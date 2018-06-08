@@ -25,11 +25,6 @@ gmres_ca: $(OBJ)
 
 run:
 	./gmres_ca
-	./gmres_ca
-	./gmres_ca
-	./gmres_ca
-	./gmres_ca
-	./gmres_ca
 
 burn: gmres_ca
 	./gmres_ca
