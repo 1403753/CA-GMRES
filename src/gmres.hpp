@@ -13,6 +13,7 @@
 #include "mpk.hpp"
 #include "arnoldi_ca.hpp"
 #include "spmv.hpp"
+#include "tsqr.hpp"
 #define GMRES_HPP_
 
 class gmres {

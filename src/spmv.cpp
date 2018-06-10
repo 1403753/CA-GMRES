@@ -15,7 +15,8 @@ spmv::spmv() {
 }
 
 //void spmv::mv(std::vector< std::map<unsigned int, double>> A, const std::vector<double> x, std::vector<double> res) {
-void spmv::mv(const std::vector<ScalarType> A, const std::vector<ScalarType> x, std::vector<ScalarType> &res) {
+//void spmv::mv(const std::vector<ScalarType> A, const std::vector<ScalarType> x, std::vector<ScalarType> &res) {
+void spmv::mv(const sparse_matrix_t A, const double *x, double **y) {
 /*	
 	{
 		std::vector<std::map<unsigned int, ScalarType>> _A_(5);
@@ -59,41 +60,39 @@ void spmv::mv(const std::vector<ScalarType> A, const std::vector<ScalarType> x, 
 	
 	///////MKL
 	{		
-		const MKL_INT m = 5;
-		double x[m] = {1, 1, 1, 1, 1};
+//		const size_t m = 5;
+//		const size_t n = 3;
+//		double x[m] = {1, 1, 1, 1, 1};
+/*
 		MKL_INT rows_ptr[] = {0, 3, 5, 8, 11, 13};
 		MKL_INT col_indx[] = {0, 1, 3, 0, 1, 2, 3, 4, 0, 2, 3, 1, 4};
 		double values[] = 	 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+*/
 		sparse_status_t stat;		
+
+/*
+		MKL_INT rows_ptr[] = {0, 1, 2, 3, 4, 5};
+		MKL_INT col_indx[] = {0, 0, 1, 0, 0};
+		double values[] = 	 {1, 2, 1, 1, 1};
+		
 		sparse_matrix_t A;
 		
 //	initialize A
 //	stat = mkl_sparse_d_create_csr (A, indexing, rows, cols, rows_start, rows_end, col_indx, values)
-    stat = mkl_sparse_d_create_csr(&A, SPARSE_INDEX_BASE_ZERO, m, m, rows_ptr, rows_ptr + 1, col_indx, values);
-		
+    stat = mkl_sparse_d_create_csr(&A, SPARSE_INDEX_BASE_ZERO, m, n, rows_ptr, rows_ptr + 1, col_indx, values);
+	*/	
 		
 		struct matrix_descr descr;
 		descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 		
-		ScalarType y[m] = {0, 0, 0, 0, 0};
 		//sparse_status_t mkl_sparse_d_mv (sparse_operation_t operation, double alpha, const sparse_matrix_t A, struct matrix_descr descr, const double *x, double beta, double *y);
-		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, y);
+		stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, &x[0], 0, *y);
+		
 
-
 		
-		for(MKL_INT i = 0; i < m; ++i) {
-			res.push_back(y[i]);
-		}
-		
-		std::cout << "y_res: ";
-		for(MKL_INT i = 0; i < m; ++i)
-			std::cout << res[i] << ' ';
-		std::cout << std::endl;
-		
-		stat = mkl_sparse_destroy(A);
 		
 		if(stat != SPARSE_STATUS_SUCCESS)
-			throw std::exception();
+			throw std::invalid_argument("MatMult failed");
 		
 		mkl_free_buffers();
 	}

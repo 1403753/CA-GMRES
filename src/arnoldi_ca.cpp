@@ -23,7 +23,7 @@ void arnoldi_ca::print() {
 	float irtime, iptime, imflops;
   long long iflpops;
 	
-	std::cout.precision(6);
+	std::cout.precision(3);
 	
 	/*
 	*
@@ -34,7 +34,7 @@ void arnoldi_ca::print() {
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL));
 
-	const size_t n = 100;
+	const size_t n = 14;
 	
 	
 	
@@ -60,14 +60,27 @@ void arnoldi_ca::print() {
 		std::cout << std::endl;
 	}
 	*/
-	
+	for(size_t i = 0; i < n; ++i) {
+		for(size_t j = 0; j < n; ++j)
+			std::cout << H[i*n + j] << ' ';
+		std::cout << std::endl;
+	}
 
 	/*
 	*	compute ritz values of H
 	*/
 //LAPACKE_dhseqr(int matrix_layout, char job, char compz, lapack_int n, lapack_int ilo, lapack_int ihi, double *h, lapack_int ldh, double *wr, double *wi, double *z, lapack_int ldz);
 	LAPACKE_dhseqr(LAPACK_ROW_MAJOR, job, compz, n, alpha, n, H, n, wr, wi, nullptr, n);
-		
+	
+	std::cout << "H (after):" << std::endl;
+
+	for(size_t i = 0; i < n; ++i) {
+		for(size_t j = 0; j < n; ++j)
+			std::cout << H[i*n + j] << ' ';
+		std::cout << std::endl;
+	}
+	
+	
 	std::vector<std::pair<size_t, std::complex<double>>> ritz_vals;
 
 

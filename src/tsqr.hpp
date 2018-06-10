@@ -13,6 +13,7 @@
 class tsqr {
 public:
 	tsqr();
+	static void qr(double **A, size_t M, size_t N);
 	virtual ~tsqr();
 };
 
