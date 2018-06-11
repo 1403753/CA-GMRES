@@ -18,8 +18,8 @@ int main() {
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL));
 	
-	// double r[M] = {3,2,4,9,10};
-	double r[M] = {1,1,1,1,1};
+	double r[M] = {3,2,4,9,10};
+	// double r[M] = {1,1,1,1,1};
 	double *V, **V_col_ptr;
 	
 	V_col_ptr = (double **)mkl_malloc(M * sizeof(double *), 64);if(V_col_ptr == NULL){return 1;}
@@ -34,7 +34,8 @@ int main() {
 	
 	size_t rows_ptr[] = {0, 1, 2, 3, 4, 5};
 	size_t col_indx[] = {0, 0, 1, 0, 0};
-	double values[] = 	 {3, 2, 4, 9, 10};	
+	double values[] = {3, 2, 4, 9, 10};	
+	double beta;	
 /*  5 x 3 Matrix testcode:	
 		MKL_INT rows_ptr[] = {0, 3, 5, 8, 11, 13};
 		MKL_INT col_indx[] = {0, 1, 3, 0, 1, 2, 3, 4, 0, 2, 3, 1, 4};
@@ -47,18 +48,26 @@ int main() {
 	if(stat != SPARSE_STATUS_SUCCESS)
 		throw std::invalid_argument("MatCreate failed");
 	
-	printf("\n============= V:\n");
-	for(size_t i = 0; i < M*N; ++i) {
-		printf("%f, ", V[i]);
-	}
-	std::cout << std::endl;
-	
+/*
+		copy or multiply residual vector into V matrix
+*/
 	cblas_dcopy (M, r, 1, V_col_ptr[0], 1);
+/*
+	scale vector by its L2-norm
+*/
+// double cblas_dnrm2 (const MKL_INT n, const double *x, const MKL_INT incx);
+	beta = cblas_dnrm2 (M, r, 1);
+// void	cblas_dscal (const int N, const double alpha, double *X, const int incX)
+	cblas_dscal (M, 1 / beta, V_col_ptr[0], 1);
+
 	
 	for(size_t i = 0; i < N - 1; ++i) {
 		
-		spmv::mv(A, V_col_ptr[i], &V_col_ptr[i+1]);
+		spmv::mv (A, V_col_ptr[i], &V_col_ptr[i+1]);
 
+		beta = cblas_dnrm2 (M, V_col_ptr[i + 1], 1);
+		cblas_dscal (M, 1 / beta, V_col_ptr[i + 1], 1);
+		
 		printf("\n============= V:\n");
 		for(size_t j = 0; j < M; ++j) {
 			for(size_t k = 0; k < N; ++k) {
