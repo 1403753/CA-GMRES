@@ -16,25 +16,165 @@ bool is_conj_pair(std::complex<double> a, std::complex<double> b) {
 	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);
 }
 
-void arnoldi_ca::print() {
+void arnoldi_ca::givens_rotations() {
+	std::cout.precision(3);
+
+	/*
+		Apply CLASSIC/MODIFIED GIVENS ROTATIONS to H
+	*/
+	std::cout << "\n\nGIVENS =========================\n\n" << std::endl;
+
+	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
+  gsl_rng_set(rng, time(NULL));
+
+	const size_t n = 13;
+	double *H = (double *)mkl_calloc((n+1)*n, sizeof(double), 64);
+	
+	
+	// initialize H	
+	for(size_t i = 0; i < n+1; ++i) {
+		for(size_t j = 0; j < n; ++j) {
+			if(j+1 < i)
+				H[i*n + j] = 0;
+			else
+				H[i*n + j] = gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
+		}
+	}
+	
+	if(n < 14) {
+		std::cout << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}	
+	
 	
 	float rtime, ptime, mflops;
 	long long flpops;
 	float irtime, iptime, imflops;
   long long iflpops;
 	
+	
+	double c = 0;
+	double s = 0;
+	double x1 = 0;
+	double x2 = 0;
+	
+	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
+		exit(1);
+	
+	for (size_t i = 0; i < n - 1; ++i) {
+			x1 = H[i*n + i];
+			x2 = H[(i + 1)*n + i];
+			
+// void cblas_drotg (double *x1, double *x2, double *c, double *s);
+			cblas_drotg(&x1, &x2, &c, &s);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+			cblas_drot(n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, c, s);
+	}
+	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
+		exit(1);
+	
+	PAPI_shutdown();
+	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "classic givens" << std::endl;	
+	
+	if(n < 14) {
+		std::cout << std::endl << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}
+
+	// re-initialize H	
+	for(size_t i = 0; i < n+1; ++i) 
+		for(size_t j = 0; j < n; ++j) {
+			if(j+1 < i)
+				H[i*n + j] = 0;
+			else
+				H[i*n + j] = gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
+		}
+	
+	if(n < 14) {
+		std::cout << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}
+	
+	double d1 = 30;//INT32_MAX;
+	double d2 = 10;//INT32_MAX;
+	x1 = 0;
+	x2 = 0;
+	double param[5]{};
+	
+	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
+			exit(1);
+		
+	for (size_t i = 0; i < n - 1; ++i) {
+
+		x1 = H[i*n + i];
+		x2 = H[(i + 1)*n + i];
+//	void cblas_drotmg (double *d1, double *d2, double *x1, const double x2, double *param);
+		cblas_drotmg (&d1, &d2, &x1, x2, param);
+	
+//	void cblas_drotm (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double *param);
+		cblas_drotm (n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, param);
+
+	}
+	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
+		exit(1);
+	
+	PAPI_shutdown();
+	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "modified givens" << std::endl;	
+	
+	if(n < 14) {
+		std::cout << std::endl << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}
+	
+	std::cout << std::endl << "d1: " << d1 << ", d2: "<< d2 <<  std::endl << std::endl;
+	std::cout << "param: ";
+	for (size_t j = 0; j < 5; ++j)
+		std::cout << param[j] << ' ';
+	
+	std::cout << std::endl << std::endl;
+	
+	mkl_free(H);
+	gsl_rng_free(rng);
+	mkl_free_buffers();
+	
+}
+
+void arnoldi_ca::modified_leja_ordering() {
 	std::cout.precision(3);
-	
 	/*
-	*
-	*	compute ritz values used in arnoldi(s)
-	*
+		compute RITZ VALUES used in Arnoldi(s,t)
 	*/
-	
+	std::cout << "\n\nMODIFIED LEJA ORDERING =========================\n\n" << std::endl;
+
+	std::cout << "\n\n\t-\tcompute RITZ VALUES of H:\n" << std::endl;
+
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL));
 
-	const size_t n = 14;
+	const size_t n = 13;
 	
 	
 	
@@ -45,40 +185,44 @@ void arnoldi_ca::print() {
 	wr = (double *)mkl_malloc(n*sizeof(double), 64);
 	wi = (double *)mkl_malloc(n*sizeof(double), 64);
 
-	H = (double *)mkl_calloc(n*n, sizeof(double), 64);
-
-	for(size_t i = 0; i < n; ++i) 
-		for(size_t j = i; j < n; ++j) {
-			H[i*n + j] = gsl_rng_uniform_int(rng, 100) + gsl_rng_uniform(rng);
-			if(i + 1 < n)
-				H[(i + 1)*n + j] = gsl_rng_uniform_int(rng, 100) + gsl_rng_uniform(rng);
+	H = (double *)mkl_calloc((n+1)*n, sizeof(double), 64);
+	
+	
+	// initialize H	
+	for(size_t i = 0; i < n+1; ++i) {
+		for(size_t j = 0; j < n; ++j) {
+			if(j+1 < i)
+				H[i*n + j] = 0;
+			else
+				H[i*n + j] = gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
 		}
-	/*
-	for(size_t i = 0; i < n; ++i) {
-		for(size_t j = 0; j < n; ++j)
-			std::cout << H[i*n + j] << ' ';
-		std::cout << std::endl;
 	}
-	*/
-	for(size_t i = 0; i < n; ++i) {
-		for(size_t j = 0; j < n; ++j)
-			std::cout << H[i*n + j] << ' ';
-		std::cout << std::endl;
-	}
+	
+	if(n < 14) {
+		std::cout << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}	
 
 	/*
 	*	compute ritz values of H
 	*/
 //LAPACKE_dhseqr(int matrix_layout, char job, char compz, lapack_int n, lapack_int ilo, lapack_int ihi, double *h, lapack_int ldh, double *wr, double *wi, double *z, lapack_int ldz);
 	LAPACKE_dhseqr(LAPACK_ROW_MAJOR, job, compz, n, alpha, n, H, n, wr, wi, nullptr, n);
-	
-	std::cout << "H (after):" << std::endl;
 
-	for(size_t i = 0; i < n; ++i) {
-		for(size_t j = 0; j < n; ++j)
-			std::cout << H[i*n + j] << ' ';
-		std::cout << std::endl;
-	}
+	if(n < 14) {
+		std::cout << std::endl << "H (undefined after call to dhseqr):\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}	
 	
 	
 	std::vector<std::pair<size_t, std::complex<double>>> ritz_vals;
@@ -136,8 +280,10 @@ void arnoldi_ca::print() {
 	*	output: theta_vals (in modified Leja order with outlist)
 	*					type: std::vector<size_t outlist, complex<double> vals>
 	*/
+
+	std::cout << "\n\n\t-\tcompute MODIFIED LEJA ORDERING:\n" << std::endl;
 	
-	std::complex<double> C_old, C = 1;
+	std::complex<double> Capacity_old, Capacity = 1;
 	size_t L;
 
 
@@ -178,26 +324,26 @@ void arnoldi_ca::print() {
 	
 	while(L < ritz_vals.size() - 1) {
 
-		C_old = C;
-		C = 1;
+		Capacity_old = Capacity;
+		Capacity = 1;
 		
 		for(size_t j = 0; j < L; ++j) {
-			C *= std::pow(std::abs(theta_vals.at(L).second - theta_vals.at(j).second), (double) ritz_vals.at(theta_vals.at(j).first).first / (L+1));
+			Capacity *= std::pow(std::abs(theta_vals.at(L).second - theta_vals.at(j).second), (double) ritz_vals.at(theta_vals.at(j).first).first / (L+1));
 		}
 				
 		for (auto &z: ritz_vals) {
-			z.second /= (C / C_old);
+			z.second /= (Capacity / Capacity_old);
 		}
 		
 		for (auto &t: theta_vals)
-			t.second /= (C / C_old);
+			t.second /= (Capacity / Capacity_old);
 		
 		std::vector<std::complex<double>> zprod;
 		
 		for (auto k: k_index) {
 			std::complex<double> prod = 1;
 			for(size_t j = 0; j < L+1; ++j) {
-				prod *= std::pow(std::abs(ritz_vals.at(k).second - ritz_vals.at(theta_vals.at(j).first).second) / C, ritz_vals.at(theta_vals.at(j).first).first);
+				prod *= std::pow(std::abs(ritz_vals.at(k).second - ritz_vals.at(theta_vals.at(j).first).second) / Capacity, ritz_vals.at(theta_vals.at(j).first).first);
 			}
 			zprod.push_back(prod);
 		}
@@ -255,151 +401,14 @@ void arnoldi_ca::print() {
 	if (n < 15) {
 		std::cout << std:: endl << "ritz_vals :" << std:: endl;
 		for (auto p: ritz_vals) {
-			std::cout << p.second*C << "\tmult: " << p.first << std::endl;
+			std::cout << p.second*Capacity << "   \tmult: " << p.first << std::endl;
 		}
 		
 		std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
 		for (auto p: theta_vals) {
-			std::cout << p.second*C << "\toutlist: " << p.first << std:: endl;
-		}
-	}
-
-	
-	
-	
-	/*
-	*
-	* Apply MODIFIED GIVENS ROTATION to H (used in CA-GMRES)
-	*
-	*/
-	std::cout << "\n\n==============================GIVENS" << std::endl;
-
-	
-	
-	
-	// re-initialize H	
-	for(size_t i = 0; i < n; ++i) 
-		for(size_t j = 0; j < n; ++j) {
-			if(j < i-1)
-				H[i*n + j] = 0;
-			else
-				H[i*n + j] = gsl_rng_uniform_int(rng, 100) + gsl_rng_uniform(rng);
-		}
-	
-	if(n < 2) {
-		std::cout << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
-			std::cout << std::endl;
+			std::cout << p.second*Capacity << "   \toutlist: " << p.first << std:: endl;
 		}
 	}	
-	
-	double c = 0;
-	double s = 0;
-	double a = 0;
-	double b = 0;
-	
-	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
-		exit(1);
-	
-	for (size_t i = 0; i < n - 1; ++i) {
-			a = H[i*n + i];
-			b = H[(i + 1)*n + i];
-// void cblas_drotg (double *a, double *b, double *c, double *s);
-			cblas_drotg(&a, &b, &c, &s);
-
-// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-			cblas_drot(n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, c, s);
-	}
-	
-	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
-		exit(1);
-	
-	PAPI_shutdown();
-	std::cout << n << ", " << rtime << std::endl;	
-	
-	if(n < 2) {
-		std::cout << std::endl << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
-			std::cout << std::endl;
-		}
-	}
-	
-	
-	
-	
-	// re-initialize H	
-	for(size_t i = 0; i < n; ++i) 
-		for(size_t j = 0; j < n; ++j) {
-			if(j < i-1)
-				H[i*n + j] = 0;
-			else
-				H[i*n + j] = gsl_rng_uniform_int(rng, 100) + gsl_rng_uniform(rng);
-		}
-	
-	if(n < 2) {
-		std::cout << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
-			std::cout << std::endl;
-		}
-	}
-	
-	double d1 = INT32_MAX;
-	double d2 = INT32_MAX;
-	double x1 = 0;
-	double y1 = 0;
-	double param[5]{};
-	
-	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
-			exit(1);
-		
-	for (size_t i = 0; i < n - 1; ++i) {
-		//std::cout << std::endl << "d1: " << d1 << ", d2: "<< d2;
-		x1 = H[i*n + i];
-		y1 = H[(i + 1)*n + i];
-//	void cblas_drotmg (double *d1, double *d2, double *x1, const double y1, double *param);
-		cblas_drotmg (&d1, &d2, &x1, y1, param);
-	
-//	void cblas_drotm (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double *param);
-		cblas_drotm (n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, param);
-
-	}
-	
-	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
-		exit(1);
-	
-	PAPI_shutdown();
-	std::cout << n << ", " << rtime << std::endl;	
-	
-	if(n < 2) {
-		std::cout << std::endl << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
-			std::cout << std::endl;
-		}
-	}
-	
-	std::cout << std::endl << "d1: " << d1 << ", d2: "<< d2 <<  std::endl << std::endl;
-	std::cout << "param: ";
-	for (size_t j = 0; j < 5; ++j)
-		std::cout << param[j] << ' ';
-	
-	std::cout << std::endl << std::endl;	
-	
-	
-	
-	
-	
 	
 	mkl_free(H);
 	mkl_free(wr);

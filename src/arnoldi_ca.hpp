@@ -23,7 +23,8 @@
 class arnoldi_ca {
 public:
 	arnoldi_ca();
-	static void print();	
+	static void givens_rotations();	
+	static void modified_leja_ordering();	
 	virtual ~arnoldi_ca();
 };
 
