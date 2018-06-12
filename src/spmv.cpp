@@ -37,6 +37,12 @@ spmv::~spmv() {
 
 	VIENNACL SpMV:
 	{
+
+	#include "viennacl/vector.hpp"
+	#include "viennacl/compressed_matrix.hpp"
+	#include "viennacl/matrix.hpp"
+	#include "viennacl/linalg/prod.hpp"  
+
 		std::vector<std::map<unsigned int, ScalarType>> _A_(5);
 		
 		_A_[0][0] = 1;

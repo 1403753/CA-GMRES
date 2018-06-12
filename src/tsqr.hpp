@@ -6,8 +6,9 @@
  */
 
 #ifndef TSQR_HPP_
-#include "mkl.h"
-#include "mkl_spblas.h"
+
+#include "includes.hpp"
+
 #define TSQR_HPP_
 
 class tsqr {

@@ -6,6 +6,7 @@
  */
 
 #include "arnoldi_ca.hpp"
+#include <omp.h>
 
 arnoldi_ca::arnoldi_ca() {
 	// Constructor
@@ -18,6 +19,10 @@ bool is_conj_pair(std::complex<double> a, std::complex<double> b) {
 
 void arnoldi_ca::givens_rotations() {
 	std::cout.precision(3);
+	
+	const size_t n = 1000;
+	const size_t num_threads = 48;
+	omp_set_num_threads(num_threads);
 
 	/*
 		Apply CLASSIC/MODIFIED GIVENS ROTATIONS to H
@@ -27,26 +32,33 @@ void arnoldi_ca::givens_rotations() {
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL));
 
-	const size_t n = 13;
-	double *H = (double *)mkl_calloc((n+1)*n, sizeof(double), 64);
+	double *H = (double *)mkl_malloc((n+1)*n * sizeof(double), 64);
 	
-	
-	// initialize H	
+	double start = omp_get_wtime();
+
+	// initialize H
+	#pragma omp parallel for if(n > 10) default(none) \
+	shared(rng, H) schedule(auto) collapse(2)
 	for(size_t i = 0; i < n+1; ++i) {
 		for(size_t j = 0; j < n; ++j) {
 			if(j+1 < i)
 				H[i*n + j] = 0;
 			else
-				H[i*n + j] = gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
+				H[i*n + j] = 1;//gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
 		}
 	}
+
+	double time = omp_get_wtime() - start;
+
+	std::cout << "Initialized H after " << time << " seconds!" << std::endl;
 	
 	if(n < 14) {
 		std::cout << std::endl << "H:\n";
 
 		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
+			for (size_t j = 0; j < n; ++j) {
 				std::cout << H[n*i + j] << "\t";
+			}
 			std::cout << std::endl;
 		}
 	}	
@@ -57,7 +69,9 @@ void arnoldi_ca::givens_rotations() {
 	float irtime, iptime, imflops;
   long long iflpops;
 	
-	
+	/*
+		classic givens_rotation
+	*/
 	double c = 0;
 	double s = 0;
 	double x1 = 0;
@@ -87,20 +101,32 @@ void arnoldi_ca::givens_rotations() {
 		std::cout << std::endl << std::endl << "H:\n";
 
 		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
+			for (size_t j = 0; j < n; ++j) {
+				if(j+1 < i)
+					std::cout << "*" << "\t";
+				else
+					std::cout << H[n*i + j] << "\t";
+			}
 			std::cout << std::endl;
 		}
 	}
-
-	// re-initialize H	
+	
+	start = omp_get_wtime();
+	
+	// re-initialize H
+	#pragma omp parallel for if(n > 10) default(none) \
+	shared(rng, H) schedule(auto) collapse(2)
 	for(size_t i = 0; i < n+1; ++i) 
 		for(size_t j = 0; j < n; ++j) {
 			if(j+1 < i)
 				H[i*n + j] = 0;
 			else
-				H[i*n + j] = gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
+				H[i*n + j] = 1.023;//gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
 		}
+	
+	time = omp_get_wtime() - start;
+
+	std::cout << "Re-initialized H after " << time << " seconds!" << std::endl;	
 	
 	if(n < 14) {
 		std::cout << std::endl << "H:\n";
@@ -112,6 +138,9 @@ void arnoldi_ca::givens_rotations() {
 		}
 	}
 	
+	/*
+		modified givens_rotation
+	*/
 	double d1 = 30;//INT32_MAX;
 	double d2 = 10;//INT32_MAX;
 	x1 = 0;
@@ -137,7 +166,7 @@ void arnoldi_ca::givens_rotations() {
 		exit(1);
 	
 	PAPI_shutdown();
-	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "modified givens" << std::endl;	
+	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "modified givens" << std::endl;
 	
 	if(n < 14) {
 		std::cout << std::endl << std::endl << "H:\n";

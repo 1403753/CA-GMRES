@@ -5,7 +5,6 @@
  *      Author: Robert
  */
 
-#include "arnoldi_ca.hpp"
 #include "tsqr.hpp"
 
 tsqr::tsqr() {

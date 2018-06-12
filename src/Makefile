@@ -1,8 +1,8 @@
 CC = g++
-CFLAGS = -Wall -pedantic -std=c++14 -DMKL_ILP64 -m64 -I$(MKLROOT)/include -I$(INC_PAPI)
+CFLAGS = -Wall -pedantic -std=c++14 -DMKL_ILP64 -m64 -I$(MKLROOT)/include -I$(INC_PAPI) -fopenmp
 DFLAGS = -ggdb -g -O0
-DEPS = mpk.hpp tsqr.hpp block_cgs.hpp arnoldi_ca.hpp spmv.hpp
-OBJ =  spmv.o mpk.o tsqr.o block_cgs.o arnoldi_ca.o gmres.o 
+DEPS = tsqr.hpp arnoldi_ca.hpp spmv.hpp
+OBJ =  spmv.o tsqr.o  arnoldi_ca.o gmres.o 
 INC_LAPACK = /usr/lib/x86_64-linux-gnu/lapack
 INC_VIENNACL = /home/a01403753/BSC/ViennaCL_rep/ViennaCL-1.7.1
 MKLROOT = /home/a01403753/intel/mkl
@@ -17,7 +17,7 @@ gmres_ca: $(OBJ)
 	$(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a \
 	$(MKLROOT)/lib/intel64/libmkl_gnu_thread.a \
 	$(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group \
-	-lgomp -lpthread -lm -ldl \
+	-fopenmp -lpthread -lm -ldl \
 	-L$(LIB_PAPI) -lpapi
 
 %.o: %.cpp %.hpp

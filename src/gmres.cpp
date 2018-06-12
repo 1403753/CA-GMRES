@@ -86,9 +86,9 @@ int main() {
 
 
 //	mpk::mv(A, u, y);
-	tsqr::qr(&V, M, N);
+//	tsqr::qr(&V, M, N);
 	arnoldi_ca::givens_rotations();
-	arnoldi_ca::modified_leja_ordering();
+//	arnoldi_ca::modified_leja_ordering();
 	
 	
 	
