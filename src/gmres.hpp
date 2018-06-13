@@ -10,6 +10,7 @@
 #include "arnoldi_ca.hpp"
 #include "spmv.hpp"
 #include "tsqr.hpp"
+#include "matrix_reader.hpp"
 
 #define GMRES_HPP_
 

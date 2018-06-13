@@ -15,15 +15,14 @@ spmv::spmv() {
 }
 
 sparse_status_t spmv::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType **y) {
-		sparse_status_t stat;
-		struct matrix_descr descr;
+		sparse_status_t 			stat;
+		struct matrix_descr 	descr;
+		
 		descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 		
-		//sparse_status_t mkl_sparse_d_mv (sparse_operation_t operation, double alpha, const sparse_matrix_t A, struct matrix_descr descr, const double *x, double beta, double *y);
-		stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, &x[0], 0, *y);
-		
-		if(stat != SPARSE_STATUS_SUCCESS)
-			throw std::invalid_argument("MatMult failed");
+//sparse_status_t mkl_sparse_d_mv (sparse_operation_t operation, double alpha, const sparse_matrix_t A, struct matrix_descr descr, const double *x, double beta, double *y);
+		stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, *y);
+		if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatMult failed");
 		
 		mkl_free_buffers();
 	return stat;

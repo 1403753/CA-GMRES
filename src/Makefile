@@ -1,8 +1,8 @@
 CC = g++
 CFLAGS = -Wall -pedantic -std=c++14 -DMKL_ILP64 -m64 -I$(MKLROOT)/include -I$(INC_PAPI) -fopenmp
 DFLAGS = -ggdb -g -O0
-DEPS = tsqr.hpp arnoldi_ca.hpp spmv.hpp
-OBJ =  spmv.o tsqr.o  arnoldi_ca.o gmres.o 
+DEPS = tsqr.hpp arnoldi_ca.hpp spmv.hpp matrix_reader.cpp
+OBJ =  spmv.o tsqr.o  arnoldi_ca.o gmres.o matrix_reader.o
 INC_LAPACK = /usr/lib/x86_64-linux-gnu/lapack
 INC_VIENNACL = /home/a01403753/BSC/ViennaCL_rep/ViennaCL-1.7.1
 MKLROOT = /home/a01403753/intel/mkl
@@ -33,9 +33,7 @@ vurn: gmres_ca
 	valgrind ./gmres_ca
 
 clean:
-	rm -rf *.o gmres_ca *.gch
-
-
+	rm -rf *.o gmres_ca
 
 #spmv.o: spmv.cpp spmv.hpp
 #	$(CC) $(CFLAGS) -c $^

@@ -5,8 +5,11 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 #include <complex>
+
+#define MKL_MAX_PATH_LEN 4096
 #define MKL_Complex16 std::complex<double>
 #define MKL_INT size_t
+
 #include "mkl.h"
 
 #define INCLUDES_HPP_

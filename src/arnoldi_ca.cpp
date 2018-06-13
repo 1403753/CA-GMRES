@@ -17,180 +17,6 @@ bool is_conj_pair(std::complex<double> a, std::complex<double> b) {
 	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);
 }
 
-void arnoldi_ca::givens_rotations() {
-	std::cout.precision(3);
-	
-	const size_t n = 1000;
-	const size_t num_threads = 48;
-	omp_set_num_threads(num_threads);
-
-	/*
-		Apply CLASSIC/MODIFIED GIVENS ROTATIONS to H
-	*/
-	std::cout << "\n\nGIVENS =========================\n\n" << std::endl;
-
-	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
-  gsl_rng_set(rng, time(NULL));
-
-	double *H = (double *)mkl_malloc((n+1)*n * sizeof(double), 64);
-	
-	double start = omp_get_wtime();
-
-	// initialize H
-	#pragma omp parallel for if(n > 10) default(none) \
-	shared(rng, H) schedule(auto) collapse(2)
-	for(size_t i = 0; i < n+1; ++i) {
-		for(size_t j = 0; j < n; ++j) {
-			if(j+1 < i)
-				H[i*n + j] = 0;
-			else
-				H[i*n + j] = 1;//gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
-		}
-	}
-
-	double time = omp_get_wtime() - start;
-
-	std::cout << "Initialized H after " << time << " seconds!" << std::endl;
-	
-	if(n < 14) {
-		std::cout << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j) {
-				std::cout << H[n*i + j] << "\t";
-			}
-			std::cout << std::endl;
-		}
-	}	
-	
-	
-	float rtime, ptime, mflops;
-	long long flpops;
-	float irtime, iptime, imflops;
-  long long iflpops;
-	
-	/*
-		classic givens_rotation
-	*/
-	double c = 0;
-	double s = 0;
-	double x1 = 0;
-	double x2 = 0;
-	
-	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
-		exit(1);
-	
-	for (size_t i = 0; i < n - 1; ++i) {
-			x1 = H[i*n + i];
-			x2 = H[(i + 1)*n + i];
-			
-// void cblas_drotg (double *x1, double *x2, double *c, double *s);
-			cblas_drotg(&x1, &x2, &c, &s);
-
-// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-			cblas_drot(n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, c, s);
-	}
-	
-	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
-		exit(1);
-	
-	PAPI_shutdown();
-	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "classic givens" << std::endl;	
-	
-	if(n < 14) {
-		std::cout << std::endl << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j) {
-				if(j+1 < i)
-					std::cout << "*" << "\t";
-				else
-					std::cout << H[n*i + j] << "\t";
-			}
-			std::cout << std::endl;
-		}
-	}
-	
-	start = omp_get_wtime();
-	
-	// re-initialize H
-	#pragma omp parallel for if(n > 10) default(none) \
-	shared(rng, H) schedule(auto) collapse(2)
-	for(size_t i = 0; i < n+1; ++i) 
-		for(size_t j = 0; j < n; ++j) {
-			if(j+1 < i)
-				H[i*n + j] = 0;
-			else
-				H[i*n + j] = 1.023;//gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
-		}
-	
-	time = omp_get_wtime() - start;
-
-	std::cout << "Re-initialized H after " << time << " seconds!" << std::endl;	
-	
-	if(n < 14) {
-		std::cout << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
-			std::cout << std::endl;
-		}
-	}
-	
-	/*
-		modified givens_rotation
-	*/
-	double d1 = 30;//INT32_MAX;
-	double d2 = 10;//INT32_MAX;
-	x1 = 0;
-	x2 = 0;
-	double param[5]{};
-	
-	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
-			exit(1);
-		
-	for (size_t i = 0; i < n - 1; ++i) {
-
-		x1 = H[i*n + i];
-		x2 = H[(i + 1)*n + i];
-//	void cblas_drotmg (double *d1, double *d2, double *x1, const double x2, double *param);
-		cblas_drotmg (&d1, &d2, &x1, x2, param);
-	
-//	void cblas_drotm (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double *param);
-		cblas_drotm (n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, param);
-
-	}
-	
-	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
-		exit(1);
-	
-	PAPI_shutdown();
-	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "modified givens" << std::endl;
-	
-	if(n < 14) {
-		std::cout << std::endl << std::endl << "H:\n";
-
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j)
-				std::cout << H[n*i + j] << "\t";
-			std::cout << std::endl;
-		}
-	}
-	
-	std::cout << std::endl << "d1: " << d1 << ", d2: "<< d2 <<  std::endl << std::endl;
-	std::cout << "param: ";
-	for (size_t j = 0; j < 5; ++j)
-		std::cout << param[j] << ' ';
-	
-	std::cout << std::endl << std::endl;
-	
-	mkl_free(H);
-	gsl_rng_free(rng);
-	mkl_free_buffers();
-	
-}
-
 void arnoldi_ca::modified_leja_ordering() {
 	std::cout.precision(3);
 	/*
@@ -444,6 +270,180 @@ void arnoldi_ca::modified_leja_ordering() {
 	mkl_free(wi);
 	gsl_rng_free(rng);
 	mkl_free_buffers();
+}
+
+void arnoldi_ca::givens_rotations() {
+	std::cout.precision(3);
+	
+	const size_t n = 1000;
+	const size_t num_threads = 48;
+	omp_set_num_threads(num_threads);
+
+	/*
+		Apply CLASSIC/MODIFIED GIVENS ROTATIONS to H
+	*/
+	std::cout << "\n\nGIVENS =========================\n\n" << std::endl;
+
+	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
+  gsl_rng_set(rng, time(NULL));
+
+	double *H = (double *)mkl_malloc((n+1)*n * sizeof(double), 64);
+	
+	double start = omp_get_wtime();
+
+	// initialize H
+	#pragma omp parallel for if(n > 10) default(none) \
+	shared(rng, H) schedule(auto) collapse(2)
+	for(size_t i = 0; i < n+1; ++i) {
+		for(size_t j = 0; j < n; ++j) {
+			if(j+1 < i)
+				H[i*n + j] = 0;
+			else
+				H[i*n + j] = 1;//gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
+		}
+	}
+
+	double time = omp_get_wtime() - start;
+
+	std::cout << "Initialized H after " << time << " seconds!" << std::endl;
+	
+	if(n < 14) {
+		std::cout << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j) {
+				std::cout << H[n*i + j] << "\t";
+			}
+			std::cout << std::endl;
+		}
+	}	
+	
+	
+	float rtime, ptime, mflops;
+	long long flpops;
+	float irtime, iptime, imflops;
+  long long iflpops;
+	
+	/*
+		classic givens_rotation
+	*/
+	double c = 0;
+	double s = 0;
+	double x1 = 0;
+	double x2 = 0;
+	
+	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
+		exit(1);
+	
+	for (size_t i = 0; i < n - 1; ++i) {
+			x1 = H[i*n + i];
+			x2 = H[(i + 1)*n + i];
+			
+// void cblas_drotg (double *x1, double *x2, double *c, double *s);
+			cblas_drotg(&x1, &x2, &c, &s);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+			cblas_drot(n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, c, s);
+	}
+	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
+		exit(1);
+	
+	PAPI_shutdown();
+	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "classic givens" << std::endl;	
+	
+	if(n < 14) {
+		std::cout << std::endl << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j) {
+				if(j+1 < i)
+					std::cout << "*" << "\t";
+				else
+					std::cout << H[n*i + j] << "\t";
+			}
+			std::cout << std::endl;
+		}
+	}
+	
+	start = omp_get_wtime();
+	
+	// re-initialize H
+	#pragma omp parallel for if(n > 10) default(none) \
+	shared(rng, H) schedule(auto) collapse(2)
+	for(size_t i = 0; i < n+1; ++i) 
+		for(size_t j = 0; j < n; ++j) {
+			if(j+1 < i)
+				H[i*n + j] = 0;
+			else
+				H[i*n + j] = 1.023;//gsl_rng_uniform_int(rng, 30);// + gsl_rng_uniform(rng);
+		}
+	
+	time = omp_get_wtime() - start;
+
+	std::cout << "Re-initialized H after " << time << " seconds!" << std::endl;	
+	
+	if(n < 14) {
+		std::cout << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}
+	
+	/*
+		modified givens_rotation
+	*/
+	double d1 = 30;//INT32_MAX;
+	double d2 = 10;//INT32_MAX;
+	x1 = 0;
+	x2 = 0;
+	double param[5]{};
+	
+	if (PAPI_flops(&irtime, &iptime, &iflpops, &imflops) != PAPI_OK)
+			exit(1);
+		
+	for (size_t i = 0; i < n - 1; ++i) {
+
+		x1 = H[i*n + i];
+		x2 = H[(i + 1)*n + i];
+//	void cblas_drotmg (double *d1, double *d2, double *x1, const double x2, double *param);
+		cblas_drotmg (&d1, &d2, &x1, x2, param);
+	
+//	void cblas_drotm (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double *param);
+		cblas_drotm (n - i, &H[i*n + i], 1, &H[(i + 1)*n + i], 1, param);
+
+	}
+	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) != PAPI_OK)
+		exit(1);
+	
+	PAPI_shutdown();
+	std::cout << "N: " << n << ", runtime: " << rtime << " seconds, " << "modified givens" << std::endl;
+	
+	if(n < 14) {
+		std::cout << std::endl << std::endl << "H:\n";
+
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j)
+				std::cout << H[n*i + j] << "\t";
+			std::cout << std::endl;
+		}
+	}
+	
+	std::cout << std::endl << "d1: " << d1 << ", d2: "<< d2 <<  std::endl << std::endl;
+	std::cout << "param: ";
+	for (size_t j = 0; j < 5; ++j)
+		std::cout << param[j] << ' ';
+	
+	std::cout << std::endl << std::endl;
+	
+	mkl_free(H);
+	gsl_rng_free(rng);
+	mkl_free_buffers();
+	
 }
 
 arnoldi_ca::~arnoldi_ca() {
