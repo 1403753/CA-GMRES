@@ -8,13 +8,21 @@
 #ifndef MATRIX_READER_HPP_
 
 #include "includes.hpp"
+#include <fstream>
+#include <string>
 
 #define MATRIX_READER_HPP_
+
+typedef struct _MatrixInfo{
+	size_t rows;
+	size_t cols;
+	size_t nnz;
+} MatrixInfo;
 
 class matrix_reader {
 public:
 	matrix_reader();
-	static void read_matrix_from_file();
+	static sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A, MatrixInfo *minfo);
 	virtual ~matrix_reader();
 };
 

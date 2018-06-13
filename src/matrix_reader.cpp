@@ -9,85 +9,65 @@ matrix_reader::matrix_reader() {
 	
 }
 
-void matrix_reader::read_matrix_from_file() {
-	/*
-	char buf[PETSC_MAX_PATH_LEN];
-	PetscInt       i, n, nnz, nz, nztemp, nzmax, col, row;
-	PetscScalar	   value;
-	PetscReal	   	 r_value;
-	FILE*          file;
-	PetscInt 	   	 ierr;
-	nz=1;
-	nztemp=-1;
-	nzmax=1;
+sparse_status_t matrix_reader::read_matrix_from_file(std::string fname, sparse_matrix_t *A, MatrixInfo *minfo) {
 	
-	ierr = PetscFOpen(PETSC_COMM_WORLD,fin,"r",&file);CHKERRQ(ierr);
-		
-	// Print the first line of the file
-	fgets(buf, PETSC_MAX_PATH_LEN-1, file);
-	fscanf(file, "%d %d %d\n", &n, &n, &nnz);
+	std::cout.precision(3);
 	
-	if(nnz<=0) SETERRQ(PETSC_COMM_WORLD,1,"Matrix Market Converter : you must verify the format of entry file\n");
+	size_t						*row_indx, *col_indx, indx, rows, cols, nnz;
+	double						*values;
+	std::ifstream			file (fname);
+	sparse_status_t 	stat;
+	std::string 			line;
+	sparse_matrix_t		Acoo;
+	
+	if (!file.is_open()) {throw std::invalid_argument("Unable to open file");}
 
-	minfo->n=n;
-	minfo->m=n;
-	minfo->nnz=nnz;
+	getline (file, line);
+	std::cout << "line: " << line << '\n';
+	
+	while(line.front() == '%') {getline(file, line);}
+	
+	std::istringstream iss (line);
 
-	PetscPrintf(PETSC_COMM_WORLD,"Matrix properties : m = %d, n = %d, nnz = %d\n", n, n, nnz);CHKERRQ(ierr);
+	iss >> rows >> cols >> nnz;
+	if(nnz < 1)throw std::invalid_argument("Matrix Market Converter : you must verify the format of entry file.");
 	
-	ierr = MatCreateSeqAIJ(PETSC_COMM_SELF, n, n, PETSC_DEFAULT, PETSC_NULL, A);CHKERRQ(ierr);
-	
-	for (i = 0; i < n; ++i) {
-		ierr = MatSetValue(*A, i, i, 0, INSERT_VALUES);CHKERRQ(ierr);
-	}
-	
-	fscanf(file,"%d %d %le\n",&row,&col,&r_value);
-	row = row-1; col = col-1 ;
-	if(nztemp!=col){
-		nz=1;
-		nztemp=col;
-	} else {
-		nz++;
-	}
-	if(nz>nzmax) {
-		nzmax=nz;
-	}
+	row_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(row_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
+	col_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
+	values = (double *) mkl_malloc(nnz * sizeof(double), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
 
-	value=(PetscScalar)r_value;
-	*A_min = value;
-	*A_max = value;
-	ierr = MatSetValues(*A,1,&row,1,&col,&value,INSERT_VALUES);CHKERRQ(ierr);
-		
-	//Matrix reading
-	for (i = 1; i < nnz; ++i) {
-		fscanf(file,"%d %d %le\n",&row,&col,&r_value);
-		row = row-1; col = col-1 ;
-		if(nztemp!=col){
-			nz=1;
-			nztemp=col;
-		} else {
-			nz++;
-		}
-		if(nz>nzmax){
-			nzmax=nz;
-		}
-		value = (PetscScalar)r_value;
-		if(value < *A_min) *A_min = value;
-		if(value > *A_max) *A_max = value;
-		ierr = MatSetValues(*A,1,&row,1,&col,&value,INSERT_VALUES);CHKERRQ(ierr);
+	indx = 0;
+	while (getline(file, line)) {
+		iss.clear();
+		iss.str(line);
+		iss >> row_indx[indx] >> col_indx[indx] >> values[indx];		
+		--row_indx[indx];
+		--col_indx[indx];
+		++indx;
 	}
-	PetscPrintf(PETSC_COMM_WORLD,"Maximum number of NNZ on a line : %d\n",nz);
-	PetscPrintf(PETSC_COMM_WORLD,"A_min: %f\nA_max: %f\n", *A_min, *A_max);
 	
+	file.close();
 	
-	//Matrix assembly
-	PetscPrintf(PETSC_COMM_WORLD,"Assembling matrix within PETSc.\n");
-	ierr = MatAssemblyBegin(*A, MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-	ierr = MatAssemblyEnd(	*A, MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-	PetscPrintf(PETSC_COMM_WORLD,"Finished matrix assembly.\n");
+	minfo->rows = rows;
+	minfo->cols = cols;
+	minfo->nnz = nnz;
 	
-	fclose(file);
-	*/
+	std::cout << "rows: " << rows << ", cols: " << cols << ", nnz: " << nnz << "\n";
+
+	// for(size_t i = 0; i < nnz; ++i)
+		// std::cout << "row: " << row_indx[i] << ", col: " << col_indx[i] << ", val: " << values[i] << "\n";	
+	
+	stat = mkl_sparse_d_create_coo (&Acoo, SPARSE_INDEX_BASE_ZERO, rows, cols, nnz, row_indx, col_indx, values);
+	if (stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("Matrix Market Converter : matrix creation failed.");
+
+	stat = mkl_sparse_convert_csr (Acoo, SPARSE_OPERATION_NON_TRANSPOSE, A);
+	
+	mkl_free(row_indx);
+	mkl_free(col_indx);
+	mkl_free(values);
+	mkl_free_buffers();
+	
+	return stat;
 }
 
 

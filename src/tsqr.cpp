@@ -25,7 +25,7 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	size_t lmwork = -1;
 	size_t tsize = -1;
 	size_t info = 0;
-	double *Q, *workquery, *tquery, *work, *t;
+	double *Q, *work, *t, *tquery, *workquery, *mwork, *mworkquery;
 	char side = 'L', trans = 'N';
 	
 	// A = (double *)mkl_calloc(n*m, sizeof(double), 64); //check malloc!
@@ -55,8 +55,8 @@ void tsqr::qr(double **A, size_t M, size_t N){
 									};
 */
 
-	workquery = (double *)mkl_calloc(1, sizeof(double), 64); //check malloc!
-	tquery = (double *)mkl_calloc(5, sizeof(double), 64); //check malloc!
+	tquery = (double *)mkl_malloc(5 * sizeof(double), 64); //check malloc!
+	workquery = (double *)mkl_malloc(sizeof(double), 64); //check malloc!
 
 /*
 	//TODO: make col-major for call to fortran
@@ -81,9 +81,10 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	dgeqr(&m, &n, *A, &m, tquery, &tsize, workquery, &lwork, &info);
 	
 	tsize = tquery[0];
-	t = (double *)mkl_calloc(tsize, sizeof(double), 64); //check malloc!
+	t = (double *)mkl_malloc(tsize * sizeof(double), 64); //check malloc!
+
 	lwork = workquery[0];
-	work = (double *)mkl_calloc(lwork, sizeof(double), 64); //check malloc!
+	work = (double *)mkl_malloc(lwork * sizeof(double), 64); //check malloc!
 
 	
 	dgeqr(&m, &n, *A, &m, t, &tsize, work, &lwork, &info);
@@ -96,16 +97,17 @@ void tsqr::qr(double **A, size_t M, size_t N){
 		printf("\n");
 	}
 	
-	
+	mworkquery = (double *)mkl_malloc(sizeof(double), 64); //check malloc!
+
 	/* Workspace query */
-	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, workquery, &lmwork, &info);
+	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, mworkquery, &lmwork, &info);
 
-	lmwork = workquery[0];
-	work = (double *)mkl_calloc(lwork, sizeof(double), 64); //check malloc!
+	lmwork = mworkquery[0];
+	mwork = (double *)mkl_malloc(lmwork * sizeof(double), 64); //check malloc!
 
 	
 	
-	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, work, &lmwork, &info);
+	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, mwork, &lmwork, &info);
 
 	printf("\n============= R:\n");
 	for(size_t i = 0; i < m; ++i) {
@@ -129,10 +131,11 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	
 	mkl_free(Q);
 	mkl_free(work);
-	mkl_free(workquery);
+	mkl_free(mwork);
 	mkl_free(t);
+	mkl_free(mworkquery);
+	mkl_free(workquery);
 	mkl_free(tquery);
-
 }
 tsqr::~tsqr() {
 	// TODO Auto-generated destructor stub
