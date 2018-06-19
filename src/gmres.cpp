@@ -23,23 +23,22 @@ int main() {
 	sparse_matrix_t 	A;
 	MatrixInfo				minfo;
 	size_t						indx;
-		
 
-	stat = matrix_reader::read_matrix_from_file("../matrix_market/e05r0000.mtx", &A, &minfo);
-	// stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	// stat = matrix_reader::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
 	if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatCreate failed");
 
 	const size_t m = minfo.rows;
 
 	r = (double *)mkl_calloc(m, sizeof(double), 64);if(r == NULL){return 1;}
 	V_col_ptr = (double **)mkl_malloc(m * sizeof(double *), 64);if(V_col_ptr == NULL){return 1;}
-	V = (double *)mkl_calloc(m * s, sizeof(double), 64);if(V == NULL){return 1;}
+	V = (double *)mkl_calloc(m * (s+1), sizeof(double), 64);if(V == NULL){return 1;}
 
 	for(size_t i = 0; i < m; ++i)
 		r[i] = 1;
 	
 	indx = 0;
-	for(size_t i = 0; i < m * s; i += m)
+	for(size_t i = 0; i < m * (s+1); i += m)
 		V_col_ptr[indx++] = &V[i];
 
 /*
@@ -55,32 +54,44 @@ int main() {
 	cblas_dscal (m, 1 / beta, V_col_ptr[0], 1);
 	
 	
-	for(size_t i = 0; i < s - 1; ++i) {
+	for(size_t i = 0; i < s; ++i) {
 		
-		spmv::mv (A, V_col_ptr[i], &V_col_ptr[i+1]);
+		spmv::mv (A, V_col_ptr[i], &V_col_ptr[i+1], s);
 
 		beta = cblas_dnrm2 (m, V_col_ptr[i + 1], 1);
 		cblas_dscal (m, 1 / beta, V_col_ptr[i + 1], 1);
 		
 		printf("\n============= V:\n");
 		for(size_t j = 0; j < m; ++j) {
-			for(size_t k = 0; k < s; ++k) {
+			for(size_t k = 0; k < s+1; ++k) {
 				std::cout << V[k*m + j] << '\t';
 			}
 			std::cout << std::endl;
 		}
 	}
 	
+	printf("\n============= V col major:\n");
+	for(size_t j = 0; j < m*(s+1); ++j) {
+		std::cout << V[j] << ", ";
+	}
+	std::cout << std::endl;
+
+	
 	/*
 		transpose matrix in place
 	*/
 	// void mkl_dimatcopy (const char ordering, const char trans, size_t rows, size_t cols, const double alpha, double * AB, size_t lda, size_t ldb);
-	// mkl_dimatcopy('R', 'T', N, M, 1, V, M, N);
+	// mkl_dimatcopy('R', 'T', s+1, m, 1, V, m, s+1);
 
+	printf("\n============= V row major:\n");
+	for(size_t j = 0; j < m*(s+1); ++j) {
+		std::cout << V[j] << ", ";
+	}
+	std::cout << std::endl;
 
 
 //	mpk::mv(A, u, y);
-	tsqr::qr(&V, m, s);
+	tsqr::qr(&V, m, s+1);
 	arnoldi_ca::givens_rotations();
 	arnoldi_ca::modified_leja_ordering();
 

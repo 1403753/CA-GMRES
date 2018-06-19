@@ -15,7 +15,7 @@ class spmv {
 public:
 	spmv();
 	// static void mv(const std::vector<double>, const std::vector<double>, std::vector<double>&);
-	static sparse_status_t mv(const sparse_matrix_t A, const double *x, double **y);
+	static sparse_status_t mv(const sparse_matrix_t A, const double *x, double **y, size_t s);
 	virtual ~spmv();
 };
 

@@ -18,7 +18,6 @@ sparse_status_t matrix_reader::read_matrix_from_file(std::string fname, sparse_m
 	std::ifstream			file (fname);
 	sparse_status_t 	stat;
 	std::string 			line;
-	sparse_matrix_t		Acoo;
 	
 	if (!file.is_open()) {throw std::invalid_argument("Unable to open file");}
 
@@ -40,7 +39,7 @@ sparse_status_t matrix_reader::read_matrix_from_file(std::string fname, sparse_m
 	while (getline(file, line)) {
 		iss.clear();
 		iss.str(line);
-		iss >> row_indx[indx] >> col_indx[indx] >> values[indx];		
+		iss >> row_indx[indx] >> col_indx[indx] >> values[indx];
 		--row_indx[indx];
 		--col_indx[indx];
 		++indx;
@@ -55,12 +54,12 @@ sparse_status_t matrix_reader::read_matrix_from_file(std::string fname, sparse_m
 	std::cout << "rows: " << rows << ", cols: " << cols << ", nnz: " << nnz << "\n";
 
 	// for(size_t i = 0; i < nnz; ++i)
-		// std::cout << "row: " << row_indx[i] << ", col: " << col_indx[i] << ", val: " << values[i] << "\n";	
+		// std::cout << "row: " << row_indx[i] << ", col: " << col_indx[i] << ", val: " << values[i] << "\n";
 	
-	stat = mkl_sparse_d_create_coo (&Acoo, SPARSE_INDEX_BASE_ZERO, rows, cols, nnz, row_indx, col_indx, values);
+	stat = mkl_sparse_d_create_coo (A, SPARSE_INDEX_BASE_ZERO, rows, cols, nnz, row_indx, col_indx, values);
 	if (stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("Matrix Market Converter : matrix creation failed.");
 
-	stat = mkl_sparse_convert_csr (Acoo, SPARSE_OPERATION_NON_TRANSPOSE, A);
+	stat = mkl_sparse_convert_csr (*A, SPARSE_OPERATION_NON_TRANSPOSE, A);
 	
 	mkl_free(row_indx);
 	mkl_free(col_indx);

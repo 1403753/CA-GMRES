@@ -59,7 +59,6 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	workquery = (double *)mkl_malloc(sizeof(double), 64); //check malloc!
 
 /*
-	//TODO: make col-major for call to fortran
 	for(size_t i = 0; i < m; ++i) 
 		for(size_t j = 0; j < n; ++j) {
 			A[i*n + j] = gsl_rng_uniform_int(rng, 100);// + gsl_rng_uniform(rng);

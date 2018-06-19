@@ -14,11 +14,14 @@ spmv::spmv() {
 	
 }
 
-sparse_status_t spmv::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType **y) {
+sparse_status_t spmv::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType **y, size_t s) {
 		sparse_status_t 			stat;
 		struct matrix_descr 	descr;
 		
 		descr.type = SPARSE_MATRIX_TYPE_GENERAL;
+		
+		mkl_sparse_set_mv_hint(A, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
+		mkl_sparse_optimize(A);
 		
 //sparse_status_t mkl_sparse_d_mv (sparse_operation_t operation, double alpha, const sparse_matrix_t A, struct matrix_descr descr, const double *x, double beta, double *y);
 		stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, *y);
