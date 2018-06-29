@@ -37,9 +37,6 @@ clean:
 #	$(CC) $(CFLAGS) -c $^
 #-I$(INC_VIENNACL)
 
-#mpk.o: mpk.cpp mpk.hpp
-#	$(CC) $(CFLAGS) -c $^
-
 #tsqr.o: tsqr.cpp tsqr.hpp
 #	$(CC) $(CFLAGS) -c $^
 

@@ -8,7 +8,7 @@
 
 #include "gmres.hpp"
 
-#define s 3
+#define s 5
 
 int main() {
 	std::cout.setf(std::ios_base::fixed);
@@ -78,11 +78,11 @@ int main() {
 	
 	PAPI_shutdown();	
 
-	printf("\n============= V col major:\n");
-	for(size_t j = 0; j < m*(s+1); ++j) {
-		std::cout << V[j] << ", ";
-	}
-	std::cout << std::endl;
+	// printf("\n============= V col major:\n");
+	// for(size_t j = 0; j < m*(s+1); ++j) {
+		// std::cout << V[j] << ", ";
+	// }
+	// std::cout << std::endl;
 
 	
 	/*
@@ -91,17 +91,16 @@ int main() {
 	// void mkl_dimatcopy (const char ordering, const char trans, size_t rows, size_t cols, const double alpha, double * AB, size_t lda, size_t ldb);
 	// mkl_dimatcopy('R', 'T', s+1, m, 1, V, m, s+1);
 
-	printf("\n============= V row major:\n");
-	for(size_t j = 0; j < m*(s+1); ++j) {
-		std::cout << V[j] << ", ";
-	}
-	std::cout << std::endl;
+	// printf("\n============= V row major:\n");
+	// for(size_t j = 0; j < m*(s+1); ++j) {
+		// std::cout << V[j] << ", ";
+	// }
+	// std::cout << std::endl;
 
 
-//	mpk::mv(A, u, y);
-	tsqr::qr(&V, m, s+1);
-	arnoldi_ca::givens_rotations();
-	arnoldi_ca::modified_leja_ordering();
+	// tsqr::qr(&V, m, s+1);
+	// arnoldi_ca::givens_rotations();
+	// arnoldi_ca::modified_leja_ordering();
 
 	stat = mkl_sparse_destroy(A);
 	gsl_rng_free(rng);
