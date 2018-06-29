@@ -11,6 +11,7 @@
 #include "spmv.hpp"
 #include "tsqr.hpp"
 #include "matrix_reader.hpp"
+#include <papi.h>
 
 #define GMRES_HPP_
 

@@ -17,15 +17,16 @@ int main() {
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL));
 	
-
+	float							rtime, ptime, mflops;
+	long long 				flpops;
 	double 						*V, **V_col_ptr, *r, beta;
 	sparse_status_t 	stat;	
 	sparse_matrix_t 	A;
 	MatrixInfo				minfo;
 	size_t						indx;
 
-	stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
-	// stat = matrix_reader::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
+	// stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	stat = matrix_reader::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
 	if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatCreate failed");
 
 	const size_t m = minfo.rows;
@@ -53,23 +54,30 @@ int main() {
 // void	cblas_dscal (const int N, const double alpha, double *X, const int incX)
 	cblas_dscal (m, 1 / beta, V_col_ptr[0], 1);
 	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
 	
 	for(size_t i = 0; i < s; ++i) {
-		
-		spmv::mv (A, V_col_ptr[i], &V_col_ptr[i+1], s);
 
-		beta = cblas_dnrm2 (m, V_col_ptr[i + 1], 1);
-		cblas_dscal (m, 1 / beta, V_col_ptr[i + 1], 1);
+		spmv::mv (A, V_col_ptr[i], &V_col_ptr[i+1], s);
 		
-		printf("\n============= V:\n");
-		for(size_t j = 0; j < m; ++j) {
-			for(size_t k = 0; k < s+1; ++k) {
-				std::cout << V[k*m + j] << '\t';
-			}
-			std::cout << std::endl;
-		}
+		// beta = cblas_dnrm2 (m, V_col_ptr[i + 1], 1);
+		// cblas_dscal (m, 1 / beta, V_col_ptr[i + 1], 1);
+		
+		// printf("\n============= V:\n");
+		// for(size_t j = 0; j < m; ++j) {
+			// for(size_t k = 0; k < s+1; ++k) {
+				// std::cout << V[k*m + j] << '\t';
+			// }
+			// std::cout << std::endl;
+		// }
 	}
 	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+	
+	PAPI_shutdown();	
+
 	printf("\n============= V col major:\n");
 	for(size_t j = 0; j < m*(s+1); ++j) {
 		std::cout << V[j] << ", ";
@@ -100,7 +108,8 @@ int main() {
 	mkl_free(V);
 	mkl_free(r);
 	mkl_free(V_col_ptr);
-	
+	printf("runtime SpMV: %f\n", rtime);
+
 	return 0;
 }
 
