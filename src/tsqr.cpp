@@ -67,13 +67,13 @@ void tsqr::qr(double **A, size_t M, size_t N){
 		}
 */	
 
-	printf("\nC:\n");
-	for(size_t i = 0; i < m; ++i) {
-		for(size_t j = 0; j < n; ++j) {
-			printf("%f, ", (*A)[j*m + i]);
-		}
-		printf("\n");
-	}
+	// printf("\nC:\n");
+	// for(size_t i = 0; i < m; ++i) {
+		// for(size_t j = 0; j < n; ++j) {
+			// printf("%f, ", (*A)[j*m + i]);
+		// }
+		// printf("\n");
+	// }
 		
 	/* Workspace query */
 //	dgeqr(m, n, A, lda, t, tsize, work, lwork, info);
@@ -88,13 +88,13 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	
 	dgeqr(&m, &n, *A, &m, t, &tsize, work, &lwork, &info);
 	
-	printf("\n============= R:\n");
-	for(size_t i = 0; i < m; ++i) {
-		for(size_t j = 0; j < n; ++j) {
-			printf("%f, ", (*A)[j*m + i]);
-		}
-		printf("\n");
-	}
+	// printf("\n============= R:\n");
+	// for(size_t i = 0; i < m; ++i) {
+		// for(size_t j = 0; j < n; ++j) {
+			// printf("%f, ", (*A)[j*m + i]);
+		// }
+		// printf("\n");
+	// }
 	
 	mworkquery = (double *)mkl_malloc(sizeof(double), 64); //check malloc!
 
@@ -108,25 +108,25 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	
 	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, mwork, &lmwork, &info);
 
-	printf("\n============= R:\n");
-	for(size_t i = 0; i < m; ++i) {
-		for(size_t j = 0; j < n; ++j) {
-			printf("%f, ", (*A)[j*m + i]);
-		}
-		printf("\n");
-	}
-	printf("\n============= Q:\n");
-	for(size_t i = 0; i < m; ++i) {
-		for(size_t j = 0; j < n; ++j) {
-			printf("%f, ", Q[j*m + i]);
-		}
-		printf("\n");
-	}
+	// printf("\n============= R:\n");
+	// for(size_t i = 0; i < m; ++i) {
+		// for(size_t j = 0; j < n; ++j) {
+			// printf("%f, ", (*A)[j*m + i]);
+		// }
+		// printf("\n");
+	// }
+	// printf("\n============= Q:\n");
+	// for(size_t i = 0; i < m; ++i) {
+		// for(size_t j = 0; j < n; ++j) {
+			// printf("%f, ", Q[j*m + i]);
+		// }
+		// printf("\n");
+	// }
 
-	std::cout << "\n\n";	
-	for(size_t j = 0; j < n*m; ++j)
-		printf("%f, ", (*A)[j]);
-	std::cout << "\n";
+	// std::cout << "\n\n";	
+	// for(size_t j = 0; j < n*m; ++j)
+		// printf("%f, ", (*A)[j]);
+	// std::cout << "\n";
 	
 	mkl_free(Q);
 	mkl_free(work);

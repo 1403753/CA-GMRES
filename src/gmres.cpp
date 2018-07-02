@@ -8,7 +8,7 @@
 
 #include "gmres.hpp"
 
-#define s 5
+#define s 500
 
 int main() {
 	std::cout.setf(std::ios_base::fixed);
@@ -97,10 +97,18 @@ int main() {
 	// }
 	// std::cout << std::endl;
 
-
-	// tsqr::qr(&V, m, s+1);
-	// arnoldi_ca::givens_rotations();
-	// arnoldi_ca::modified_leja_ordering();
+	// if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			// exit(1);
+		
+	tsqr::qr(&V, m, s+1);
+	
+	// if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+		// exit(1);
+	
+	// PAPI_shutdown();	
+	
+	arnoldi_ca::givens_rotations();
+	arnoldi_ca::modified_leja_ordering();
 
 	stat = mkl_sparse_destroy(A);
 	gsl_rng_free(rng);
