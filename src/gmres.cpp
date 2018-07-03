@@ -8,7 +8,7 @@
 
 #include "gmres.hpp"
 
-#define s 500
+#define s 3
 
 int main() {
 	std::cout.setf(std::ios_base::fixed);
@@ -25,8 +25,9 @@ int main() {
 	MatrixInfo				minfo;
 	size_t						indx;
 
-	// stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
-	stat = matrix_reader::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
+	stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	// stat = matrix_reader::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
+	// stat = matrix_reader::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
 	if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatCreate failed");
 
 	const size_t m = minfo.rows;
@@ -107,8 +108,8 @@ int main() {
 	
 	// PAPI_shutdown();	
 	
-	arnoldi_ca::givens_rotations();
-	arnoldi_ca::modified_leja_ordering();
+	// arnoldi_ca::givens_rotations();
+	// arnoldi_ca::modified_leja_ordering();
 
 	stat = mkl_sparse_destroy(A);
 	gsl_rng_free(rng);

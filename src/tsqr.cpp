@@ -28,8 +28,11 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	double *Q, *work, *t, *tquery, *workquery, *mwork, *mworkquery;
 	char side = 'L', trans = 'N';
 	
-	// A = (double *)mkl_calloc(n*m, sizeof(double), 64); //check malloc!
-	Q = (double *)mkl_calloc(m*n, sizeof(double), 64); //check malloc!
+	// A = (double *)mkl_calloc(n*m, sizeof(double), 64); //check calloc!
+	Q = (double *)mkl_calloc(m*n, sizeof(double), 64);
+	if (Q == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for Q failed.");
+	
 	for(size_t i = 0; i < n; ++i) 
 		Q[i*m + i] = 1;
 		
@@ -55,9 +58,12 @@ void tsqr::qr(double **A, size_t M, size_t N){
 									};
 */
 
-	tquery = (double *)mkl_malloc(5 * sizeof(double), 64); //check malloc!
-	workquery = (double *)mkl_malloc(sizeof(double), 64); //check malloc!
-
+	tquery = (double *)mkl_malloc(5 * sizeof(double), 64);
+	if (tquery == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for tquery failed.");
+	workquery = (double *)mkl_malloc(sizeof(double), 64);
+	if (workquery == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for workquery failed.");
 /*
 	for(size_t i = 0; i < m; ++i) 
 		for(size_t j = 0; j < n; ++j) {
@@ -80,41 +86,47 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	dgeqr(&m, &n, *A, &m, tquery, &tsize, workquery, &lwork, &info);
 	
 	tsize = tquery[0];
-	t = (double *)mkl_malloc(tsize * sizeof(double), 64); //check malloc!
-
+	t = (double *)mkl_malloc(tsize * sizeof(double), 64);
+	if (t == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for t failed.");
+	
 	lwork = workquery[0];
-	work = (double *)mkl_malloc(lwork * sizeof(double), 64); //check malloc!
-
+	work = (double *)mkl_malloc(lwork * sizeof(double), 64);
+	if (work == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for work failed.");
 	
 	dgeqr(&m, &n, *A, &m, t, &tsize, work, &lwork, &info);
 	
 	// printf("\n============= R:\n");
-	// for(size_t i = 0; i < m; ++i) {
+	// for(size_t i = 0; i < n; ++i) {
 		// for(size_t j = 0; j < n; ++j) {
-			// printf("%f, ", (*A)[j*m + i]);
+			// printf("%f, ", (*A)[j*n + i]);
 		// }
 		// printf("\n");
 	// }
 	
-	mworkquery = (double *)mkl_malloc(sizeof(double), 64); //check malloc!
-
+	mworkquery = (double *)mkl_malloc(sizeof(double), 64); 
+	if (mworkquery == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for mworkquery failed.");
+	
 	/* Workspace query */
 	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, mworkquery, &lmwork, &info);
 
 	lmwork = mworkquery[0];
-	mwork = (double *)mkl_malloc(lmwork * sizeof(double), 64); //check malloc!
-
+	mwork = (double *)mkl_malloc(lmwork * sizeof(double), 64);
+	if (mwork == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for mwork failed.");
 	
 	
 	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, mwork, &lmwork, &info);
 
-	// printf("\n============= R:\n");
-	// for(size_t i = 0; i < m; ++i) {
-		// for(size_t j = 0; j < n; ++j) {
-			// printf("%f, ", (*A)[j*m + i]);
-		// }
-		// printf("\n");
-	// }
+	printf("\n============= R:\n");
+	for(size_t i = 0; i < n; ++i) {
+		for(size_t j = 0; j < n; ++j) {
+			printf("%f, ", (*A)[j*n + i]);
+		}
+		printf("\n");
+	}
 	// printf("\n============= Q:\n");
 	// for(size_t i = 0; i < m; ++i) {
 		// for(size_t j = 0; j < n; ++j) {
