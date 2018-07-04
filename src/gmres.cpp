@@ -25,7 +25,8 @@ int main() {
 	MatrixInfo				minfo;
 	size_t						indx;
 
-	stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	stat = matrix_reader::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
+	// stat = matrix_reader::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
 	// stat = matrix_reader::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
 	if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatCreate failed");
@@ -43,6 +44,7 @@ int main() {
 	for(size_t i = 0; i < m * (s+1); i += m)
 		V_col_ptr[indx++] = &V[i];
 
+	
 /*
 	compute L2-norm beta
 */

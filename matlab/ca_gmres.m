@@ -32,9 +32,9 @@ B0_ = [ritz(1),0,0; B0_];
 B0_(2,2) = real(ritz(2));
 B0_(3,3) = real(ritz(2));
 B0_(2,3) = - imag(ritz(2))^2;
-v2 = (A-ritz(1)*eye(m))*v1;
-v3 = (A-real(ritz(2))*eye(m))*v2;
-v4 = (A-real(ritz(2))*eye(m))*v3 + imag(ritz(2))^2*v2;
+v2 = A*v1 - ritz(1)*v1;
+v3 = A*v2 - real(ritz(2))*v2;
+v4 = A*v3 - real(ritz(2))*v3 + imag(ritz(2))^2*v2;
 V0_accute = [v2, v3, v4];
 
 V_bad = [v1, A*v1, A*A*v1, A*A*A*v1];
@@ -70,9 +70,9 @@ B1 = B1_(1:3,1:3);
 
 v4 = Q0_(:,4);
 
-v5 = (A - ritz(4)*eye(m))*v4;
-v6 = (A - real(ritz(5))*eye(m))*v5;
-v7 = (A - real(ritz(5))*eye(m))*v6 + imag(ritz(5))^2*v5;
+v5 = A*v4 - ritz(4)*v4;
+v6 = A*v5 - real(ritz(5))*v5;
+v7 = A*v6 - real(ritz(5))*v6 + imag(ritz(5))^2*v5;
 
 V1_accute = [v5, v6, v7];
 V_bad = [v4, A*v4, A*A*v4, A*A*A*v4];
@@ -160,7 +160,7 @@ norm(b - A*Q1_blackletter(:,1:6)*y);
 norm(b - A*Q_ref(:,1:6)*y_ref);
 zeta(7);
 
-Q1_blackletter(:,1:6)*y
+Q1_blackletter(:,1:6)*y;
 Q_ref(:,1:6)*y_ref;
 x;
 
