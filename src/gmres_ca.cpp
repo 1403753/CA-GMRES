@@ -58,8 +58,8 @@ int main() {
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 	
-	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
@@ -78,9 +78,7 @@ int main() {
 	tx = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(tx == NULL){return 1;}
 	r = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(r == NULL){return 1;}
 	Q = (ScalarType *)mkl_malloc(n * (m+1) * sizeof(ScalarType), 64);if(Q == NULL){return 1;}
-	H = (ScalarType *)mkl_calloc((m+1) * m, sizeof(ScalarType), 64);if(H == NULL){return 1;}
-	H_s = (ScalarType *)mkl_calloc((2*s+1) * s, sizeof(ScalarType), 64);if(H_s == NULL){return 1;}
-	
+	H = (ScalarType *)mkl_calloc((m+1) * m, sizeof(ScalarType), 64);if(H == NULL){return 1;}	
 	
 	V_col_ptr = (ScalarType **)mkl_malloc(n * sizeof(ScalarType *), 64);if(V_col_ptr == NULL){return 1;}
 	V = (ScalarType *)mkl_calloc(n * (s+1), sizeof(ScalarType), 64);if(V == NULL){return 1;}
@@ -103,8 +101,6 @@ int main() {
 	
 	
 	
-	
-	
 	indx = 0;
 	for(i = 0; i < n * (s+1); i += n)
 		V_col_ptr[indx++] = &V[i];
@@ -118,9 +114,9 @@ int main() {
 /*
 	copy and scale residual vector 'r' into V matrix
 */
-	cblas_dcopy (n, r, 1, V_col_ptr[0], 1);
+	cblas_dcopy (n, r, 1, *V_col_ptr, 1);
 // void	cblas_dscal (const int N, const double alpha, double *X, const int incX)
-	cblas_dscal (n, 1 / beta, V_col_ptr[0], 1);
+	cblas_dscal (n, 1 / beta, *V_col_ptr, 1);
 	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 			exit(1);
@@ -129,8 +125,8 @@ int main() {
 
 		gmres<ScalarType>::mv(A, V_col_ptr[i], &V_col_ptr[i+1], s);
 		
-		beta = cblas_dnrm2 (n, V_col_ptr[i + 1], 1);
-		cblas_dscal (n, 1 / beta, V_col_ptr[i + 1], 1);
+		// beta = cblas_dnrm2 (n, V_col_ptr[i + 1], 1);
+		// cblas_dscal (n, 1 / beta, V_col_ptr[i + 1], 1);
 		
 		// printf("\n============= V:\n");
 		// for(size_t j = 0; j < n; ++j) {

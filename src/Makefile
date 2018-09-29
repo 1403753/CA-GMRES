@@ -1,8 +1,11 @@
 CC = g++
 CFLAGS = -Wall -pedantic -std=c++14 -I$(HYPRE)/include -DBLASINT=int64_t -DMKL_ILP64 -m64 -I$(MKLROOT)/include -fopenmp
+
 DFLAGS = -ggdb -g -O0
-OBJ = gmres_ca.o gmres.o tsqr.o  arnoldi_ca.o matrix_reader.o block_cgs.o
-DEP = $(wildcard *.tpp)
+
+SRC         := $(wildcard *.cpp)
+OBJ         := $(SRC:.cpp=.o)
+#DEP         := $(OBJ:.o=.tpp)
 
 MKLROOT = /home/a01403753/intel/mkl
 HYPRE = /home/a01403753/local/hypre
@@ -18,9 +21,19 @@ gmres_ca: $(OBJ)
 	-fopenmp -lpthread -lm -ldl \
 	-lpapi \
 	-lgfortran -L$(HYPRE)/lib -lHYPRE
-
+	
 gmres_ca.o: gmres_ca.cpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)
+	
+####################################################
+#  the below must change! the below will change..  #
+####################################################
+
+gmres.o: gmres.cpp gmres.hpp gmres.tpp
+	$(CC) $(CFLAGS) -c $< $(DFLAGS)
+
+matrix_reader.o: matrix_reader.cpp matrix_reader.hpp matrix_reader.tpp
+	$(CC) $(CFLAGS) -c $< $(DFLAGS)	
 	
 %.o: %.cpp %.hpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)
