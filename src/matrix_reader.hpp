@@ -19,11 +19,14 @@ typedef struct _MatrixInfo{
 	size_t nnz;
 } MatrixInfo;
 
+template <typename ScalarType>
 class matrix_reader {
 public:
 	matrix_reader();
 	static sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A, MatrixInfo *minfo);
 	virtual ~matrix_reader();
 };
+
+#include "matrix_reader.tpp"
 
 #endif /* MATRIX_READER_HPP_ */
