@@ -3,6 +3,9 @@
  *
  *  Created on: 06.05.2018
  *      Author: Robert
+ * Uses 'dgeqr' and 'dgemqr', called twice, first call is workspace query
+ * 'dgeqr' computes QR decomposition
+ * 'dgemqr' stores implicit Q explicitly in C (= also called Q here) if C is the identity.
  */
 
 #include "tsqr.hpp"
@@ -14,8 +17,8 @@ tsqr::tsqr() {
 
 
 void tsqr::qr(double **A, size_t M, size_t N){
-	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
-	gsl_rng_set(rng, time(NULL));
+	// gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
+	// gsl_rng_set(rng, time(NULL));
 
 	const size_t m = M;
 	const size_t n = N;
@@ -81,6 +84,14 @@ void tsqr::qr(double **A, size_t M, size_t N){
 		// printf("\n");
 	// }
 		
+	printf("\n============= A:\n");
+	for(size_t i = 0; i < n; ++i) {
+		for(size_t j = 0; j < n; ++j) {
+			printf("%.20f, ", (*A)[j*m + i]);
+		}
+		printf("\n");
+	}
+		
 	/* Workspace query */
 //	dgeqr(m, n, A, lda, t, tsize, work, lwork, info);
 	dgeqr(&m, &n, *A, &m, tquery, &tsize, workquery, &lwork, &info);
@@ -117,7 +128,6 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	if (mwork == NULL)
 		throw std::invalid_argument("malloc error: allocating memory for mwork failed.");
 	
-	
 	dgemqr(&side, &trans, &m, &n, &n, *A, &m, t, &tsize, Q, &m, mwork, &lmwork, &info);
 
 	printf("\n============= R:\n");
@@ -139,7 +149,35 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	// for(size_t j = 0; j < n*m; ++j)
 		// printf("%f, ", (*A)[j]);
 	// std::cout << "\n";
+
+
+	// cblas_dtrmm (CblasColMajor, CblasRight, CblasUpper, CblasNoTrans,  CblasNonUnit, 
+								// m, n, 1, *A, m, Q, m);
 	
+	// printf("\n============= QR:\n");
+	// for(size_t i = 0; i < n; ++i) {
+		// for(size_t j = 0; j < n; ++j) {
+			// printf("%.20f, ", Q[j*m + i]);
+		// }
+		// printf("\n");
+	// }
+	
+	double *C;
+	C = (double *)mkl_calloc(n*n, sizeof(double), 64);
+	if (C == NULL)
+		throw std::invalid_argument("malloc error: allocating memory for C failed.");
+	
+	cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, n, n, m, 1, Q, m, Q, m, 0, C, n);
+	
+	printf("\n============= C:\n");
+	for(size_t i = 0; i < n; ++i) {
+		for(size_t j = 0; j < n; ++j) {
+			printf("%.20f, ", C[j*n + i]);
+		}
+		printf("\n");
+	}
+	
+	mkl_free(C);
 	mkl_free(Q);
 	mkl_free(work);
 	mkl_free(mwork);
@@ -147,6 +185,8 @@ void tsqr::qr(double **A, size_t M, size_t N){
 	mkl_free(mworkquery);
 	mkl_free(workquery);
 	mkl_free(tquery);
+	
+	// gsl_rng_free(rng);
 }
 tsqr::~tsqr() {
 	// TODO Auto-generated destructor stub

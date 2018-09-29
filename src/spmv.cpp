@@ -5,7 +5,6 @@
  *      Author: Robert
  */
 #include "spmv.hpp"
-#include <iostream>
 #include <exception>
 
 typedef double ScalarType;
@@ -17,6 +16,7 @@ spmv::spmv() {
 sparse_status_t spmv::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType **y, size_t s) {
 		sparse_status_t 			stat;
 		struct matrix_descr 	descr;
+		// double 								theta = 1;
 		
 		descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 		
