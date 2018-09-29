@@ -118,8 +118,8 @@ void arnoldi_ca::modified_leja_ordering() {
 
 	ritz_vals.shrink_to_fit();
 	
-	std::vector<pair_t> theta_vals;
-	std::vector<size_t> k_index;
+	std::vector<pair_t, mkl_allocator<pair_t>> theta_vals;
+	std::vector<size_t, mkl_allocator<size_t>> k_index;
 
 	theta_vals.reserve(ritz_vals.size());
 	k_index.reserve(ritz_vals.size());
@@ -195,7 +195,7 @@ void arnoldi_ca::modified_leja_ordering() {
 		for (auto &t: theta_vals)
 			t.second /= (Capacity / Capacity_old);
 		
-		std::vector<complex_t> zprod;
+		std::vector<complex_t, mkl_allocator<complex_t>> zprod;
 		
 		for (auto k: k_index) {
 			complex_t prod = 1;
@@ -205,7 +205,7 @@ void arnoldi_ca::modified_leja_ordering() {
 			zprod.push_back(prod);
 		}
 		
-		std::vector<complex_t>::iterator max_zprod;
+		std::vector<complex_t, mkl_allocator<complex_t>>::iterator max_zprod;
 		max_zprod = std::max_element(zprod.begin( ), zprod.end( ), [ ]( const complex_t& lhs, const complex_t& rhs ) {
 			return std::abs(lhs) < std::abs(rhs);
 		});
@@ -452,145 +452,3 @@ arnoldi_ca::~arnoldi_ca() {
 	// Destructor
 	
 }
-
-
-
-	/* NOT NEEDED!!
-	HAD TO ITERATE OVER RITZ VALUES AND SWAP COMPLEX NUMBERS BECAUSE SORTING ALGO
-	WAS UNSTABLE. REPLACEMENT WITH STABLE VERSION MADE THIS CODE OBSOLETE.
-	
-	for (size_t i = 0; i < n; ++i)
-		if(std::imag(ritz_vals.at(i)) != 0) {
-			if(std::imag(ritz_vals.at(i)) < 0) {
-				std::swap(ritz_vals[i], ritz_vals[i + 1]);
-				++i;
-			} else ++i;
-			
-			if (std::real(ritz_vals.at(i-1)) != std::real(ritz_vals.at(i))) {
-				std::cout << "error!\n";	
-				exit(-1);
-			}
-		}
-	std::cout << "ritz:\n";
-	for(auto r: ritz_vals)
-		std::cout << r << "\n";
-	
-	
-	NOT NEEDED!!
-	NORMAL GIVENS ROTATION (Valgrind error) AND MODIFIED GIVENS ROTATION EXAMPLES WITH 3X3 MATRICES
-	
-	{
-		const int m = 3;
-		double vec[m*m] = {9,0,2,
-											 0,7,3,
-											 2,3,1};
-		double c = 0;
-		double s = 0;
-		double a = vec[0];
-		double b = vec[m*2];
-
-		for (size_t j = 0; j < m - 1; ++j) {
-			for (size_t i = m; --i > j;) {
-				a = vec[j*m + j];
-				b = vec[i*m + j];
-// void cblas_drotg (double *a, double *b, double *c, double *s);
-				cblas_drotg(&a, &b, &c, &s);
-
-// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-				cblas_drot(m - j, &vec[j*m + j], 1, &vec[i*m + j], 1, c, s);
-			}
-		}
-		
-		for (size_t i = 0; i < m; ++i) {
-			for (size_t j = 0; j < m; ++j)
-				std::cout << vec[m*i + j] << ' ';
-			std::cout << std::endl;
-		}
-	
-		std::cout << std::endl << "c: " << c << ", s: "<< s <<  std::endl << std::endl;
-		double vec2[m*m] = {9,3,2,
-												2,7,3,
-												0,3,1};
-		double d1 = 1;
-		double d2 = 1;
-		double x1;
-		double param[5]{};
-		
-		for (size_t i = 0; i < m - 1; ++i) {
-			x1 = vec2[i*m + i];
-//	void cblas_drotmg (double *d1, double *d2, double *x1, const double y1, double *param);
-			cblas_drotmg (&d1, &d2, &x1, vec2[(i + 1)*m + i], param);
-	
-//	void cblas_drotm (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double *param);
-			cblas_drotm (m - i, &vec2[i*m + i], 1, &vec2[(i + 1)*m + i], 1, param);
-		}
-	
-		for (size_t i = 0; i < m; ++i) {
-			for (size_t j = 0; j < m; ++j)
-				std::cout << vec2[m*i + j] << ' ';
-			std::cout << std::endl;
-		}
-	
-		std::cout << std::endl << "d1: " << d1 << ", d2: "<< d2 <<  std::endl << std::endl;
-		std::cout << "param: ";
-		for (size_t j = 0; j < 5; ++j)
-			std::cout << param[j] << ' ';
-		
-		std::cout << std::endl;
-	}
-	*/
-	
-	/*
-	*
-	* TEST DATA for modified Leja order
-	*
-	*/
-	/*
-	double wr[n] = {0.3795668652,  0.3795668652, -0.3795668652, -0.3795668652, -1, 0.3414450976, -0.3795668652, -0.3795668652, -1, .01, 0};
-	double wi[n] = {10.7694800092, -10.7694800092,  0.7694800092, -0.7694800092,  0, 					 	0,  0.7694800092, -0.7694800092,  0,   0, 0};
-
-	double wr[n] = {2, 2, 9, 8};
-	double wi[n] = {1, -1, 0, 0};
-
-	double wr[n] = {-0.23278561593838409394,
-								-0.23278561593838409394,
-								-0.17965204298588813292,
-								-0.17965204298588813292,
-								0.00000000000000000000,
-								0.00000000000000000000,
-								0.00000000000000004290,
-								1.00000000000000155431,
-								1.46557123187676840992,
-								2.00000000000000000000,
-								2.35930408597177665442};
-	double wi[n] = {0.79255199251544805605,
-								 - 0.79255199251544805605,
-									0.90301314585700431792,
-									- 0.90301314585700431792,
-									0.00000000000000000000,
-									0.00000000000000000000,
-									0.00000000000000000000,
-									0.00000000000000000000,
-									0.00000000000000000000,
-									0.00000000000000000000,
-									0.00000000000000000000};
-
-	double wr[n] = {-18.26253971751562232839,
-									-18.26253971751562232839,
-									-0.76880864595760334268,
-									7.33095544939625387570,
-									7.33095544939625387570,
-									23.03908177957729108698,
-									49.47271159472406765190,
-									75.45757786431740044009,
-									110.84124849021880265809,
-									127.88031559350544341669,
-									182.32163992436568378253};
-
-	double wi[n] = {8.56750903964367971355,
-									-8.56750903964367971355,
-									0.00000000000000000000,
-									46.23141328511955805425,
-									-46.23141328511955805425,
-									0,0,0,0,0,0};
-	*/

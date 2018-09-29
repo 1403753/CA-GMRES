@@ -13,17 +13,23 @@
 
 #define MATRIX_READER_HPP_
 
-typedef struct _MatrixInfo{
-	size_t rows;
-	size_t cols;
+template <typename ScalarType>
+struct MatrixInfo{
+	size_t n;
 	size_t nnz;
-} MatrixInfo;
+	size_t *rows_start;
+	size_t *rows_end;
+	size_t *col_indx;
+	ScalarType *values;
+	ScalarType **diag_ptr;
+};
 
 template <typename ScalarType>
 class matrix_reader {
 public:
 	matrix_reader();
-	static sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A, MatrixInfo *minfo);
+	MatrixInfo<ScalarType> minfo;
+	static sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A, MatrixInfo<ScalarType> *minfo);
 	virtual ~matrix_reader();
 };
 

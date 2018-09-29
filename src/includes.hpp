@@ -2,9 +2,10 @@
 
 #include <iostream>
 #include <iomanip>
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_rng.h>
-#include <complex>
+#include <gsl/gsl_randist.h> 	// <- not needed everywhere!
+#include <gsl/gsl_rng.h> 			// <- not needed everywhere!
+#include <complex> 						// <- not needed everywhere!
+#include <exception>
 
 #define MKL_MAX_PATH_LEN 4096
 #define MKL_Complex16 std::complex<double>

@@ -40,7 +40,7 @@ block_cgs::~block_cgs() {
 	
 }
 
-	/* NOT NEEDED!!!
+	/* (PROBABLY) NOT NEEDED!!!
 		Batch matrix-matrix multiplication for small matrices, not what I'm looking for..
 		std::cout << "format: 'MKL_COMPACT_SSE'" << mkl_get_format_compact();
 		link: https://software.intel.com/en-us/mkl-developer-reference-c-mkl-get-size-compact
