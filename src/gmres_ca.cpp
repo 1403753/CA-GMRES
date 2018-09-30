@@ -8,7 +8,7 @@
 
 #ifndef GMRES_CA_HPP_
 
-#include "arnoldi_ca.hpp"
+// #include "arnoldi_ca.hpp"
 #include "gmres.hpp"
 #include "tsqr.hpp"
 #include "matrix_reader.hpp"
@@ -36,30 +36,32 @@ int main() {
 	float                         rtime, ptime, mflops;
 	long long                     flpops;
 	ScalarType                    *V;           // matrix with vectors {A^0v, A^1v, ..., A^kv}
-	ScalarType                    **V_col_ptr;  // prob. unnecessary !!
+	ScalarType                    **V_col_ptr;  // necessary for MKL spmv!
 	ScalarType                    *r;           // residual b - Ax
 	ScalarType                    *tx;          // true solution
 	ScalarType                    beta;         // L2-norm of r_0
 	ScalarType                    *H;           //
-	ScalarType                    *H_s;         // H computed by init_gmres, dim(H_s): s+1 x s
 	ScalarType                    *Q;           //
 	// ScalarType                    rTol;         //
 	// size_t                        itTol;        //
+
+	std::vector<pair_t, mkl_allocator<pair_t>>  theta_vals;     // ritz values in modified leja ordering	
 
 	sparse_status_t               stat;
 	sparse_matrix_t               A;            // n x n matrix A
 	MatrixInfo<ScalarType>        minfo;        //
 	size_t                        n;            // dim(A)
-	const size_t                  m = s*12;     // restart length m := s*t
-	size_t                        indx;         // prob. unnecessary !! Connected to V_col_ptr.
+	const size_t                  t = 2;        // number of 'outer iterations' before restart
+	const size_t                  m = s*t;      // restart length
+	size_t                        indx;         // necessary for MKL spmv! Connected to V_col_ptr.
 	size_t                        i;            // index used in for-loops
 
 	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 	
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
-	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
@@ -77,7 +79,7 @@ int main() {
 
 	tx = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(tx == NULL){return 1;}
 	r = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(r == NULL){return 1;}
-	Q = (ScalarType *)mkl_malloc(n * (m+1) * sizeof(ScalarType), 64);if(Q == NULL){return 1;}
+	Q = (ScalarType *)mkl_calloc(n * (m+1), sizeof(ScalarType), 64);if(Q == NULL){return 1;}
 	H = (ScalarType *)mkl_calloc((m+1) * m, sizeof(ScalarType), 64);if(H == NULL){return 1;}	
 	
 	V_col_ptr = (ScalarType **)mkl_malloc(n * sizeof(ScalarType *), 64);if(V_col_ptr == NULL){return 1;}
@@ -95,9 +97,21 @@ int main() {
 	/********************************************/
 	gmres<ScalarType>::mv(A, tx, &r, 1);		
 	
-	stat = gmres<ScalarType>::init_gmres(n, A, r, &H_s, &Q, 2*s);
+	stat = gmres<ScalarType>::init_gmres(n, A, r, &H, &Q, theta_vals, 2*s, m);
 	
 	
+	printf("\n============= H:\n");
+	for(size_t i = 0; i < m+1; ++i) {
+		for(size_t j = 0; j < m; ++j) {
+			printf("%2.2f ", H[i*m + j]);
+		}
+		printf("\n");
+	}
+	
+	std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
+	for (auto p: theta_vals) {
+		std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
+	}	
 	
 	
 	
@@ -109,14 +123,14 @@ int main() {
 /*
 	compute L2-norm beta
 */
-// double cblas_dnrm2 (const MKL_INT n, const double *x, const MKL_INT incx);
-	beta = cblas_dnrm2 (n, r, 1);
+// double cblas_dnrm2(const MKL_INT n, const double *x, const MKL_INT incx);
+	beta = cblas_dnrm2(n, r, 1);
 /*
 	copy and scale residual vector 'r' into V matrix
 */
-	cblas_dcopy (n, r, 1, *V_col_ptr, 1);
-// void	cblas_dscal (const int N, const double alpha, double *X, const int incX)
-	cblas_dscal (n, 1 / beta, *V_col_ptr, 1);
+	cblas_dcopy(n, r, 1, *V_col_ptr, 1);
+// void	cblas_dscal(const int N, const double alpha, double *X, const int incX)
+	cblas_dscal(n, 1 / beta, *V_col_ptr, 1);
 	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 			exit(1);
@@ -178,7 +192,6 @@ int main() {
 	mkl_free(V);
 	mkl_free(r);
 	mkl_free(H);
-	mkl_free(H_s);
 	mkl_free(Q);
 	mkl_free(tx);
 	mkl_free(V_col_ptr);

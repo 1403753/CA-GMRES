@@ -11,7 +11,6 @@ gmres<ScalarType>::gmres() {
 	
 }
 
-
 template <typename ScalarType>
 gmres<ScalarType>::~gmres() {
 	

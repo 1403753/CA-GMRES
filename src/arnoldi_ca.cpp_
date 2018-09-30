@@ -33,8 +33,6 @@ void arnoldi_ca::modified_leja_ordering() {
 
 	const size_t n = 13;
 	
-	
-	
 	size_t alpha = 1;
 	const char job = 'E';
 	const char compz = 'N';
