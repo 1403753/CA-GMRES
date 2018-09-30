@@ -10,7 +10,7 @@
 
 // #include "arnoldi_ca.hpp"
 #include "gmres.hpp"
-#include "tsqr.hpp"
+// #include "tsqr.hpp"
 #include "matrix_reader.hpp"
 #include <papi.h>
 
@@ -178,7 +178,7 @@ int main() {
 	// if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 			// exit(1);
 
-	tsqr::qr(&V, n, s+1);
+	// tsqr::qr(&V, n, s+1);
 	
 	// if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		// exit(1);

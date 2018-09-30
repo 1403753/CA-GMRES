@@ -299,13 +299,13 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 	std::cout << std:: endl << "ritz_vals :" << std:: endl;
 	for (auto &p: ritz_vals) {
 		p.second *= Capacity;
-		std::cout << p.second << "   \tmult: " << p.first << std::endl;
+		// std::cout << p.second << "   \tmult: " << p.first << std::endl;
 	}
 	
 	std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
 	for (auto &p: theta_vals) {
 		p.second *= Capacity;
-		std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
+		// std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
 	}
 	
 	return stat;
