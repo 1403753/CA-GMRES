@@ -95,9 +95,9 @@ int main() {
 	/*  compute residual vector (r = b - Ax_0)  */
 	/*  therefore, b == r                       */
 	/********************************************/
-	gmres<ScalarType>::mv(A, tx, &r, 1);		
+	gmres<ScalarType>::mv(A, tx, r, 1);		
 	
-	stat = gmres<ScalarType>::init_gmres(n, A, r, &H, &Q, theta_vals, 2*s, m);
+	stat = gmres<ScalarType>::init_gmres(n, A, r, H, Q, theta_vals, 2*s, m);
 	
 	
 	printf("\n============= H:\n");
@@ -137,7 +137,7 @@ int main() {
 	
 	for(i = 0; i < s; ++i) {
 
-		gmres<ScalarType>::mv(A, V_col_ptr[i], &V_col_ptr[i+1], s);
+		gmres<ScalarType>::mv(A, V_col_ptr[i], V_col_ptr[i+1], s);
 		
 		// beta = cblas_dnrm2 (n, V_col_ptr[i + 1], 1);
 		// cblas_dscal (n, 1 / beta, V_col_ptr[i + 1], 1);

@@ -4,7 +4,7 @@ bool gmres<ScalarType>::is_conj_pair(complex_t a, complex_t b) {
 }
 
 template <typename ScalarType>
-sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A, const ScalarType *v, ScalarType **H, ScalarType **Q, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals, size_t s, size_t m) {
+sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A, const ScalarType *v, ScalarType *H, ScalarType *Q, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals, size_t s, size_t m) {
 	sparse_status_t 			                      stat = SPARSE_STATUS_SUCCESS;
 	ScalarType 						                      beta;
 	ScalarType                                  *w;
@@ -30,12 +30,12 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 	
 	// Q is in col-major!
 	for(i = 0; i < n; ++i)
-		(*Q)[i] = v[i] / beta;
+		Q[i] = v[i] / beta;
 	
 	if (n < 15) {
 		for(i = 0; i < n; ++i) {
 			for(size_t k = 0; k < m+1; ++k) {
-				std::cout << (*Q)[k*n + i] << " ";
+				std::cout << Q[k*n + i] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -47,20 +47,20 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 		// std::cout << w[o] << "\n";	
 	
 	for(j = 0; j < s; ++j) {
-		mv(A, &(*Q)[j*n], &w, 1);
+		mv(A, &Q[j*n], w, 1);
 		for(i = 0; i < j+1; ++i) {
 			
-			h_ij = cblas_ddot(n, w, 1, &(*Q)[i*n], 1);
+			h_ij = cblas_ddot(n, w, 1, &Q[i*n], 1);
 			H_s[s*i + j] = h_ij;
-			(*H)[m*i + j] = h_ij;
+			H[m*i + j] = h_ij;
 			
-			cblas_daxpy (n, h_ij*(-1), &(*Q)[i*n], 1, w, 1);
+			cblas_daxpy (n, h_ij*(-1), &Q[i*n], 1, w, 1);
 		}
 		h_jp1j = cblas_dnrm2(n, w, 1);
 		H_s[s*(j+1) + j] = h_jp1j;
-		(*H)[m*(j+1) + j] = h_jp1j;
+		H[m*(j+1) + j] = h_jp1j;
 		
-		cblas_daxpy(n, 1 / h_jp1j, w, 1, &(*Q)[(j+1)*n], 1);	
+		cblas_daxpy(n, 1 / h_jp1j, w, 1, &Q[(j+1)*n], 1);	
 	}
 
 	printf("\n============= H_s:\n");
@@ -104,7 +104,7 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 }
 
 template <typename ScalarType>
-sparse_status_t gmres<ScalarType>::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType **y, size_t s) {
+sparse_status_t gmres<ScalarType>::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType *y, size_t s) {
 	sparse_status_t 			stat = SPARSE_STATUS_SUCCESS;
 	struct matrix_descr 	descr;
 	
@@ -114,7 +114,7 @@ sparse_status_t gmres<ScalarType>::mv(const sparse_matrix_t A, const ScalarType 
 	mkl_sparse_optimize(A);
 		
 //sparse_status_t mkl_sparse_d_mv (sparse_operation_t operation, double alpha, const sparse_matrix_t A, struct matrix_descr descr, const double *x, double beta, double *y);
-	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, *y);
+	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, y);
 	if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatMult failed");
 	
 	mkl_free_buffers();
@@ -178,8 +178,6 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 	*	output: theta_vals (in modified Leja order with outlist)
 	*					type: std::vector<size_t outlist, complex<double> vals>
 	*/
-
-	std::cout << "\n\n\t-\tcompute MODIFIED LEJA ORDERING:\n" << std::endl;
 	
 	complex_t Capacity_old, Capacity = 1;
 	size_t L;
@@ -296,13 +294,13 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 		}
 	} //end while
 	
-	std::cout << std:: endl << "ritz_vals :" << std:: endl;
+	// std::cout << std:: endl << "ritz_vals :" << std:: endl;
 	for (auto &p: ritz_vals) {
 		p.second *= Capacity;
 		// std::cout << p.second << "   \tmult: " << p.first << std::endl;
 	}
 	
-	std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
+	// std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
 	for (auto &p: theta_vals) {
 		p.second *= Capacity;
 		// std::cout << p.second << "   \toutlist: " << p.first << std:: endl;

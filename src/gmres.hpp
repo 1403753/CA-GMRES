@@ -21,8 +21,8 @@ class gmres {
 public:
 	gmres();
 	static bool is_conj_pair(complex_t a, complex_t b);
-	static sparse_status_t mv(const sparse_matrix_t A, const ScalarType *x, ScalarType **y, size_t s);
-	static sparse_status_t init_gmres(size_t n, const sparse_matrix_t A, const ScalarType *v, ScalarType **H_s, ScalarType **Q, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals, size_t s, size_t m);
+	static sparse_status_t mv(const sparse_matrix_t A, const ScalarType *x, ScalarType *y, size_t s);
+	static sparse_status_t init_gmres(size_t n, const sparse_matrix_t A, const ScalarType *v, ScalarType *H_s, ScalarType *Q, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals, size_t s, size_t m);
 	static sparse_status_t modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals);
 	virtual ~gmres();
 };
