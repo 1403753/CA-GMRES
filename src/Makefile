@@ -28,12 +28,6 @@ gmres_ca.o: gmres_ca.cpp
 ####################################################
 #  the below must change! the below will change..  #
 ####################################################
-
-gmres.o: gmres.cpp gmres.hpp gmres.tpp
-	$(CC) $(CFLAGS) -c $< $(DFLAGS)
-
-matrix_reader.o: matrix_reader.cpp matrix_reader.hpp matrix_reader.tpp
-	$(CC) $(CFLAGS) -c $< $(DFLAGS)	
 	
 %.o: %.cpp %.hpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)

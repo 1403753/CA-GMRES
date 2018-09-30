@@ -9,8 +9,8 @@
 #ifndef GMRES_CA_HPP_
 
 // #include "arnoldi_ca.hpp"
-#include "gmres.hpp"
 // #include "tsqr.hpp"
+#include "gmres.hpp"
 #include "matrix_reader.hpp"
 #include <papi.h>
 
@@ -37,13 +37,14 @@ int main() {
 	long long                     flpops;
 	ScalarType                    *V;           // matrix with vectors {A^0v, A^1v, ..., A^kv}
 	ScalarType                    **V_col_ptr;  // necessary for MKL spmv!
-	ScalarType                    *r;           // residual b - Ax
+	ScalarType                    *r;           // residual vector b - Ax
 	ScalarType                    *tx;          // true solution
 	ScalarType                    beta;         // L2-norm of r_0
 	ScalarType                    *H;           //
 	ScalarType                    *Q;           //
 	// ScalarType                    rTol;         //
 	// size_t                        itTol;        //
+	ScalarType 										**diag_ptr;
 
 	std::vector<pair_t, mkl_allocator<pair_t>>  theta_vals;     // ritz values in modified leja ordering	
 
@@ -60,8 +61,8 @@ int main() {
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 	
-	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
@@ -95,8 +96,8 @@ int main() {
 	/*  compute residual vector (r = b - Ax_0)  */
 	/*  therefore, b == r                       */
 	/********************************************/
-	gmres<ScalarType>::mv(A, tx, r, 1);		
-	
+	gmres<ScalarType>::mv(A, tx, r, 1);
+
 	stat = gmres<ScalarType>::init_gmres(n, A, r, H, Q, theta_vals, 2*s, m);
 	
 	
@@ -114,12 +115,16 @@ int main() {
 	}	
 	
 	
-	
 	indx = 0;
 	for(i = 0; i < n * (s+1); i += n)
 		V_col_ptr[indx++] = &V[i];
 
-	
+	diag_ptr = minfo.diag_ptr;
+
+	for (i = 0; i < n; ++i)
+		*diag_ptr[i] -= theta_vals.at(0).second.real();
+
+
 /*
 	compute L2-norm beta
 */

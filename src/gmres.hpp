@@ -27,6 +27,7 @@ public:
 	virtual ~gmres();
 };
 
-#include "gmres.tpp"
+#include "init_gmres.tpp"
+#include "modified_leja_ordering.tpp"
 
 #endif /* GMRES_HPP_ */
