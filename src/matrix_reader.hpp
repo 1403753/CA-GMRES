@@ -20,7 +20,7 @@ struct MatrixInfo{
 	size_t *rows_start;
 	size_t *rows_end;
 	size_t *col_indx;
-	ScalarType *values;
+	ScalarType **values;
 	ScalarType **diag_ptr;
 };
 

@@ -33,15 +33,15 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 	for(i = 0; i < n; ++i)
 		Q[i] = v[i] / beta;
 	
-	if (n < 15) {
-		for(i = 0; i < n; ++i) {
-			for(size_t k = 0; k < m+1; ++k) {
-				std::cout << Q[k*n + i] << " ";
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-	}
+	// if (n < 15) {
+		// for(i = 0; i < n; ++i) {
+			// for(size_t k = 0; k < m+1; ++k) {
+				// std::cout << Q[k*n + i] << " ";
+			// }
+			// std::cout << std::endl;
+		// }
+		// std::cout << std::endl;
+	// }
 	
 	// std::cout << std::endl;
 	// for(size_t o = 0; o < n; ++o)
@@ -61,10 +61,14 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 			
 			cblas_daxpy (n, h_ij*(-1), &Q[i*n], 1, w, 1);
 		}
+		
 		h_jp1j = cblas_dnrm2(n, w, 1);
 		H_s[(s+1)*(j+1) + j] = h_jp1j;
 		H[m*(j+1) + j] = h_jp1j;
 		
+// void	cblas_dscal(const int N, const double alpha, double *X, const int incX)
+		// cblas_dscal(n, 1 / h_jp1j, w, 1);		
+		// cblas_dcopy(n, w, 1, &Q[(j+1)*n], 1);
 		cblas_daxpy(n, 1 / h_jp1j, w, 1, &Q[(j+1)*n], 1);	
 	}
 	
@@ -81,7 +85,7 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 	h_jp1j = cblas_dnrm2(n, w, 1);
 
 	printf("\n============= H_s:\n");
-	for(size_t i = 0; i < s+2; ++i) {
+	for(size_t i = 0; i < s+1; ++i) {
 		for(size_t j = 0; j < s+1; ++j) {
 			printf("%2.2f ", H_s[i*(s+1) + j]);
 		}
