@@ -31,10 +31,11 @@ public:
 																		size_t m);
 
 	static sparse_status_t modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals);
+	// TODO -> static reduce_H(size_t ritz_num, ScalarType *H, size_t m, ScalarType *zeta);
 	virtual ~gmres();
 };
 
-#include "gmres_init.tpp"
+#include "gmres.tpp"
 #include "gmres_modified_leja_ordering.tpp"
 
 #endif /* GMRES_HPP_ */

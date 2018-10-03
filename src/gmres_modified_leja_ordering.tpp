@@ -7,24 +7,13 @@ template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals) {
 	sparse_status_t                             stat = SPARSE_STATUS_SUCCESS;
 	std::vector<pair_t, mkl_allocator<pair_t>>  ritz_vals;
-	size_t                                      i, j, real_idx;
+	size_t                                      i, j;
 
 //	ritz_vals.reserve(sizeof(wr) / sizeof(wr[0]));
 	ritz_vals.reserve(s);
 	
-	for(i = 0; i < s; ++i) {
-		if(wi[i] == 0) real_idx = i;
-	}
-	
-	for(i = 0; i < s; ++i) {
-		if (i != real_idx)
-			ritz_vals.push_back(pair_t(1, complex_t(wr[i], wi[i])));		
-	}
-	
-	if (ritz_vals.back().second.imag() > 0.0) {
-		ritz_vals.pop_back();
-		ritz_vals.push_back(pair_t(1, complex_t(wr[real_idx], wi[real_idx])));		
-	}
+	for(i = 0; i < s; ++i)
+		ritz_vals.push_back(pair_t(1, complex_t(wr[i], wi[i])));		
 		
 	std::stable_sort(ritz_vals.begin( ), ritz_vals.end( ), [ ]( const pair_t& lhs, const pair_t& rhs ) {
 			return lhs.second.real() < rhs.second.real();

@@ -5,7 +5,7 @@
  *      Author: Robert
  * Uses 'dgeqr' and 'dgemqr', called twice, first call is workspace query
  * 'dgeqr' computes QR decomposition of A stored in col-maj. order
- * 'dgemqr' stores implicit Q explicitly in C (= also called Q here) if C is the Identity.
+ * 'dgemqr' stores implicit Q (after 'dseqr' implicit Q and R were stored in A) explicitly in C (= also called 'Q' here) if C is the Identity.
  */
 
 #include "tsqr.hpp"
@@ -126,15 +126,15 @@ void tsqr::qr(double **A, size_t M, size_t N){
 		}
 		printf("\n");
 	}
-
-	// printf("\n============= Q:\n");
-	// for(size_t i = 0; i < m; ++i) {
-		// for(size_t j = 0; j < n; ++j) {
-			// printf("%f, ", Q[j*m + i]);
-		// }
-		// printf("\n");
-	// }
-
+	if (m < 15) {
+		printf("\n============= Q:\n");
+		for(size_t i = 0; i < m; ++i) {
+			for(size_t j = 0; j < n; ++j) {
+				printf("%f, ", Q[j*m + i]);
+			}
+			printf("\n");
+		}
+	}
 	// std::cout << "\n\n";	
 	// for(size_t j = 0; j < n*m; ++j)
 		// printf("%f, ", (*A)[j]);

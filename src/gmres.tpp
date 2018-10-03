@@ -1,3 +1,6 @@
+// TODO: write givens_rot function 'reduce_H'
+// template <typename ScalarType>
+
 template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
                                               const sparse_matrix_t A,
@@ -10,7 +13,6 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 	sparse_status_t 			                      stat = SPARSE_STATUS_SUCCESS;
 	ScalarType                                  *w;
 	ScalarType                                  *H_s;          // is square with odd dimension to ensure at least one real value bc. we initially needed to pick 's' out of '2s' ritzvalues.
-
 	ScalarType                                  h_ij;
 	ScalarType                                  h_jp1j;
 	
@@ -26,7 +28,7 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 	size_t                                      i, j;           // index in for-loops
 	
 	w = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	H_s = (ScalarType *)mkl_calloc((s + 1)*(s + 1), sizeof(ScalarType), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	H_s = (ScalarType *)mkl_calloc((s + 1)*s, sizeof(ScalarType), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	
 	// if (n < 15) {
@@ -52,14 +54,14 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 		for(i = 0; i < j+1; ++i) {
 			
 			h_ij = cblas_ddot(n, w, 1, &Q[i*n], 1);
-			H_s[(s+1)*i + j] = h_ij;
+			H_s[s*i + j] = h_ij;
 			H[m*i + j] = h_ij;
 			
 			cblas_daxpy (n, h_ij*(-1), &Q[i*n], 1, w, 1);
 		}
 		
 		h_jp1j = cblas_dnrm2(n, w, 1);
-		H_s[(s+1)*(j+1) + j] = h_jp1j;
+		H_s[s*(j+1) + j] = h_jp1j;
 		H[m*(j+1) + j] = h_jp1j;
 		
 // void	cblas_dscal(const int N, const double alpha, double *X, const int incX)
@@ -67,30 +69,18 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 		// cblas_dcopy(n, w, 1, &Q[(j+1)*n], 1);
 		cblas_daxpy(n, 1 / h_jp1j, w, 1, &Q[(j+1)*n], 1);	
 	}
-	
-  /********************************************************************/
-	/* compute one more column of H_s to get odd number of Ritz values  */
-	/********************************************************************/
-	
-	mv(A, &Q[j*n], w, 1);
-	for(i = 0; i < j+1; ++i) {
-		h_ij = cblas_ddot(n, w, 1, &Q[i*n], 1);
-		H_s[(s+1)*i + j] = h_ij;			
-		cblas_daxpy (n, h_ij*(-1), &Q[i*n], 1, w, 1);
-	}
-	h_jp1j = cblas_dnrm2(n, w, 1);
 
 	printf("\n============= H_s:\n");
 	for(size_t i = 0; i < s+1; ++i) {
-		for(size_t j = 0; j < s+1; ++j) {
-			printf("%2.2f ", H_s[i*(s+1) + j]);
+		for(size_t j = 0; j < s; ++j) {
+			printf("%2.2f ", H_s[s*i + j]);
 		}
 		printf("\n");
 	}
 	
 	
-	wr = (double *)mkl_malloc((s + 1)*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	wi = (double *)mkl_malloc((s + 1)*sizeof(double), 64);if(wi == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	wi = (double *)mkl_malloc(s*sizeof(double), 64);if(wi == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	// scale = (double *)mkl_malloc((s + 1)*sizeof(double), 64);if(scale == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 
@@ -98,18 +88,18 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 // balancing prob. not needed!
 	// job = 'N'; // neither scaled nor pivoted
 //LAPACKE_dgebal( int matrix_layout, char job, lapack_int n, double* a, lapack_int lda, lapack_int* ilo, lapack_int* ihi, double* scale );
-	// LAPACKE_dgebal(LAPACK_ROW_MAJOR, job, s+1, H_s, s+1, &ilo, &ihi, scale);	
+	// LAPACKE_dgebal(LAPACK_ROW_MAJOR, job, s, H_s, s, &ilo, &ihi, scale);	
 	
 	job = 'E';
 	
 //LAPACKE_dhseqr(int matrix_layout, char job, char compz, lapack_int n, lapack_int ilo, lapack_int ihi, double *h, lapack_int ldh, double *wr, double *wi, double *z, lapack_int ldz);
-	LAPACKE_dhseqr(LAPACK_ROW_MAJOR, job, compz, s+1, ilo, ihi, H_s, s+1, wr, wi, nullptr, s+1);	
+	LAPACKE_dhseqr(LAPACK_ROW_MAJOR, job, compz, s, ilo, ihi, H_s, s, wr, wi, nullptr, s);	
 	
 	std::cout << std::endl;
 	for(size_t o = 0; o < s; ++o)
 		printf("%.10f,\t%.10f\n", wr[o], wi[o]);	
 
-	modified_leya_ordering(s/2+1, wr, wi, theta_vals);
+	modified_leya_ordering(s, wr, wi, theta_vals);
 		
 	
 	// mkl_free(scale);
