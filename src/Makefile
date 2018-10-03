@@ -25,10 +25,6 @@ gmres_ca: $(OBJ)
 gmres_ca.o: gmres_ca.cpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)
 	
-####################################################
-#  the below must change! the below will change..  #
-####################################################
-	
 %.o: %.cpp %.hpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)
 	

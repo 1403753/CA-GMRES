@@ -1,4 +1,9 @@
 template <typename ScalarType>
+bool gmres<ScalarType>::is_conj_pair(complex_t a, complex_t b) {
+	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);
+}
+
+template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals) {
 	sparse_status_t                             stat = SPARSE_STATUS_SUCCESS;
 	std::vector<pair_t, mkl_allocator<pair_t>>  ritz_vals;

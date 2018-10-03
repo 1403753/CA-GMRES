@@ -1,13 +1,13 @@
 template <typename ScalarType>
-void diagonal_pointer_csr (size_t n, size_t *rows_start, size_t *rows_end, size_t *col_indx, ScalarType **values, ScalarType **diag_ptr);
+void diagonal_pointer_csr (size_t n, sparse_matrix_t A, size_t *rows_start, size_t *rows_end, size_t *col_indx, ScalarType *values, ScalarType **diag_ptr);
 
 template <typename ScalarType>
 sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fname, sparse_matrix_t *A, MatrixInfo<ScalarType> *minfo) {
 	
 	std::cout.precision(3);
 	
-	size_t            *row_indx, *col_indx, indx, n, cols, nnz;
-	ScalarType        *vals, **values, **diag_ptr;
+	size_t            *row_indx, *col_indx, i, n, cols, nnz;
+	ScalarType        *values, **diag_ptr;
 	std::ifstream     file (fname);
 	sparse_status_t   stat;
 	std::string       line;
@@ -27,21 +27,18 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 	
 	row_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(row_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
 	col_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
-	diag_ptr = (ScalarType **) mkl_malloc(n * sizeof(ScalarType *), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'diag_ptr' failed.");}
-	values = (ScalarType **) mkl_malloc(nnz * sizeof(ScalarType *), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
-	vals = (ScalarType *) mkl_malloc(nnz * sizeof(ScalarType), 64);if(vals == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
-	
-
+	diag_ptr = (ScalarType **) mkl_malloc(n * sizeof(ScalarType *), 64);if(diag_ptr == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'diag_ptr' failed.");}
+	values = (ScalarType *) mkl_malloc(nnz * sizeof(ScalarType), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
 	
 	// size_t next = 0;	
 	
-	for(indx = 0; indx < nnz; ++indx) {
-		file >> row_indx[indx] >> col_indx[indx] >> vals[indx];
-		--row_indx[indx];
-		--col_indx[indx];
-
-		// if (row_indx[indx] == col_indx[indx])
-			// diag_ptr[next++] = &vals[indx];
+	for(i = 0; i < nnz; ++i) {
+		file >> row_indx[i] >> col_indx[i] >> values[i];
+		--row_indx[i];
+		--col_indx[i];
+		
+		// if (row_indx[i] == col_indx[i])
+			// *diag_ptr[next++] = values[i];
 	}
 	
 	// if(next != n)throw std::invalid_argument("Matrix Market Converter : matrix has missing diagonal entries.");
@@ -51,12 +48,12 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 	minfo->n = n;
 	minfo->nnz = nnz;
 	
-	stat = mkl_sparse_d_create_coo (A, SPARSE_INDEX_BASE_ZERO, n, n, nnz, row_indx, col_indx, vals);
+	stat = mkl_sparse_d_create_coo (A, SPARSE_INDEX_BASE_ZERO, n, n, nnz, row_indx, col_indx, values);
 	if (stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("Matrix Market Converter : matrix creation failed.");
-	std::cout << indx << std::endl;
+	std::cout << i << std::endl;
 
 	stat = mkl_sparse_convert_csr (*A, SPARSE_OPERATION_NON_TRANSPOSE, A);
-	std::cout << indx << std::endl;
+	std::cout << i << std::endl;
 	
 	/***************************/
 	/* BUILT IN PRECONDITIONER */
@@ -65,16 +62,21 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 
 	mkl_free(row_indx);
 	mkl_free(col_indx);
-	mkl_free(vals);
+	mkl_free(values);
 	
 	sparse_index_base_t indexing;
 	
 	size_t *rows_start;
 	size_t *rows_end;
 	
-	mkl_sparse_d_export_csr (*A, &indexing, &n, &cols, &rows_start, &rows_end, &col_indx, values);
+	mkl_sparse_d_export_csr (*A, &indexing, &n, &cols, &rows_start, &rows_end, &col_indx, &values);
+	
+	diagonal_pointer_csr(n, *A, rows_start, rows_end, col_indx, values, diag_ptr);
+		
+	for (size_t j = 0; j < n; ++j)
+		std::cout<< *diag_ptr[j] << " " << j+1 << " diag\n";
 
-	diagonal_pointer_csr(n, rows_start, rows_end, col_indx, values, diag_ptr);
+	mkl_sparse_order(*A);
 	
 	minfo->col_indx = col_indx;
 	minfo->rows_start = rows_start;
@@ -88,15 +90,15 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 }
 
 template <typename ScalarType>
-void diagonal_pointer_csr (size_t n, size_t *rows_start, size_t *rows_end, size_t *col_indx, ScalarType **values, ScalarType **diag_ptr) {
-	size_t j1, j2;
+void diagonal_pointer_csr(size_t n, sparse_matrix_t A, size_t *rows_start, size_t *rows_end, size_t *col_indx, ScalarType *values, ScalarType **diag_ptr) {
+	size_t j, j1, j2;
 	for (size_t i = 0; i < n; ++i) {
     j1 = rows_start[i];
     j2 = rows_end[i];
 
-    for (size_t j = j1; j < j2; ++j) {
+    for (j = j1; j < j2; ++j) {
 			if (col_indx[j] == i) {
-				diag_ptr[i] = values[j];
+				diag_ptr[i] = &values[j];
 				break;
 			}
     }

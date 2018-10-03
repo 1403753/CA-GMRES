@@ -1,12 +1,13 @@
 template <typename ScalarType>
-bool gmres<ScalarType>::is_conj_pair(complex_t a, complex_t b) {
-	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);
-}
-
-template <typename ScalarType>
-sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A, const ScalarType *v, ScalarType *H, ScalarType *Q, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals, size_t s, size_t m) {
+sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
+                                              const sparse_matrix_t A,
+																							ScalarType *H,
+																							ScalarType *Q,
+																							std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals,
+																							size_t s,
+																							size_t m) {
+																								
 	sparse_status_t 			                      stat = SPARSE_STATUS_SUCCESS;
-	ScalarType 						                      beta;
 	ScalarType                                  *w;
 	ScalarType                                  *H_s;          // is square with odd dimension to ensure at least one real value bc. we initially needed to pick 's' out of '2s' ritzvalues.
 
@@ -26,12 +27,7 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 	
 	w = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	H_s = (ScalarType *)mkl_calloc((s + 1)*(s + 1), sizeof(ScalarType), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	
-	beta = cblas_dnrm2 (n, v, 1);
-	
-	// Q is in col-major!
-	for(i = 0; i < n; ++i)
-		Q[i] = v[i] / beta;
+
 	
 	// if (n < 15) {
 		// for(i = 0; i < n; ++i) {
@@ -114,6 +110,7 @@ sparse_status_t gmres<ScalarType>::init_gmres(size_t n, const sparse_matrix_t A,
 		printf("%.10f,\t%.10f\n", wr[o], wi[o]);	
 
 	modified_leya_ordering(s/2+1, wr, wi, theta_vals);
+		
 	
 	// mkl_free(scale);
 	mkl_free(w);
