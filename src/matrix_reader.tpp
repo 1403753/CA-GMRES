@@ -50,10 +50,9 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 	
 	stat = mkl_sparse_d_create_coo (A, SPARSE_INDEX_BASE_ZERO, n, n, nnz, row_indx, col_indx, values);
 	if (stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("Matrix Market Converter : matrix creation failed.");
-	std::cout << i << std::endl;
 
 	stat = mkl_sparse_convert_csr (*A, SPARSE_OPERATION_NON_TRANSPOSE, A);
-	std::cout << i << std::endl;
+
 	
 	/***************************/
 	/* BUILT IN PRECONDITIONER */
@@ -72,9 +71,10 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 	mkl_sparse_d_export_csr (*A, &indexing, &n, &cols, &rows_start, &rows_end, &col_indx, &values);
 	
 	diagonal_pointer_csr(n, *A, rows_start, rows_end, col_indx, values, diag_ptr);
-		
-	for (size_t j = 0; j < n; ++j)
-		std::cout<< *diag_ptr[j] << " " << j+1 << " diag\n";
+	
+	if (n < 15)
+		for (size_t j = 0; j < n; ++j)
+			std::cout<< *diag_ptr[j] << " " << j+1 << " diag\n";
 
 	mkl_sparse_order(*A);
 	

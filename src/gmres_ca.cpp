@@ -78,7 +78,7 @@ int main() {
 
 	tx = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(tx == NULL){return 1;}
 	r = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(r == NULL){return 1;}
-	zeta = (ScalarType *)mkl_calloc(m + s + 1, sizeof(ScalarType), 64);if(zeta == NULL){return 1;}
+	zeta = (ScalarType *)mkl_calloc(m+1, sizeof(ScalarType), 64);if(zeta == NULL){return 1;}
 	Q = (ScalarType *)mkl_calloc(n * (m+1), sizeof(ScalarType), 64);if(Q == NULL){return 1;}
 	H = (ScalarType *)mkl_calloc((m+1) * m, sizeof(ScalarType), 64);if(H == NULL){return 1;}		
 	
@@ -106,6 +106,81 @@ int main() {
 		std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
 	}
 	
+	
+	
+	/*****************************/
+  /*  classic givens_rotation  */
+	/*****************************/
+	
+	ScalarType c_giv = 0;
+	ScalarType s_giv = 0;
+	ScalarType x1 = 0;
+	ScalarType x2 = 0;
+	
+	
+	printf("\n\n============= H reduced:\n");
+	for(i = 0; i < 2*s + 1; ++i) {
+		for(j = 0; j < 2*s; ++j) {
+			printf("%2.2f ", H[i*m + j]);
+		}
+		std::cout << std::endl;
+	}	
+	std::cout << std::endl;
+
+	
+	for (i = 0; i < s*2; ++i) {
+			x1 = H[i*m + i];
+			x2 = H[(i + 1)*m + i];
+			
+			std::cout << "x1: " << x1 << ", x2: " << x2 << ", i: " << i << std::endl;
+			
+// void cblas_drotg (double *x1, double *x2, double *c, double *s);
+			cblas_drotg(&x1, &x2, &c_giv, &s_giv);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+			cblas_drot(m - i, &H[i*m + i], 1, &H[(i + 1)*m + i], 1, c_giv, s_giv);
+
+
+			/**********************************/
+			/* zeta givens NOT WORKING A.T.M. */		
+			/**********************************/
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+			cblas_drot(m - i, &zeta[i], 1, &zeta[i + 1], 1, c_giv, s_giv);
+	}
+
+
+	std::cout << "\n\n============= zeta:\n";
+	for(i = 0; i < m+1; ++i)
+		std::cout << zeta[i] << std::endl;	
+	
+	/****************************/
+	/*  check this function !!! */
+	/****************************/
+
+	// void cblas_dtrsv (const CBLAS_LAYOUT Layout, const CBLAS_UPLO uplo, const CBLAS_TRANSPOSE trans, const CBLAS_DIAG diag, 
+                  // const MKL_INT n, const double *a, const MKL_INT lda, double *x, const MKL_INT incx);
+	cblas_dtrsv (CblasRowMajor, CblasUpper, CblasNoTrans, CblasNonUnit, 2*s, H, m, zeta, 1);
+	
+	std::cout << "\n\n============= H reduced:\n";
+	for(i = 0; i < 2*s+1; ++i) {
+		for(j = 0; j < 2*s; ++j) {
+			printf("%2.2f ", H[i*m + j]);
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+
+	std::cout << "\n\n============= sol:\n";
+	for(i = 0; i < m+1; ++i)
+		std::cout << zeta[i] << std::endl;
+
+	std::cout << std::endl;
+
+
+	
+	
+	
 	ScalarType **diag_ptr = minfo.diag_ptr;
 	lambda_old = 0;
 	
@@ -114,15 +189,15 @@ int main() {
 		lambda = theta_vals.at((i - 2*s + 1)%s).second.real();
 		lambda_imag = theta_vals.at((i - 2*s + 1)%s).second.imag();
 				
-		if (n < 15) {
-			printf("\n============= Q col major:\n");
-			for(k = 0; k < n; ++k) {
-				for(j = 0; j < m+1; ++j) {
-					std::cout << Q[j*n + k] << " ";
-				}
-				std::cout << std::endl;
-			}
-		}		
+		// if (n < 15) {
+			// printf("\n============= Q col major:\n");
+			// for(k = 0; k < n; ++k) {
+				// for(j = 0; j < m+1; ++j) {
+					// std::cout << Q[j*n + k] << " ";
+				// }
+				// std::cout << std::endl;
+			// }
+		// }		
 
 		// #pragma omp parallel for if(n > 100000000000000) default(none) shared(A, diag_ptr, n, lambda) schedule(auto)
 		for (j = 0; j < n; ++j) {
