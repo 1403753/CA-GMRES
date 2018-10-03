@@ -1,0 +1,10 @@
+==40354== HEAP SUMMARY:
+==40354==     in use at exit: 320,510 bytes in 103 blocks
+==40354==   total heap usage: 2,211 allocs, 2,108 frees, 3,333,616 bytes allocated
+==40354==
+==40354== LEAK SUMMARY:
+==40354==    definitely lost: 544 bytes in 2 blocks
+==40354==    indirectly lost: 224 bytes in 1 blocks
+==40354==      possibly lost: 84,960 bytes in 49 blocks
+==40354==    still reachable: 234,782 bytes in 51 blocks
+==40354==         suppressed: 0 bytes in 0 blocks
