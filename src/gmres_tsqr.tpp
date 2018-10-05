@@ -62,14 +62,14 @@ sparse_status_t gmres<ScalarType>::tsqr(ScalarType *V, ScalarType *Q, ScalarType
 	return stat;
 }
 
-	// std::cout << "AAAAARRR:" << std::endl;
+	// std::cout << "R_:" << std::endl;
 	// for(i = 0; i < n; ++i) {
 		// for(j = i; j < n; ++j) {
 			// std::cout << R_[(st + n + 1)*j + i] << " ";
 		// }
 		// std::cout << std::endl;
 	// }
-	// printf("\n============= R:\n");
+	// printf("\n============= R_:\n");
 	// for(size_t i = 0; i < n; ++i) {
 		// for(size_t j = 0; j < n; ++j) {
 			// printf("%f, ", V[n*j + i]);

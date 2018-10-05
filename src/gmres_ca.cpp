@@ -14,6 +14,7 @@
 /* make template functions virtual, or leave 'em */
 /* remove static functions and initialize objects */
 /* change allocation of 'R' back to malloc */
+/* modify givens rotations to H */
 
 /**************/
 /*  END TODO  */
@@ -195,7 +196,15 @@ int main() {
 			/**********/
 
 			gmres<ScalarType>::tsqr(V, &Q[n*(k*s + 1)], &R[s*k+1], n, s, m);
-
+			
+			
+			/************************************************************************************************************************/
+			/*************************************  inverse of upper triangular matrix  *********************************************/
+			/*************************  https://software.intel.com/en-us/mkl-developer-reference-c-trtri ****************************/
+			/* lapack_int LAPACKE_dtrtri (int matrix_layout , char uplo , char diag , lapack_int n , double * a , lapack_int lda ); */
+			/************************************************************************************************************************/
+			
+			
 		} // end for "outer iteration"
 
 		restart = false;
