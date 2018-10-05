@@ -1,5 +1,30 @@
-// TODO: write givens_rot function 'reduce_H'
-// template <typename ScalarType>
+template <typename ScalarType>
+sparse_status_t gmres<ScalarType>::reduce_H(ScalarType *H, size_t s, size_t m, size_t k, ScalarType *zeta) {
+	sparse_status_t stat = SPARSE_STATUS_EXECUTION_FAILED;
+	ScalarType c_giv = 0;
+	ScalarType s_giv = 0;
+	ScalarType x1 = 0;
+	ScalarType x2 = 0;
+
+	for (size_t i = 0; i < s; ++i) {
+		
+		x1 = H[(i + s*k)*m + (i + s*k)];
+		x2 = H[(i + s*k + 1)*m + (i + s*k)];
+
+// void cblas_drotg (double *x1, double *x2, double *c, double *s);
+		cblas_drotg(&x1, &x2, &c_giv, &s_giv);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+		cblas_drot(m - (i + s*k), &H[(i + s*k)*m + (i + s*k)], 1, &H[(i + s*k + 1)*m + (i + s*k)], 1, c_giv, s_giv);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+		cblas_drot(1, &zeta[i + s*k], 1, &zeta[i + s*k + 1], 1, c_giv, s_giv);
+
+	}
+
+	stat = SPARSE_STATUS_SUCCESS;
+	return stat;
+}
 
 template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
@@ -29,7 +54,6 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 	
 	w = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	H_s = (ScalarType *)mkl_calloc((s + 1)*s, sizeof(ScalarType), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-
 	
 	// if (n < 15) {
 		// for(i = 0; i < n; ++i) {

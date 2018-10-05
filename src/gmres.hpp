@@ -29,13 +29,14 @@ public:
 																		std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals,
 																		size_t s,
 																		size_t m);
-
 	static sparse_status_t modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals);
-	// TODO -> static reduce_H(size_t ritz_num, ScalarType *H, size_t m, ScalarType *zeta);
+	static sparse_status_t reduce_H(ScalarType *H, size_t s, size_t m, size_t k, ScalarType *zeta);
+	static sparse_status_t tsqr(ScalarType *V, ScalarType *Q, ScalarType *R_, const size_t m, const size_t n, const size_t st);
 	virtual ~gmres();
 };
 
 #include "gmres.tpp"
 #include "gmres_modified_leja_ordering.tpp"
+#include "gmres_tsqr.tpp"
 
 #endif /* GMRES_HPP_ */
