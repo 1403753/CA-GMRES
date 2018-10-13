@@ -37,7 +37,7 @@ sparse_status_t matrix_reader<ScalarType>::read_matrix_from_file(std::string fna
 	minfo->n = n;
 	minfo->nnz = nnz;
 	
-	stat = mkl_sparse_d_create_coo (A, SPARSE_INDEX_BASE_ZERO, n, n, nnz, row_indx, col_indx, values);
+	stat = mkl_sparse_d_create_coo(A, SPARSE_INDEX_BASE_ZERO, n, n, nnz, row_indx, col_indx, values);
 	if (stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("Matrix Market Converter : matrix creation failed.");
 
 	stat = mkl_sparse_convert_csr (*A, SPARSE_OPERATION_NON_TRANSPOSE, A);

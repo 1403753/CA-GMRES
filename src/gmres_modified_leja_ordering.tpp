@@ -4,18 +4,18 @@ bool gmres<ScalarType>::is_conj_pair(complex_t a, complex_t b) {
 }
 
 template <typename ScalarType>
-sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<pair_t, mkl_allocator<pair_t>> &theta_vals) {
-	sparse_status_t                             stat = SPARSE_STATUS_SUCCESS;
-	std::vector<pair_t, mkl_allocator<pair_t>>  ritz_vals;
-	size_t                                      i, j;
+sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>> &theta_vals) {
+	sparse_status_t                                   stat = SPARSE_STATUS_SUCCESS;
+	std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  ritz_vals;
+	size_t                                            i, j;
 
 //	ritz_vals.reserve(sizeof(wr) / sizeof(wr[0]));
 	ritz_vals.reserve(s);
 	
 	for(i = 0; i < s; ++i)
-		ritz_vals.push_back(pair_t(1, complex_t(wr[i], wi[i])));		
+		ritz_vals.push_back(ic_pair_t(1, complex_t(wr[i], wi[i])));		
 		
-	std::stable_sort(ritz_vals.begin( ), ritz_vals.end( ), [ ]( const pair_t& lhs, const pair_t& rhs ) {
+	std::stable_sort(ritz_vals.begin( ), ritz_vals.end( ), [ ]( const ic_pair_t &lhs, const ic_pair_t &rhs ) {
 			return lhs.second.real() < rhs.second.real();
 	});
 	
@@ -68,13 +68,13 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 		
 		if (ritz_vals.front().second.imag() == 0) {
 
-			theta_vals.push_back(pair_t(std::move(k_index.front()), ritz_vals.front().second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.front()), ritz_vals.front().second));
 			k_index.erase(k_index.begin());
 			L = 0;
 		} else {
 			
-			theta_vals.push_back(pair_t(std::move(k_index.front()), ritz_vals.front().second));
-			theta_vals.push_back(pair_t(std::move(k_index.begin()[1]), ritz_vals.begin()[1].second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.front()), ritz_vals.front().second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.begin()[1]), ritz_vals.begin()[1].second));
 
 			k_index.erase(k_index.begin());
 			k_index.erase(k_index.begin());
@@ -84,13 +84,13 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 
 		if (ritz_vals.back().second.imag() == 0) {
 
-			theta_vals.push_back(pair_t(std::move(k_index.back()), ritz_vals.back().second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.back()), ritz_vals.back().second));
 			k_index.pop_back();
 			L = 0;
 		} else {
 			
-			theta_vals.push_back(pair_t(std::move(k_index.end()[-2]), ritz_vals.end()[-2].second));
-			theta_vals.push_back(pair_t(std::move(k_index.back()), ritz_vals.back().second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.end()[-2]), ritz_vals.end()[-2].second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.back()), ritz_vals.back().second));
 			
 			k_index.pop_back();
 			k_index.pop_back();				
@@ -145,8 +145,8 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 				if (!is_conj_pair(ritz_vals.at(k_index.at(idx) - 1).second, ritz_vals.at(k_index.at(idx)).second)) 
 					throw std::invalid_argument( "Input out of order");
 				
-				theta_vals.push_back(pair_t(std::move(k_index.at(idx - 1)), ritz_vals.at(k_index.at(idx) - 1).second));
-				theta_vals.push_back(pair_t(std::move(k_index.at(idx)), ritz_vals.at(k_index.at(idx)).second));			
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx - 1)), ritz_vals.at(k_index.at(idx) - 1).second));
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx)), ritz_vals.at(k_index.at(idx)).second));			
 
 				k_index.erase(k_index.begin() + idx - 1);
 				k_index.erase(k_index.begin() + idx - 1);
@@ -158,8 +158,8 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 				if (!is_conj_pair(ritz_vals.at(k_index.at(idx)).second, ritz_vals.at(k_index.at(idx + 1)).second))
 					throw std::invalid_argument( "Input out of order");
 				
-				theta_vals.push_back(pair_t(std::move(k_index.at(idx)), ritz_vals.at(k_index.at(idx)).second));
-				theta_vals.push_back(pair_t(std::move(k_index.at(idx + 1)), ritz_vals.at(k_index.at(idx + 1)).second));			
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx)), ritz_vals.at(k_index.at(idx)).second));
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx + 1)), ritz_vals.at(k_index.at(idx + 1)).second));			
 				
 				k_index.erase(k_index.begin() + idx);
 				k_index.erase(k_index.begin() + idx);
@@ -168,7 +168,7 @@ sparse_status_t gmres<ScalarType>::modified_leya_ordering(size_t s, ScalarType *
 			}
 		} else {
 		
-			theta_vals.push_back(pair_t(k_index.at(idx), ritz_vals.at(k_index.at(idx)).second));
+			theta_vals.push_back(ic_pair_t(k_index.at(idx), ritz_vals.at(k_index.at(idx)).second));
 			k_index.erase(k_index.begin() + idx);
 		
 			L++;
