@@ -14,7 +14,7 @@
 /* make template functions virtual, or leave 'em */
 /* remove static functions and initialize objects */
 /* change allocation of 'R' back to malloc */
-/* line 125: make blas operation */
+/* change allocation of 'H_reduced' back to malloc */
 
 /**************/
 /*  END TODO  */
@@ -46,7 +46,7 @@ int main() {
 	test.reserve(2);
 	
 	std::cout.setf(std::ios_base::fixed);
-	std::cout.precision(3);
+	std::cout.precision(5);
 	
 	float                         rtime, ptime, mflops;
 	long long                     flpops;
@@ -55,7 +55,8 @@ int main() {
 	ScalarType                    *R;                             // upper triangular matrix containing construction info for H
                                                                    // (at each outer iteration only the last s columns of R are needed)
 	ScalarType                    *H;                             // Hessenberg matrix, Arnoldi output
-	ScalarType                    *B;                             // s+1 x s basis conversion matrix B
+	ScalarType                    *H_reduced;                     // QR factorized H, upper triangular matrix
+  ScalarType                    *R_k;                           // s x s submatrix needed for updating H
 	ScalarType                    *r;                             // residual vector b - Ax
 	ScalarType                    *x;                             // solution vector x
 	ScalarType                    *tx;                            // true solution
@@ -72,7 +73,7 @@ int main() {
 	sparse_matrix_t               A;                              // n x n matrix A
 	MatrixInfo<ScalarType>        minfo;                          //
 	size_t                        n;                              // dim(A)
-	const size_t                  t = 3;                          // number of 'outer iterations' before restart
+	const size_t                  t = 3;                         // number of 'outer iterations' before restart
 	const size_t                  m = s*t;                        // restart length
 	const size_t                  ritz_num = s;                   // number of Ritz-values
 	size_t                        i, j, k;                        // indices used in for-loops	
@@ -102,38 +103,41 @@ int main() {
 	Q = (ScalarType *)mkl_calloc(n*(m + 1), sizeof(ScalarType), 64);if(Q == NULL){return 1;}
 	R = (ScalarType *)mkl_calloc((m + s + 1)*s, sizeof(ScalarType), 64);if(R == NULL){return 1;}
 	H = (ScalarType *)mkl_calloc((m + 1)*m, sizeof(ScalarType), 64);if(H == NULL){return 1;}
-	B = (ScalarType *)mkl_calloc((s + 1)*s, sizeof(ScalarType), 64);if(B == NULL){return 1;}
+	H_reduced = (ScalarType *)mkl_calloc((m + 1)*m, sizeof(ScalarType), 64);if(H_reduced == NULL){return 1;}
 	r = (ScalarType *)mkl_malloc(n * sizeof(ScalarType), 64);if(r == NULL){return 1;}
 	x = (ScalarType *)mkl_malloc(n * sizeof(ScalarType), 64);if(x == NULL){return 1;}
 	tx = (ScalarType *)mkl_malloc(n * sizeof(ScalarType), 64);if(tx == NULL){return 1;}
 	zeta = (ScalarType *)mkl_calloc(m + 1, sizeof(ScalarType), 64);if(zeta == NULL){return 1;}
+	R_k = (ScalarType *)mkl_calloc(s*s, sizeof(ScalarType), 64);if(R_k == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	R_k[0] = 1;
 
 	std::vector<std::pair<ScalarType, ScalarType>, mkl_allocator<std::pair<ScalarType, ScalarType>>> cs(m+1); // cs stores givens rotations for reduction of H
 
 	/* set true solution */
 	for (i = 0; i < n; ++i)
 		tx[i] = 1;
-	
+
 	/********************************************/
 	/*  compute RHS b                           */
 	/*  compute residual vector (r = b - Ax_0)  */
 	/*  therefore, b == r                       */
 	/********************************************/
-	
+
 	gmres<ScalarType>::mv(A, tx, r, 1);
-	
-	zeta[0] = cblas_dnrm2(n, r, 1);
 
-	for(i = 0; i < n; ++i)
-		Q[i] = r[i] / zeta[0];
+	ScalarType beta = cblas_dnrm2(n, r, 1);
 
-	stat = gmres<ScalarType>::gmres_init(n, A, H, Q, theta_vals, ritz_num, m);
-	
+	zeta[0] = beta;
+
+	cblas_daxpy(n, 1 / beta, r, 1, Q, 1);
+
+	stat = gmres<ScalarType>::gmres_init(n, A, H, H_reduced, Q, theta_vals, ritz_num, m);
+
 	std::cout << std:: endl << "theta_vals (FINAL):" << std::endl;
 	for (auto p: theta_vals) {
 		std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
 	}
-	
+
 	printf("\n\n============= H:\n");
 	for(i = 0; i < ritz_num + 1; ++i) {
 		for(j = 0; j < ritz_num; ++j) {
@@ -147,7 +151,7 @@ int main() {
   /*  reduce H  */
 	/**************/
 	
-	stat = gmres<ScalarType>::reduce_H(H, s, m, 0, zeta, cs);	
+	stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, 0, zeta, cs);	
 
 
 	std::cout << "\n\n============= zeta:\n";
@@ -157,7 +161,7 @@ int main() {
 	std::cout << "\n\n============= H reduced:\n";
 	for(i = 0; i < m+1; ++i) {
 		for(j = 0; j < m; ++j) {
-			printf("%2.2f ", H[(m+1)*j + i]);
+			printf("%2.2f ", H_reduced[(m+1)*j + i]);
 		}
 		std::cout << std::endl;
 	}
@@ -166,8 +170,8 @@ int main() {
 
 	do{
 
-		// outer iterations before restart :: k < {'t' resp. 't+1'} ::
-		for (k = ritz_num / s; k < 2; ++k) {
+		// outer iterations before restart
+		for (k = 1; k < t; ++k) {
 			
 			// compute A*q_(s+1) and store result in V[:,0]
 			lambda = theta_vals.at(0).second.real();
@@ -201,24 +205,30 @@ int main() {
 									// const MKL_INT lda, const double *b,
 									// const MKL_INT ldb, const double beta,
 									// double *c, const MKL_INT ldc);
-			
+
 			cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k)+1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
 			cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k)+1, -1, Q, n, R, m + s + 1, 1, V, n);
 
 			/**********/
 			/*  TSQR  */
 			/**********/
-
+			
 			gmres<ScalarType>::tsqr(V, &Q[n*(k*s + 1)], &R[s*k+1], n, s, m);
 
-			stat = gmres<ScalarType>::update_H(H, R, B, theta_vals, s, m, k);	
+			if (n < 15) {
+				printf("\n============= final Q (col major):\n");
+				for(size_t o = 0; o < n; ++o) {
+					for(size_t j = 0; j < m+1; ++j) {
+						std::cout << Q[j*n + o] << " ";
+					}
+					std::cout << std::endl;
+				}
+			}		
 			
-			
-			/************************************************************************************************************************/
-			/*************************************  inverse of upper triangular matrix  *********************************************/
-			/*************************  https://software.intel.com/en-us/mkl-developer-reference-c-trtri ****************************/
-			/* lapack_int LAPACKE_dtrtri (int matrix_layout , char uplo , char diag , lapack_int n , double * a , lapack_int lda ); */
-			/************************************************************************************************************************/
+			stat = gmres<ScalarType>::update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
+
+			stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, k, zeta, cs);
+
 
 		} // end for "outer iteration"
 
@@ -230,14 +240,27 @@ int main() {
 	/*  solve the system (standard GMRES) */
 	/**************************************/
 
+	std::cout << "\n\n============= H final\n";
+	for (size_t i = 0; i < m+1; ++i) {
+		for (size_t j = 0; j < m; ++j) {
+			printf("%e ", H[(m+1)*j + i]);
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;	
+
+	std::cout << "\n\n============= zeta:\n";
+	for(i = 0; i < m+1; ++i)
+		std::cout << zeta[i] << std::endl;
+
 // void cblas_dtrsv (const CBLAS_LAYOUT Layout, const CBLAS_UPLO uplo, const CBLAS_TRANSPOSE trans, const CBLAS_DIAG diag, 
                   // const MKL_INT n, const double *a, const MKL_INT lda, double *x, const MKL_INT incx);
-	cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, ritz_num, H, m+1, zeta, 1);
+	cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m+1, zeta, 1);
 
 // void cblas_dgemv (const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE trans, const MKL_INT m, const MKL_INT n, const double alpha,
                   // const double *a, const MKL_INT lda, const double *x, const MKL_INT incx, const double beta, double *y, const MKL_INT incy);	
-	cblas_dgemv (CblasColMajor, CblasNoTrans, n, ritz_num, 1, Q, n, zeta, 1, 0, x, 1);	
-	
+	cblas_dgemv (CblasColMajor, CblasNoTrans, n, s*k, 1, Q, n, zeta, 1, 0, x, 1);
+
 	if (n < 15) {
 		std::cout << "\n\n============= y:\n";
 		for(i = 0; i < m+1; ++i)
@@ -251,14 +274,15 @@ int main() {
 
 		std::cout << std::endl;
 	}
-	
+
 	stat = mkl_sparse_destroy(A);
 
 	mkl_free(V);
 	mkl_free(Q);
 	mkl_free(R);
 	mkl_free(H);
-	mkl_free(B);
+	mkl_free(H_reduced);
+	mkl_free(R_k);
 	mkl_free(r);
 	mkl_free(x);
 	mkl_free(tx);
@@ -290,7 +314,7 @@ int main() {
 					// std::cout << std::endl;
 				// }
 			// }
-			
+
 			// if (n < 15) {
 				// printf("\n============= V (col major):\n");
 				// for(size_t k = 0; k < n; ++k) {
@@ -316,7 +340,7 @@ int main() {
 				// }
 				// std::cout << std::endl;
 			// }
-			
+		
 			// printf("\n============= Q row major:\n");
 			// for(size_t j = 0; j < n*(s+1); ++j) {
 				// std::cout << Q[j] << ", ";

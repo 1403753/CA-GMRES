@@ -1,46 +1,38 @@
 template <typename ScalarType>
-sparse_status_t gmres<ScalarType>::reduce_H(ScalarType *H, size_t s, size_t m, size_t k, ScalarType *zeta, std::vector<std::pair<ScalarType, ScalarType>, mkl_allocator<std::pair<ScalarType, ScalarType>>> &cs) {
+sparse_status_t gmres<ScalarType>::update_H(ScalarType *H, ScalarType *H_reduced, ScalarType *R, ScalarType *R_k, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  theta_vals, size_t s, size_t m, size_t k) {
 	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
-	ScalarType x1;
-	ScalarType x2;
 
-	for (size_t i = 0; i < s*k; ++i) {
-// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-		cblas_drot(s, &H[(m+1)*s*k + i], m+1, &H[(m+1)*s*k + (i+1)], m+1, cs.at(i).first, cs.at(i).second);
+	for (size_t i = 0; i < s - 1; ++i)
+		cblas_dcopy(s, &R[(m + s + 1)*i + s*k], 1, &R_k[s*(i + 1)], 1);		
+
+	printf("\n============= R_k (col major):\n");
+	for (size_t o = 0; o < s; ++o) {
+		for (size_t j = 0; j < s; ++j) {
+			std::cout << R_k[s*j + o] << " ";
+		}
+		std::cout << std::endl;
 	}
-
-	for (size_t i = s*k; i < s*(k+1); ++i) {
-
-		x1 = H[(m+1)*i + i];
-		x2 = H[(m+1)*i + (i+1)];
-		
-// void cblas_drotg (double *x1, double *x2, double *c, double *s);
-		cblas_drotg(&x1, &x2, &cs.at(i).first, &cs.at(i).second);
-
-// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-		cblas_drot(s*(k+1) - i, &H[(m+1)*i + i], m+1, &H[(m+1)*i + (i+1)], m+1, cs.at(i).first, cs.at(i).second);
-
-// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-		cblas_drot(1, &zeta[i], 1, &zeta[i + 1], 1, cs.at(i).first, cs.at(i).second);
-	}
-
-	// std::cout << "\n\n============= H reduced: (" << k << ")\n";
-	// for(size_t i = 0; i < m+1; ++i) {
-		// for(size_t j = 0; j < m; ++j) {
-			// printf("%2.2f ", H[(m+1)*j + i]);
-		// }
-		// std::cout << std::endl;
-	// }
-	// std::cout << std::endl;	
-
-	return stat;
-}
-
-template <typename ScalarType>
-sparse_status_t gmres<ScalarType>::update_H(ScalarType *H, ScalarType *R, ScalarType *B, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  theta_vals, size_t s, size_t m, size_t k) {
-	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
 	
-	// void cblas_dgemm (const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE transa,
+	std::cout.precision(3);
+
+	printf("\n============= R (col major):\n");
+	for (size_t o = 0; o < m + s + 1; ++o) {
+		for (size_t j = 0; j < s; ++j) {
+			std::cout << R[(m + s + 1)*j + o] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	std::cout << "\n\n============= H update: (before)\n";
+	for (size_t i = 0; i < m+1; ++i) {
+		for (size_t j = 0; j < m; ++j) {
+			printf("%2.5f ", H[(m+1)*j + i]);
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;	
+
+// void cblas_dgemm (const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE transa,
 									// const CBLAS_TRANSPOSE transb, const MKL_INT m, 
                   // const MKL_INT n, const MKL_INT k,
 									// const double alpha, const double *a,
@@ -48,38 +40,102 @@ sparse_status_t gmres<ScalarType>::update_H(ScalarType *H, ScalarType *R, Scalar
 									// const MKL_INT ldb, const double beta,
 									// double *c, const MKL_INT ldc);
 
-	printf("\n============= R (col major):\n");
-	for(size_t o = 0; o < m + s + 1; ++o) {
-		for(size_t j = 0; j < s; ++j) {
-			std::cout << R[(m + s + 1)*j + o] << " ";
+	// h_underscore_blackletter_(k - 1,k): -h_blackletter_0 * R_(k - 1, k)
+	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s*k, s - 1, s*k, -1, H, m + 1, R, m + s + 1, 1, &H[(m + 1)*(s*k + 1)], m + 1);
+	
+	// h_underscore_blackletter_(k - 1,k): R_(k-1,k)*B_
+	cblas_daxpy(s*k, 1, R, 1, &H[(m + 1)*(s*k)], 1);
+
+	ScalarType imag;
+
+	for (size_t i = 1; i < s; ++i) {
+		cblas_daxpy(s*k, theta_vals.at(i).second.real(), &R[(m + s + 1)*(i - 1)], 1, &H[(m + 1)*(s*k + i)], 1);
+		cblas_daxpy(s*k, 1, &R[(m + s + 1)*i], 1, &H[(m + 1)*(s*k + i)], 1);
+		imag = theta_vals.at(i).second.imag();
+		if (imag < 0)
+			cblas_daxpy(s*k, -(imag*imag), &R[(m + s + 1)*(i - 1)], 1, &H[(m + 1)*(s*k + i)], 1);
+	}
+		
+	// H_k: -h0*e1*esk^T*R_blackletter_(0,1)
+	cblas_daxpy(s - 1, -H[(m + 1)*(s*k - 1) + s*k], &R[s*k - 1], m + s + 1, &H[(m + 1)*(s*k + 1) + s*k], m + 1);	
+	
+	// H_k: R_k * B_k
+	cblas_daxpy(s, theta_vals.at(s - 1).second.real(), &R_k[s*(s - 1)], 1, &H[(m + 1)*(s*k + (s - 1)) + s*k], 1);
+	imag = theta_vals.at(s - 1).second.imag();
+	if (imag < 0)
+		cblas_daxpy(s, -(imag*imag), &R_k[s*(s - 2)], 1, &H[(m + 1)*(s*k + (s - 1)) + s*k], 1);
+
+	for (size_t i = 0; i < s - 1; ++i) {
+		cblas_daxpy(i+1, theta_vals.at(i).second.real(), &R_k[s*i], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
+		cblas_daxpy(i+2, 1, &R_k[s*(i + 1)], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
+		imag = theta_vals.at(i).second.imag();
+		if (imag < 0)
+			cblas_daxpy(s, -(imag*imag), &R_k[s*(i - 1)], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
+	}
+
+	// h_k: roh_k * b_k (here b_k is 1)
+	H[(m + 1)*(s*(k + 1) - 1) + s*(k + 1)] = R[(m + s + 1)*(s - 1) + s*(k + 1)] * 1;
+	
+	int info;
+	info = LAPACKE_dtrtri (LAPACK_COL_MAJOR, 'U', 'N', s, R_k, s);
+
+	if (info != 0)
+		stat = SPARSE_STATUS_EXECUTION_FAILED;
+
+	printf("\n============= R_k (col major):\n");
+	for (size_t o = 0; o < s; ++o) {
+		for (size_t j = 0; j < s; ++j) {
+			std::cout << R_k[s*j + o] << " ";
 		}
 		std::cout << std::endl;
 	}
 
-	// for(size_t i = 0; i < s*k; ++i) {
-		// H[(m+1)*s*k + i] = R[i];
-	// }
-	
-	// for(size_t i = 1; i < s; ++i) {
-// void	cblas_dscal(const int N, const double alpha, double *X, const int incX)
-		// cblas_dscal(s*k, 1 / h_jp1j, w, 1);
-		// H[(m+1)*s*k + i] = R[(m+s+1)*i];
-	// }
-	
-	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s*k, s-1, s*k, -1, H, m+1, R, m+s+1, 1, &H[(m+1)*(s*k+1)], m+1);
+	// h_underscore_blackletter_(k - 1,k): times R^-1
+	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s*k, s, s, 1, &H[(m + 1)*(s*k)], m + 1, R_k, s, 0, &H_reduced[(m + 1)*(s*k)], m + 1);
 
-	
-	
-	std::cout << "\n\n============= H update: (after)\n";
-	for(size_t i = 0; i < m+1; ++i) {
-		for(size_t j = 0; j < m; ++j) {
-			printf("%2.2f ", H[(m+1)*j + i]);
-		}
-		std::cout << std::endl;
+	// H_k: times R_k^-1
+	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s, s, s, 1, &H[(m + 1)*(s*k) + s*k], m + 1, R_k, s, 0, &H_reduced[(m + 1)*(s*k) + s*k], m + 1);	
+
+	// H_k: + roh~^-1*b_k*z*es^T
+	cblas_daxpy(s, R_k[s*s - 1]*1, &R[(m + s + 1)*(s - 1) + s*k], 1, &H_reduced[(m + 1)*(s*(k + 1) - 1) + s*k], 1);
+
+	// h_k: times roh~^-1
+	H[(m + 1)*(s*(k + 1) - 1) + s*(k + 1)] *= R_k[s*s - 1];
+	H_reduced[(m + 1)*(s*k + s - 1) + s*(k + 1)] = H[(m + 1)*(s*(k + 1) - 1) + s*(k + 1)];
+
+	for (size_t i = 0; i < s; ++i) {
+		cblas_dcopy(s*(k + 1), &H_reduced[(m + 1)*(s*k + i)], 1, &H[(m + 1)*(s*k + i)], 1);
 	}
-	std::cout << std::endl;	
-	
-	
+
+	return stat;
+}
+
+template <typename ScalarType>
+sparse_status_t gmres<ScalarType>::reduce_H(ScalarType *H, size_t s, size_t m, size_t k, ScalarType *zeta, std::vector<std::pair<ScalarType, ScalarType>, mkl_allocator<std::pair<ScalarType, ScalarType>>> &cs) {
+	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
+	ScalarType x1;
+	ScalarType x2;
+
+	for (size_t i = 0; i < s*k; ++i) {
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+		cblas_drot(s, &H[(m + 1)*s*k + i], m + 1, &H[(m + 1)*s*k + (i + 1)], m + 1, cs.at(i).first, cs.at(i).second);
+	}
+
+	for (size_t i = s*k; i < s*(k+1); ++i) {
+
+		x1 = H[(m + 1)*i + i];
+		x2 = H[(m + 1)*i + (i + 1)];
+
+// void cblas_drotg (double *x1, double *x2, double *c, double *s);
+		cblas_drotg(&x1, &x2, &cs.at(i).first, &cs.at(i).second);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+		cblas_drot(s*(k + 1) - i, &H[(m + 1)*i + i], m + 1, &H[(m + 1)*i + (i + 1)], m + 1, cs.at(i).first, cs.at(i).second);
+
+// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
+		cblas_drot(1, &zeta[i], 1, &zeta[i + 1], 1, cs.at(i).first, cs.at(i).second);
+	}
+
 	return stat;
 }
 
@@ -87,6 +143,7 @@ template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
                                               const sparse_matrix_t A,
 																							ScalarType *H,
+																							ScalarType *H_reduced,
 																							ScalarType *Q,
 																							std::vector<ic_pair_t, mkl_allocator<ic_pair_t>> &theta_vals,
 																							size_t s,
@@ -113,62 +170,32 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 	w = (ScalarType *)mkl_calloc(n, sizeof(ScalarType), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	H_s = (ScalarType *)mkl_calloc((s + 1)*s, sizeof(ScalarType), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
-	// if (n < 15) {
-		// for(i = 0; i < n; ++i) {
-			// for(size_t k = 0; k < m+1; ++k) {
-				// std::cout << Q[k*n + i] << " ";
-			// }
-			// std::cout << std::endl;
-		// }
-		// std::cout << std::endl;
-	// }
-	
-	// std::cout << std::endl;
-	// for(size_t o = 0; o < n; ++o)
-		// std::cout << w[o] << "\n";	
-	
 	/**************************/
 	/*  Modfied Gram-Schmidt  */
 	/**************************/
 
 	for(j = 0; j < s; ++j) {
 		mv(A, &Q[j*n], w, 1);
-		for(i = 0; i < j+1; ++i) {
+		for(i = 0; i < j + 1; ++i) {
 
 			h_ij = cblas_ddot(n, w, 1, &Q[i*n], 1);
 			H_s[s*i + j] = h_ij;
 			H[(m+1)*j + i] = h_ij;
+			H_reduced[(m + 1)*j + i] = h_ij;
 			
-			cblas_daxpy (n, h_ij*(-1), &Q[i*n], 1, w, 1);
+			cblas_daxpy (n, -h_ij, &Q[i*n], 1, w, 1);
 		}
 
 		h_jp1j = cblas_dnrm2(n, w, 1);
-		H_s[s*(j+1) + j] = h_jp1j;
-		H[(m+1)*j + (j+1)] = h_jp1j;
+		H_s[s*(j + 1) + j] = h_jp1j;
+		H[(m + 1)*j + (j + 1)] = h_jp1j;
+		H_reduced[(m + 1)*j + (j + 1)] = h_jp1j;
 
 // void	cblas_dscal(const int N, const double alpha, double *X, const int incX)
 		// cblas_dscal(n, 1 / h_jp1j, w, 1);
 		// cblas_dcopy(n, w, 1, &Q[(j+1)*n], 1);
-		cblas_daxpy(n, 1 / h_jp1j, w, 1, &Q[(j+1)*n], 1);
+		cblas_daxpy(n, 1 / h_jp1j, w, 1, &Q[(j + 1)*n], 1);
 	}
-
-	printf("\n============= H_s:\n");
-	for(size_t i = 0; i < s+1; ++i) {
-		for(size_t j = 0; j < s; ++j) {
-			printf("%2.2f ", H_s[s*i + j]);
-		}
-		printf("\n");
-	}
-	
-	std::cout << "\n\n============= H_col_maj:\n";
-	for(i = 0; i < m+1; ++i) {
-		for(j = 0; j < m; ++j) {
-			printf("%2.2f ", H[(m+1)*j + i]);
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;	
-	
 
 	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	wi = (double *)mkl_malloc(s*sizeof(double), 64);if(wi == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -205,16 +232,70 @@ template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::mv(const sparse_matrix_t A, const ScalarType *x, ScalarType *y, size_t s) {
 	sparse_status_t 			stat = SPARSE_STATUS_SUCCESS;
 	struct matrix_descr 	descr;
-	
+
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
-	
+
 	mkl_sparse_set_mv_hint(A, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
 	mkl_sparse_optimize(A);
-		
+
 //sparse_status_t mkl_sparse_d_mv (sparse_operation_t operation, double alpha, const sparse_matrix_t A, struct matrix_descr descr, const double *x, double beta, double *y);
 	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, y);
 	if(stat != SPARSE_STATUS_SUCCESS) throw std::invalid_argument("MatMult failed");
-	
+
 	mkl_free_buffers();
 	return stat;
 }
+
+
+/****************/
+/* print output */
+/****************/
+
+	// printf("\n============= H_s:\n");
+	// for(size_t i = 0; i < s+1; ++i) {
+		// for(size_t j = 0; j < s; ++j) {
+			// printf("%2.2f ", H_s[s*i + j]);
+		// }
+		// printf("\n");
+	// }
+	
+	// std::cout << "\n\n============= H_col_maj:\n";
+	// for(i = 0; i < m+1; ++i) {
+		// for(j = 0; j < m; ++j) {
+			// printf("%2.2f ", H[(m+1)*j + i]);
+		// }
+		// std::cout << std::endl;
+	// }
+	// std::cout << std::endl;
+	
+		// if (n < 15) {
+		// for(i = 0; i < n; ++i) {
+			// for(size_t k = 0; k < m+1; ++k) {
+				// std::cout << Q[k*n + i] << " ";
+			// }
+			// std::cout << std::endl;
+		// }
+		// std::cout << std::endl;
+	// }
+
+	// std::cout << std::endl;
+	// for(size_t o = 0; o < n; ++o)
+		// std::cout << w[o] << "\n";
+
+	// std::cout << "\n\n============= H update: checkpoint\n";
+	// for(size_t i = 0; i < m + 1; ++i) {
+		// for(size_t j = 0; j < m; ++j) {
+			// printf("%e ", H[(m + 1)*j + i]);
+		// }
+		// std::cout << std::endl;
+	// }
+	// std::cout << std::endl;	
+
+	// std::cout << "\n\n============= H update: checkpoint reduced)\n";
+	// for(size_t i = 0; i < m + 1; ++i) {
+		// for(size_t j = 0; j < m; ++j) {
+			// printf("%e ", H_reduced[(m + 1)*j + i]);
+		// }
+		// std::cout << std::endl;
+	// }
+	// std::cout << std::endl;
