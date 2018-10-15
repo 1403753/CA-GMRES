@@ -1,5 +1,15 @@
-template <typename ScalarType>
+template <typename ScalarType>																																	// m = rows        n = cols        st = m (m = s*t)
 sparse_status_t gmres<ScalarType>::tsqr(ScalarType *V, ScalarType *Q, ScalarType *R_, const size_t m, const size_t n, const size_t st) {
+
+	// if (m < 15) {
+		// printf("\n============= V:\n");
+		// for(size_t i = 0; i < m; ++i) {
+			// for(size_t j = 0; j < n; ++j) {
+				// printf("%e ", V[m*j + i]);
+			// }
+			// std::cout << std::endl;
+		// }
+	// }
 
 	size_t lwork = -1;
 	size_t lmwork = -1;
@@ -56,6 +66,26 @@ sparse_status_t gmres<ScalarType>::tsqr(ScalarType *V, ScalarType *Q, ScalarType
 			R_[(st + n + 1)*j + i] = V[m*j + i];
 		}
 	}
+	
+
+	// if (m < 15) {
+		// printf("\n============= gmres_tsqr:Q:\n");
+		// for(size_t i = 0; i < m; ++i) {
+			// for(size_t j = 0; j < n; ++j) {
+				// printf("%e ", Q[m*j + i]);
+			// }
+			// printf("\n");
+		// }
+		
+		// std::cout << "gmres_tsqr:R_:" << std::endl;
+		// for(i = 0; i < n; ++i) {
+			// for(j = i; j < n; ++j) {
+				// printf("%e ", R_[(st + n + 1)*j + i]);
+			// }
+			// std::cout << std::endl;
+		// }
+		
+	// }
 
 	if (info < 0) stat = SPARSE_STATUS_EXECUTION_FAILED;
 

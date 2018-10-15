@@ -76,7 +76,7 @@ int main() {
 	const size_t                  t = 3;                         // number of 'outer iterations' before restart
 	const size_t                  m = s*t;                        // restart length
 	const size_t                  ritz_num = s;                   // number of Ritz-values
-	size_t                        i, j, k;                        // indices used in for-loops	
+	size_t                        i, k;                           // indices used in for-loops	
 	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
@@ -90,7 +90,7 @@ int main() {
 
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 			exit(1);
-	
+
 	PAPI_shutdown();
 
 	printf("runtime readfile: %f\n", rtime);
@@ -99,7 +99,7 @@ int main() {
 
 	n = minfo.n;
 
-	V = (ScalarType *)mkl_malloc(n*(s + 1) * sizeof(ScalarType), 64);if(V == NULL){return 1;}
+	V = (ScalarType *)mkl_malloc(n*s * sizeof(ScalarType), 64);if(V == NULL){return 1;}
 	Q = (ScalarType *)mkl_calloc(n*(m + 1), sizeof(ScalarType), 64);if(Q == NULL){return 1;}
 	R = (ScalarType *)mkl_calloc((m + s + 1)*s, sizeof(ScalarType), 64);if(R == NULL){return 1;}
 	H = (ScalarType *)mkl_calloc((m + 1)*m, sizeof(ScalarType), 64);if(H == NULL){return 1;}
@@ -133,19 +133,21 @@ int main() {
 
 	stat = gmres<ScalarType>::gmres_init(n, A, H, H_reduced, Q, theta_vals, ritz_num, m);
 
-	std::cout << std:: endl << "theta_vals (FINAL):" << std::endl;
-	for (auto p: theta_vals) {
-		std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
-	}
+	// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
-	printf("\n\n============= H:\n");
-	for(i = 0; i < ritz_num + 1; ++i) {
-		for(j = 0; j < ritz_num; ++j) {
-			printf("%2.2f ", H[i*m + j]);
-		}
-		std::cout << std::endl;
-	}	
-	std::cout << std::endl;
+	// std::cout << std:: endl << "theta_vals (FINAL):" << std::endl;
+	// for (auto p: theta_vals) {
+		// std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
+	// }
+
+	// printf("\n\n============= H:\n");
+	// for(size_t i = 0; i < ritz_num + 1; ++i) {
+		// for(size_t j = 0; j < ritz_num; ++j) {
+			// printf("%2.2f ", H[i*m + j]);
+		// }
+		// std::cout << std::endl;
+	// }	
+	// std::cout << std::endl;
 
 	/**************/
   /*  reduce H  */
@@ -153,41 +155,43 @@ int main() {
 	
 	stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, 0, zeta, cs);	
 
+	// after H_reduced is reduced, zeta contains s+1 values
 
-	std::cout << "\n\n============= zeta:\n";
-	for(i = 0; i < m+1; ++i)
-		std::cout << zeta[i] << std::endl;	
+	// std::cout << "\n\n============= zeta:\n";
+	// for(i = 0; i < m+1; ++i)
+		// std::cout << zeta[i] << std::endl;
 
-	std::cout << "\n\n============= H reduced:\n";
-	for(i = 0; i < m+1; ++i) {
-		for(j = 0; j < m; ++j) {
-			printf("%2.2f ", H_reduced[(m+1)*j + i]);
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;	
-	
+	// std::cout << "\n\n============= H reduced:\n";
+	// for(size_t i = 0; i < m+1; ++i) {
+		// for(size_t j = 0; j < m; ++j) {
+			// printf("%2.2f ", H_reduced[(m+1)*j + i]);
+		// }
+		// std::cout << std::endl;
+	// }
+	// std::cout << std::endl;	
+
 
 	do{
 
 		// outer iterations before restart
 		for (k = 1; k < t; ++k) {
-			
+
 			// compute A*q_(s+1) and store result in V[:,0]
 			lambda = theta_vals.at(0).second.real();
-			gmres<ScalarType>::mv(A, &Q[k*s*n], &V[0], s);
-			cblas_daxpy(n, -lambda, &Q[k*s*n], 1, &V[0], 1);		
+			gmres<ScalarType>::mv(A, &Q[n*(s*k)], V, s);
+			cblas_daxpy(n, -lambda, &Q[n*(s*k)], 1, V, 1);		
 
-			for (i = 0; i < s; ++i) {
+			for (i = 0; i < s-1; ++i) {
 
-				lambda = theta_vals.at(i).second.real();
-				lambda_imag = theta_vals.at(i).second.imag();
+				lambda = theta_vals.at(i+1).second.real();
+				lambda_imag = theta_vals.at(i+1).second.imag();
 
 				// leave in for debug, matrix may not be sparse enough
 				// stat = mkl_sparse_d_create_csr (&A, SPARSE_INDEX_BASE_ZERO, n, n, minfo.rows_start, minfo.rows_end, minfo.col_indx, minfo.values);
 
-				gmres<ScalarType>::mv(A, &V[i*n], &V[(i+1)*n], s);
-				cblas_daxpy(n, -lambda, &V[i*n], 1, &V[(i+1)*n], 1);
+				gmres<ScalarType>::mv(A, &V[n*i], &V[n*(i + 1)], s);
+
+				cblas_daxpy(n, -lambda, &V[n*i], 1, &V[n*(i + 1)], 1);
 
 				if (lambda_imag < 0) {
 					cblas_daxpy(n, lambda_imag*lambda_imag, &V[(i-1)*n], 1, &V[(i+1)*n], 1);
@@ -308,7 +312,7 @@ int main() {
 			// if (n < 15) {
 				// printf("\n============= final Q (col major):\n");
 				// for(size_t k = 0; k < n; ++k) {
-					// for(j = 0; j < m+1; ++j) {
+					// for(size_t j = 0; j < m+1; ++j) {
 						// std::cout << Q[j*n + k] << " ";
 					// }
 					// std::cout << std::endl;
@@ -318,7 +322,7 @@ int main() {
 			// if (n < 15) {
 				// printf("\n============= V (col major):\n");
 				// for(size_t k = 0; k < n; ++k) {
-					// for(j = 0; j < s; ++j) {
+					// for(size_t j = 0; j < s; ++j) {
 						// std::cout << V[j*n + k] << " ";
 					// }
 					// std::cout << std::endl;

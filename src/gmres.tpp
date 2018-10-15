@@ -1,3 +1,8 @@
+// template <typename ScalarType>                                                                // m = rows,       n = cols,       st = m (m = s*t)
+// sparse_status_t gmres<ScalarType>::qr(ScalarType *V, ScalarType *Q, ScalarType *R_, const size_t m, const size_t n, const size_t st) {
+	
+// }
+
 template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::update_H(ScalarType *H, ScalarType *H_reduced, ScalarType *R, ScalarType *R_k, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  theta_vals, size_t s, size_t m, size_t k) {
 	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
@@ -175,7 +180,7 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 	/**************************/
 
 	for(j = 0; j < s; ++j) {
-		mv(A, &Q[j*n], w, 1);
+		mv(A, &Q[n*j], w, 1);
 		for(i = 0; i < j + 1; ++i) {
 
 			h_ij = cblas_ddot(n, w, 1, &Q[i*n], 1);
@@ -194,7 +199,7 @@ sparse_status_t gmres<ScalarType>::gmres_init(size_t n,
 // void	cblas_dscal(const int N, const double alpha, double *X, const int incX)
 		// cblas_dscal(n, 1 / h_jp1j, w, 1);
 		// cblas_dcopy(n, w, 1, &Q[(j+1)*n], 1);
-		cblas_daxpy(n, 1 / h_jp1j, w, 1, &Q[(j + 1)*n], 1);
+		cblas_daxpy(n, 1/h_jp1j, w, 1, &Q[n*(j + 1)], 1);
 	}
 
 	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
