@@ -15,6 +15,7 @@
 /* remove static functions and initialize objects */
 /* change allocation of 'R' back to malloc */
 /* change allocation of 'H_reduced' back to malloc */
+/* check if impl. works for complex ritzvals */
 
 /**************/
 /*  END TODO  */
@@ -81,7 +82,7 @@ int main() {
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
@@ -135,10 +136,10 @@ int main() {
 
 	// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
-	// std::cout << std:: endl << "theta_vals (FINAL):" << std::endl;
-	// for (auto p: theta_vals) {
-		// std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
-	// }
+	std::cout << std:: endl << "theta_vals (FINAL):" << std::endl;
+	for (auto p: theta_vals) {
+		std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
+	}
 
 	// printf("\n\n============= H:\n");
 	// for(size_t i = 0; i < ritz_num + 1; ++i) {
@@ -170,7 +171,6 @@ int main() {
 	// }
 	// std::cout << std::endl;	
 
-
 	do{
 
 		// outer iterations before restart
@@ -181,20 +181,20 @@ int main() {
 			gmres<ScalarType>::mv(A, &Q[n*(s*k)], V, s);
 			cblas_daxpy(n, -lambda, &Q[n*(s*k)], 1, V, 1);		
 
-			for (i = 0; i < s-1; ++i) {
+			for (i = 1; i < s; ++i) {
 
-				lambda = theta_vals.at(i+1).second.real();
-				lambda_imag = theta_vals.at(i+1).second.imag();
+				lambda = theta_vals.at(i).second.real();
+				lambda_imag = theta_vals.at(i).second.imag();
 
 				// leave in for debug, matrix may not be sparse enough
 				// stat = mkl_sparse_d_create_csr (&A, SPARSE_INDEX_BASE_ZERO, n, n, minfo.rows_start, minfo.rows_end, minfo.col_indx, minfo.values);
 
-				gmres<ScalarType>::mv(A, &V[n*i], &V[n*(i + 1)], s);
+				gmres<ScalarType>::mv(A, &V[n*(i - 1)], &V[n*i], s);
 
-				cblas_daxpy(n, -lambda, &V[n*i], 1, &V[n*(i + 1)], 1);
+				cblas_daxpy(n, -lambda, &V[n*(i - 1)], 1, &V[n*i], 1);
 
 				if (lambda_imag < 0) {
-					cblas_daxpy(n, lambda_imag*lambda_imag, &V[(i-1)*n], 1, &V[(i+1)*n], 1);
+					cblas_daxpy(n, lambda_imag*lambda_imag, &V[n*(i - 2)], 1, &V[n*i], 1);
 				}
 			}
 
@@ -210,20 +210,20 @@ int main() {
 									// const MKL_INT ldb, const double beta,
 									// double *c, const MKL_INT ldc);
 
-			cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k)+1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
-			cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k)+1, -1, Q, n, R, m + s + 1, 1, V, n);
+			cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k) + 1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
+			cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k) + 1, -1, Q, n, R, m + s + 1, 1, V, n);
 
 			/**********/
 			/*  TSQR  */
 			/**********/
 			
-			gmres<ScalarType>::tsqr(V, &Q[n*(k*s + 1)], &R[s*k+1], n, s, m);
+			gmres<ScalarType>::tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
 
 			if (n < 15) {
 				printf("\n============= final Q (col major):\n");
 				for(size_t o = 0; o < n; ++o) {
-					for(size_t j = 0; j < m+1; ++j) {
-						std::cout << Q[j*n + o] << " ";
+					for(size_t j = 0; j < m + 1; ++j) {
+						std::cout << Q[n*j + o] << " ";
 					}
 					std::cout << std::endl;
 				}
@@ -233,7 +233,8 @@ int main() {
 
 			stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, k, zeta, cs);
 
-
+			printf("%e\n", zeta[s*k + 1] / beta);
+			
 		} // end for "outer iteration"
 
 		restart = false;
@@ -244,22 +245,22 @@ int main() {
 	/*  solve the system (standard GMRES) */
 	/**************************************/
 
-	std::cout << "\n\n============= H final\n";
-	for (size_t i = 0; i < m+1; ++i) {
-		for (size_t j = 0; j < m; ++j) {
-			printf("%e ", H[(m+1)*j + i]);
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;	
+	// std::cout << "\n\n============= H final\n";
+	// for (size_t i = 0; i < m + 1; ++i) {
+		// for (size_t j = 0; j < m; ++j) {
+			// printf("%e ", H[(m + 1)*j + i]);
+		// }
+		// std::cout << std::endl;
+	// }
+	// std::cout << std::endl;	
 
-	std::cout << "\n\n============= zeta:\n";
-	for(i = 0; i < m+1; ++i)
-		std::cout << zeta[i] << std::endl;
+	// std::cout << "\n\n============= zeta:\n";
+	// for(i = 0; i < m + 1; ++i)
+		// std::cout << zeta[i] << std::endl;
 
 // void cblas_dtrsv (const CBLAS_LAYOUT Layout, const CBLAS_UPLO uplo, const CBLAS_TRANSPOSE trans, const CBLAS_DIAG diag, 
                   // const MKL_INT n, const double *a, const MKL_INT lda, double *x, const MKL_INT incx);
-	cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m+1, zeta, 1);
+	cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m + 1, zeta, 1);
 
 // void cblas_dgemv (const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE trans, const MKL_INT m, const MKL_INT n, const double alpha,
                   // const double *a, const MKL_INT lda, const double *x, const MKL_INT incx, const double beta, double *y, const MKL_INT incy);	
@@ -267,13 +268,21 @@ int main() {
 
 	if (n < 15) {
 		std::cout << "\n\n============= y:\n";
-		for(i = 0; i < m+1; ++i)
+		for(i = 0; i < m + 1; ++i)
 			std::cout << zeta[i] << std::endl;
 
 		std::cout << std::endl;
 
 		std::cout << "\n\n============= sol x:\n";
 		for(i = 0; i < n; ++i)
+			std::cout << x[i] << std::endl;
+
+		std::cout << std::endl;
+	} else {
+		std::cout.precision(20);
+
+		std::cout << "\n\n============= sol x:\n";
+		for(i = 0; i < 30; ++i)
 			std::cout << x[i] << std::endl;
 
 		std::cout << std::endl;
@@ -303,7 +312,7 @@ int main() {
 	transpose matrix in place
 */
 // void mkl_dimatcopy (const char ordering, const char trans, size_t rows, size_t cols, const double alpha, double * AB, size_t lda, size_t ldb);
-// mkl_dimatcopy('R', 'T', s+1, n, 1, Q, n, s+1);
+// mkl_dimatcopy('R', 'T', s + 1, n, 1, Q, n, s + 1);
 
 /*****************************************/
 /*  cout 'V', 'Q' and result matrix 'R'  */
@@ -312,8 +321,8 @@ int main() {
 			// if (n < 15) {
 				// printf("\n============= final Q (col major):\n");
 				// for(size_t k = 0; k < n; ++k) {
-					// for(size_t j = 0; j < m+1; ++j) {
-						// std::cout << Q[j*n + k] << " ";
+					// for(size_t j = 0; j < m + 1; ++j) {
+						// std::cout << Q[n*j + k] << " ";
 					// }
 					// std::cout << std::endl;
 				// }
@@ -323,7 +332,7 @@ int main() {
 				// printf("\n============= V (col major):\n");
 				// for(size_t k = 0; k < n; ++k) {
 					// for(size_t j = 0; j < s; ++j) {
-						// std::cout << V[j*n + k] << " ";
+						// std::cout << V[n*j + k] << " ";
 					// }
 					// std::cout << std::endl;
 				// }
@@ -346,7 +355,7 @@ int main() {
 			// }
 		
 			// printf("\n============= Q row major:\n");
-			// for(size_t j = 0; j < n*(s+1); ++j) {
+			// for(size_t j = 0; j < n*(s + 1); ++j) {
 				// std::cout << Q[j] << ", ";
 			// }
 			// std::cout << std::endl;
