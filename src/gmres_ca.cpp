@@ -38,7 +38,7 @@
 
 #define GMRES_CA_HPP_
 
-#define s 3
+#define s 5
 #define ScalarType double
 
 int main() {
@@ -74,7 +74,7 @@ int main() {
 	sparse_matrix_t               A;                              // n x n matrix A
 	MatrixInfo<ScalarType>        minfo;                          //
 	size_t                        n;                              // dim(A)
-	const size_t                  t = 3;                         // number of 'outer iterations' before restart
+	const size_t                  t = 500;                         // number of 'outer iterations' before restart
 	const size_t                  m = s*t;                        // restart length
 	const size_t                  ritz_num = s;                   // number of Ritz-values
 	size_t                        i, k;                           // indices used in for-loops	
@@ -82,11 +82,11 @@ int main() {
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
-	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
 
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
@@ -153,14 +153,15 @@ int main() {
 	/**************/
   /*  reduce H  */
 	/**************/
-	
+
 	stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, 0, zeta, cs);	
 
 	// after H_reduced is reduced, zeta contains s+1 values
 
 	// std::cout << "\n\n============= zeta:\n";
-	// for(i = 0; i < m+1; ++i)
+	// for(size_t i = 0; i < m + 1; ++i)
 		// std::cout << zeta[i] << std::endl;
+	// std::cout << std::endl;
 
 	// std::cout << "\n\n============= H reduced:\n";
 	// for(size_t i = 0; i < m+1; ++i) {
@@ -219,21 +220,22 @@ int main() {
 			
 			gmres<ScalarType>::tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
 
-			if (n < 15) {
-				printf("\n============= final Q (col major):\n");
-				for(size_t o = 0; o < n; ++o) {
-					for(size_t j = 0; j < m + 1; ++j) {
-						std::cout << Q[n*j + o] << " ";
-					}
-					std::cout << std::endl;
-				}
-			}		
+			// if (n < 15) {
+				// printf("\n============= final Q (col major):\n");
+				// for(size_t o = 0; o < n; ++o) {
+					// for(size_t j = 0; j < m + 1; ++j) {
+						// std::cout << Q[n*j + o] << " ";
+					// }
+					// std::cout << std::endl;
+				// }
+			// }		
 			
 			stat = gmres<ScalarType>::update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
 
 			stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, k, zeta, cs);
 
-			printf("%e\n", zeta[s*k + 1] / beta);
+			std::cout << "\n============= rel. res.:\n";
+			printf("%e\n", std::abs(zeta[s*k + 1]) / beta);
 			
 		} // end for "outer iteration"
 
@@ -272,17 +274,19 @@ int main() {
 			std::cout << zeta[i] << std::endl;
 
 		std::cout << std::endl;
-
+	
+		std::cout.precision(20);
+		
 		std::cout << "\n\n============= sol x:\n";
 		for(i = 0; i < n; ++i)
 			std::cout << x[i] << std::endl;
 
 		std::cout << std::endl;
 	} else {
-		std::cout.precision(20);
+		std::cout.precision(1);
 
 		std::cout << "\n\n============= sol x:\n";
-		for(i = 0; i < 30; ++i)
+		for(i = n - 30; i < n; ++i)
 			std::cout << x[i] << std::endl;
 
 		std::cout << std::endl;

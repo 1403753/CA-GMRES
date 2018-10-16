@@ -1,8 +1,3 @@
-// template <typename ScalarType>                                                                // m = rows,       n = cols,       st = m (m = s*t)
-// sparse_status_t gmres<ScalarType>::qr(ScalarType *V, ScalarType *Q, ScalarType *R_, const size_t m, const size_t n, const size_t st) {
-	
-// }
-
 template <typename ScalarType>
 sparse_status_t gmres<ScalarType>::update_H(ScalarType *H, ScalarType *H_reduced, ScalarType *R, ScalarType *R_k, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  theta_vals, size_t s, size_t m, size_t k) {
 	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
@@ -140,6 +135,10 @@ sparse_status_t gmres<ScalarType>::reduce_H(ScalarType *H, size_t s, size_t m, s
 // void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
 		cblas_drot(1, &zeta[i], 1, &zeta[i + 1], 1, cs.at(i).first, cs.at(i).second);
 	}
+
+	// std::cout << "\n\n============= zeta:\n";
+	// for(size_t o = 0; o < m + 1; ++o)
+		// std::cout << zeta[o] << std::endl;
 
 	return stat;
 }
