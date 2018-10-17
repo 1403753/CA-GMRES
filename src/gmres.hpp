@@ -13,9 +13,6 @@
 
 #define GMRES_HPP_
 
-typedef std::complex<double> complex_t; 
-typedef std::pair<size_t, complex_t> ic_pair_t;
-
 template <typename ScalarType>
 class gmres {
 public:

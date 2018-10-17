@@ -10,9 +10,9 @@ OBJ         := $(SRC:.cpp=.o)
 MKLROOT = /home/a01403753/intel/mkl
 HYPRE = /home/a01403753/local/hypre
 
-all: gmres_ca
+all: main
 
-gmres_ca: $(OBJ)
+main: $(OBJ)
 	$(CC) -o $@ $^ -lgsl \
 	-Wl,--start-group \
 	$(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a \
@@ -22,20 +22,20 @@ gmres_ca: $(OBJ)
 	-lpapi \
 	-lgfortran -L$(HYPRE)/lib -lHYPRE
 	
-gmres_ca.o: gmres_ca.cpp
+main.o: main.cpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)
 	
 %.o: %.cpp %.hpp
 	$(CC) $(CFLAGS) -c $< $(DFLAGS)
 	
 run:
-	./gmres_ca
+	./main
 
-burn: gmres_ca
-	./gmres_ca
+burn: main
+	./main
 
-vurn: gmres_ca
-	valgrind ./gmres_ca
+vurn: main
+	valgrind ./main
 
 clean:
-	rm -rf *.o gmres_ca
+	rm -rf *.o main
