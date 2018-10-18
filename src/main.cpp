@@ -15,7 +15,7 @@
 /* remove static functions and initialize objects */
 /* change allocation of 'R' back to malloc */
 /* change allocation of 'H_reduced' back to malloc */
-/* check if impl. works for complex ritzvals */
+/* implement standard GMRES */
 
 /**************/
 /*  END TODO  */
@@ -87,7 +87,8 @@ int main() {
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/dwb512.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
 
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
@@ -125,7 +126,14 @@ int main() {
 	/*  therefore, b == r                       */
 	/********************************************/
 
-	gmres<ScalarType>::mv(A, tx, r, 1);
+	struct matrix_descr 	descr;
+
+	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
+
+	mkl_sparse_set_mv_hint(A, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
+	mkl_sparse_optimize(A);	
+	
+	kernels<ScalarType>::mv(A, tx, r, 1);
 
 
 
@@ -139,7 +147,7 @@ int main() {
 
 	cblas_daxpy(n, 1 / beta, r, 1, Q, 1);
 
-	stat = gmres<ScalarType>::gmres_init(n, A, H, H_reduced, Q, theta_vals, ritz_num, m);
+	stat = kernels<ScalarType>::gmres_init(n, A, H, H_reduced, Q, theta_vals, ritz_num, m);
 
 	// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
@@ -161,7 +169,7 @@ int main() {
   /*  reduce H  */
 	/**************/
 
-	stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, 0, zeta, cs);	
+	stat = kernels<ScalarType>::reduce_H(H_reduced, s, m, 0, zeta, cs);	
 
 	// after H_reduced is reduced, zeta contains s+1 values
 
@@ -186,7 +194,10 @@ int main() {
 
 			// compute A*q_(s+1) and store result in V[:,0]
 
-			gmres<ScalarType>::mv(A, &Q[n*(s*k)], V, s);
+			mkl_sparse_set_mv_hint(A, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
+			mkl_sparse_optimize(A);				
+			
+			kernels<ScalarType>::mv(A, &Q[n*(s*k)], V, s);
 			cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);		
 
 			for (i = 1; i < s; ++i) {
@@ -196,7 +207,7 @@ int main() {
 				// leave in for debug, matrix may not be sparse enough
 				// stat = mkl_sparse_d_create_csr (&A, SPARSE_INDEX_BASE_ZERO, n, n, minfo.rows_start, minfo.rows_end, minfo.col_indx, minfo.values);
 
-				gmres<ScalarType>::mv(A, &V[n*(i - 1)], &V[n*i], s);
+				kernels<ScalarType>::mv(A, &V[n*(i - 1)], &V[n*i], s);
 
 				cblas_daxpy(n, -theta_vals.at(i).second.real(), &V[n*(i - 1)], 1, &V[n*i], 1);
 
@@ -224,7 +235,7 @@ int main() {
 			/*  TSQR  */
 			/**********/
 			
-			gmres<ScalarType>::tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
+			kernels<ScalarType>::tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
 
 			// if (n < 15) {
 				// printf("\n============= final Q (col major):\n");
@@ -236,9 +247,9 @@ int main() {
 				// }
 			// }		
 			
-			stat = gmres<ScalarType>::update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
+			stat = kernels<ScalarType>::update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
 
-			stat = gmres<ScalarType>::reduce_H(H_reduced, s, m, k, zeta, cs);
+			stat = kernels<ScalarType>::reduce_H(H_reduced, s, m, k, zeta, cs);
 
 			std::cout << "\n============= rel. res.:\n";
 			printf("%e\n", std::abs(zeta[s*k + 1]) / beta);
@@ -275,12 +286,7 @@ int main() {
 	cblas_dgemv (CblasColMajor, CblasNoTrans, n, s*k, 1, Q, n, zeta, 1, 0, x, 1);
 
 	if (n < 15) {
-		std::cout << "\n\n============= y:\n";
-		for(i = 0; i < m + 1; ++i)
-			std::cout << zeta[i] << std::endl;
-
-		std::cout << std::endl;
-	
+		
 		std::cout.precision(20);
 		
 		std::cout << "\n\n============= sol x:\n";
@@ -289,7 +295,7 @@ int main() {
 
 		std::cout << std::endl;
 	} else {
-		std::cout.precision(1);
+		std::cout.precision(20);
 
 		std::cout << "\n\n============= sol x:\n";
 		for(i = n - 30; i < n; ++i)

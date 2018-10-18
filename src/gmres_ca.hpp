@@ -7,9 +7,7 @@
 
 #ifndef GMRES_CA_HPP_
 
-#include "includes.hpp"
-#include "gmres.hpp"
-#include <vector>
+#include "kernels.hpp"
 
 #define GMRES_CA_HPP_
 
