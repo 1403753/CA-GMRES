@@ -1,0 +1,226 @@
+//============================================================================
+// Name        : metisgraph.cpp
+// Author      : Robert Ernstbrunner
+// Version     :
+// Copyright   : Your copyright notice
+// Description : main in C++
+//============================================================================
+
+/**********/
+/*  TODO  */
+/**********/
+
+/**************/
+/*  END TODO  */
+/**************/
+
+/*********/
+/* notes */
+/*********/
+
+#ifndef METIS_HPP
+
+#include "at_plus_a.hpp"
+
+#include <vector>
+#include <algorithm>
+#include <omp.h>
+
+
+#include <cstddef> /* NULL */
+#include <metis.h>
+
+#define METIS_HPP
+
+#define s 5
+
+#define ScalarType double
+
+
+int main(int argc, char *argv[]) {
+	const idx_t nV = 6;
+	
+	idx_t nVertices = 6;
+	const idx_t nEdges = 7;
+	idx_t nWeights = 2;
+	idx_t nParts = 3;
+
+	idx_t objval;
+	idx_t part[nV];
+	idx_t options[METIS_NOPTIONS];
+	METIS_SetDefaultOptions(options);
+	options[METIS_OPTION_PTYPE] = METIS_PTYPE_KWAY;
+	// options[METIS_OPTION_PTYPE] = METIS_PTYPE_RB;
+	options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_CUT;
+
+	// Indexes of starting points in adjacent array
+	idx_t xadj[nV+1] = {0,2,5,7,9,12,14};
+
+	// Adjacent vertices in consecutive index order
+	idx_t adjncy[2 * nEdges] = {1,3,0,2,4,1,5,0,4,1,3,5,2,4};
+    
+	// options[METIS_OPTION_NUMBERING] = 1; // fortran
+	// idx_t xadj[nV+1] = {1,3,6,8,10,13,15}; // fortran
+	// idx_t adjncy[2 * nEdges] = {2,4,1,3,5,2,6,1,5,2,4,6,3,5}; // fortran
+		
+	// int METIS_PartGraphKway(
+	// idx_t *nvtxs,   -> The number of vertices in the graph
+	// idx_t *ncon,    -> The number of balancing constraints. It should be at least 1
+	// idx_t *xadj,    -> The adjacency structure of the graph as described in Section 5.5
+	// idx_t *adjncy,  -> The adjacency structure of the graph as described in Section 5.5
+	// idx t *vwgt,    -> The weights of the vertices as described in Section 5.5
+	// idx_t *vsize,   -> The size of the vertices for computing the total communication volume as described in Section 5.7
+	// idx_t *adjwgt,  -> The weights of the edges as described in Section 5.5
+	// idx_t *nparts,  -> The number of parts to partition the graph
+	// real_t *tpwgts, -> This is an array of size nparts×ncon that specifies the desired weight for each partition and constraint.
+	                   // The target partition weight for the ith partition and jth constraint is specified at tpwgts[i*ncon+j]
+                     // (the numbering for both partitions and constraints starts from 0). For each constraint, the sum of the
+                     // tpwgts[]entries must be 1.0 (i.e., \sum_i tpwgts[i*ncon+j] = 1.0)
+										 // A NULL value can be passed to indicate that the graph should be equally divided among the partitions.
+	// real_t ubvec,   -> This is an array of size ncon that speciﬁes the allowed load imbalance tolerance for each constraint.
+                     // For the ith partition and jth constraint the allowed weight is the ubvec[j]*tpwgts[i*ncon+j] fraction
+                     // of the jth’s constraint total weight. The load imbalances must be greater than 1.0.
+                     // A NULLvalue can be passed indicating that the load imbalance tolerance for each constraint should
+                     // be 1.001 (for ncon=1) or 1.01 (for ncon>1).
+	// idx_t *options, -> This is the array of options as described in Section 5.4.
+                     // The following options are valid for METIS PartGraphKway:
+                     // METIS_OPTION_OBJTYPE, METIS_OPTION_CTYPE, METIS_OPTION_IPTYPE,
+                     // METIS_OPTION_RTYPE, METIS_OPTION_NO2HOP, METIS_OPTION_NCUTS,
+                     // METIS_OPTION_NITER, METIS_OPTION_UFACTOR, METIS_OPTION_MINCONN,
+                     // METIS_OPTION_CONTIG, METIS_OPTION_SEED, METIS_OPTION_NUMBERING,
+                     // METIS_OPTION_DBGLVL
+	// idx_t *objval,  -> Upon successful completion, this variable stores the edge-cut or the total communication volume of
+                     // the partitioning solution. The value returned depends on the partitioning’s objective function.
+	// idx_t *part)    -> This is a vector of size nvtxs that upon successful completion stores the partition vector of the graph.
+                     // The numbering of this vector starts from either 0 or 1, depending on the value of
+                     // options[METIS_OPTION_NUMBERING].
+
+	int ret = METIS_PartGraphKway(&nVertices,&nWeights, xadj, adjncy,
+				       NULL, NULL, NULL, &nParts, NULL,
+				       NULL, options, &objval, part);
+
+  std::cout << ret << std::endl;
+    
+  for(unsigned i = 0; i < nVertices; i++) {
+		std::cout << i << ' ' << part[i] << std::endl;
+  }
+	
+	const size_t n_ = 6;
+	const size_t nz_ = 19;
+	// ScalarType a[nz_] = {10,3,3,9,7,8,4,8,8,7,7,9,-2,5,9,2,3,13,-1};
+	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,7,5,8,9,9,13,4,2,-1};
+	size_t rowptr_[n_+1] = {0,2,5,8,12,16,19};
+	size_t colind_[nz_] = {0,4,0,1,5,1,2,3,0,2,3,4,1,3,4,5,1,4,5};
+	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
+	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
+	size_t bnz_;
+	size_t *b_rowptr_;
+	size_t *b_colind_;
+
+	at_plus_a(
+	  n_,      /* number of rows in matrix A. */
+	  nz_,     /* number of nonzeros in matrix A */
+	  rowptr_,      /* row pointer of size n+1 for matrix A. */
+	  colind_,      /* column indices of size nz for matrix A. */
+	  &bnz_,         /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
+	  &b_rowptr_,   /* out - size n+1 */
+	  &b_colind_    /* out - size *bnz */);
+	
+	std::cout << bnz_ << "....\n";
+	
+	std::cout << "colindx:\n"; 
+	for(size_t i = 0; i < bnz_; i++) {
+		std::cout << b_colind_[i] << ", ";
+  }
+	std::cout << std::endl;
+
+	std::cout << "rowptr:\n"; 
+	for(size_t i = 0; i < n_+1; i++) {
+		std::cout << b_rowptr_[i] << ", ";
+  }
+	std::cout << std::endl;
+	
+	
+	mkl_free(b_rowptr_);
+	if (bnz_) {
+		mkl_free(b_colind_);
+	}
+	
+	size_t ipar[128];										
+	ipar[30] = 1; // use dpar[31] instead of 0 diagonal; set ipar[30] = 0 to abort computation instead
+
+	double dpar[128];
+	dpar[30] = 1.0e-16; // compare value to diagonal
+	dpar[31] = 1.0e-10;	// the value that will be set on the diagonal
+	
+	///////////////
+	// MKL ILU0  //
+	///////////////
+	
+	// void dcsrilu0 (const MKL_INT *n,
+								 // const double *a,			-> Array containing the set of elements of the matrix A
+								 // const MKL_INT *ia,
+								 // const MKL_INT *ja,
+								 // double *bilu0,
+								 // const MKL_INT *ipar,
+								 // const double *dpar,
+								 // MKL_INT *ierr );
+	
+	size_t *ia, *ja, ierr;
+	ia = (size_t*) mkl_malloc((n_+1) * sizeof(size_t), 64); if(ia == NULL) {return 1;}
+	ja = (size_t*) mkl_malloc(nz_ * sizeof(size_t), 64); if(ja == NULL) {return 1;}
+	double *bilu0;
+	bilu0 = (ScalarType*) mkl_malloc(nz_ * sizeof(ScalarType), 64); if(bilu0 == NULL) {return 1;}
+	
+	for(size_t i = 0; i < n_+1; ++i) {
+		ia[i] = rowptr_[i] + 1;
+	}
+	
+	for(size_t i = 0; i < nz_; ++i) {
+		ja[i] = colind_[i] + 1;
+	}
+	
+	dcsrilu0(&n_, a, ia, ja, bilu0, ipar, dpar, &ierr);
+
+	for (size_t i = 0; i < nz_; ++i) {
+		std::cout << bilu0[i] << ", ";
+	}
+	std::cout << std::endl;
+	
+	mkl_free(ia);
+	mkl_free(ja);
+	mkl_free(bilu0);
+	
+	sparse_status_t   stat;
+	sparse_matrix_t   A;
+	sparse_matrix_t   B;
+	size_t            *row_indx, *col_indx, nn = 5, nnz = 5;
+	ScalarType        *values;
+	
+	row_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(row_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
+	col_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
+	values = (ScalarType *) mkl_malloc(nnz * sizeof(ScalarType), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
+	
+	for (size_t i = 0; i < nn; ++i) {
+		row_indx[i] = i;
+		col_indx[i] = i;
+		values[i] = i + 2;
+	}
+	
+	stat = mkl_sparse_d_create_coo(&A, SPARSE_INDEX_BASE_ZERO, nn, nn, nnz, row_indx, col_indx, values);
+	stat = mkl_sparse_convert_csr (A, SPARSE_OPERATION_NON_TRANSPOSE, &B);
+	mkl_free_buffers();
+
+	
+	mkl_free(row_indx);
+	mkl_free(col_indx);
+	mkl_free(values);
+	mkl_sparse_destroy(A);
+	mkl_sparse_destroy(B);
+	mkl_free_buffers();
+	
+	return 0;
+}
+
+
+#endif
