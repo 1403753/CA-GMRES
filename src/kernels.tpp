@@ -1,5 +1,5 @@
 template <typename ScalarType>
-sparse_status_t kernels<ScalarType>::update_H(ScalarType *H, ScalarType *H_reduced, ScalarType *R, ScalarType *R_k, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  theta_vals, size_t s, size_t m, size_t k) {
+sparse_status_t kernels<ScalarType>::update_H(ScalarType *H, ScalarType *H_reduced, ScalarType *R, ScalarType *R_k, std::vector<ic_pair_t>  theta_vals, size_t s, size_t m, size_t k) {
 	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
 	ScalarType      imag;
 
@@ -111,7 +111,7 @@ sparse_status_t kernels<ScalarType>::update_H(ScalarType *H, ScalarType *H_reduc
 }
 
 template <typename ScalarType>
-sparse_status_t kernels<ScalarType>::reduce_H(ScalarType *H, size_t s, size_t m, size_t k, ScalarType *zeta, std::vector<std::pair<ScalarType, ScalarType>, mkl_allocator<std::pair<ScalarType, ScalarType>>> &cs) {
+sparse_status_t kernels<ScalarType>::reduce_H(ScalarType *H, size_t s, size_t m, size_t k, ScalarType *zeta, std::vector<std::pair<ScalarType, ScalarType>> &cs) {
 	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
 	ScalarType x1;
 	ScalarType x2;
@@ -149,7 +149,7 @@ sparse_status_t kernels<ScalarType>::gmres_init(size_t n,
 																							ScalarType *H,
 																							ScalarType *H_reduced,
 																							ScalarType *Q,
-																							std::vector<ic_pair_t, mkl_allocator<ic_pair_t>> &theta_vals,
+																							std::vector<ic_pair_t> &theta_vals,
 																							size_t s,
 																							size_t m) {
 

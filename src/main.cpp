@@ -11,6 +11,7 @@
 /**********/
 
 /* check sparse_status_t in every class/function */
+/* check fees for allocated arrays in blackbox functions*/
 /* make template functions virtual, or leave 'em */
 /* remove static functions and initialize objects */
 /* change allocation of 'R' back to malloc */
@@ -33,8 +34,9 @@
 #include "matrix_reader.hpp"
 #include <papi.h>
 #include <omp.h>
-#include "_hypre_utilities.h"
-#include "HYPRE_struct_ls.h"
+
+#include <cstddef> /* NULL */
+#include <metis.h>
 
 #define MAIN_HPP
 
@@ -43,8 +45,42 @@
 
 int main() {
 	
-	std::vector<ScalarType, mkl_allocator<ScalarType>> test;
-	test.reserve(2);
+	const idx_t nV = 6;
+	
+	idx_t nVertices = 6;
+	const idx_t nEdges    = 7;
+	idx_t nWeights  = 1;
+	idx_t nParts    = 2;
+
+	idx_t objval;
+	idx_t part[nV];
+
+
+	// Indexes of starting points in adjacent array
+	idx_t xadj[nV+1] = {0,2,5,7,9,12,14};
+
+	// Adjacent vertices in consecutive index order
+	idx_t adjncy[2 * nEdges] = {1,3,0,4,2,1,5,0,4,3,1,5,4,2};
+    
+
+	// int ret = METIS_PartGraphRecursive(&nVertices,& nWeights, xadj, adjncy,
+	// 				       NULL, NULL, NULL, &nParts, NULL,
+	// 				       NULL, NULL, &objval, part);
+
+	int ret = METIS_PartGraphKway(&nVertices,& nWeights, xadj, adjncy,
+				       NULL, NULL, NULL, &nParts, NULL,
+				       NULL, NULL, &objval, part);
+
+  std::cout << ret << std::endl;
+    
+  for(unsigned part_i = 0; part_i < nVertices; part_i++){
+		std::cout << part_i << " " << part[part_i] << std::endl;
+  }
+	
+	
+	
+	// std::vector<ScalarType> test;
+	// test.reserve(2);
 	
 	std::cout.setf(std::ios_base::fixed);
 	std::cout.precision(5);
@@ -69,7 +105,7 @@ int main() {
 	// size_t                        maxit;                          //
 	bool                          restart = true;                 // restart as long as value is true
 
-	std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  theta_vals; // ritz values in modified leja ordering	
+	std::vector<ic_pair_t>  theta_vals; // ritz values in modified leja ordering	
 
 	sparse_status_t               stat;
 	sparse_matrix_t               A;                              // n x n matrix A
@@ -83,12 +119,12 @@ int main() {
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 
-	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/nasa4704.mtx", &A, &minfo);
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/dwb512.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/dwb512.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A, &minfo);
 
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
@@ -114,7 +150,7 @@ int main() {
 	R_k = (ScalarType *)mkl_calloc(s*s, sizeof(ScalarType), 64);if(R_k == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k[0] = 1;
 
-	std::vector<std::pair<ScalarType, ScalarType>, mkl_allocator<std::pair<ScalarType, ScalarType>>> cs(m+1); // cs stores givens rotations for reduction of H
+	std::vector<std::pair<ScalarType, ScalarType>> cs(m+1); // cs stores givens rotations for reduction of H
 
 	/* set true solution */
 	for (i = 0; i < n; ++i)
@@ -126,7 +162,7 @@ int main() {
 	/*  therefore, b == r                       */
 	/********************************************/
 
-	struct matrix_descr 	descr;
+	struct matrix_descr descr;
 
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
@@ -134,12 +170,6 @@ int main() {
 	mkl_sparse_optimize(A);	
 	
 	kernels<ScalarType>::mv(A, tx, r, 1);
-
-
-
-
-
-
 
 	ScalarType beta = cblas_dnrm2(n, r, 1);
 

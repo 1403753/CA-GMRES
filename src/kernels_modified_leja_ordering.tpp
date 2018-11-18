@@ -4,7 +4,7 @@ bool kernels<ScalarType>::is_conj_pair(complex_t a, complex_t b) {
 }
 
 template <typename ScalarType>
-sparse_status_t kernels<ScalarType>::modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<ic_pair_t, mkl_allocator<ic_pair_t>> &theta_vals) {
+sparse_status_t kernels<ScalarType>::modified_leya_ordering(size_t s, ScalarType *wr, ScalarType *wi, std::vector<ic_pair_t> &theta_vals) {
 	sparse_status_t                                   stat = SPARSE_STATUS_SUCCESS;
 	std::vector<ic_pair_t, mkl_allocator<ic_pair_t>>  ritz_vals;
 	size_t                                            i, j;
