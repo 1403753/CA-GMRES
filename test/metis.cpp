@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 	const size_t n_ = 6;
 	const size_t nz_ = 19;
 	// ScalarType a[nz_] = {10,3,3,9,7,8,4,8,8,7,7,9,-2,5,9,2,3,13,-1};
-	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,7,5,8,9,9,13,4,2,-1};
+	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,80,5,8,9,9,13,4,2,-1};
 	size_t rowptr_[n_+1] = {0,2,5,8,12,16,19};
 	size_t colind_[nz_] = {0,4,0,1,5,1,2,3,0,2,3,4,1,3,4,5,1,4,5};
 	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
@@ -124,7 +124,8 @@ int main(int argc, char *argv[]) {
 	  colind_,      /* column indices of size nz for matrix A. */
 	  &bnz_,         /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
 	  &b_rowptr_,   /* out - size n+1 */
-	  &b_colind_    /* out - size *bnz */);
+	  &b_colind_    /* out - size *bnz */
+	);
 	
 	std::cout << bnz_ << "....\n";
 	
@@ -187,34 +188,81 @@ int main(int argc, char *argv[]) {
 	}
 	std::cout << std::endl;
 	
-	mkl_free(ia);
-	mkl_free(ja);
-	mkl_free(bilu0);
-	
 	sparse_status_t   stat;
 	sparse_matrix_t   A;
 	sparse_matrix_t   B;
-	size_t            *row_indx, *col_indx, nn = 5, nnz = 5;
-	ScalarType        *values;
+	// size_t            nn = 5, nnz = 5;
+	// ScalarType        *values;
 	
-	row_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(row_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
-	col_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
-	values = (ScalarType *) mkl_malloc(nnz * sizeof(ScalarType), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
+	// row_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(row_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
+	// col_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
+	// values = (ScalarType *) mkl_malloc(nnz * sizeof(ScalarType), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
 	
-	for (size_t i = 0; i < nn; ++i) {
-		row_indx[i] = i;
-		col_indx[i] = i;
-		values[i] = i + 2;
-	}
+	// for (size_t i = 0; i < nn; ++i) {
+		// row_indx[i] = i;
+		// col_indx[i] = i;
+		// values[i] = i + 2;
+	// }
 	
-	stat = mkl_sparse_d_create_coo(&A, SPARSE_INDEX_BASE_ZERO, nn, nn, nnz, row_indx, col_indx, values);
-	stat = mkl_sparse_convert_csr (A, SPARSE_OPERATION_NON_TRANSPOSE, &B);
-	mkl_free_buffers();
+	
+	// sparse_status_t mkl_sparse_d_create_csr (sparse_matrix_t *A,
+																					 // sparse_index_base_t indexing,
+																					 // MKL_INT rows,
+																					 // MKL_INT cols,
+																					 // MKL_INT *rows_start,
+																					 // MKL_INT *rows_end,
+																					 // MKL_INT *col_indx,
+																					 // double *values);
+	
+	
+	
+	stat = mkl_sparse_d_create_csr(&A, SPARSE_INDEX_BASE_ZERO, n_, n_, rowptr_, rowptr_ + 1, colind_, a);
+	stat = mkl_sparse_d_create_csr(&B, SPARSE_INDEX_BASE_ZERO, n_, n_, rowptr_, rowptr_ + 1, colind_, bilu0);
+
+	ScalarType *x, *y;
+	
+	x = (ScalarType *) mkl_malloc(n_ * sizeof(ScalarType), 64);if(x == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'x' failed.");}	
+	y = (ScalarType *) mkl_malloc(n_ * sizeof(ScalarType), 64);if(y == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'y' failed.");}	
 
 	
-	mkl_free(row_indx);
-	mkl_free(col_indx);
-	mkl_free(values);
+	for (size_t i = 0; i < n_; ++i) {
+		x[i] = 1;
+	}
+	// sparse_status_t mkl_sparse_d_trsm (sparse_operation_t operation,
+																		 // double alpha,
+																		 // const sparse_matrix_t A,
+																		 // struct matrix_descr descr,
+																		 // sparse_layout_t layout,
+																		 // const double *x,
+																		 // MKL_INT columns,
+																		 // MKL_INT ldx,
+																		 // double *y,
+																		 // MKL_INT ldy);
+	struct matrix_descr descr;
+	descr.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
+	descr.mode = SPARSE_FILL_MODE_LOWER;
+	descr.diag = SPARSE_DIAG_UNIT;
+	
+	stat = mkl_sparse_d_trsm (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, SPARSE_LAYOUT_ROW_MAJOR, x, 1, 1, y, 1);
+
+	descr.mode = SPARSE_FILL_MODE_UPPER;
+	descr.diag = SPARSE_DIAG_NON_UNIT;
+
+	stat = mkl_sparse_d_trsm (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, SPARSE_LAYOUT_ROW_MAJOR, y, 1, 1, x, 1);
+
+	
+	for (size_t i = 0; i < n_; ++i) {
+		std::cout << " :" << x[i] << std::endl;
+	}
+	
+	mkl_free(ia);
+	mkl_free(ja);
+	mkl_free(x);
+	mkl_free(y);
+	mkl_free(bilu0);
+	// mkl_free(row_indx);
+	// mkl_free(col_indx);
+	// mkl_free(values);
 	mkl_sparse_destroy(A);
 	mkl_sparse_destroy(B);
 	mkl_free_buffers();

@@ -109,6 +109,7 @@ int main() {
 
 	sparse_status_t               stat;
 	sparse_matrix_t               A;                              // n x n matrix A
+	sparse_matrix_t               M;                              // n x n preconditioned matrix M == ilu0(A)
 	MatrixInfo<ScalarType>        minfo;                          //
 	size_t                        n;                              // dim(A)
 	const size_t                  t = 12;                         // number of 'outer iterations' before restart
