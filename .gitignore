@@ -31,6 +31,8 @@
 *.out
 *.app
 gmres_ca
+main
+metis
 
 # Files too large
 bmw7st_1.mtx
