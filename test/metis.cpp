@@ -38,31 +38,66 @@
 
 
 int main(int argc, char *argv[]) {
-	const idx_t nV = 6;
 	
-	idx_t nVertices = 6;
-	const idx_t nEdges = 7;
-	idx_t nWeights = 2;
-	idx_t nParts = 3;
+	// A = [
+  //    10     0     0     0    -2     0
+  //     3     9     0     0     0     3
+  //     0     7     8     7     0     0
+  //     3     0     8    80     5     0
+  //     0     8     0     9     9    13
+  //     0     4     0     0     2    -1
+	//     ]
+	
+	
+	
+	const size_t n_ = 6;
+	const size_t nz_ = 19;
 
-	idx_t objval;
-	idx_t part[nV];
-	idx_t options[METIS_NOPTIONS];
-	METIS_SetDefaultOptions(options);
+	////////////////
+	// csr format //
+	////////////////	
+	
+	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,80,5,8,9,9,13,4,2,-1};
+	size_t rowptr_[n_+1] = {0,2,5,8,12,16,19};
+	size_t colind_[nz_] = {0,4,0,1,5,1,2,3,0,2,3,4,1,3,4,5,1,4,5};
+	
+	////////////////
+	// csc format //
+	////////////////
+	
+	// ScalarType a[nz_] = {10,3,3,9,7,8,4,8,8,7,80,9,-2,5,9,2,3,13,-1};
+	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
+	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
+	
+	size_t bnz_;
+	size_t *b_rowptr_;
+	size_t *b_colind_;
+
+	at_plus_a(
+	  n_,      /* number of rows in matrix A. */
+	  nz_,     /* number of nonzeros in matrix A */
+	  rowptr_,      /* row pointer of size n+1 for matrix A. */
+	  colind_,      /* column indices of size nz for matrix A. */
+	  &bnz_,         /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
+	  &b_rowptr_,   /* out - size n+1 */
+	  &b_colind_    /* out - size *bnz */
+	);
+	
+	size_t nWeights = 2;
+	size_t nParts = 3;
+	size_t options[METIS_NOPTIONS];
+	size_t objval;
+	size_t part[n_];
+
+	METIS_SetDefaultOptions((idx_t*) options);
 	options[METIS_OPTION_PTYPE] = METIS_PTYPE_KWAY;
 	// options[METIS_OPTION_PTYPE] = METIS_PTYPE_RB;
-	options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_CUT;
-
-	// Indexes of starting points in adjacent array
-	idx_t xadj[nV+1] = {0,2,5,7,9,12,14};
-
-	// Adjacent vertices in consecutive index order
-	idx_t adjncy[2 * nEdges] = {1,3,0,2,4,1,5,0,4,1,3,5,2,4};
-    
+	options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_VOL; // slower, but could effectively reduce overall communication volume
+	// options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_CUT; // faster, approximates minimum communication volume
 	// options[METIS_OPTION_NUMBERING] = 1; // fortran
-	// idx_t xadj[nV+1] = {1,3,6,8,10,13,15}; // fortran
-	// idx_t adjncy[2 * nEdges] = {2,4,1,3,5,2,6,1,5,2,4,6,3,5}; // fortran
-		
+	
+	
+	
 	// int METIS_PartGraphKway(
 	// idx_t *nvtxs,   -> The number of vertices in the graph
 	// idx_t *ncon,    -> The number of balancing constraints. It should be at least 1
@@ -94,40 +129,17 @@ int main(int argc, char *argv[]) {
 	// idx_t *part)    -> This is a vector of size nvtxs that upon successful completion stores the partition vector of the graph.
                      // The numbering of this vector starts from either 0 or 1, depending on the value of
                      // options[METIS_OPTION_NUMBERING].
-
-	int ret = METIS_PartGraphKway(&nVertices,&nWeights, xadj, adjncy,
-				       NULL, NULL, NULL, &nParts, NULL,
-				       NULL, options, &objval, part);
-
-  std::cout << ret << std::endl;
+	
+	int ret = METIS_PartGraphKway((idx_t*) &n_, (idx_t*) &nWeights, (idx_t*) b_rowptr_, (idx_t*) b_colind_,
+																NULL, NULL, NULL, (idx_t*) &nParts, NULL,
+																NULL, (idx_t*) options, (idx_t*) &objval, (idx_t*) part);
+	
+	std::cout << ret << std::endl;
     
-  for(unsigned i = 0; i < nVertices; i++) {
-		std::cout << i << ' ' << part[i] << std::endl;
+  for(size_t i = 0; i < n_; i++) {
+		std::cout << i << ": " << part[i] << std::endl;
   }
 	
-	const size_t n_ = 6;
-	const size_t nz_ = 19;
-	// ScalarType a[nz_] = {10,3,3,9,7,8,4,8,8,7,7,9,-2,5,9,2,3,13,-1};
-	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,80,5,8,9,9,13,4,2,-1};
-	size_t rowptr_[n_+1] = {0,2,5,8,12,16,19};
-	size_t colind_[nz_] = {0,4,0,1,5,1,2,3,0,2,3,4,1,3,4,5,1,4,5};
-	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
-	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
-	size_t bnz_;
-	size_t *b_rowptr_;
-	size_t *b_colind_;
-
-	at_plus_a(
-	  n_,      /* number of rows in matrix A. */
-	  nz_,     /* number of nonzeros in matrix A */
-	  rowptr_,      /* row pointer of size n+1 for matrix A. */
-	  colind_,      /* column indices of size nz for matrix A. */
-	  &bnz_,         /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
-	  &b_rowptr_,   /* out - size n+1 */
-	  &b_colind_    /* out - size *bnz */
-	);
-	
-	std::cout << bnz_ << "....\n";
 	
 	std::cout << "colindx:\n"; 
 	for(size_t i = 0; i < bnz_; i++) {
@@ -147,7 +159,8 @@ int main(int argc, char *argv[]) {
 		mkl_free(b_colind_);
 	}
 	
-	size_t ipar[128];										
+	size_t ipar[128];		
+	ipar[1] = 6; // 6 == display all error msgs on screen
 	ipar[30] = 1; // use dpar[31] instead of 0 diagonal; set ipar[30] = 0 to abort computation instead
 
 	double dpar[128];
@@ -267,7 +280,7 @@ int main(int argc, char *argv[]) {
 	mkl_sparse_destroy(B);
 	mkl_free_buffers();
 	
-	return 0;
+	return stat;
 }
 
 

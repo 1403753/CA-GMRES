@@ -120,7 +120,8 @@ int main() {
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 
-	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
+	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A, &minfo);
+	stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/1138_bus.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/matlab_example.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/mini_test.mtx", &A, &minfo);
 	// stat = matrix_reader<ScalarType>::read_matrix_from_file("../matrix_market/goodwin.mtx", &A, &minfo);
