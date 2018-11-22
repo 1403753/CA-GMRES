@@ -25,9 +25,24 @@
 #include <vector>
 #include <algorithm>
 #include <omp.h>
+#include "cs.h"
 
+template <typename ScalarType>
+struct RobsMatrix{
+	size_t n;
+	size_t nnz;
+	size_t *rows_start;
+	size_t *rows_end;
+	size_t *col_indx;
+	ScalarType *values;
+};
 
-#include <cstddef> /* NULL */
+extern "C"
+{
+	#include <igraph.h>
+}
+
+// #include <cstddef> /* NULL */
 #include <metis.h>
 
 #define METIS_HPP
@@ -35,10 +50,52 @@
 #define s 5
 
 #define ScalarType double
+sparse_status_t my_permute(ScalarType *a, size_t *rowptr_, size_t *colind_, const size_t n, size_t *pinv, size_t *q) {
+		size_t nz = rowptr_[n];
+		size_t t, j, k, inz = 0, *Ap, *Ai, *Cp, *Ci;
+    ScalarType *Cx, *Ax;
+	
+		Ap = rowptr_;
+		Ai = colind_;
+		Ax = a;
+		
+    Cp = new size_t[n+1];
+		Ci = new size_t[nz];
+		Cx = new ScalarType[nz];
+
+    for (k = 0 ; k < n ; k++)
+    {
+        Cp[k] = inz ;                   /* column k of C is column pinv[k] of A */
+        j = pinv ? (pinv[k]) : k ;
+        for (t = Ap[j] ; t < Ap[j+1] ; t++)
+        {
+            if (Cx) Cx[inz] = Ax[t] ;  /* row i of A is row q[i] of C */
+            Ci[inz++] = q ? (q[Ai [t]]) : Ai[t] ;
+        }
+    }
+    Cp[n] = inz;                       /* finalize the last column of C */
+		
+
+		
+		for (size_t i = 0; i < nz; ++i)
+			std::cout << Ci[i] << "\n";
+		std::cout << std::endl;
+		
+		std::cout << "permuted: \n"; 
+		for (size_t i = 0; i < nz; ++i)
+			std::cout << Cx[i] << "\n";
+		std::cout << std::endl;
+		
+		delete[] Cp;
+		delete[] Ci;
+		delete[] Cx;
+		
+    return SPARSE_STATUS_SUCCESS;
+}
 
 
 int main(int argc, char *argv[]) {
-	
+		
 	// A = [
   //    10     0     0     0    -2     0
   //     3     9     0     0     0     3
@@ -47,8 +104,6 @@ int main(int argc, char *argv[]) {
   //     0     8     0     9     9    13
   //     0     4     0     0     2    -1
 	//     ]
-	
-	
 	
 	const size_t n_ = 6;
 	const size_t nz_ = 19;
@@ -69,6 +124,23 @@ int main(int argc, char *argv[]) {
 	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
 	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
 	
+	const cs_di C = 
+	{
+		nz_,
+		n_,
+		n_,
+		(int*) rowptr_,
+		(int*) colind_,
+		a,
+		-1
+	};
+	
+	size_t pinv[n_] = {0,2,1,3,4,5};
+	size_t q[n_] = {0,1,2,3,4,5};
+	
+	my_permute (a, rowptr_, colind_, n_, pinv, q);
+	
+	
 	size_t bnz_;
 	size_t *b_rowptr_;
 	size_t *b_colind_;
@@ -88,6 +160,8 @@ int main(int argc, char *argv[]) {
 	size_t options[METIS_NOPTIONS];
 	size_t objval;
 	size_t part[n_];
+	struct matrix_descr descr;
+
 
 	METIS_SetDefaultOptions((idx_t*) options);
 	options[METIS_OPTION_PTYPE] = METIS_PTYPE_KWAY;
@@ -140,7 +214,6 @@ int main(int argc, char *argv[]) {
 		std::cout << i << ": " << part[i] << std::endl;
   }
 	
-	
 	std::cout << "colindx:\n"; 
 	for(size_t i = 0; i < bnz_; i++) {
 		std::cout << b_colind_[i] << ", ";
@@ -152,7 +225,6 @@ int main(int argc, char *argv[]) {
 		std::cout << b_rowptr_[i] << ", ";
   }
 	std::cout << std::endl;
-	
 	
 	mkl_free(b_rowptr_);
 	if (bnz_) {
@@ -204,19 +276,6 @@ int main(int argc, char *argv[]) {
 	sparse_status_t   stat;
 	sparse_matrix_t   A;
 	sparse_matrix_t   B;
-	// size_t            nn = 5, nnz = 5;
-	// ScalarType        *values;
-	
-	// row_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(row_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
-	// col_indx = (size_t *) mkl_malloc(nnz * sizeof(size_t), 64);if(col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
-	// values = (ScalarType *) mkl_malloc(nnz * sizeof(ScalarType), 64);if(values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
-	
-	// for (size_t i = 0; i < nn; ++i) {
-		// row_indx[i] = i;
-		// col_indx[i] = i;
-		// values[i] = i + 2;
-	// }
-	
 	
 	// sparse_status_t mkl_sparse_d_create_csr (sparse_matrix_t *A,
 																					 // sparse_index_base_t indexing,
@@ -227,8 +286,6 @@ int main(int argc, char *argv[]) {
 																					 // MKL_INT *col_indx,
 																					 // double *values);
 	
-	
-	
 	stat = mkl_sparse_d_create_csr(&A, SPARSE_INDEX_BASE_ZERO, n_, n_, rowptr_, rowptr_ + 1, colind_, a);
 	stat = mkl_sparse_d_create_csr(&B, SPARSE_INDEX_BASE_ZERO, n_, n_, rowptr_, rowptr_ + 1, colind_, bilu0);
 
@@ -237,31 +294,30 @@ int main(int argc, char *argv[]) {
 	x = (ScalarType *) mkl_malloc(n_ * sizeof(ScalarType), 64);if(x == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'x' failed.");}	
 	y = (ScalarType *) mkl_malloc(n_ * sizeof(ScalarType), 64);if(y == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'y' failed.");}	
 
-	
 	for (size_t i = 0; i < n_; ++i) {
 		x[i] = 1;
 	}
-	// sparse_status_t mkl_sparse_d_trsm (sparse_operation_t operation,
+	
+	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
+
+	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, y);
+
+	// sparse_status_t mkl_sparse_d_trsv (sparse_operation_t operation,
 																		 // double alpha,
 																		 // const sparse_matrix_t A,
 																		 // struct matrix_descr descr,
-																		 // sparse_layout_t layout,
 																		 // const double *x,
-																		 // MKL_INT columns,
-																		 // MKL_INT ldx,
-																		 // double *y,
-																		 // MKL_INT ldy);
-	struct matrix_descr descr;
+																		 // double *y);
 	descr.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
 	descr.mode = SPARSE_FILL_MODE_LOWER;
 	descr.diag = SPARSE_DIAG_UNIT;
 	
-	stat = mkl_sparse_d_trsm (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, SPARSE_LAYOUT_ROW_MAJOR, x, 1, 1, y, 1);
+	stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, y, y);
 
 	descr.mode = SPARSE_FILL_MODE_UPPER;
 	descr.diag = SPARSE_DIAG_NON_UNIT;
 
-	stat = mkl_sparse_d_trsm (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, SPARSE_LAYOUT_ROW_MAJOR, y, 1, 1, x, 1);
+	stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, y, x);
 
 	
 	for (size_t i = 0; i < n_; ++i) {
@@ -273,9 +329,6 @@ int main(int argc, char *argv[]) {
 	mkl_free(x);
 	mkl_free(y);
 	mkl_free(bilu0);
-	// mkl_free(row_indx);
-	// mkl_free(col_indx);
-	// mkl_free(values);
 	mkl_sparse_destroy(A);
 	mkl_sparse_destroy(B);
 	mkl_free_buffers();

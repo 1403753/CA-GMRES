@@ -1,7 +1,8 @@
 CC = g++
 CFLAGS = -Wall -pedantic -std=c++14 
-INC = -I/home/a01403753/local/include -DBLASINT=int64_t -DMKL_ILP64 -m64 -I$(MKLROOT)/include -fopenmp
 LIB = /home/a01403753/local/lib
+INCLUDE = /home/a01403753/local/include
+INC = -DBLASINT=int64_t -DMKL_ILP64 -m64 -I$(MKLROOT)/include -fopenmp
 
 DFLAGS = -g -O0 
 #-ggdb
@@ -15,19 +16,21 @@ MKLROOT = /home/a01403753/intel/mkl
 all: metis
 
 metis: $(OBJ)
-	$(CC) -o $@ $^ -lgsl \
+	$(CC) -o $@ $^ \
+	-lpapi \
+	-lgfortran \
+	-L$(LIB) -l:libmetis.a \
+	-L$(LIB) -l:libigraph.a \
+	-L$(LIB) -lcxsparse \
 	-Wl,--start-group \
 	$(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a \
 	$(MKLROOT)/lib/intel64/libmkl_gnu_thread.a \
 	$(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group \
-	-lgomp -lpthread -lm -ldl \
-	-lpapi \
-	-lgfortran \
-	-L$(LIB) -l:libmetis.a
+	-lgomp -lpthread -lm -ldl
 
 metis.o: metis.cpp
-	$(CC) $(CFLAGS) $(INC) -c $< $(DFLAGS)
-	
+	$(CC) $(CFLAGS) $(INC) -I$(INCLUDE) -I$(INCLUDE)/igraph -c $< $(DFLAGS)
+
 %.o: %.cpp %.hpp
 	$(CC) $(CFLAGS) $(INC) -c $< $(DFLAGS)
 
