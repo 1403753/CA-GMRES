@@ -3,6 +3,8 @@ CFLAGS = -Wall -pedantic -std=c++14
 INC = -I/home/a01403753/local/include -DBLASINT=int64_t -DMKL_ILP64 -m64 -I$(MKLROOT)/include -fopenmp
 LIB = /home/a01403753/local/lib
 
+VALFLAG = 
+# --leak-check=full;
 DFLAGS = -g -O0 
 #-ggdb
 
@@ -38,7 +40,7 @@ burn: main
 	./main
 
 vurn: main
-	valgrind --leak-check=full ./main
+	valgrind $(VALFLAG) ./main
 
 clean:
 	rm -rf *.o main

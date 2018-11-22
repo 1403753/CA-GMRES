@@ -20,22 +20,11 @@
 
 #ifndef METIS_HPP
 
-#include "at_plus_a.hpp"
+#include "sparse_utils.hpp"
 
 #include <vector>
 #include <algorithm>
 #include <omp.h>
-#include "cs.h"
-
-template <typename ScalarType>
-struct RobsMatrix{
-	size_t n;
-	size_t nnz;
-	size_t *rows_start;
-	size_t *rows_end;
-	size_t *col_indx;
-	ScalarType *values;
-};
 
 extern "C"
 {
@@ -50,48 +39,7 @@ extern "C"
 #define s 5
 
 #define ScalarType double
-sparse_status_t my_permute(ScalarType *a, size_t *rowptr_, size_t *colind_, const size_t n, size_t *pinv, size_t *q) {
-		size_t nz = rowptr_[n];
-		size_t t, j, k, inz = 0, *Ap, *Ai, *Cp, *Ci;
-    ScalarType *Cx, *Ax;
-	
-		Ap = rowptr_;
-		Ai = colind_;
-		Ax = a;
-		
-    Cp = new size_t[n+1];
-		Ci = new size_t[nz];
-		Cx = new ScalarType[nz];
 
-    for (k = 0 ; k < n ; k++)
-    {
-        Cp[k] = inz ;                   /* column k of C is column pinv[k] of A */
-        j = pinv ? (pinv[k]) : k ;
-        for (t = Ap[j] ; t < Ap[j+1] ; t++)
-        {
-            if (Cx) Cx[inz] = Ax[t] ;  /* row i of A is row q[i] of C */
-            Ci[inz++] = q ? (q[Ai [t]]) : Ai[t] ;
-        }
-    }
-    Cp[n] = inz;                       /* finalize the last column of C */
-		
-
-		
-		for (size_t i = 0; i < nz; ++i)
-			std::cout << Ci[i] << "\n";
-		std::cout << std::endl;
-		
-		std::cout << "permuted: \n"; 
-		for (size_t i = 0; i < nz; ++i)
-			std::cout << Cx[i] << "\n";
-		std::cout << std::endl;
-		
-		delete[] Cp;
-		delete[] Ci;
-		delete[] Cx;
-		
-    return SPARSE_STATUS_SUCCESS;
-}
 
 
 int main(int argc, char *argv[]) {
@@ -123,23 +71,52 @@ int main(int argc, char *argv[]) {
 	// ScalarType a[nz_] = {10,3,3,9,7,8,4,8,8,7,80,9,-2,5,9,2,3,13,-1};
 	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
 	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
+
 	
-	const cs_di C = 
-	{
-		nz_,
-		n_,
-		n_,
-		(int*) rowptr_,
-		(int*) colind_,
-		a,
-		-1
-	};
-	
-	size_t pinv[n_] = {0,2,1,3,4,5};
+	size_t pinv[n_] = {3,2,1,0,5,4};
 	size_t q[n_] = {0,1,2,3,4,5};
 	
-	my_permute (a, rowptr_, colind_, n_, pinv, q);
+	RobMat R = {
+		n_,
+		nz_,
+		rowptr_,
+		rowptr_+1,
+		colind_,
+		a
+	};
 	
+	size_t *Cp = new size_t[n_+1];
+	size_t *Ci = new size_t[nz_];
+	double *Cx = new double[nz_];
+	
+	RobMat C = {
+		n_,
+		nz_,
+		Cp,
+		Cp+1,
+		Ci,
+		Cx
+	};
+	
+	my_permute(&R, &C, n_, pinv, pinv);
+	
+	for (size_t i = 0; i < nz_; ++i)
+		std::cout << Ci[i] << "\n";
+	std::cout << std::endl;
+	
+	std::cout << "permuted: \n"; 
+	for (size_t i = 0; i < nz_; ++i)
+		std::cout << Cx[i] << "\n";
+	std::cout << std::endl;
+
+	std::cout << "rowptr: \n"; 
+	for (size_t i = 0; i < n_+1; ++i)
+		std::cout << Cp[i] << "\n";
+	std::cout << std::endl;
+	
+	delete[] Cp;
+	delete[] Ci;
+	delete[] Cx;
 	
 	size_t bnz_;
 	size_t *b_rowptr_;
@@ -169,8 +146,6 @@ int main(int argc, char *argv[]) {
 	options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_VOL; // slower, but could effectively reduce overall communication volume
 	// options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_CUT; // faster, approximates minimum communication volume
 	// options[METIS_OPTION_NUMBERING] = 1; // fortran
-	
-	
 	
 	// int METIS_PartGraphKway(
 	// idx_t *nvtxs,   -> The number of vertices in the graph
