@@ -15,6 +15,15 @@
 
 #define INCLUDES_HPP_
 
+struct RobMat{
+	size_t n;
+	size_t nnz;
+	size_t *rows_start;
+	size_t *rows_end;
+	size_t *col_indx;
+	double *values;
+};
+
 typedef std::complex<double> complex_t; 
 typedef std::pair<size_t, complex_t> ic_pair_t;
 

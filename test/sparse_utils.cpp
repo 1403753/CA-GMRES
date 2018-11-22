@@ -1,14 +1,42 @@
-#include "at_plus_a.hpp"
+#include "sparse_utils.hpp"
 
-int at_plus_a(
-	  const size_t n,      /* number of columns in matrix A. */
-	  const size_t nz,     /* number of nonzeros in matrix A */
-	  size_t *colptr,      /* column pointer of size n+1 for matrix A. */
-	  size_t *rowind,      /* row indices of size nz for matrix A. */
-	  size_t *bnz,         /* out - on exit, returns the actual number of
-                               nonzeros in matrix A'*A. */
-	  size_t **b_colptr,   /* out - size n+1 */
-	  size_t **b_rowind    /* out - size *bnz */
+sparse_status_t my_permute(const RobMat *A, RobMat *dest, const size_t n, size_t *pinv, size_t *q) {
+
+	size_t t, j, k, inz = 0, *Ap, *Ai, *Cp, *Ci;
+	double *Cx, *Ax;
+
+	Ap = A->rows_start;
+	Ai = A->col_indx;
+	Ax = A->values;
+	
+	Cp = dest->rows_start;
+	Ci = dest->col_indx;
+	Cx = dest->values;
+
+	for (k = 0 ; k < n ; k++) {
+			Cp[k] = inz;                   /* row k of C is row pinv[k] of A */
+			j = pinv ? (pinv[k]) : k ;
+			for (t = Ap[j] ; t < Ap[j+1] ; t++) {
+					if (Cx) Cx[inz] = Ax[t] ;  /* column i of A is column q[i] of C */
+					Ci[inz++] = q ? (q[Ai [t]]) : Ai[t] ;
+			}
+	}
+	Cp[n] = inz;                       /* finalize the last row of C */
+		
+	dest->rows_end = Cp+1;
+		
+	return SPARSE_STATUS_SUCCESS;
+}
+
+sparse_status_t at_plus_a(
+	const size_t n,      /* number of columns in matrix A. */
+	const size_t nz,     /* number of nonzeros in matrix A */
+	size_t *colptr,      /* column pointer of size n+1 for matrix A. */
+	size_t *rowind,      /* row indices of size nz for matrix A. */
+	size_t *bnz,         /* out - on exit, returns the actual number of
+														 nonzeros in matrix A'*A. */
+	size_t **b_colptr,   /* out - size n+1 */
+	size_t **b_rowind    /* out - size *bnz */
 	  )
 {
 /*
@@ -25,9 +53,9 @@ int at_plus_a(
 	size_t *t_colptr, *t_rowind; /* a column oriented form of T = A' */
 	size_t *marker;
 
-	marker = (size_t*) mkl_malloc(n * sizeof(size_t), 64); if(marker == NULL) {return 1;}
-	t_colptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(t_colptr == NULL) {return 1;}
-	t_rowind = (size_t*) mkl_malloc(nz * sizeof(size_t), 64); if(t_rowind == NULL) {return 1;}
+	marker = (size_t*) mkl_malloc(n * sizeof(size_t), 64); if(marker == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	t_colptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(t_colptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	t_rowind = (size_t*) mkl_malloc(nz * sizeof(size_t), 64); if(t_rowind == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	
 	/* Get counts of each column of T, and set up column pointers */
 	for (i = 0; i < n; ++i) marker[i] = 0;
@@ -89,9 +117,9 @@ int at_plus_a(
 	*bnz = num_nz;
   
 	/* Allocate storage for A+A' */
-	*b_colptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(b_colptr == NULL) {return 1;}
+	*b_colptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(b_colptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	if ( *bnz) {
-		*b_rowind = (size_t*) mkl_malloc(*bnz * sizeof(size_t), 64); if(b_rowind == NULL) {return 1;}
+		*b_rowind = (size_t*) mkl_malloc(*bnz * sizeof(size_t), 64); if(b_rowind == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	}
     
 	/* Zero the diagonal flag */
@@ -129,5 +157,5 @@ int at_plus_a(
 	mkl_free(t_colptr);
 	mkl_free(t_rowind);	
 	
-	return 0;
+	return SPARSE_STATUS_SUCCESS;
 }
