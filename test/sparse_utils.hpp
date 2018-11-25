@@ -1,5 +1,12 @@
 #include "includes.hpp"
 
+sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
+												std::vector<size_t *> &v_In, // input vector containing pointers to CSR rows
+												std::vector<size_t *> &v_Res, // result vector for some level of order containing pointers to CSR rows
+												size_t order, // the reachabilty order
+												Gr_Part gPart
+								);
+
 sparse_status_t my_permute(const Mtx_CSR *A, Mtx_CSR *dest, const size_t n, const size_t *pinv, const size_t *q);
 // double *a, size_t *rowptr_, size_t *colind_, 
 

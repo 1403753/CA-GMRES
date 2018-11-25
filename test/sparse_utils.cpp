@@ -1,109 +1,109 @@
 #include "sparse_utils.hpp"
 
-#ifdef JUHU
 // taken from igraph ../src/structural_properties.c
-
-int igraph_neighborhood(const Mtx_CSR A,  // CSR MATRIX
-												igraph_vector_ptr_t *res, // result vertices for some level of order
-												igraph_vs_t vids, // input set
-												igraph_integer_t order, //
-												)
+sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
+												std::vector<size_t *> &v_In, // input set
+												std::vector<size_t *> &v_Res, // result vertices for some level of order
+												size_t order, // the reachabilty order
+												Gr_Part gPart
+								)
 {
   
-  long int no_of_nodes=igraph_vcount(graph); // calculate number of nodes in the graph
-  igraph_dqueue_t q; // double-ended queue (C++: std::deque)
-	// igraph_dqueue_pop :=  Remove the head. (C++: pop_front)
-	// igraph_dqueue_pop_back :=  Remove the tail. (C++: pop_back)
-	// igraph_dqueue_push := Append an element to the end of the queue (head side) (C++: push_back) (there is no push_back)
-
-	// igraph_dqueue_back := The last element in the queue (C++: back)
-	// igraph_dqueue_head := The first element in the queue (C++: front)
-	// igraph_dqueue_size := number of elements in the queue (C++: size)
+  size_t n = A->n; // calculate number of nodes in the graph
+	size_t *Ap = A->row_ptr;
+	size_t *Ai = A->col_indx;
 	
-  igraph_vit_t vit; // vertex iterator
-  long int i, j;
-  long int *added; // added vertices
-  igraph_vector_t neis; //neighbors of a vertex
-  igraph_vector_t tmp; // ?temporary help vector
-  igraph_vector_t *newv; // ?new vertices
+  std::deque<size_t> q; // double-ended queue (C++: std::deque)
+	//* igraph_dqueue_pop :=  Remove the head. (C++: pop_front)
+	//* igraph_dqueue_pop_back :=  Remove the tail. (C++: pop_back)
+	//* igraph_dqueue_push := Append an element to the end of the queue (head side) (C++: push_back) (there is no push_back)
 
-	// check order > 0
-  
-  added=igraph_Calloc(no_of_nodes, long int); // allocate memory for added nodes with size of "number of all nodes in the graph" of type "int"
+	//* igraph_dqueue_back := The last element in the queue (C++: back)
+	//* igraph_dqueue_head := The first element in the queue (C++: front)
+	//* igraph_dqueue_size := number of elements in the queue (C++: size)
 	
-  if (added==0) {
-    IGRAPH_ERROR("Cannot calculate neighborhood size", IGRAPH_ENOMEM);
+  size_t *added; // added vertices
+  std::vector<size_t> neis; // neighbors of a vertex
+
+  if (order < 0) {
+    return SPARSE_STATUS_INVALID_VALUE;
   }
-  IGRAPH_FINALLY(igraph_free, added); // ~ probably free memory for added later on
-  IGRAPH_DQUEUE_INIT_FINALLY(&q, 100); // initialize dqueue
-  IGRAPH_CHECK(igraph_vit_create(graph, vids, &vit)); // create vit-iterator for the graph and iterate over input set
-  IGRAPH_FINALLY(igraph_vit_destroy, &vit); // destroy iterator eventually
-  IGRAPH_VECTOR_INIT_FINALLY(&neis, 0); // initialize and free neighbors-vector
-  IGRAPH_VECTOR_INIT_FINALLY(&tmp, 0); // initialize and free temporary help vector
-  IGRAPH_CHECK(igraph_vector_ptr_resize(res, IGRAPH_VIT_SIZE(vit))); // ??? get size of the iterator and resize the initial result vertices-vector.
   
-  for (i=0; !IGRAPH_VIT_END(vit); IGRAPH_VIT_NEXT(vit), i++) { //iterate over input set. (for each vid do .... )
-    long int node=IGRAPH_VIT_GET(vit); // get the current vertex, aka node;
-    added[node]=i+1; // add node to added vertices-vector in location "node (vertex_id)" and set it to vertexnumber + 1
-    igraph_vector_clear(&tmp); // clear the temporary help-vector
-    IGRAPH_CHECK(igraph_vector_push_back(&tmp, node)); // add current vertex to the back of the temporary help-vector.
-    if (order > 0) {
-      igraph_dqueue_push(&q, node); // add vertex to the end of the dqueue if order > 0
-      igraph_dqueue_push(&q, 0); // add 0 afterwards to the end of the dqueue (this number is the distance of the node to itself)
+	// allocate memory for added nodes with size of "number of all nodes in the graph" of type "int"
+	added = (size_t*) mkl_calloc(n, sizeof(size_t), 64); if(added == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+
+	for(std::vector<size_t*>::reverse_iterator it = v_In.rbegin(); it != v_In.rend(); ++it) { //iterate over input set. (for each vid do .... )
+		ptrdiff_t node = std::distance(Ap, *it); // get the current vertex_id, aka node_id;
+    added[node]=**it+1; // add node to added vertices-vector in location "node (vertex_id)" and set it to vertexnumber + 1
+		v_Res.push_back(Ap + node); // add current vertex to result.
+    
+		if (order > 0) {
+			q.push_back(node); // add vertex to the end of the dqueue if order > 0
+			q.push_back(0); // add 0 afterwards to the end of the dqueue (this number is the distance of the node to itself)
     }
 
-    while (!igraph_dqueue_empty(&q)) { // as long as dqueue is not empty do ...
-      long int actnode=(long int) igraph_dqueue_pop(&q); // remove the head (the node)
-      long int actdist=(long int) igraph_dqueue_pop(&q); // remove the head (the distance/order of the node)
-      long int n; // declare n := number of neighbors
-      igraph_neighbors(graph, &neis, (igraph_integer_t) actnode, mode); // get all neighbors (mode == out) from the current vertex and store in neis
-      n=igraph_vector_size(&neis); // calculate size of neighbors
+    while(!q.empty()) { // as long as dqueue is not empty do ...
+			size_t actnode = q.front(); // remove the head (the node)
+			q.pop_front();
+			size_t actdist = q.front(); // remove the head (the distance/order of the node)
+			q.pop_front();
+      size_t nneis; // declare nneis := number of neighbors
+			for(size_t i = *(Ap + actnode); i < *(Ap + actnode + 1); ++i) {
+				switch(gPart) {
+					case GRAPH_LOWER:
+						if(actnode > Ai[i])
+							neis.push_back(Ai[i]); // get all neighbors (outdegree) from the current vertex and store in neis
+						break;
+					case GRAPH_UPPER:
+						if(actnode <= Ai[i])
+							neis.push_back(Ai[i]); // get all neighbors (outdegree) from the current vertex and store in neis
+						break;
+					case GRAPH_COMPLETE:
+						neis.push_back(Ai[i]); // get all neighbors (outdegree) from the current vertex and store in neis
+						break;
+					default:
+						return SPARSE_STATUS_INVALID_VALUE;
+				}
+			}
+			
+			nneis = neis.size(); // calculate size of neighbors
       
       if (actdist<order-1) { // ask if the node-distance is smaller than the order (in first iteration actdist == 0 and order-1 == 0 for order==1)
 				/* we add them to the q */
-				for (j=0; j<n; j++) { // iterate over all neighbors
-					long int nei=(long int) VECTOR(neis)[j]; // get current neighbor
-					if (added[nei] != i+1) { // only add if the added vertices-vector in location "nei (vertex_id)" is not the vertexnumber + 1
-																	 // in other words this should mean if the neighbor is not the current vertex in the input set or has not been added yet!
-																	 // *added is kind of like the marker for "has been visited"
-						added[nei]=i+1; // mark as visited
-						IGRAPH_CHECK(igraph_dqueue_push(&q, nei)); // add the vertex to the dqueue
-						IGRAPH_CHECK(igraph_dqueue_push(&q, actdist+1)); // add its distance to the queue
-						IGRAPH_CHECK(igraph_vector_push_back(&tmp, nei)); // add the vertex to the result 
+				for (size_t j = 0; j < nneis; j++) { // iterate over all neighbors
+					size_t nei= neis.at(j); // get current neighbor
+					if (added[nei] != **it+1) { // only add if the added vertices-vector in location "nei (vertex_id)" is not the vertexnumber + 1
+																	 //* in other words this should mean if the neighbor is not the current vertex in the input set or has not been added yet!
+																	 //* *added is kind of like the marker for "has been visited"
+						added[nei]=**it + 1; // mark as visited
+						q.push_back(nei); // add the vertex to the dqueue
+						q.push_back(actdist + 1); // add its distance to the queue
+						v_Res.push_back(Ap + nei); // add the vertex to the result 
 					}
 				}
       } else {
 				/* we just count them but don't add them to q */ // just add them to the result, but not process them in the dqueue
-				for (j=0; j<n; j++) { // iterate over all neighbors
-					long int nei=(long int) VECTOR(neis)[j];
-					if (added[nei] != i+1) {
-						added[nei]=i+1;
-						IGRAPH_CHECK(igraph_vector_push_back(&tmp, nei));
+				for (size_t j=0; j<nneis; j++) { // iterate over all neighbors
+					size_t nei= neis.at(j); // get current neighbor
+					if (added[nei] != **it+1) {
+						added[nei] = **it + 1;
+						v_Res.push_back(Ap + nei); // add the vertex to the result 
 					}
 				}
       }
     } /* while q not empty */
-
-    newv=igraph_Calloc(1, igraph_vector_t); // allocate memory for newv of size "1" of type "vector"
-		// check calloc
 		
-    IGRAPH_FINALLY(igraph_free, newv);
-    IGRAPH_CHECK(igraph_vector_copy(newv, &tmp));
-    VECTOR(*res)[i]=newv;
-    IGRAPH_FINALLY_CLEAN(1);
-  } // end for every vertex in the input set
+  } //* end for every vertex in the input set
 
-  igraph_vector_destroy(&tmp);
-  igraph_vector_destroy(&neis);
-  igraph_vit_destroy(&vit);
-  igraph_dqueue_destroy(&q);
-  igraph_Free(added);
-  IGRAPH_FINALLY_CLEAN(5);
+	if (v_In.size() > 1) {
+		std::sort( v_Res.begin(), v_Res.end() );
+		v_Res.erase( std::unique( v_Res.begin(), v_Res.end() ), v_Res.end() );
+	}
 
-  return 0;
+	mkl_free(added);
+  return SPARSE_STATUS_SUCCESS;
 }
 
-#endif
 
 
 

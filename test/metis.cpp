@@ -95,23 +95,48 @@ int main(int argc, char *argv[]) {
 	
 	my_permute(&R, &C, n_, pinv, pinv);
 	
-	for (size_t i = 0; i < nz_; ++i)
-		std::cout << Ci[i] << "\n";
-	std::cout << std::endl;
+	// for (size_t i = 0; i < nz_; ++i)
+		// std::cout << Ci[i] << "\n";
+	// std::cout << std::endl;
 	
-	std::cout << "permuted: \n"; 
-	for (size_t i = 0; i < nz_; ++i)
-		std::cout << Cx[i] << "\n";
-	std::cout << std::endl;
+	// std::cout << "permuted: \n"; 
+	// for (size_t i = 0; i < nz_; ++i)
+		// std::cout << Cx[i] << "\n";
+	// std::cout << std::endl;
 
-	std::cout << "rowptr: \n"; 
-	for (size_t i = 0; i < n_+1; ++i)
-		std::cout << Cp[i] << "\n";
-	std::cout << std::endl;
+	// std::cout << "rowptr: \n"; 
+	// for (size_t i = 0; i < n_+1; ++i)
+		// std::cout << Cp[i] << "\n";
+	// std::cout << std::endl;
 	
+
+	
+	std::vector<size_t *> v_Res;
+	std::vector<size_t *> v_In;
+	size_t order = 1;
+	
+	v_In.push_back(Cp);
+	v_In.push_back(Cp+1);
+	// v_In.push_back(Cp+2);
+	// v_In.push_back(Cp+3);
+	// v_In.push_back(Cp+4);
+	v_In.push_back(Cp+5);
+	
+	Gr_Part gPart = GRAPH_COMPLETE;
+	
+	neighborhood(&C,  // CSR MATRIX
+							 v_In, // input set
+							 v_Res, // result vertices for some level of order
+							 order, // the reachabilty order
+							 gPart
+	);
+	
+	for(auto k:v_Res)
+		std::cout << "RES:  " << std::distance(Cp, k) << "\n"; 
+
 	delete[] Cp;
 	delete[] Ci;
-	delete[] Cx;
+	delete[] Cx;	
 	
 	size_t bnz_;
 	size_t *b_rowptr_;

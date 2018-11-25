@@ -7,6 +7,10 @@
 #include <complex> 						// <- not needed everywhere!
 #include <exception>
 
+#include <vector>
+#include <deque>
+#include <algorithm>
+
 #define MKL_MAX_PATH_LEN 4096
 #define MKL_Complex16 std::complex<double>
 #define MKL_INT size_t
@@ -24,6 +28,7 @@ struct Mtx_CSR{
 
 typedef std::complex<double> complex_t; 
 typedef std::pair<size_t, complex_t> ic_pair_t;
+enum Gr_Part {GRAPH_LOWER, GRAPH_UPPER, GRAPH_COMPLETE};
 
 
 /**
