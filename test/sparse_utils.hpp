@@ -1,6 +1,6 @@
 #include "includes.hpp"
 
-sparse_status_t my_permute(const RobMat *A, RobMat *dest, const size_t n, size_t *pinv, size_t *q);
+sparse_status_t my_permute(const Mtx_CSR *A, Mtx_CSR *dest, const size_t n, const size_t *pinv, const size_t *q);
 // double *a, size_t *rowptr_, size_t *colind_, 
 
 sparse_status_t at_plus_a(

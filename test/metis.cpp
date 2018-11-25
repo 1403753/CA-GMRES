@@ -50,19 +50,19 @@ int main(int argc, char *argv[]) {
   //     0     7     8     7     0     0
   //     3     0     8    80     5     0
   //     0     8     0     9     9    13
-  //     0     4     0     0     2    -1
+  //     0     4     0     0     0    -1
 	//     ]
 	
 	const size_t n_ = 6;
-	const size_t nz_ = 19;
+	const size_t nz_ = 18;
 
 	////////////////
 	// csr format //
 	////////////////	
 	
-	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,80,5,8,9,9,13,4,2,-1};
-	size_t rowptr_[n_+1] = {0,2,5,8,12,16,19};
-	size_t colind_[nz_] = {0,4,0,1,5,1,2,3,0,2,3,4,1,3,4,5,1,4,5};
+	ScalarType a[nz_] = {10,-2,3,9,3,7,8,7,3,8,80,5,8,9,9,13,4,-1};
+	size_t rowptr_[n_+1] = {0,2,5,8,12,16,18};
+	size_t colind_[nz_] = {0,4,0,1,5,1,2,3,0,2,3,4,1,3,4,5,1,5};
 	
 	////////////////
 	// csc format //
@@ -73,14 +73,11 @@ int main(int argc, char *argv[]) {
 	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
 
 	
-	size_t pinv[n_] = {3,2,1,0,5,4};
-	size_t q[n_] = {0,1,2,3,4,5};
+	size_t pinv[n_] = {0,1,2,3,4,5};
 	
-	RobMat R = {
+	Mtx_CSR R = {
 		n_,
-		nz_,
 		rowptr_,
-		rowptr_+1,
 		colind_,
 		a
 	};
@@ -89,11 +86,9 @@ int main(int argc, char *argv[]) {
 	size_t *Ci = new size_t[nz_];
 	double *Cx = new double[nz_];
 	
-	RobMat C = {
+	Mtx_CSR C = {
 		n_,
-		nz_,
 		Cp,
-		Cp+1,
 		Ci,
 		Cx
 	};

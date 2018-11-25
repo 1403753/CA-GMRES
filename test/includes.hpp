@@ -15,11 +15,9 @@
 
 #define INCLUDES_HPP_
 
-struct RobMat{
+struct Mtx_CSR{
 	size_t n;
-	size_t nnz;
-	size_t *rows_start;
-	size_t *rows_end;
+	size_t *row_ptr;
 	size_t *col_indx;
 	double *values;
 };
