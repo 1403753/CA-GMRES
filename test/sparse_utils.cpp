@@ -1,18 +1,51 @@
 #include "sparse_utils.hpp"
 
+sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix
+												Mtx_CSR *C, // extracted CSR output-Matrix
+												std::vector<size_t> &rows, // input set
+												std::vector<size_t> &cols) // result vertices for some level of order
+{
+	size_t n = A->n; // calculate number of nodes in the graph
+	size_t *Ap = A->row_ptr;
+	size_t *Ai = A->col_indx;
+	double *Ax = A->values;
+	
+	size_t *t_row_ptr;
+	size_t *t_col_indx;
+	size_t *t_values;
+	
+	size_t nrows = rows.size();
+	
+	t_row_ptr = (size_t*) mkl_malloc((nrows + 1) * sizeof(size_t), 64); if(t_row_ptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	
+	for (size_t i = 0; i < nrows; ++i) {
+		size_t k = 0;
+		for (size_t j = Ap[rows.at(i)]; j < Ap[rows.at(i)+1]; ++j) {
+			std::cout << Ai[j] << " -------ü";
+			auto result = std::find(cols.begin() + k, cols.end(), Ai[j]);
+			if(result != cols.end()) {
+				++k;
+				std:: cout << " &&&::: " << Ai[j];
+			}
+			std::cout << std::endl;
+		}
+	}
+	
+	mkl_free(t_row_ptr); // just for now
+}
 // taken from igraph ../src/structural_properties.c
 sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
-												std::vector<size_t *> &v_In, // input set
-												std::vector<size_t *> &v_Res, // result vertices for some level of order
+												std::vector<size_t> &v_In, // input set
+												std::vector<size_t> &v_Res, // result vertices for some level of order
 												size_t order, // the reachabilty order
-												Gr_Part gPart
-								)
+												Gr_Part gPart) // the part of the graph to operate on
 {
   
   size_t n = A->n; // calculate number of nodes in the graph
 	size_t *Ap = A->row_ptr;
 	size_t *Ai = A->col_indx;
-	
+	v_Res.clear();
+	v_Res.reserve(100);
   std::deque<size_t> q; // double-ended queue (C++: std::deque)
 	//* igraph_dqueue_pop :=  Remove the head. (C++: pop_front)
 	//* igraph_dqueue_pop_back :=  Remove the tail. (C++: pop_back)
@@ -22,7 +55,7 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
 	//* igraph_dqueue_head := The first element in the queue (C++: front)
 	//* igraph_dqueue_size := number of elements in the queue (C++: size)
 	
-  size_t *added; // added vertices
+  size_t *marker; // added vertices
   std::vector<size_t> neis; // neighbors of a vertex
 
   if (order < 0) {
@@ -30,12 +63,12 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
   }
   
 	// allocate memory for added nodes with size of "number of all nodes in the graph" of type "int"
-	added = (size_t*) mkl_calloc(n, sizeof(size_t), 64); if(added == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	marker = (size_t*) mkl_calloc(n, sizeof(size_t), 64); if(marker == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 
-	for(std::vector<size_t*>::reverse_iterator it = v_In.rbegin(); it != v_In.rend(); ++it) { //iterate over input set. (for each vid do .... )
-		ptrdiff_t node = std::distance(Ap, *it); // get the current vertex_id, aka node_id;
-    added[node]=**it+1; // add node to added vertices-vector in location "node (vertex_id)" and set it to vertexnumber + 1
-		v_Res.push_back(Ap + node); // add current vertex to result.
+	for(std::vector<size_t>::reverse_iterator it = v_In.rbegin(); it != v_In.rend(); ++it) { //iterate over input set. (for each vid do .... )
+		size_t node = *it; // get the current vertex_id, aka node_id;
+    marker[node]=*it + 1; // add node to added vertices-vector in location "node (vertex_id)" and set it to vertexnumber + 1
+		v_Res.push_back(node); // add current vertex to result.
     
 		if (order > 0) {
 			q.push_back(node); // add vertex to the end of the dqueue if order > 0
@@ -72,22 +105,22 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
 				/* we add them to the q */
 				for (size_t j = 0; j < nneis; j++) { // iterate over all neighbors
 					size_t nei= neis.at(j); // get current neighbor
-					if (added[nei] != **it+1) { // only add if the added vertices-vector in location "nei (vertex_id)" is not the vertexnumber + 1
+					if (marker[nei] != *it+1) { // only add if the added vertices-vector in location "nei (vertex_id)" is not the vertexnumber + 1
 																	 //* in other words this should mean if the neighbor is not the current vertex in the input set or has not been added yet!
-																	 //* *added is kind of like the marker for "has been visited"
-						added[nei]=**it + 1; // mark as visited
+																	 //* *marker is kind of like "has been visited"
+						marker[nei]=*it + 1; // mark as visited
 						q.push_back(nei); // add the vertex to the dqueue
 						q.push_back(actdist + 1); // add its distance to the queue
-						v_Res.push_back(Ap + nei); // add the vertex to the result 
+						v_Res.push_back(nei); // add the vertex to the result 
 					}
 				}
       } else {
 				/* we just count them but don't add them to q */ // just add them to the result, but not process them in the dqueue
 				for (size_t j=0; j<nneis; j++) { // iterate over all neighbors
 					size_t nei= neis.at(j); // get current neighbor
-					if (added[nei] != **it+1) {
-						added[nei] = **it + 1;
-						v_Res.push_back(Ap + nei); // add the vertex to the result 
+					if (marker[nei] != *it+1) {
+						marker[nei] = *it + 1;
+						v_Res.push_back(nei); // add the vertex to the result 
 					}
 				}
       }
@@ -100,7 +133,7 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
 		v_Res.erase( std::unique( v_Res.begin(), v_Res.end() ), v_Res.end() );
 	}
 
-	mkl_free(added);
+	mkl_free(marker);
   return SPARSE_STATUS_SUCCESS;
 }
 
@@ -109,7 +142,7 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR MATRIX
 
 
 
-sparse_status_t my_permute(const Mtx_CSR *A, Mtx_CSR *dest, const size_t n, const size_t *pinv, const size_t *q) {
+sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t n, const size_t *pinv, const size_t *q) {
 
 	size_t t, j, k, inz = 0, *Ap, *Ai, *Cp, *Ci;
 	double *Cx, *Ax;
@@ -122,71 +155,70 @@ sparse_status_t my_permute(const Mtx_CSR *A, Mtx_CSR *dest, const size_t n, cons
 	Ci = dest->col_indx;
 	Cx = dest->values;
 
-	for (k = 0 ; k < n ; k++) {
-			Cp[k] = inz;                   /* row k of C is row pinv[k] of A */
-			j = pinv ? (pinv[k]) : k ;
-			for (t = Ap[j] ; t < Ap[j+1] ; t++) {
-					if (Cx) Cx[inz] = Ax[t] ;  /* column i of A is column q[i] of C */
-					Ci[inz++] = q ? (q[Ai [t]]) : Ai[t] ;
+	for (k = 0; k < n; k++) {
+			Cp[k] = inz; // row k of C is row pinv[k] of A
+			j = pinv ? (pinv[k]) : k;
+			for (t = Ap[j]; t < Ap[j+1]; t++) {
+					if (Cx)
+						Cx[inz] = Ax[t]; // column i of A is column q[i] of C
+					Ci[inz++] = q ? (q[Ai[t]]) : Ai[t];
 			}
 	}
-	Cp[n] = inz;                       /* finalize the last row of C */
+	Cp[n] = inz; // finalize the last row of C
 			
 	return SPARSE_STATUS_SUCCESS;
 }
 
 sparse_status_t at_plus_a(
-	const size_t n,      /* number of columns in matrix A. */
+	const size_t n,      /* number of rows/columns in matrix A. */
 	const size_t nz,     /* number of nonzeros in matrix A */
-	size_t *colptr,      /* column pointer of size n+1 for matrix A. */
-	size_t *rowind,      /* row indices of size nz for matrix A. */
-	size_t *bnz,         /* out - on exit, returns the actual number of
-														 nonzeros in matrix A'*A. */
-	size_t **b_colptr,   /* out - size n+1 */
-	size_t **b_rowind    /* out - size *bnz */
-	  )
-{
+	size_t *row_ptr,     /* row pointer of size n+1 for matrix A. */
+	size_t *col_indx,    /* column indices of size nz for matrix A. */
+	size_t *bnz,         /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
+	size_t **b_row_ptr,  /* out - size n+1 */
+	size_t **b_col_indx  /* out - size *bnz */
+) {
 /*
  * Purpose
  * =======
  *
- * Form the structure of A'+A. A is an n-by-n matrix in column oriented
- * format represented by (colptr, rowind). The output A'+A is in column
- * oriented format (symmetrically, also row oriented), represented by
- * (b_colptr, b_rowind).
+ * Form the structure of A'+A. A is an n-by-n matrix in row oriented
+ * format represented by (row_ptr, col_indx). The output A'+A is in row
+ * oriented format (symmetrically, also column oriented), represented by
+ * (b_row_ptr, b_col_indx).
  *
  */
-	size_t i, j, k, col, num_nz;
-	size_t *t_colptr, *t_rowind; /* a column oriented form of T = A' */
+	size_t i, j, k, row, num_nz;
+	size_t *t_row_ptr, *t_col_indx; /* a row oriented form of T = A' */
 	size_t *marker;
 
 	marker = (size_t*) mkl_malloc(n * sizeof(size_t), 64); if(marker == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
-	t_colptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(t_colptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
-	t_rowind = (size_t*) mkl_malloc(nz * sizeof(size_t), 64); if(t_rowind == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	t_row_ptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(t_row_ptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	t_col_indx = (size_t*) mkl_malloc(nz * sizeof(size_t), 64); if(t_col_indx == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	
-	/* Get counts of each column of T, and set up column pointers */
+	/* Get counts of each row of T, and set up row pointers */
 	for (i = 0; i < n; ++i) marker[i] = 0;
 	for (j = 0; j < n; ++j) {
-		for (i = colptr[j]; i < colptr[j+1]; ++i)
-			++marker[rowind[i]];
+		for (i = row_ptr[j]; i < row_ptr[j+1]; ++i)
+			++marker[col_indx[i]];
 	}
-	t_colptr[0] = 0;
+	t_row_ptr[0] = 0;
 	for (i = 0; i < n; ++i) {
-		t_colptr[i+1] = t_colptr[i] + marker[i];
-		marker[i] = t_colptr[i];
+		t_row_ptr[i+1] = t_row_ptr[i] + marker[i];
+		marker[i] = t_row_ptr[i];
 	}
 
 	/* Transpose the matrix from A to T */
 	for (j = 0; j < n; ++j)
-		for (i = colptr[j]; i < colptr[j+1]; ++i) {
-			col = rowind[i];
-			t_rowind[marker[col]] = j;
-			++marker[col];
+		for (i = row_ptr[j]; i < row_ptr[j+1]; ++i) {
+			row = col_indx[i];
+			t_col_indx[marker[row]] = j;
+			++marker[row];
 		}
 
 
 	/* ----------------------------------------------------------------
-		 compute B = A + T, where column j of B is:
+		 compute B = A + T, where row j of B is:
 
 		 Struct (B_*j) = Struct (A_*k) UNION Struct (T_*k)
 
@@ -202,18 +234,18 @@ sparse_status_t at_plus_a(
 		/* Flag the diagonal so it's not included in the B matrix */
 		marker[j] = j;
 
-		/* Add pattern of column A_*k to B_*j */
-		for (i = colptr[j]; i < colptr[j+1]; ++i) {
-			k = rowind[i];
+		/* Add pattern of row A_*k to B_*j */
+		for (i = row_ptr[j]; i < row_ptr[j+1]; ++i) {
+			k = col_indx[i];
 			if ( marker[k] != j ) {
 				marker[k] = j;
 				++num_nz;
 			}
 		}
 
-		/* Add pattern of column T_*k to B_*j */
-		for (i = t_colptr[j]; i < t_colptr[j+1]; ++i) {
-			k = t_rowind[i];
+		/* Add pattern of row T_*k to B_*j */
+		for (i = t_row_ptr[j]; i < t_row_ptr[j+1]; ++i) {
+			k = t_col_indx[i];
 			if ( marker[k] != j ) {
 				marker[k] = j;
 				++num_nz;
@@ -224,45 +256,45 @@ sparse_status_t at_plus_a(
 	*bnz = num_nz;
   
 	/* Allocate storage for A+A' */
-	*b_colptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(b_colptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	*b_row_ptr = (size_t*) mkl_malloc((n+1) * sizeof(size_t), 64); if(b_row_ptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	if ( *bnz) {
-		*b_rowind = (size_t*) mkl_malloc(*bnz * sizeof(size_t), 64); if(b_rowind == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+		*b_col_indx = (size_t*) mkl_malloc(*bnz * sizeof(size_t), 64); if(b_col_indx == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	}
     
 	/* Zero the diagonal flag */
 	for (i = 0; i < n; ++i) marker[i] = -1;
     
-	/* Compute each column of B, one at a time */
+	/* Compute each row of B, one at a time */
 	num_nz = 0;
 	for (j = 0; j < n; ++j) {
-		(*b_colptr)[j] = num_nz;
+		(*b_row_ptr)[j] = num_nz;
 	
 		/* Flag the diagonal so it's not included in the B matrix */
 		marker[j] = j;
 
-		/* Add pattern of column A_*k to B_*j */
-		for (i = colptr[j]; i < colptr[j+1]; ++i) {
-				k = rowind[i];
+		/* Add pattern of row A_*k to B_*j */
+		for (i = row_ptr[j]; i < row_ptr[j+1]; ++i) {
+				k = col_indx[i];
 				if ( marker[k] != j ) {
 			marker[k] = j;
-			(*b_rowind)[num_nz++] = k;
+			(*b_col_indx)[num_nz++] = k;
 				}
 		}
 
-		/* Add pattern of column T_*k to B_*j */
-		for (i = t_colptr[j]; i < t_colptr[j+1]; ++i) {
-			k = t_rowind[i];
+		/* Add pattern of row T_*k to B_*j */
+		for (i = t_row_ptr[j]; i < t_row_ptr[j+1]; ++i) {
+			k = t_col_indx[i];
 			if ( marker[k] != j ) {
 				marker[k] = j;
-				(*b_rowind)[num_nz++] = k;
+				(*b_col_indx)[num_nz++] = k;
 			}
 		}
 	}
-	(*b_colptr)[n] = num_nz;
+	(*b_row_ptr)[n] = num_nz;
 		 
 	mkl_free(marker);
-	mkl_free(t_colptr);
-	mkl_free(t_rowind);	
+	mkl_free(t_row_ptr);
+	mkl_free(t_col_indx);	
 	
 	return SPARSE_STATUS_SUCCESS;
 }

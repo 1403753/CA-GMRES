@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 		Cx
 	};
 	
-	my_permute(&R, &C, n_, pinv, pinv);
+	permute_Mtx(&R, &C, n_, pinv, pinv);
 	
 	// for (size_t i = 0; i < nz_; ++i)
 		// std::cout << Ci[i] << "\n";
@@ -111,28 +111,52 @@ int main(int argc, char *argv[]) {
 	
 
 	
-	std::vector<size_t *> v_Res;
-	std::vector<size_t *> v_In;
+	std::vector<size_t> v_Res;
+	std::vector<size_t> v_In;
 	size_t order = 1;
+		
+	// v_In.push_back(0);
+	v_In.push_back(1);
+	// v_In.push_back(2);
+	// v_In.push_back(3);
+	// v_In.push_back(4);
+	v_In.push_back(5);
 	
-	v_In.push_back(Cp);
-	v_In.push_back(Cp+1);
-	// v_In.push_back(Cp+2);
-	// v_In.push_back(Cp+3);
-	// v_In.push_back(Cp+4);
-	v_In.push_back(Cp+5);
-	
-	Gr_Part gPart = GRAPH_COMPLETE;
-	
+	// Gr_Part gPart = GRAPH_COMPLETE;
+
+	neighborhood(&C,  // CSR MATRIX
+							 v_In, // input set
+							 v_Res, // result vertices for some level of order
+							 n_, // the reachabilty order
+							 GRAPH_UPPER
+	);	
+	neighborhood(&C,  // CSR MATRIX
+							 v_Res, // input set
+							 v_In, // result vertices for some level of order
+							 n_, // the reachabilty order
+							 GRAPH_LOWER
+	);
 	neighborhood(&C,  // CSR MATRIX
 							 v_In, // input set
 							 v_Res, // result vertices for some level of order
 							 order, // the reachabilty order
-							 gPart
+							 GRAPH_COMPLETE
 	);
-	
+
 	for(auto k:v_Res)
-		std::cout << "RES:  " << std::distance(Cp, k) << "\n"; 
+		std::cout << "RES:  " << k << " :-. " << "\n"; 
+	
+	v_In.clear();
+	
+	v_In.push_back(1);
+	v_In.push_back(3);
+	
+	Mtx_CSR K;
+
+	extract(&C,	// CSR input-Matrix
+					&K,		// extracted CSR output-Matrix
+					v_In,	// rows
+					v_In); // cols
 
 	delete[] Cp;
 	delete[] Ci;
