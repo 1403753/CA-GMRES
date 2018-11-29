@@ -71,9 +71,7 @@ int main(int argc, char *argv[]) {
 	// ScalarType a[nz_] = {10,3,3,9,7,8,4,8,8,7,80,9,-2,5,9,2,3,13,-1};
 	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
 	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
-
 	
-	size_t pinv[n_] = {0,1,2,3,4,5};
 	
 	Mtx_CSR R = {
 		n_,
@@ -92,8 +90,9 @@ int main(int argc, char *argv[]) {
 		Ci,
 		Cx
 	};
-	
-	permute_Mtx(&R, &C, n_, pinv, pinv);
+
+	size_t pinv[n_] = {0,1,2,3,4,5};	
+	permute_Mtx(&R, &C, pinv, pinv); // permutation destroys order of column indices! (identity permutation does not)
 	
 	// for (size_t i = 0; i < nz_; ++i)
 		// std::cout << Ci[i] << "\n";
@@ -120,7 +119,7 @@ int main(int argc, char *argv[]) {
 	// v_In.push_back(2);
 	// v_In.push_back(3);
 	// v_In.push_back(4);
-	v_In.push_back(5);
+	// v_In.push_back(5);
 	
 	// Gr_Part gPart = GRAPH_COMPLETE;
 
@@ -143,35 +142,52 @@ int main(int argc, char *argv[]) {
 							 GRAPH_COMPLETE
 	);
 
+	std::cout << "\ncomputed neighborhood vertices (v_Res):\n";
 	for(auto k:v_Res)
-		std::cout << "RES:  " << k << " :-. " << "\n"; 
+		std::cout << k << ", ";
+	std::cout << std::endl;
 	
 	v_In.clear();
 	
+	v_In.push_back(0);
 	v_In.push_back(1);
-	v_In.push_back(3);
+	// v_In.push_back(2);
+	// v_In.push_back(3);
+	v_In.push_back(4);	
+	v_In.push_back(5);
 	
 	Mtx_CSR K;
 
-	extract(&C,	// CSR input-Matrix
+	extract(&C,	// CSR input-Matrix column indices have to be in increasing order!
 					&K,		// extracted CSR output-Matrix
 					v_In,	// rows
 					v_In); // cols
+					
+	std::cout << "\nExtracted CSR Matrix:\n"; 
+	std::cout << "values:\n"; 
+	for(size_t i = 0; i < K.row_ptr[K.n]; i++) {
+		std::cout << K.values[i] << ", ";
+  }
+	std::cout << std::endl;
+	
+	std::cout << "colindx:\n"; 
+	for(size_t i = 0; i < K.row_ptr[K.n]; i++) {
+		std::cout << K.col_indx[i] << ", ";
+  }
+	std::cout << std::endl;
 
-	delete[] Cp;
-	delete[] Ci;
-	delete[] Cx;	
+	std::cout << "rowptr:\n"; 
+	for(size_t i = 0; i < K.n+1; i++) {
+		std::cout << K.row_ptr[i] << ", ";
+  }
+	std::cout << std::endl;
 	
 	size_t bnz_;
 	size_t *b_rowptr_;
 	size_t *b_colind_;
 
-	at_plus_a(
-	  n_,      /* number of rows in matrix A. */
-	  nz_,     /* number of nonzeros in matrix A */
-	  rowptr_,      /* row pointer of size n+1 for matrix A. */
-	  colind_,      /* column indices of size nz for matrix A. */
-	  &bnz_,         /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
+	at_plus_a(&R,
+	  &bnz_,        /* out - on exit, returns the actual number of nonzeros in matrix A'*A. */
 	  &b_rowptr_,   /* out - size n+1 */
 	  &b_colind_    /* out - size *bnz */
 	);
@@ -223,32 +239,13 @@ int main(int argc, char *argv[]) {
                      // The numbering of this vector starts from either 0 or 1, depending on the value of
                      // options[METIS_OPTION_NUMBERING].
 	
-	int ret = METIS_PartGraphKway((idx_t*) &n_, (idx_t*) &nWeights, (idx_t*) b_rowptr_, (idx_t*) b_colind_,
-																NULL, NULL, NULL, (idx_t*) &nParts, NULL,
-																NULL, (idx_t*) options, (idx_t*) &objval, (idx_t*) part);
+	METIS_PartGraphKway((idx_t*) &n_, (idx_t*) &nWeights, (idx_t*) b_rowptr_, (idx_t*) b_colind_, NULL, NULL,
+											NULL, (idx_t*) &nParts, NULL, NULL, (idx_t*) options, (idx_t*) &objval, (idx_t*) part);
 	
-	std::cout << ret << std::endl;
-    
+	std::cout << "\nMetis K-Way:" << std::endl;
   for(size_t i = 0; i < n_; i++) {
 		std::cout << i << ": " << part[i] << std::endl;
   }
-	
-	std::cout << "colindx:\n"; 
-	for(size_t i = 0; i < bnz_; i++) {
-		std::cout << b_colind_[i] << ", ";
-  }
-	std::cout << std::endl;
-
-	std::cout << "rowptr:\n"; 
-	for(size_t i = 0; i < n_+1; i++) {
-		std::cout << b_rowptr_[i] << ", ";
-  }
-	std::cout << std::endl;
-	
-	mkl_free(b_rowptr_);
-	if (bnz_) {
-		mkl_free(b_colind_);
-	}
 	
 	size_t ipar[128];		
 	ipar[1] = 6; // 6 == display all error msgs on screen
@@ -272,22 +269,23 @@ int main(int argc, char *argv[]) {
 								 // MKL_INT *ierr );
 	
 	size_t *ia, *ja, ierr;
-	ia = (size_t*) mkl_malloc((n_+1) * sizeof(size_t), 64); if(ia == NULL) {return 1;}
-	ja = (size_t*) mkl_malloc(nz_ * sizeof(size_t), 64); if(ja == NULL) {return 1;}
+	ia = (size_t*) mkl_malloc((K.n+1) * sizeof(size_t), 64); if(ia == NULL) {return 1;}
+	ja = (size_t*) mkl_malloc(K.row_ptr[K.n] * sizeof(size_t), 64); if(ja == NULL) {return 1;}
 	double *bilu0;
-	bilu0 = (ScalarType*) mkl_malloc(nz_ * sizeof(ScalarType), 64); if(bilu0 == NULL) {return 1;}
+	bilu0 = (ScalarType*) mkl_malloc(K.row_ptr[K.n] * sizeof(ScalarType), 64); if(bilu0 == NULL) {return 1;}
 	
-	for(size_t i = 0; i < n_+1; ++i) {
-		ia[i] = rowptr_[i] + 1;
+	for(size_t i = 0; i < K.n+1; ++i) {
+		ia[i] = K.row_ptr[i] + 1;
 	}
 	
-	for(size_t i = 0; i < nz_; ++i) {
-		ja[i] = colind_[i] + 1;
+	for(size_t i = 0; i < K.row_ptr[K.n]; ++i) {
+		ja[i] = K.col_indx[i] + 1;
 	}
-	
-	dcsrilu0(&n_, a, ia, ja, bilu0, ipar, dpar, &ierr);
 
-	for (size_t i = 0; i < nz_; ++i) {
+	dcsrilu0(&K.n, K.values, ia, ja, bilu0, ipar, dpar, &ierr);
+
+	std::cout << "\nbilu0 values:" << std::endl;
+	for (size_t i = 0; i < K.row_ptr[K.n]; ++i) {
 		std::cout << bilu0[i] << ", ";
 	}
 	std::cout << std::endl;
@@ -305,15 +303,15 @@ int main(int argc, char *argv[]) {
 																					 // MKL_INT *col_indx,
 																					 // double *values);
 	
-	stat = mkl_sparse_d_create_csr(&A, SPARSE_INDEX_BASE_ZERO, n_, n_, rowptr_, rowptr_ + 1, colind_, a);
-	stat = mkl_sparse_d_create_csr(&B, SPARSE_INDEX_BASE_ZERO, n_, n_, rowptr_, rowptr_ + 1, colind_, bilu0);
+	stat = mkl_sparse_d_create_csr(&A, SPARSE_INDEX_BASE_ZERO, K.n, K.n, K.row_ptr, K.row_ptr + 1, K.col_indx, K.values);
+	stat = mkl_sparse_d_create_csr(&B, SPARSE_INDEX_BASE_ZERO, K.n, K.n, K.row_ptr, K.row_ptr + 1, K.col_indx, bilu0);
 
 	ScalarType *x, *y;
 	
-	x = (ScalarType *) mkl_malloc(n_ * sizeof(ScalarType), 64);if(x == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'x' failed.");}	
-	y = (ScalarType *) mkl_malloc(n_ * sizeof(ScalarType), 64);if(y == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'y' failed.");}	
-
-	for (size_t i = 0; i < n_; ++i) {
+	x = (ScalarType *) mkl_malloc(K.n * sizeof(ScalarType), 64);if(x == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'x' failed.");}	
+	y = (ScalarType *) mkl_malloc(K.n * sizeof(ScalarType), 64);if(y == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'y' failed.");}	
+	
+	for (size_t i = 0; i < K.n; ++i) {
 		x[i] = 1;
 	}
 	
@@ -321,15 +319,23 @@ int main(int argc, char *argv[]) {
 
 	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, x, 0, y);
 
-	// sparse_status_t mkl_sparse_d_trsv (sparse_operation_t operation,
-																		 // double alpha,
-																		 // const sparse_matrix_t A,
-																		 // struct matrix_descr descr,
-																		 // const double *x,
-																		 // double *y);
+	///////////////////////////////////////////////////////////////////
+	//  solve a sparse triangular system  op(A)*y = alpha * x for y  //
+	///////////////////////////////////////////////////////////////////
+	
+	// sparse_status_t mkl_sparse_d_trsv (sparse_operation_t operation, // SPARSE_OPERATION_NON_TRANSPOSE
+																		 // double alpha,									// usually 1
+																		 // const sparse_matrix_t A,			// handle to CSR Matrix
+																		 // struct matrix_descr descr,		// descr.type = SPARSE_MATRIX_TYPE_GENERAL
+																																			// descr.mode = SPARSE_FILL_MODE_UPPER/LOWER
+																																			// descr.diag = SPARSE_DIAG_NON_UNIT for UPPER or SPARSE_DIAG_UNIT for LOWER
+																		 // const double *x,							// dense vector with length size(rows(A)).
+																		 // double *y);										// dense solution vector	
+																		 
 	descr.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
 	descr.mode = SPARSE_FILL_MODE_LOWER;
 	descr.diag = SPARSE_DIAG_UNIT;
+	
 	
 	stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, y, y);
 
@@ -338,10 +344,23 @@ int main(int argc, char *argv[]) {
 
 	stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, B, descr, y, x);
 
-	
-	for (size_t i = 0; i < n_; ++i) {
+	std::cout << "\nSolution for solving A*x = y -> [L,U] = ilu0(A) -> y = L\\y -> x = U\\y\n";
+	for (size_t i = 0; i < K.n; ++i) {
 		std::cout << " :" << x[i] << std::endl;
 	}
+	
+	delete[] Cp;
+	delete[] Ci;
+	delete[] Cx;
+	
+	mkl_free(K.row_ptr);
+	mkl_free(K.col_indx);
+	mkl_free(K.values);
+	
+	mkl_free(b_rowptr_);
+	if (bnz_) {
+		mkl_free(b_colind_);
+	}	
 	
 	mkl_free(ia);
 	mkl_free(ja);
