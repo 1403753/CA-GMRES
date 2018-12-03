@@ -11,58 +11,53 @@
 
 #ifndef MAIN_HPP
 
-#include "ca_iluz_gmres.hpp"
-// #include "matrix_reader.hpp"
-#include <omp.h>
-
-#include <metis.h>
+#include "KSP.hpp"
+#include "GMRES_ca.hpp"
+#include "ILU0_ca.hpp"
+#include "MmtReader.hpp"
 
 #define MAIN_HPP
-
 
 int main() {
 	
 	std::cout.setf(std::ios_base::fixed);
 	std::cout.precision(5);
-	
 
-	double                 		   	rTol;                           // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b || == || r_{k+1} || / || r_0 ||
-	double                    		aTol;                           // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
-	double                        dTol;                           // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
-	size_t                        maxit;                          // maximum number of iterations to use
+	double                 		   	rTol = 1e-11;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b || == || r_{k+1} || / || r_0 ||
+	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
+	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
+	size_t                        maxit = 100;                    // maximum number of iterations to use
 	sparse_status_t               stat;
 	// sparse_matrix_t               A_mkl;                          // n x n matrix A
 	// sparse_matrix_t               M;                              // n x n preconditioned matrix M == ilu0(A)
-	// Mtx_CSR      								 A_mtx;                         	
-	// ca_iluz_gmres 								ksp;														// linear solver context	
-	size_t                        n;                              // dim(A)
+	Mtx_CSR                       A_mtx;                         	
+	KSP						 							  ksp;							 						  // linear solver context	
+	GMRES_ca											gmres;													// KSPType
+	ILU0_ca												ilu0;														// PCType
+	// const size_t                  n = 4;                          // dim(A)
 	const size_t                  t = 12;                         // number of 'outer iterations' before restart
 	const size_t									s = 5;													// step-size ('inner iterations')
 	
-	
-	
 	// read matrix
-	// stat = matrix_reader<double>::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mtx);
+	stat = MmtReader::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mtx);
+	if (stat);
+	// size_t row_ptr[n] = {0,1,2,3};
+	// size_t col_indx[n] = {0,1,2,3};
+	// double values[n] = {1,1,1,1};
 	
-	size_t row_ptr[4] = {0,1,2,3};
-	size_t col_indx[4] = {0,1,2,3};
-	double values[4] = {1,1,1,1};
+	// for (size_t i = 0; i < n + 1; ++i)
+		// std::cout << A_mtx.row_ptr[i] << ", ";
+	// std::cout << std::endl;
 	
-	Mtx_CSR A_mtx{4, 4, row_ptr, col_indx, values};
+	// Mtx_CSR A_mtx{4, 4, row_ptr, col_indx, values};
 	
-	ca_iluz_gmres ksp{A_mtx};
+	ksp.setOperators(&A_mtx, &A_mtx);
+	ksp.setKSPType(&gmres);
+	ksp.setPCType(&ilu0);
+		
+	ksp.setOptions(s, t, rTol, aTol, dTol, maxit);
 	
-	std::cout << ksp.pub << " hehe\n";
-	
-	// ksp.SetOptions(s,      // step-size
-								 // t,      // restart length
-								 // rTol,   
-								 // aTol,  
-								 // dTol,   
-								 // maxit	  
-							  // );
-	
-	// ksp.SetUp();
+	ksp.setUp();
 	// what happens:
 	// compute structure at_plus_a(A_mtx) ->output: b_rowptr and partition A with metis 
 	// sort A_mtx with amml(s)
@@ -75,8 +70,7 @@ int main() {
 	// 
 	
 	// ksp.solve(x, b);
-
-
+	
 	return 0;
 }
 
