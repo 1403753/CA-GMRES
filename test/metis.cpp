@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 	// size_t rowptr_[n_+1] = {0,3,7,9,12,16,19};
 	// size_t colind_[nz_] = {0,1,3,1,2,4,5,2,3,2,3,4,0,3,4,5,1,4,5};
 	
-	
+	// 
 	Mtx_CSR R = {
 		n_,
 		rowptr_,
@@ -110,58 +110,75 @@ int main(int argc, char *argv[]) {
 	
 
 	
-	std::vector<size_t> v_Res;
-	std::vector<size_t> v_In;
+	std::vector<size_t> alpha;
+	std::vector<size_t> beta;
+	std::vector<size_t> gamma;
+	std::vector<size_t> delta;
+	
 	size_t order = 1;
 		
-	// v_In.push_back(0);
-	v_In.push_back(1);
-	// v_In.push_back(2);
-	// v_In.push_back(3);
-	// v_In.push_back(4);
-	// v_In.push_back(5);
+	// alpha.push_back(0);
+	alpha.push_back(1);
+	// alpha.push_back(2);
+	// alpha.push_back(3);
+	// alpha.push_back(4);
+	// alpha.push_back(5);
 	
 	// Gr_Part gPart = GRAPH_COMPLETE;
 
 	neighborhood(&C,  // CSR MATRIX
-							 v_In, // input set
-							 v_Res, // result vertices for some level of order
+							 alpha, // input set
+							 beta, // result vertices for some level of order
 							 n_, // the reachabilty order
 							 GRAPH_UPPER
 	);	
 	neighborhood(&C,  // CSR MATRIX
-							 v_Res, // input set
-							 v_In, // result vertices for some level of order
+							 beta, // input set
+							 gamma, // result vertices for some level of order
 							 n_, // the reachabilty order
 							 GRAPH_LOWER
 	);
 	neighborhood(&C,  // CSR MATRIX
-							 v_In, // input set
-							 v_Res, // result vertices for some level of order
+							 gamma, // input set
+							 delta, // result vertices for some level of order
 							 order, // the reachabilty order
 							 GRAPH_COMPLETE
 	);
 
-	std::cout << "\ncomputed neighborhood vertices (v_Res):\n";
-	for(auto k:v_Res)
+	std::cout << "\nstart vertices (alpha):\n";
+	for(auto k:alpha)
+		std::cout << k << ", ";
+	std::cout << std::endl;	
+
+	std::cout << "\nreachability in U (beta):\n";
+	for(auto k:beta)
 		std::cout << k << ", ";
 	std::cout << std::endl;
 	
-	v_In.clear();
+	std::cout << "\nreachability in L (gamma):\n";
+	for(auto k:gamma)
+		std::cout << k << ", ";
+	std::cout << std::endl;
 	
-	v_In.push_back(0);
-	v_In.push_back(1);
-	// v_In.push_back(2);
-	// v_In.push_back(3);
-	v_In.push_back(4);	
-	v_In.push_back(5);
-	
+	std::cout << "\nadjacent vertices in A (delta):\n";
+	for(auto k:delta)
+		std::cout << k << ", ";
+	std::cout << std::endl;
+		
 	Mtx_CSR K;
+	
+	std::vector<size_t> all_cols;
+	
+	all_cols.insert(all_cols.end(), { 0, 1, 2, 3, 4, 5 });
 
 	extract(&C,	// CSR input-Matrix column indices have to be in increasing order!
 					&K,		// extracted CSR output-Matrix
-					v_In,	// rows
-					v_In); // cols
+					gamma,	// rows
+					all_cols); // cols
+					
+	// extract(&C,	// CSR input-Matrix column indices have to be in increasing order!
+					// &K,		// extracted CSR output-Matrix
+					// gamma);	// rows
 					
 	std::cout << "\nExtracted CSR Matrix:\n"; 
 	std::cout << "values:\n"; 

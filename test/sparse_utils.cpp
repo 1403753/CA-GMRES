@@ -2,6 +2,14 @@
 
 sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix. Column indices have to be in increasing order!
 												Mtx_CSR *dest, // extracted CSR output-Matrix
+												std::vector<size_t> &rows) // input rows
+{
+	
+	return SPARSE_STATUS_SUCCESS;
+}
+
+sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix. Column indices have to be in increasing order!
+												Mtx_CSR *dest, // extracted CSR output-Matrix
 												std::vector<size_t> &rows, // input rows
 												std::vector<size_t> &cols) // input columns
 {
