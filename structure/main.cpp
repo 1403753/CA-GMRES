@@ -15,10 +15,14 @@
 #include "GMRES_ca.hpp"
 #include "ILU0_ca.hpp"
 #include "MmtReader.hpp"
+#include <papi.h>
 
 #define MAIN_HPP
 
 int main() {
+	
+	float                         rtime, ptime, mflops;
+	long long                     flpops;	
 	
 	std::cout.setf(std::ios_base::fixed);
 	std::cout.precision(5);
@@ -28,33 +32,39 @@ int main() {
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 100;                    // maximum number of iterations to use
 	sparse_status_t               stat;
-	// sparse_matrix_t               A_mkl;                          // n x n matrix A
-	// sparse_matrix_t               M;                              // n x n preconditioned matrix M == ilu0(A)
-	Mtx_CSR                       A_mtx;                         	
+	sparse_matrix_t               A_mkl;                          // n x n matrix A
+	// sparse_matrix_t               M_mkl;                          // n x n preconditioned matrix M == ilu0(A)
+	// Mtx_CSR                       A_mtx;                         	
 	KSP						 							  ksp;							 						  // linear solver context	
 	GMRES_ca											gmres;													// KSPType
 	ILU0_ca												ilu0;														// PCType
+	MmtReader											mmtReader;
 	// const size_t                  n = 4;                          // dim(A)
 	const size_t                  t = 12;                         // number of 'outer iterations' before restart
 	const size_t									s = 5;													// step-size ('inner iterations')
 	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+		exit(1);	
+	
 	// read matrix
-	stat = MmtReader::read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mtx);
+	mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
+
 	if (stat);
-	// size_t row_ptr[n] = {0,1,2,3};
-	// size_t col_indx[n] = {0,1,2,3};
-	// double values[n] = {1,1,1,1};
+
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+		exit(1);
+
+	PAPI_shutdown();
+
+	std::cout << "runtime readfile: " << rtime << " seconds." << std::endl;
 	
-	// for (size_t i = 0; i < n + 1; ++i)
-		// std::cout << A_mtx.row_ptr[i] << ", ";
-	// std::cout << std::endl;
-	
-	// Mtx_CSR A_mtx{4, 4, row_ptr, col_indx, values};
-	
-	ksp.setOperators(&A_mtx, &A_mtx);
+	ksp.setOperator(&A_mkl);
 	ksp.setKSPType(&gmres);
 	ksp.setPCType(&ilu0);
-		
+	
 	ksp.setOptions(s, t, rTol, aTol, dTol, maxit);
 	
 	ksp.setUp();
@@ -70,6 +80,8 @@ int main() {
 	// 
 	
 	// ksp.solve(x, b);
+	
+	mkl_sparse_destroy(A_mkl);
 	
 	return 0;
 }

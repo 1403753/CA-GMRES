@@ -6,7 +6,11 @@
  */
 #include "MmtReader.hpp"
 
-sparse_status_t MmtReader::read_matrix_from_file(std::string fname, Mtx_CSR *A_mtx) {
+MmtReader::MmtReader() {
+	
+}
+
+sparse_status_t MmtReader::read_matrix_from_file(std::string fname, sparse_matrix_t *A_mkl) {
 	
 	std::cout.precision(3);
 	
@@ -40,49 +44,52 @@ sparse_status_t MmtReader::read_matrix_from_file(std::string fname, Mtx_CSR *A_m
 	
 	file.close();
 	
-	sparse_matrix_t B;
-	sparse_matrix_t A;
-	
 	stat = mkl_sparse_d_create_coo(&B, SPARSE_INDEX_BASE_ZERO, n, n, nz, row_indx, col_indx, values);
 	
-	stat = mkl_sparse_convert_csr(B, SPARSE_OPERATION_NON_TRANSPOSE, &A);
+	stat = mkl_sparse_convert_csr(B, SPARSE_OPERATION_NON_TRANSPOSE, A_mkl);
 
+	mkl_sparse_destroy(B);
 	mkl_free(row_indx);
 	mkl_free(col_indx);
+	mkl_free(values);
+
+	mkl_sparse_order(*A_mkl);
 	
-	sparse_index_base_t indexing;
+	// sparse_index_base_t indexing;
 
-	size_t *rows_start;
-	size_t *rows_end;
+	// size_t *rows_start;
+	// size_t *rows_end;
 
-	mkl_sparse_order(A);
 	
-	mkl_sparse_d_export_csr(A, &indexing, &n, &cols, &rows_start, &rows_end, &col_indx, &values);
+	// mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &cols, &rows_start, &rows_end, &col_indx, &values);
 
-	A_mtx->n = n;
-	A_mtx->nz = nz;	
-	A_mtx->row_ptr = (size_t *) mkl_malloc((n + 1) * sizeof(size_t), 64);if(A_mtx->row_ptr == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
-	A_mtx->col_indx = (size_t *) mkl_malloc(nz * sizeof(size_t), 64);if(A_mtx->col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
-	A_mtx->values = (double *) mkl_malloc(nz * sizeof(double), 64);if(A_mtx->values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
+	// A_mtx->n = n;
+	// A_mtx->nz = nz;	
 	
-	for (size_t i = 0; i < n + 1; ++i)
-		A_mtx->row_ptr[i] = rows_start[i];
+	// A_mtx->row_ptr = (size_t *) mkl_malloc((n + 1) * sizeof(size_t), 64);if(A_mtx->row_ptr == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'row_indx' failed.");}
+	// A_mtx->col_indx = (size_t *) mkl_malloc(nz * sizeof(size_t), 64);if(A_mtx->col_indx == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'col_indx' failed.");}
+	// A_mtx->values = (double *) mkl_malloc(nz * sizeof(double), 64);if(A_mtx->values == NULL){throw std::invalid_argument("Matrix Market Converter : malloc on 'values' failed.");}	
 	
-	for (size_t i = 0; i < nz; ++i) {
-		A_mtx->col_indx[i] = col_indx[i];
-		A_mtx->values[i] = values[i];
-	}
+	// for (size_t i = 0; i < n + 1; ++i)
+		// A_mtx->row_ptr[i] = rows_start[i];
+	
+	// for (size_t i = 0; i < nz; ++i) {
+		// A_mtx->col_indx[i] = col_indx[i];
+		// A_mtx->values[i] = values[i];
+	// }
 
-
-	mkl_sparse_destroy(A);
-	mkl_sparse_destroy(B);
+	// A_mtx->values = values;
+	// A_mtx->row_ptr = rows_start;
+	// A_mtx->col_indx = col_indx;
+	
 	mkl_free_buffers();
+
 	
 	return stat;
 }
 
 
 MmtReader::~MmtReader() {
-	
+	mkl_free_buffers();
 }
 

@@ -1,4 +1,4 @@
-sparse_status_t ca_iluz_gmres::tsqr(double *V, double *Q, double *R_, const size_t m, const size_t n, const size_t st) {
+sparse_status_t GMRES_ca::tsqr(double *V, double *Q, double *R_, const size_t m, const size_t n, const size_t st) {
 
 	size_t lwork = -1;
 	size_t lmwork = -1;

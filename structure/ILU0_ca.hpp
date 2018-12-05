@@ -3,8 +3,6 @@
 
 #include "IPCType.hpp"
 
-enum Gr_Part {GRAPH_LOWER, GRAPH_UPPER, GRAPH_COMPLETE};
-
 class ILU0_ca : public IPCType{
 public:
 	ILU0_ca();

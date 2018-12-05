@@ -7,8 +7,8 @@
 
  
 #include "GMRES_ca.hpp"
-// #include "solve.cc"
-// #include "tsqr.cc"
+#include "solve.cc"
+#include "tsqr.cc"
 
 GMRES_ca::GMRES_ca() { 
 

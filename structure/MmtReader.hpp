@@ -14,9 +14,11 @@
 #define MMT_READER_HPP
 
 class MmtReader {
+	sparse_matrix_t B;
+	sparse_matrix_t A;
 public:
 	MmtReader();
-	static sparse_status_t read_matrix_from_file(std::string fname, Mtx_CSR *A_mtx);
+	sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A_mkl);
 	virtual ~MmtReader();
 };
 

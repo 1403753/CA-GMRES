@@ -1,16 +1,16 @@
 
-bool ca_iluz_gmres::is_conj_pair(complex_t a, complex_t b) {
+bool GMRES_ca::is_conj_pair(complex_t a, complex_t b) {
 	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);
 }
 
-sparse_status_t ca_iluz_gmres::modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals) {
-	std::vector<ic_pair_t>                            ritz_vals;
+sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals) {
+	std::vector<ic_pair_t> ritz_vals;
 
 //	ritz_vals.reserve(sizeof(wr) / sizeof(wr[0]));
 	ritz_vals.reserve(s);
 	
 	for(size_t i = 0; i < s; ++i)
-		ritz_vals.push_back(ic_pair_t(1, complex_t(wr[i], wi[i])));		
+		ritz_vals.emplace_back(ic_pair_t(1, complex_t(wr[i], wi[i])));		
 		
 	std::stable_sort(ritz_vals.begin( ), ritz_vals.end( ), [ ]( const ic_pair_t &lhs, const ic_pair_t &rhs ) {
 			return lhs.second.real() < rhs.second.real();
