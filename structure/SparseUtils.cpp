@@ -165,7 +165,6 @@ approvals from U.S. Dept. of Energy)
 */
 sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t *pinv, const size_t *q)
 {
-
 	size_t t, j, k, n = A->n, inz = 0, *Ap, *Ai, *Cp, *Ci;
 	double *Cx, *Ax;
 
@@ -210,7 +209,7 @@ sparse_status_t at_plus_a(const Mtx_CSR *A,
 	size_t n = A->n;
 	size_t *Ap = A->row_ptr;
 	size_t *Ai = A->col_indx;
-	size_t nz = Ap[n];
+	size_t nz = A->nz;
 
 	size_t *t_row_ptr, *t_col_indx; /* a row oriented form of T = A' */
 	size_t *marker;

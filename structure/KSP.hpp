@@ -26,28 +26,8 @@ struct Mtx_CSR{
 	size_t *row_ptr;
 	size_t *col_indx;
 	double *values;
-	Mtx_CSR() : n{0}, nz{0}, row_ptr{nullptr}, col_indx{nullptr}, values{nullptr} {
-		
-	}
-	Mtx_CSR(size_t n, size_t nz) : n{n}, nz{nz} {
-		row_ptr = (size_t *) mkl_malloc((n + 1) * sizeof(size_t), 64);if(row_ptr == NULL){return;}	
-		col_indx = (size_t *) mkl_malloc(nz * sizeof(size_t), 64);if(col_indx == NULL){return;}	
-		values = (double *) mkl_malloc(nz * sizeof(double), 64);if(values == NULL){return;}	
-	}
-	virtual ~Mtx_CSR() {
-		if (row_ptr != nullptr) {
-			mkl_free(row_ptr);
-			row_ptr = nullptr;
-		}
-		if (col_indx != nullptr) {
-			mkl_free(col_indx);
-			col_indx = nullptr;
-		}
-		if (values != nullptr) {
-			mkl_free(values);
-			values = nullptr;
-		}
-	};
+	Mtx_CSR() : n{0}, nz{0}, row_ptr{nullptr}, col_indx{nullptr}, values{nullptr} {	}
+	virtual ~Mtx_CSR() { }
 };
 
 typedef std::complex<double> complex_t; 
@@ -61,7 +41,7 @@ class KSP {
 	size_t										s = 5;
 	size_t										t = 12;
 	sparse_matrix_t						*A_mkl;
-	sparse_matrix_t						*M_mkl;
+	sparse_matrix_t						M_mkl;
 	Mtx_CSR										*A_mtx;
 	Mtx_CSR										*M_mtx;
 	IKSPType 								  *kspType;
@@ -82,10 +62,15 @@ public:
 	size_t getS() {return this->s;};
 	size_t getT() {return this->t;};
 	sparse_matrix_t* getA_mkl() {return this->A_mkl;};
-	sparse_matrix_t* getM_mkl() {return this->M_mkl;};
+	sparse_matrix_t* getM_mkl() {return &this->M_mkl;};
 	Mtx_CSR* getA_mtx() {return this->A_mtx;};
 	Mtx_CSR* getM_mtx() {return this->M_mtx;};
-	void mkl_order(sparse_matrix_t *O);
+	IPCType* getIPCType() {return this->pcType;};
+	void setA_mtx(Mtx_CSR *A_mtx) {this->A_mtx = A_mtx;};
+	void setM_mtx(Mtx_CSR *M_mtx) {this->M_mtx = M_mtx;};
+	void print(Mtx_CSR *P);
+	void createMtx(Mtx_CSR *Mtx, size_t n, size_t nz);
+	void destroyMtx(Mtx_CSR *Mtx);
 };
 
 #endif

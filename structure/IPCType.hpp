@@ -8,7 +8,7 @@ class KSP;
 
 class IPCType {
 public:
-	KSP *ctx;
+	KSP *ksp;
 	virtual sparse_status_t setUp() = 0;
 };
 

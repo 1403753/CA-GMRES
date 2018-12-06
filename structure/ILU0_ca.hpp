@@ -5,6 +5,7 @@
 
 class ILU0_ca : public IPCType{
 public:
+	void test();
 	ILU0_ca();
 	sparse_status_t setUp();
 };

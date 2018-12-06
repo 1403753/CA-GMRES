@@ -31,10 +31,11 @@ int main() {
 	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 100;                    // maximum number of iterations to use
-	sparse_status_t               stat;
+	// sparse_status_t               stat;
 	sparse_matrix_t               A_mkl;                          // n x n matrix A
+	double                        *b;
+	double                        *x;
 	// sparse_matrix_t               M_mkl;                          // n x n preconditioned matrix M == ilu0(A)
-	// Mtx_CSR                       A_mtx;                         	
 	KSP						 							  ksp;							 						  // linear solver context	
 	GMRES_ca											gmres;													// KSPType
 	ILU0_ca												ilu0;														// PCType
@@ -43,24 +44,44 @@ int main() {
 	const size_t                  t = 12;                         // number of 'outer iterations' before restart
 	const size_t									s = 5;													// step-size ('inner iterations')
 	
+	sparse_index_base_t indexing;	
+	size_t n, m;
+	size_t *rows_start;
+	size_t *rows_end;
+	size_t *col_indx;
+	double *values;
+		
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);	
 	
 	// read matrix
-	mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
+	mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
 
-	if (stat);
+	mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
+	
+	struct matrix_descr           descr;
+	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
+	b = (double *) mkl_malloc((n) * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	x = (double *) mkl_malloc((n) * sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+
+	
+	for (size_t i = 0; i < n; ++i)
+		b[i] = 1;
+	
+	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, b, 0, b);	
+	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
 
 	PAPI_shutdown();
 
 	std::cout << "runtime readfile: " << rtime << " seconds." << std::endl;
-	
+		
 	ksp.setOperator(&A_mkl);
 	ksp.setKSPType(&gmres);
 	ksp.setPCType(&ilu0);
@@ -68,6 +89,7 @@ int main() {
 	ksp.setOptions(s, t, rTol, aTol, dTol, maxit);
 	
 	ksp.setUp();
+	
 	// what happens:
 	// compute structure at_plus_a(A_mtx) ->output: b_rowptr and partition A with metis 
 	// sort A_mtx with amml(s)
@@ -79,10 +101,12 @@ int main() {
 	// openmp: find s-step dependencies for each alpha_p -> beta_p -> gamma_p -> delta_p 
 	// 
 	
-	// ksp.solve(x, b);
+	ksp.solve(x, b);
 	
 	mkl_sparse_destroy(A_mkl);
-	
+	mkl_free(x);
+	mkl_free(b);
+	mkl_free_buffers();
 	return 0;
 }
 

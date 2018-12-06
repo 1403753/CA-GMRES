@@ -82,14 +82,10 @@ sparse_status_t MmtReader::read_matrix_from_file(std::string fname, sparse_matri
 	// A_mtx->row_ptr = rows_start;
 	// A_mtx->col_indx = col_indx;
 	
-	mkl_free_buffers();
-
-	
 	return stat;
 }
 
 
 MmtReader::~MmtReader() {
-	mkl_free_buffers();
 }
 
