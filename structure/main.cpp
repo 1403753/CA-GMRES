@@ -99,9 +99,9 @@ int main() {
 	// factorize A_mtx to get ILU(0)-values
 	// find subsets alpha_p p == #threads depending on matrix size
 	// openmp: find s-step dependencies for each alpha_p -> beta_p -> gamma_p -> delta_p 
-	// 
-	
-	ksp.solve(x, b);
+
+	gmres.mpk(x,b,2);
+	// ksp.solve(x, b);
 	
 	mkl_sparse_destroy(A_mkl);
 	mkl_free(x);

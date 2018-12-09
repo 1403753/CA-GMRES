@@ -166,24 +166,41 @@ approvals from U.S. Dept. of Energy)
 sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t *pinv, const size_t *q)
 {
 	size_t t, j, k, n = A->n, inz = 0, *Ap, *Ai, *Cp, *Ci;
-	double *Cx, *Ax;
+	double *Cx, *Cm, *Ax, *Am;
 
 	Ap = A->row_ptr;
 	Ai = A->col_indx;
 	Ax = A->values;
+	Am = A->ilu0_values;
 	
 	Cp = dest->row_ptr;
 	Ci = dest->col_indx;
 	Cx = dest->values;
+	Cm = dest->ilu0_values;
 
-	for (k = 0; k < n; k++) {
+	if (Am) {
+		for (k = 0; k < n; k++) {
 			Cp[k] = inz; // row k of C is row pinv[k] of A
 			j = pinv ? (pinv[k]) : k;
 			for (t = Ap[j]; t < Ap[j+1]; t++) {
-					if (Cx)
-						Cx[inz] = Ax[t]; // column i of A is column q[i] of C
-					Ci[inz++] = q ? (q[Ai[t]]) : Ai[t];
+				if (Cx) {
+					Cx[inz] = Ax[t]; // column i of A is column q[i] of C
+					Cm[inz] = Am[t];
+				}
+				Ci[inz++] = q ? (q[Ai[t]]) : Ai[t];
 			}
+		}
+	} else {
+		for (k = 0; k < n; k++) {
+			Cp[k] = inz; // row k of C is row pinv[k] of A
+			j = pinv ? (pinv[k]) : k;
+			for (t = Ap[j]; t < Ap[j+1]; t++) {
+				if (Cx) {
+					Cx[inz] = Ax[t]; // column i of A is column q[i] of C
+				}
+				Ci[inz++] = q ? (q[Ai[t]]) : Ai[t];
+				}
+		}
 	}
 	Cp[n] = inz; // finalize the last row of C
 			
