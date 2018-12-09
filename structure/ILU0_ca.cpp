@@ -144,7 +144,6 @@ sparse_status_t ILU0_ca::setUp() {
 
 	mkl_free(ia);
 	mkl_free(ja);
-	// mkl_free(P_indx);
 	mkl_free(part);
 	mkl_free(b_row_ptr);
 	mkl_free(b_col_indx);
