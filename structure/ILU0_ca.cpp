@@ -8,8 +8,64 @@ ILU0_ca::ILU0_ca() {
 
 }
 
-void ILU0_ca::test(){
-	std::cout << "SUCCESS!" << std::endl;
+sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
+															std::vector<size_t>& alpha, 
+															std::vector<std::vector<size_t>>& betaArr,
+															std::vector<std::vector<size_t>>& gammaArr,
+															std::vector<std::vector<size_t>>& deltaArr)
+{
+	size_t s = ksp->getS();
+	size_t n = A_mtx->n;
+	deltaArr.at(0) = alpha;
+	// std::cout << "alpha:\n";
+	// for (auto v:deltaArr.at(0)) {
+		// std::cout << v << ", ";
+	// }
+	// std::cout << std::endl;
+	
+	for (size_t i = 0; i < s; ++i) {
+		neighborhood(A_mtx, // CSR MATRIX
+								 deltaArr.at(i), // input set
+								 betaArr.at(i), // result vertices for some level of order
+								 n, // the reachabilty order
+								 GRAPH_UPPER
+		);
+		
+		// std::cout << "beta:\n";
+		// for (auto v:betaArr.at(i)) {
+			// std::cout << v << ", ";
+		// }
+		// std::cout << std::endl;
+		neighborhood(A_mtx, // CSR MATRIX
+								 betaArr.at(i), // input set
+								 gammaArr.at(i), // result vertices for some level of order
+								 n, // the reachabilty order
+								 GRAPH_LOWER
+		);
+		
+		// std::cout << "gamma:\n";
+		// for (auto v:gammaArr.at(i)) {
+			// std::cout << v << ", ";
+		// }
+		// std::cout << std::endl;
+		
+		neighborhood(A_mtx, // CSR MATRIX
+								 gammaArr.at(i), // input set
+								 deltaArr.at(i), // result vertices for some level of order
+								 1, // the reachabilty order
+								 GRAPH_COMPLETE
+		);
+		
+		// std::cout << "delta:\n";
+		// for (auto v:deltaArr.at(i)) {
+			// std::cout << v << ", ";
+		// }		
+		// std::cout << std::endl;
+		
+		if (i < s - 1)
+			deltaArr.at(i+1) = deltaArr.at(i);
+	}
+	return SPARSE_STATUS_SUCCESS;	
 }
 
 sparse_status_t ILU0_ca::setUp() {
@@ -23,7 +79,7 @@ sparse_status_t ILU0_ca::setUp() {
 	ksp->createMtx(&destA, n, nz);
 
 	sparse_matrix_t *A_mkl = ksp->getA_mkl();
-	sparse_matrix_t *M_mkl = ksp->getM_mkl();
+	// sparse_matrix_t *M_mkl = ksp->getM_mkl();
 	size_t nWeights = 2; // <- set this to 1 eventually
 	size_t nParts = n < (size_t) mkl_get_max_threads() ? n : (size_t) mkl_get_max_threads();
 	size_t options[METIS_NOPTIONS];
@@ -65,9 +121,6 @@ sparse_status_t ILU0_ca::setUp() {
 	}
 
 	dcsrilu0(&n, A_mtx->values, ia, ja, A_mtx->ilu0_values, ipar, dpar, &ierr);
-
-	ksp->print(A_mtx);
-
 	
 	std::cout << "factorization finished\n";
 
@@ -91,14 +144,16 @@ sparse_status_t ILU0_ca::setUp() {
 	std::cout << "metis finished\n";
 
 	size_t incp = 0;
+	
+	size_t *testPerm;
+	testPerm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(testPerm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}	
 
 	for (size_t i = n; i-- > 0;) {
-		part[i] = incp++;
+		// testPerm[i] = incp++;
+		testPerm[i] = i;
 	}
 
-	permute_Mtx(A_mtx, &destA, part, part);	
-
-	std::cout << "permutation finished\n";
+	permute_Mtx(A_mtx, &destA, testPerm, testPerm);	
 		
 	mkl_sparse_destroy(*A_mkl);
 
@@ -130,18 +185,46 @@ sparse_status_t ILU0_ca::setUp() {
 	mkl_free(destA.ilu0_values);
 	
 	ksp->setOperator(A_mkl);
+
+	std::vector<std::vector<size_t>> alphaArr(nParts);
+	std::vector<std::vector<std::vector<size_t>>> betaArr(nParts, std::vector<std::vector<size_t>>(ksp->getS()));
+	std::vector<std::vector<std::vector<size_t>>> gammaArr(nParts, std::vector<std::vector<size_t>>(ksp->getS()));
+	std::vector<std::vector<std::vector<size_t>>> deltaArr(nParts, std::vector<std::vector<size_t>>(ksp->getS()));
 	
-	ksp->print(A_mtx);
+	size_t alphaPartSize = (size_t)((n / nParts) * 1.03 + 5); // add 103% + 5 buffer
+	
+	for (size_t i = 0; i < nParts; ++i) {
+		alphaArr.at(i).reserve(alphaPartSize); 
+	}
+	
+	for (size_t i = 0; i < n; ++i) {
+		alphaArr.at(part[i]).push_back(i);
+	}
+	
+	for (size_t i = 0; i < nParts; ++i) {
+		alphaArr.at(i).shrink_to_fit();
+	}	
+	
+	size_t sum = 0;
+	
+	for (auto a:alphaArr) {
+		sum += a.size();
+		std::cout << a.size() << std::endl;
+		// for(size_t i = 0; i < a.size(); ++i)
+				// std::cout << a.at(i) << ", ";
+		// std::cout << std::endl << std::endl;
+	}
+	
+	std::cout << std::endl << "reserved: " << alphaPartSize << std::endl;
+	std::cout << std::endl << "sum: " << sum << std::endl;
 
-	// compute structure at_plus_a(A_mtx) ->output: b_rowptr and partition A with metis 
-	// sort A_mtx with amml(s)
-	// permute A_mtx -> col_indx out of order
-	// create A_mkl and sort col_indx (maybe create own algorithm)
-	// export A_mtx from A_mkl again
-	// factorize A_mtx to get ILU(0)-values
-	// find subsets alpha_p p == #threads depending on matrix size
-	// openmp: find s-step dependencies for each alpha_p -> beta_p -> gamma_p -> delta_p 
-
+	#pragma omp parallel for
+	for(size_t i = 0; i < nParts; ++i)
+		find(A_mtx, alphaArr.at(i), betaArr.at(i), gammaArr.at(i), deltaArr.at(i));
+		
+	// std:: cout << "sizes: " << betaArr.at(0).at(0).size() << ", " << gammaArr.at(0).at(0).size() << ", " << deltaArr.at(0).at(0).size() << std::endl;
+	
+	mkl_free(testPerm);
 	mkl_free(ia);
 	mkl_free(ja);
 	mkl_free(part);
@@ -150,32 +233,3 @@ sparse_status_t ILU0_ca::setUp() {
 
 	return SPARSE_STATUS_SUCCESS;
 }
-	////////////////////
-	//  METIS OUTPUT  //
-	////////////////////
-
-	// size_t k = -1;
-	// std::cout << "\nMetis K-Way:" << std::endl;
-	// while (++k != (size_t) mkl_get_max_threads()) {
-		// for(size_t i = 0; i < n; i++) {
-			// if (part[i] == k) {
-				// std::cout << i << ": " << part[i] << std::endl;
-				// break;
-			// }
-		// }
-	// }
-
-
-	/////////////////////
-	//  PAPI TEMPLATE  //
-	/////////////////////
-
-	// float                         rtime, ptime, mflops;
-	// long long                     flpops;		
-	// if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
-		// exit(1);
-	// // -> function here <-
-	// if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
-		// exit(1);
-	// PAPI_shutdown();
-	// std::cout << "runtime: " << rtime << " seconds." << std::endl;

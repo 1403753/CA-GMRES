@@ -57,6 +57,9 @@ int main() {
 	// read matrix
 	// mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/goodwin.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
 	mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);

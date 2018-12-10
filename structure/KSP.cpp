@@ -29,15 +29,23 @@ void KSP::createMtx(Mtx_CSR *Mtx, size_t n, size_t nz) {
 }
 
 void KSP::destroyMtx(Mtx_CSR *Mtx) {
-	if(Mtx != nullptr) {
-		if (Mtx->row_ptr != nullptr)
+	if(Mtx) {
+		if (Mtx->row_ptr != nullptr) {
 			mkl_free(Mtx->row_ptr);
-		if (Mtx->col_indx != nullptr)
+			Mtx->row_ptr = nullptr;
+		}
+		if (Mtx->col_indx != nullptr) {
 			mkl_free(Mtx->col_indx);
-		if (Mtx->values != nullptr)
+			Mtx->col_indx = nullptr;
+		}
+		if (Mtx->values != nullptr) {
 			mkl_free(Mtx->values);
-		if (Mtx->ilu0_values != nullptr)
+			Mtx->values = nullptr;
+		}
+		if (Mtx->ilu0_values != nullptr) {
 			mkl_free(Mtx->ilu0_values);
+			Mtx->ilu0_values = nullptr;
+		}
 		delete Mtx;
 	}
 }

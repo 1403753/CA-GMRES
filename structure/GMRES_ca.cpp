@@ -5,10 +5,7 @@
  *      Author: Robert
  */
 
- 
 #include "GMRES_ca.hpp"
-#include "solve.cc"
-#include "tsqr.cc"
 
 GMRES_ca::GMRES_ca() {
 	
@@ -16,7 +13,7 @@ GMRES_ca::GMRES_ca() {
 
 sparse_status_t GMRES_ca::mpk(double *x, double *dest, size_t s) {
 	ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
-	prec->test();	
+	// prec->test();	// no longer available
 	
 
 	
@@ -144,9 +141,9 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 	
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 	
-	/******************************/
-	/*  LAPACKE_dhseqr variables  */
-	/******************************/
+	////////////////////////////////
+	//  LAPACKE_dhseqr variables  //
+	////////////////////////////////
 
 	size_t                                  ilo = 1;       // if A hasn't been balanced by ?gebal: ilo = 1
 	size_t                                  ihi = s;       // if A hasn't been balanced by ?gebal: ihi = s
@@ -159,9 +156,9 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 	w = (double *)mkl_calloc(n, sizeof(double), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	H_s = (double *)mkl_calloc((s + 1)*s, sizeof(double), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
-	/**************************/
-	/*  Modfied Gram-Schmidt  */
-	/**************************/
+	////////////////////////////
+	//  Modfied Gram-Schmidt  //
+	////////////////////////////
 
 	for(j = 0; j < s; ++j) {
 
@@ -258,10 +255,6 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	
 	mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
 	mkl_sparse_optimize(*A_mkl);	
-
-	// kernels<double>::mv(A_mkl, tx, r, 1); --> r == b
-
-	// mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, b, 0, b);	
 	
 	double beta = cblas_dnrm2(n, b, 1);
 
@@ -273,9 +266,9 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 
 	// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
-	/**************/
-  /*  reduce H  */
-	/**************/
+	////////////////
+  //  reduce H  //
+	////////////////
 
 	reduce_H(H_reduced, s, m, 0, zeta, cs);	
 
@@ -311,16 +304,16 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 				}
 			}
 
-			/**************************/
-			/*  "BLOCK" GRAM SCHMIDT  */
-			/**************************/
+			////////////////////////////
+			//  "BLOCK" GRAM SCHMIDT  //
+			////////////////////////////
 
 			cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k) + 1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
 			cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k) + 1, -1, Q, n, R, m + s + 1, 1, V, n);
 
-			/**********/
-			/*  TSQR  */
-			/**********/
+			////////////
+			//  TSQR  //
+			////////////
 			
 			tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
 			
@@ -337,9 +330,9 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	} while(restart);
 
 	
-	/**************************************/
-	/*  solve the system (standard GMRES) */
-	/**************************************/
+	/////////////////////////////////////////
+	//  solve the system (standard GMRES)  //
+	/////////////////////////////////////////
 	
 	cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, m, H_reduced, m + 1, zeta, 1);	
 	cblas_dgemv (CblasColMajor, CblasNoTrans, n, m, 1, Q, n, zeta, 1, 0, x, 1);	
@@ -356,3 +349,253 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	return SPARSE_STATUS_SUCCESS;
 }
 
+bool GMRES_ca::is_conj_pair(complex_t a, complex_t b) {
+	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);
+}
+
+sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals) {
+	std::vector<ic_pair_t> ritz_vals;
+
+//	ritz_vals.reserve(sizeof(wr) / sizeof(wr[0]));
+	ritz_vals.reserve(s);
+	
+	for(size_t i = 0; i < s; ++i)
+		ritz_vals.emplace_back(ic_pair_t(1, complex_t(wr[i], wi[i])));		
+		
+	std::stable_sort(ritz_vals.begin( ), ritz_vals.end( ), [ ]( const ic_pair_t &lhs, const ic_pair_t &rhs ) {
+			return lhs.second.real() < rhs.second.real();
+	});
+	
+	for(size_t i = 0; i < ritz_vals.size() - 1;) {
+		if(ritz_vals.at(i).second.imag() > 0) {
+			if(i + 3 < ritz_vals.size() && ritz_vals.at(i).second == ritz_vals.at(i + 2).second && ritz_vals.at(i + 1).second == ritz_vals.at(i + 3).second) {
+				ritz_vals.at(i).first++;
+				ritz_vals.erase(ritz_vals.begin() + i + 2);
+				ritz_vals.at(i + 1).first++;
+				ritz_vals.erase(ritz_vals.begin() + i + 2);
+			} else {
+				i += 2;
+			}
+		} else {
+			if(ritz_vals.at(i).second == ritz_vals.at(i + 1).second) {
+				ritz_vals.at(i).first++;
+				ritz_vals.erase(ritz_vals.begin() + i + 1);
+			} else {
+				i++;
+			}
+		}
+	}
+
+	ritz_vals.shrink_to_fit();
+	
+	std::vector<size_t> k_index;
+
+	theta_vals.reserve(ritz_vals.size());
+	k_index.reserve(ritz_vals.size());
+	
+	for(size_t i = 0; i < ritz_vals.size(); ++i)
+		k_index.push_back(i);
+
+	/*
+	*
+	* MODIFIED LEJA ORDERING:
+	*
+	*	input: ritz_vals (unique shifts with multiplicity mu)
+	*				 type: std::vector<size_t mu, complex<double> vals> 
+	*
+	*	output: theta_vals (in modified Leja order with outlist)
+	*					type: std::vector<size_t outlist, complex<double> vals>
+	*/
+	
+	complex_t Capacity_old, Capacity = 1;
+	size_t L;
+
+
+	if(std::abs(ritz_vals.back().second) < std::abs(ritz_vals.front().second)) {
+		
+		if (ritz_vals.front().second.imag() == 0) {
+
+			theta_vals.push_back(ic_pair_t(std::move(k_index.front()), ritz_vals.front().second));
+			k_index.erase(k_index.begin());
+			L = 0;
+		} else {
+			
+			theta_vals.push_back(ic_pair_t(std::move(k_index.front()), ritz_vals.front().second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.begin()[1]), ritz_vals.begin()[1].second));
+
+			k_index.erase(k_index.begin());
+			k_index.erase(k_index.begin());
+			L = 1;
+		}
+	} else {
+
+		if (ritz_vals.back().second.imag() == 0) {
+
+			theta_vals.push_back(ic_pair_t(std::move(k_index.back()), ritz_vals.back().second));
+			k_index.pop_back();
+			L = 0;
+		} else {
+			
+			theta_vals.push_back(ic_pair_t(std::move(k_index.end()[-2]), ritz_vals.end()[-2].second));
+			theta_vals.push_back(ic_pair_t(std::move(k_index.back()), ritz_vals.back().second));
+			
+			k_index.pop_back();
+			k_index.pop_back();				
+			L = 1;
+		}
+	}
+	
+	
+	while(L < ritz_vals.size() - 1) {
+
+		Capacity_old = Capacity;
+		Capacity = 1;
+		
+		for(size_t j = 0; j < L; ++j) {
+			Capacity *= std::pow(std::abs(theta_vals.at(L).second - theta_vals.at(j).second), (double) ritz_vals.at(theta_vals.at(j).first).first / (L+1));
+		}
+				
+		for (auto &z: ritz_vals) {
+			z.second /= (Capacity / Capacity_old);
+		}
+		
+		for (auto &t: theta_vals)
+			t.second /= (Capacity / Capacity_old);
+		
+		std::vector<complex_t> zprod;
+		
+		for (auto k: k_index) {
+			complex_t prod = 1;
+			for(size_t j = 0; j < L+1; ++j) {
+				prod *= std::pow(std::abs(ritz_vals.at(k).second - ritz_vals.at(theta_vals.at(j).first).second) / Capacity, ritz_vals.at(theta_vals.at(j).first).first);
+			}
+			zprod.push_back(prod);
+		}
+		
+		std::vector<complex_t>::iterator max_zprod;
+		max_zprod = std::max_element(zprod.begin( ), zprod.end( ), [ ]( const complex_t& lhs, const complex_t& rhs ) {
+			return std::abs(lhs) < std::abs(rhs);
+		});
+		
+		if (*max_zprod == (complex_t)0 ) {
+			throw std::invalid_argument("Product to maximize is zero; either there are multiple shifts, or the product underflowed");
+		} else if (std::isinf((*max_zprod).real()) ||	std::isnan((*max_zprod).real()) )
+			throw std::invalid_argument("Product to maximize is Inf; must have overflowed");
+		
+		size_t idx = max_zprod - zprod.begin();
+		
+
+		
+		if(ritz_vals.at(k_index.at(idx)).second.imag() != 0) {
+			
+			if(ritz_vals.at(k_index.at(idx)).second.imag() < 0) {
+				if (!is_conj_pair(ritz_vals.at(k_index.at(idx) - 1).second, ritz_vals.at(k_index.at(idx)).second)) 
+					throw std::invalid_argument( "Input out of order");
+				
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx - 1)), ritz_vals.at(k_index.at(idx) - 1).second));
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx)), ritz_vals.at(k_index.at(idx)).second));			
+
+				k_index.erase(k_index.begin() + idx - 1);
+				k_index.erase(k_index.begin() + idx - 1);
+				
+				L += 2;	
+			
+			
+			} else {
+				if (!is_conj_pair(ritz_vals.at(k_index.at(idx)).second, ritz_vals.at(k_index.at(idx + 1)).second))
+					throw std::invalid_argument( "Input out of order");
+				
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx)), ritz_vals.at(k_index.at(idx)).second));
+				theta_vals.push_back(ic_pair_t(std::move(k_index.at(idx + 1)), ritz_vals.at(k_index.at(idx + 1)).second));			
+				
+				k_index.erase(k_index.begin() + idx);
+				k_index.erase(k_index.begin() + idx);
+
+				L += 2;
+			}
+		} else {
+		
+			theta_vals.push_back(ic_pair_t(k_index.at(idx), ritz_vals.at(k_index.at(idx)).second));
+			k_index.erase(k_index.begin() + idx);
+		
+			L++;
+		}
+	} //end while
+	
+	// std::cout << std:: endl << "ritz_vals :" << std:: endl;
+	for (auto &p: ritz_vals) {
+		p.second *= Capacity;
+		// std::cout << p.second << "   \tmult: " << p.first << std::endl;
+	}
+	
+	// std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
+	for (auto &p: theta_vals) {
+		p.second *= Capacity;
+		// std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
+	}
+	
+	return SPARSE_STATUS_SUCCESS;
+}
+
+sparse_status_t GMRES_ca::tsqr(double *V, double *Q, double *R_, const size_t m, const size_t n, const size_t st) {
+
+	size_t lwork = -1;
+	size_t lmwork = -1;
+	size_t tsize = -1;
+	size_t info = 0;
+	size_t i, j;
+	double *work, *t, *tquery, *workquery, *mwork, *mworkquery;
+	char side = 'L', trans = 'N';
+	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
+		
+	for(i = 0; i < n; ++i) 
+		Q[i*m + i] = 1;
+
+	tquery = (double *)mkl_malloc(5 * sizeof(double), 64);if (tquery == NULL)throw std::invalid_argument("malloc error: allocating memory for tquery failed.");
+	workquery = (double *)mkl_malloc(sizeof(double), 64);if (workquery == NULL)throw std::invalid_argument("malloc error: allocating memory for workquery failed.");
+	
+	/* Workspace query */
+	dgeqr(&m, &n, V, &m, tquery, &tsize, workquery, &lwork, &info);
+	
+	tsize = tquery[0];
+	mkl_free(tquery);
+	
+	t = (double *)mkl_malloc(tsize * sizeof(double), 64);if (t == NULL)throw std::invalid_argument("malloc error: allocating memory for t failed.");
+	
+	lwork = workquery[0];
+	mkl_free(workquery);	
+	
+	work = (double *)mkl_malloc(lwork * sizeof(double), 64);if (work == NULL)throw std::invalid_argument("malloc error: allocating memory for work failed.");
+	
+	dgeqr(&m, &n, V, &m, t, &tsize, work, &lwork, &info);
+	mkl_free(work);
+	
+	mworkquery = (double *)mkl_malloc(sizeof(double), 64);if (mworkquery == NULL)throw std::invalid_argument("malloc error: allocating memory for mworkquery failed.");
+	
+	/************************/
+	/*  store Q explicitly  */
+	/************************/
+	
+	/* Workspace query */
+	dgemqr(&side, &trans, &m, &n, &n, V, &m, t, &tsize, Q, &m, mworkquery, &lmwork, &info);
+
+	lmwork = mworkquery[0];
+	mkl_free(mworkquery);
+		
+	mwork = (double *)mkl_malloc(lmwork * sizeof(double), 64);if (mwork == NULL)throw std::invalid_argument("malloc error: allocating memory for mwork failed.");
+	
+	dgemqr(&side, &trans, &m, &n, &n, V, &m, t, &tsize, Q, &m, mwork, &lmwork, &info);
+	mkl_free(mwork);
+
+	mkl_free(t);
+	
+	for(i = 0; i < n; ++i) {
+		for(j = i; j < n; ++j) {
+			R_[(st + n + 1)*j + i] = V[m*j + i];
+		}
+	}
+	
+	if (info < 0) stat = SPARSE_STATUS_EXECUTION_FAILED;
+
+	return stat;
+}
