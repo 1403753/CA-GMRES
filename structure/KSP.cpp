@@ -7,16 +7,19 @@ size_t kp = 0;
 size_t nz = P->nz;
 	for (size_t i = 0; i < nz; ++i) {
 		if (i == P->row_ptr[kp]) {
-			std:: cout << i << "\t: ";
-			++kp;
-		} else
-			std:: cout << "\t: ";
+			std::cout << P->row_ptr[kp++] << "\t: ";
+		} else {
+			std::cout << "\t: ";
+		}
+		while (i == P->row_ptr[kp]) {
+			std::cout << std::endl << P->row_ptr[kp++] << "\t: ";
+		}
 		std::cout << P->col_indx[i] << "; " << P->values[i];
 		if (P->ilu0_values) std::cout << " / " << P->ilu0_values[i] << " ><";
 		std::cout << std::endl;
 	}
-	std:: cout << P->row_ptr[kp] << " : ";	
-	std::cout << std::endl;
+	std::cout << P->row_ptr[kp] << "  =>  ";	
+	std::cout << P->nz << " nz" << std::endl;
 }
 
 void KSP::createMtx(Mtx_CSR *Mtx, size_t n, size_t nz) {
@@ -46,7 +49,6 @@ void KSP::destroyMtx(Mtx_CSR *Mtx) {
 			mkl_free(Mtx->ilu0_values);
 			Mtx->ilu0_values = nullptr;
 		}
-		delete Mtx;
 	}
 }
 
@@ -122,4 +124,6 @@ KSP::~KSP() {
 	mkl_sparse_destroy(M_mkl);
 	destroyMtx(this->A_mtx);
 	destroyMtx(this->M_mtx);
+	delete this->A_mtx;
+	delete this->M_mtx;
 }

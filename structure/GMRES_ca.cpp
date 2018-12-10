@@ -11,18 +11,53 @@ GMRES_ca::GMRES_ca() {
 	
 }
 
-sparse_status_t GMRES_ca::mpk(double *x, double *dest, size_t s) {
-	ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
-	// prec->test();	// no longer available
-	
-
-	
-	return SPARSE_STATUS_SUCCESS;
-}
-
-
 GMRES_ca::~GMRES_ca() {
 
+}
+
+sparse_status_t GMRES_ca::mpk(double *x, double *dest) {
+	
+	ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
+	std::vector<std::vector<Mtx_CSR>> *A_mtxArr = prec->getA_mtxArr();
+	std::vector<std::vector<Mtx_CSR>> *L_mtxArr = prec->getL_mtxArr();
+	std::vector<std::vector<Mtx_CSR>> *U_mtxArr = prec->getU_mtxArr();
+	std::vector<std::vector<size_t>> *alphaArr = prec->getAlphaArr();
+	size_t *Ap;
+	size_t *Ai;
+	double *Ax;
+	size_t n, nz;
+	size_t nParts = prec->getNParts();
+	size_t globalN = ksp->getA_mtx()->n;
+	// #pragma omp parallel for
+	for (size_t i = 0; i < nParts; ++i) {
+		for (size_t j = 0; j < 1; ++j) {
+			n = A_mtxArr->at(i).at(j).n;
+			size_t length = n / nParts;
+			// size_t offset = length * omp_get_thread_num();
+			nz = A_mtxArr->at(i).at(j).nz;
+			Ap = A_mtxArr->at(i).at(j).row_ptr;
+			Ai = A_mtxArr->at(i).at(j).col_indx;
+			Ax = A_mtxArr->at(i).at(j).values;
+			alphaArr.at(i);
+			for (size_t i = 0; i < n; ++i) {
+				double rowsum = 0.0;
+				for (size_t j = Ap[i]; j < Ap[i+1]; ++j) {
+					// if (x + Ai[j] + offset - x < n)
+						// rowsum += Ax[j] * *(x + Ai[j] + offset);
+						rowsum += Ax[j] * x[Ai[j]];
+				}
+				
+				x = rowsum;
+			}
+			// mkl_dcsrtrsv ('L', 'N', 'N', &A_mtxArr->at(i).at(j).n, A_mtxArr->at(i).at(j).ilu0_values, A_mtxArr->at(i).at(j).row_ptr, A_mtxArr->at(i).at(j).col_indx, x, dest);
+		}
+	}
+		
+	for (size_t i = 0; i < globalN; ++i)
+		std::cout << dest[i] << " .. " << x[i] << "\n";
+	
+	
+	return SPARSE_STATUS_SUCCESS;
 }
 
 sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, double *R_k, std::vector<ic_pair_t>  theta_vals, size_t s, size_t m, size_t k) {
@@ -346,6 +381,10 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	mkl_free(r);
 	mkl_free(zeta);	
 	
+	// ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
+	
+	// prec->destroy_MtxArrs();
+
 	return SPARSE_STATUS_SUCCESS;
 }
 

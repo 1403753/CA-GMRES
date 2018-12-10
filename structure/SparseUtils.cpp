@@ -13,16 +13,19 @@ sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix. Column indices h
 	size_t *Ap = A->row_ptr;
 	size_t *Ai = A->col_indx;
 	double *Ax = A->values;
+	double *Am = A->ilu0_values;
 	
 	size_t *t_row_ptr;
 	size_t *t_col_indx;
 	double *t_values;
+	double *t_ilu0_values;
 		
 	size_t nrows = rows.size();
 	
 	t_row_ptr = (size_t*) mkl_malloc((nrows + 1) * sizeof(size_t), 64); if(t_row_ptr == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	t_col_indx = (size_t*) mkl_malloc(nrows*n * sizeof(size_t), 64); if(t_col_indx == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	t_values = (double*) mkl_malloc(nrows*n * sizeof(double), 64); if(t_values == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
+	t_ilu0_values = (double*) mkl_malloc(nrows*n * sizeof(double), 64); if(t_ilu0_values == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 
 	t_row_ptr[0] = 0;
 
@@ -30,11 +33,12 @@ sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix. Column indices h
 
 	for (size_t i = 0; i < nrows; ++i) {
 		size_t optimizer = 0;
-		for (size_t j = Ap[rows[i]]; j < Ap[rows[i]+1]; ++j) {
+		for (size_t j = Ap[rows[i]]; j < Ap[rows[i]+1]; ++j) { // iterate over row
 			auto result = std::find(cols.begin() + optimizer, cols.end(), Ai[j]);
-			if(result != cols.end()) {				
+			if(result != cols.end()) { // if the column has been found
 				t_col_indx[nz] = result - cols.begin();
-				t_values[nz++] = Ax[j];
+				t_values[nz] = Ax[j];
+				t_ilu0_values[nz++] = Am[j];
 				++optimizer;
 			}
 			t_row_ptr[i+1] = nz;
@@ -43,12 +47,15 @@ sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix. Column indices h
 	
 	mkl_realloc(t_col_indx, nz);
 	mkl_realloc(t_values, nz);
+	mkl_realloc(t_ilu0_values, nz);
 		
 	dest->n = nrows;
+	dest->nz = nz;
 	dest->row_ptr = t_row_ptr;
 	dest->col_indx = t_col_indx;
 	dest->values = t_values;
-	
+	dest->ilu0_values = t_ilu0_values;
+
 	return SPARSE_STATUS_SUCCESS;
 }
 
@@ -63,7 +70,7 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR Matrix
 	size_t *Ap = A->row_ptr;
 	size_t *Ai = A->col_indx;
 	v_Res.clear();
-	// std::set<size_t> set;
+	std::set<size_t> set;
   std::deque<size_t> q; // double-ended queue (C++: std::deque)
 	//* igraph_dqueue_pop :=  Remove the head. (C++: pop_front)
 	//* igraph_dqueue_pop_back :=  Remove the tail. (C++: pop_back)
@@ -86,8 +93,8 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR Matrix
 	for(std::vector<size_t>::reverse_iterator it = v_In.rbegin(); it != v_In.rend(); ++it) { //iterate over input set. (for each vid do .... )
 		size_t node = *it; // get the current vertex_id, aka node_id;
     marker[node]=*it + 1; // add node to added vertices-vector in location "node (vertex_id)" and set it to vertexnumber + 1
-		// set.insert(node);
-		v_Res.push_back(node); // add current vertex to result.
+		set.insert(node);
+		// v_Res.push_back(node); // add current vertex to result.
     
 		if (order > 0) {
 			q.push_back(node); // add vertex to the end of the dqueue if order > 0
@@ -135,8 +142,8 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR Matrix
 						marker[nei]=*it + 1; // mark as visited
 						q.push_back(nei); // add the vertex to the dqueue
 						q.push_back(actdist + 1); // add its distance to the queue
-						// set.insert(nei);
-						v_Res.push_back(nei); // add the vertex to the result 
+						set.insert(nei);
+						// v_Res.push_back(nei); // add the vertex to the result 
 					}
 				}
       } else {
@@ -145,8 +152,8 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR Matrix
 					size_t nei= neis.at(j); // get current neighbor
 					if (marker[nei] != *it+1) {
 						marker[nei] = *it + 1;
-						// set.insert(nei);
-						v_Res.push_back(nei); // add the vertex to the result 
+						set.insert(nei);
+						// v_Res.push_back(nei); // add the vertex to the result 
 					}
 				}
       }
@@ -155,13 +162,13 @@ sparse_status_t neighborhood(const Mtx_CSR *A,  // CSR Matrix
 		
   } //* end for every vertex in the input set
 
-	if (v_In.size() > 1) {
-		std::sort(v_Res.begin(), v_Res.end());
-		v_Res.erase(std::unique( v_Res.begin(), v_Res.end() ), v_Res.end());
-	}
+	// if (v_In.size() > 1) {
+		// std::sort(v_Res.begin(), v_Res.end());
+		// v_Res.erase(std::unique( v_Res.begin(), v_Res.end() ), v_Res.end());
+	// }
 	
-	// v_Res.reserve(set.size());
-	// std::copy(set.begin(), set.end(), std::back_inserter(v_Res));
+	v_Res.reserve(set.size());
+	std::copy(set.begin(), set.end(), std::back_inserter(v_Res));
 	
 	mkl_free(marker);
   return SPARSE_STATUS_SUCCESS;

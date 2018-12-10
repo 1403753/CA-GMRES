@@ -37,8 +37,8 @@ int main() {
 	double                        *x;
 	// sparse_matrix_t               M_mkl;                          // n x n preconditioned matrix M == ilu0(A)
 	KSP						 							  ksp;							 						  // linear solver context	
-	GMRES_ca											gmres;													// KSPType
 	ILU0_ca												ilu0;														// PCType
+	GMRES_ca											gmres;													// KSPType
 	MmtReader											mmtReader;
 	// const size_t                  n = 4;                          // dim(A)
 	const size_t                  t = 12;                         // number of 'outer iterations' before restart
@@ -70,7 +70,7 @@ int main() {
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
 	b = (double *) mkl_malloc((n) * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	x = (double *) mkl_malloc((n) * sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	x = (double *) mkl_calloc((n), sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	
 	for (size_t i = 0; i < n; ++i)
@@ -92,7 +92,6 @@ int main() {
 	ksp.setOptions(s, t, rTol, aTol, dTol, maxit);
 	
 	ksp.setUp();
-	
 	// what happens:
 	// compute structure at_plus_a(A_mtx) ->output: b_rowptr and partition A with metis 
 	// sort A_mtx with amml(s)
@@ -103,10 +102,16 @@ int main() {
 	// find subsets alpha_p p == #threads depending on matrix size
 	// openmp: find s-step dependencies for each alpha_p -> beta_p -> gamma_p -> delta_p 
 
-	gmres.mpk(x,b,2);
+	double *dest = (double *) mkl_calloc(n*s, sizeof(double), 64);if(dest == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	
+	for (size_t i = 0; i < n; ++i)
+		x[i] = 1;	
+	
+	gmres.mpk(x, dest);
 	// ksp.solve(x, b);
 	
 	mkl_sparse_destroy(A_mkl);
+	mkl_free(dest);
 	mkl_free(x);
 	mkl_free(b);
 	mkl_free_buffers();

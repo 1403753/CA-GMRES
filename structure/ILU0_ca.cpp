@@ -8,6 +8,9 @@ ILU0_ca::ILU0_ca() {
 
 }
 
+ILU0_ca::~ILU0_ca() {
+	destroy_MtxArrs();
+}
 sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
 															std::vector<size_t>& alpha, 
 															std::vector<std::vector<size_t>>& betaArr,
@@ -17,11 +20,6 @@ sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
 	size_t s = ksp->getS();
 	size_t n = A_mtx->n;
 	deltaArr.at(0) = alpha;
-	// std::cout << "alpha:\n";
-	// for (auto v:deltaArr.at(0)) {
-		// std::cout << v << ", ";
-	// }
-	// std::cout << std::endl;
 	
 	for (size_t i = 0; i < s; ++i) {
 		neighborhood(A_mtx, // CSR MATRIX
@@ -31,11 +29,6 @@ sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
 								 GRAPH_UPPER
 		);
 		
-		// std::cout << "beta:\n";
-		// for (auto v:betaArr.at(i)) {
-			// std::cout << v << ", ";
-		// }
-		// std::cout << std::endl;
 		neighborhood(A_mtx, // CSR MATRIX
 								 betaArr.at(i), // input set
 								 gammaArr.at(i), // result vertices for some level of order
@@ -43,25 +36,13 @@ sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
 								 GRAPH_LOWER
 		);
 		
-		// std::cout << "gamma:\n";
-		// for (auto v:gammaArr.at(i)) {
-			// std::cout << v << ", ";
-		// }
-		// std::cout << std::endl;
-		
 		neighborhood(A_mtx, // CSR MATRIX
 								 gammaArr.at(i), // input set
 								 deltaArr.at(i), // result vertices for some level of order
 								 1, // the reachabilty order
 								 GRAPH_COMPLETE
 		);
-		
-		// std::cout << "delta:\n";
-		// for (auto v:deltaArr.at(i)) {
-			// std::cout << v << ", ";
-		// }		
-		// std::cout << std::endl;
-		
+				
 		if (i < s - 1)
 			deltaArr.at(i+1) = deltaArr.at(i);
 	}
@@ -75,13 +56,14 @@ sparse_status_t ILU0_ca::setUp() {
 	// Mtx_CSR *M_mtx = ksp->getM_mtx();
 	size_t n = A_mtx->n;
 	size_t nz = A_mtx->nz;
+	size_t s = ksp->getS();	
 	Mtx_CSR destA;
 	ksp->createMtx(&destA, n, nz);
 
 	sparse_matrix_t *A_mkl = ksp->getA_mkl();
 	// sparse_matrix_t *M_mkl = ksp->getM_mkl();
 	size_t nWeights = 2; // <- set this to 1 eventually
-	size_t nParts = n < (size_t) mkl_get_max_threads() ? n : (size_t) mkl_get_max_threads();
+	this->nParts = n < (size_t) mkl_get_max_threads() ? 2 : (size_t) mkl_get_max_threads();
 	size_t options[METIS_NOPTIONS];
 	size_t objval;
 	size_t *part;
@@ -139,20 +121,22 @@ sparse_status_t ILU0_ca::setUp() {
 	// options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_VOL;  // slower, but could effectively reduce overall communication volume
 
 	METIS_PartGraphKway((idx_t*) &n, (idx_t*) &nWeights, (idx_t*) b_row_ptr, (idx_t*) b_col_indx, NULL, NULL,
-											NULL, (idx_t*) &nParts, NULL, NULL, (idx_t*) options, (idx_t*) &objval, (idx_t*) part);	
+											NULL, (idx_t*) &this->nParts, NULL, NULL, (idx_t*) options, (idx_t*) &objval, (idx_t*) part);	
 
 	std::cout << "metis finished\n";
 
-	size_t incp = 0;
 	
 	size_t *testPerm;
-	testPerm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(testPerm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}	
+	size_t *itestPerm;
+	testPerm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(testPerm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}		
+	itestPerm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(itestPerm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}		
+	
+	// METIS NodeND(idx t*nvtxs, idx t*xadj, idx t*adjncy, idx t*vwgt, idx t*options, idx t*perm, idx t*iperm)	
+	METIS_NodeND((idx_t*) &n, (idx_t*) b_row_ptr, (idx_t*) b_col_indx, NULL, NULL, (idx_t*) testPerm, (idx_t*) itestPerm);
 
-	for (size_t i = n; i-- > 0;) {
-		// testPerm[i] = incp++;
-		testPerm[i] = i;
-	}
-
+	// for (size_t i = 0; i < n; ++i)
+		// testPerm[i] = i;
+	
 	permute_Mtx(A_mtx, &destA, testPerm, testPerm);	
 		
 	mkl_sparse_destroy(*A_mkl);
@@ -161,7 +145,6 @@ sparse_status_t ILU0_ca::setUp() {
 	
 	for (size_t i = 0; i < nz; ++i)
 		P_indx[i] = (double)i;
-	
 	
 	mkl_sparse_d_create_csr(A_mkl, SPARSE_INDEX_BASE_ZERO, destA.n, destA.n, destA.row_ptr, destA.row_ptr + 1, destA.col_indx, P_indx);
 	mkl_sparse_order(*A_mkl);
@@ -186,7 +169,7 @@ sparse_status_t ILU0_ca::setUp() {
 	
 	ksp->setOperator(A_mkl);
 
-	std::vector<std::vector<size_t>> alphaArr(nParts);
+	this->alphaArr.resize(nParts);
 	std::vector<std::vector<std::vector<size_t>>> betaArr(nParts, std::vector<std::vector<size_t>>(ksp->getS()));
 	std::vector<std::vector<std::vector<size_t>>> gammaArr(nParts, std::vector<std::vector<size_t>>(ksp->getS()));
 	std::vector<std::vector<std::vector<size_t>>> deltaArr(nParts, std::vector<std::vector<size_t>>(ksp->getS()));
@@ -201,35 +184,69 @@ sparse_status_t ILU0_ca::setUp() {
 		alphaArr.at(part[i]).push_back(i);
 	}
 	
-	for (size_t i = 0; i < nParts; ++i) {
-		alphaArr.at(i).shrink_to_fit();
-	}	
+	// for (size_t i = 0; i < nParts; ++i) {
+		// alphaArr.at(i).shrink_to_fit();
+	// }	
 	
-	size_t sum = 0;
+	// size_t sum = 0;
 	
-	for (auto a:alphaArr) {
-		sum += a.size();
-		std::cout << a.size() << std::endl;
+	// for (auto a:alphaArr) {
+		// sum += a.size();
+		// std::cout << a.size() << std::endl;
 		// for(size_t i = 0; i < a.size(); ++i)
 				// std::cout << a.at(i) << ", ";
 		// std::cout << std::endl << std::endl;
-	}
+	// }
 	
-	std::cout << std::endl << "reserved: " << alphaPartSize << std::endl;
-	std::cout << std::endl << "sum: " << sum << std::endl;
+	// std::cout << std::endl << "reserved: " << alphaPartSize << std::endl;
+	// std::cout << std::endl << "sum: " << sum << std::endl;
 
 	#pragma omp parallel for
-	for(size_t i = 0; i < nParts; ++i)
+	for (size_t i = 0; i < nParts; ++i)
 		find(A_mtx, alphaArr.at(i), betaArr.at(i), gammaArr.at(i), deltaArr.at(i));
-		
+
+	std::cout << "finding indices finished!" << std::endl;
+
+	std:: cout << "sizes: " << betaArr.at(0).at(0).size() << ", " << gammaArr.at(0).at(0).size() << ", " << deltaArr.at(0).at(0).size() << std::endl;
+	
+	this->A_mtxArr.resize(this->nParts, std::vector<Mtx_CSR>(s));
+	this->L_mtxArr.resize(this->nParts, std::vector<Mtx_CSR>(s));
+	this->U_mtxArr.resize(this->nParts, std::vector<Mtx_CSR>(s));
+
+	#pragma omp parallel for	
+	for (size_t i = 0; i < this->nParts; ++i) {
+		for (size_t j = 0; j < s; ++j) {
+			extract(A_mtx, &A_mtxArr.at(i).at(j), gammaArr.at(i).at(j), deltaArr.at(i).at(j));
+			extract(A_mtx, &L_mtxArr.at(i).at(j), gammaArr.at(i).at(j), gammaArr.at(i).at(j));
+			extract(A_mtx, &U_mtxArr.at(i).at(j), betaArr.at(i).at(j), betaArr.at(i).at(j));
+		}
+	}
+	
+	// ksp->print(&U_mtxArr.at(1).at(0));		
 	// std:: cout << "sizes: " << betaArr.at(0).at(0).size() << ", " << gammaArr.at(0).at(0).size() << ", " << deltaArr.at(0).at(0).size() << std::endl;
+
 	
 	mkl_free(testPerm);
+	mkl_free(itestPerm);
 	mkl_free(ia);
 	mkl_free(ja);
 	mkl_free(part);
 	mkl_free(b_row_ptr);
 	mkl_free(b_col_indx);
 
+	return SPARSE_STATUS_SUCCESS;
+}
+
+sparse_status_t ILU0_ca::destroy_MtxArrs() {
+
+	#pragma omp parallel for
+	for (size_t i = 0; i < this->nParts; ++i) {
+		for (size_t j = 0; j < ksp->getS(); ++j) {
+			ksp->destroyMtx(&this->A_mtxArr.at(i).at(j));
+			ksp->destroyMtx(&this->L_mtxArr.at(i).at(j));
+			ksp->destroyMtx(&this->U_mtxArr.at(i).at(j));
+		}
+	}
+	
 	return SPARSE_STATUS_SUCCESS;
 }
