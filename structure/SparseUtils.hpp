@@ -3,6 +3,7 @@
 
 #include "KSP.hpp"
 #include <deque>
+#include <set>
 
 enum Gr_Part {GRAPH_LOWER, GRAPH_UPPER, GRAPH_COMPLETE};
 
