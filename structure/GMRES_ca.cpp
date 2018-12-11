@@ -18,43 +18,7 @@ GMRES_ca::~GMRES_ca() {
 sparse_status_t GMRES_ca::mpk(double *x, double *dest) {
 	
 	ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
-	std::vector<std::vector<Mtx_CSR>> *A_mtxArr = prec->getA_mtxArr();
-	std::vector<std::vector<Mtx_CSR>> *L_mtxArr = prec->getL_mtxArr();
-	std::vector<std::vector<Mtx_CSR>> *U_mtxArr = prec->getU_mtxArr();
-	std::vector<std::vector<size_t>> *alphaArr = prec->getAlphaArr();
-	size_t *Ap;
-	size_t *Ai;
-	double *Ax;
-	size_t n, nz;
-	size_t nParts = prec->getNParts();
-	size_t globalN = ksp->getA_mtx()->n;
-	// #pragma omp parallel for
-	for (size_t i = 0; i < nParts; ++i) {
-		for (size_t j = 0; j < 1; ++j) {
-			n = A_mtxArr->at(i).at(j).n;
-			size_t length = n / nParts;
-			// size_t offset = length * omp_get_thread_num();
-			nz = A_mtxArr->at(i).at(j).nz;
-			Ap = A_mtxArr->at(i).at(j).row_ptr;
-			Ai = A_mtxArr->at(i).at(j).col_indx;
-			Ax = A_mtxArr->at(i).at(j).values;
-			alphaArr.at(i);
-			for (size_t i = 0; i < n; ++i) {
-				double rowsum = 0.0;
-				for (size_t j = Ap[i]; j < Ap[i+1]; ++j) {
-					// if (x + Ai[j] + offset - x < n)
-						// rowsum += Ax[j] * *(x + Ai[j] + offset);
-						rowsum += Ax[j] * x[Ai[j]];
-				}
-				
-				x = rowsum;
-			}
-			// mkl_dcsrtrsv ('L', 'N', 'N', &A_mtxArr->at(i).at(j).n, A_mtxArr->at(i).at(j).ilu0_values, A_mtxArr->at(i).at(j).row_ptr, A_mtxArr->at(i).at(j).col_indx, x, dest);
-		}
-	}
-		
-	for (size_t i = 0; i < globalN; ++i)
-		std::cout << dest[i] << " .. " << x[i] << "\n";
+
 	
 	
 	return SPARSE_STATUS_SUCCESS;
@@ -197,7 +161,7 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 
 	for(j = 0; j < s; ++j) {
 
-		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, &Q[n*j], 0, w);		
+		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, &Q[n*j], 0, w); // multply with inv(LU)*A instead of A. so additionally solve for L and U.
 		
 		for(i = 0; i < j + 1; ++i) {
 
@@ -268,7 +232,7 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	// sparse_status_t               stat;
 	sparse_matrix_t               *A_mkl = ksp->getA_mkl();       // n x n matrix A
 	Mtx_CSR                       *A_mtx = ksp->getA_mtx();   // n x n matrix A
-	// sparse_matrix_t               *M;                         // n x n preconditioned matrix M == ilu0(A)
+	// sparse_matrix_t               *M_mkl = ksp->getM_mkl();   // n x n preconditioned matrix M == ilu0(A)
 	size_t                        n = A_mtx->n;               // dim(A)
 	const size_t                  s = ksp->getS();            // stepsize number of 'inner iterations'
 	const size_t                  t = ksp->getT();            // number of 'outer iterations' before restart
@@ -319,18 +283,23 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 			mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
 			mkl_sparse_optimize(*A_mkl);				
 		  
-			mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &Q[n*(s*k)], 0, V);
-
+			///////////
+			//  MPK  //
+			///////////
+			
+			// A*x - lambda*x
+			mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &Q[n*(s*k)], 0, V); // solve for L and U as well
+			
 			cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
 
 			for (size_t i = 1; i < s; ++i) {
 
 				imag = theta_vals.at(i).second.imag();
 
-				// leave in for debug, matrix may not be sparse enough
+				// leave in for debug, small matrix may not be sparse enough
 				// stat = mkl_sparse_d_create_csr (&A_mkl, SPARSE_INDEX_BASE_ZERO, n, n, minfo.rows_start, minfo.rows_end, minfo.col_indx, minfo.values);
 
-				mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &V[n*(i - 1)], 0, &V[n*i]);
+				mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &V[n*(i - 1)], 0, &V[n*i]); // solve for L and U as well
 
 				cblas_daxpy(n, -theta_vals.at(i).second.real(), &V[n*(i - 1)], 1, &V[n*i], 1);
 

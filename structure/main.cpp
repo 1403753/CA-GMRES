@@ -61,8 +61,8 @@ int main() {
 	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
-	mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
+	mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
 
 	mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
 	
@@ -102,16 +102,16 @@ int main() {
 	// find subsets alpha_p p == #threads depending on matrix size
 	// openmp: find s-step dependencies for each alpha_p -> beta_p -> gamma_p -> delta_p 
 
-	double *dest = (double *) mkl_calloc(n*s, sizeof(double), 64);if(dest == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	// double *dest = (double *) mkl_calloc(n*s, sizeof(double), 64);if(dest == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	
-	for (size_t i = 0; i < n; ++i)
-		x[i] = 1;	
+	// for (size_t i = 0; i < n; ++i)
+		// x[i] = 1;	
 	
-	gmres.mpk(x, dest);
+	// gmres.mpk(x, dest);
 	// ksp.solve(x, b);
 	
 	mkl_sparse_destroy(A_mkl);
-	mkl_free(dest);
+	// mkl_free(dest);
 	mkl_free(x);
 	mkl_free(b);
 	mkl_free_buffers();

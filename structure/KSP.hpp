@@ -26,8 +26,7 @@ struct Mtx_CSR{
 	size_t *row_ptr;
 	size_t *col_indx;
 	double *values;
-	double *ilu0_values;
-	Mtx_CSR() : n{0}, nz{0}, row_ptr{nullptr}, col_indx{nullptr}, values{nullptr}, ilu0_values{nullptr} {	}
+	Mtx_CSR() : n{0}, nz{0}, row_ptr{nullptr}, col_indx{nullptr}, values{nullptr} {	}
 	virtual ~Mtx_CSR() { }
 };
 

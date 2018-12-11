@@ -7,12 +7,11 @@
 
 enum Gr_Part {GRAPH_LOWER, GRAPH_UPPER, GRAPH_COMPLETE};
 
-sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix. Column indices have to be in increasing order!
-												Mtx_CSR *dest, // extracted CSR output-Matrix
-												std::vector<size_t> &rows); // input rows
+sparse_status_t permute_Vec(double *v, const size_t *perm, const size_t n, double *dest);
+
 
 sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix
-												Mtx_CSR *C, // extracted CSR output-Matrix
+												Mtx_CSR *dest, // extracted CSR output-Matrix
 												std::vector<size_t> &rows, // input set
 												std::vector<size_t> &cols);
 
