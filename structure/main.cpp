@@ -55,13 +55,13 @@ int main() {
 		exit(1);	
 	
 	// read matrix
-	// mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
+	mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/goodwin.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
-	mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
 
 	mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
@@ -108,7 +108,7 @@ int main() {
 		// x[i] = 1;	
 	
 	// gmres.mpk(x, dest);
-	// ksp.solve(x, b);
+	ksp.solve(x, b);
 	
 	mkl_sparse_destroy(A_mkl);
 	// mkl_free(dest);

@@ -73,13 +73,13 @@ void KSP::setPC(sparse_matrix_t *M_mkl) {
 	double *values;
 	
 	this->M_mkl = *M_mkl;
-	mkl_sparse_d_export_csr(this->M_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
+	// mkl_sparse_d_export_csr(this->M_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
 	
-	this->M_mtx->n = n;
-	this->M_mtx->row_ptr = rows_start;
-	this->M_mtx->nz = rows_start[n];	
-	this->M_mtx->col_indx = col_indx;
-	this->M_mtx->values = values;
+	// this->M_mtx->n = n;
+	// this->M_mtx->row_ptr = rows_start;
+	// this->M_mtx->nz = rows_start[n];	
+	// this->M_mtx->col_indx = col_indx;
+	// this->M_mtx->values = values;
 }
 
 void KSP::setOptions(size_t s, size_t t, double rTol, double aTol, double dTol, size_t maxit) {
@@ -114,7 +114,7 @@ void KSP::setUp() {
 KSP::~KSP() {
 	mkl_sparse_destroy(M_mkl);
 	// destroyMtx(this->A_mtx);
-	// destroyMtx(this->M_mtx);
+	destroyMtx(this->M_mtx);
 	delete this->A_mtx;
 	delete this->M_mtx;
 }

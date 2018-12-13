@@ -17,12 +17,11 @@ sparse_status_t ILU0_ca::setUp() {
 
 	size_t bnz, *b_row_ptr, *b_col_indx;
 	Mtx_CSR *A_mtx = ksp->getA_mtx();
-	// Mtx_CSR *M_mtx = ksp->getM_mtx();
 	size_t n = A_mtx->n;
 	size_t nz = A_mtx->nz;
 	size_t s = ksp->getS();	
-	Mtx_CSR destA;
-	ksp->createMtx(&destA, n, nz);
+	Mtx_CSR *M_mtx = ksp->getM_mtx();
+	ksp->createMtx(M_mtx, n, nz);
 
 	sparse_matrix_t *A_mkl = ksp->getA_mkl();
 	sparse_matrix_t *M_mkl = ksp->getM_mkl();
@@ -60,8 +59,10 @@ sparse_status_t ILU0_ca::setUp() {
 	// METIS NodeND(idx t*nvtxs, idx t*xadj, idx t*adjncy, idx t*vwgt, idx t*options, idx t*perm, idx t*iperm)	
 	METIS_NodeND((idx_t*) &n, (idx_t*) b_row_ptr, (idx_t*) b_col_indx, NULL, NULL, (idx_t*) perm, (idx_t*) iperm);
 	
+	for(size_t i = 0; i < n; ++i)
+		perm[i] = iperm[i] = i;
 		
-	permute_Mtx(A_mtx, &destA, perm, iperm);	
+	permute_Mtx(A_mtx, M_mtx, perm, iperm);	
 	
 	std::cout << "metis finished\n";
 
@@ -82,10 +83,9 @@ sparse_status_t ILU0_ca::setUp() {
 
 
 	size_t *ia, *ja, ierr;
-	double *bilu0, *vec, *vec2;
+	double *vec, *vec2;
 	ia = (size_t*) mkl_malloc((n + 1) * sizeof(size_t), 64); if(ia == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	ja = (size_t*) mkl_malloc(nz * sizeof(size_t), 64); if(ja == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
-	bilu0 = (double*) mkl_malloc(nz * sizeof(double), 64); if(bilu0 == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	vec = (double*) mkl_malloc(n * sizeof(double), 64); if(vec == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	vec2 = (double*) mkl_malloc(n * sizeof(double), 64); if(vec2 == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 
@@ -124,14 +124,15 @@ sparse_status_t ILU0_ca::setUp() {
 								 // const double *dpar,
 								 // MKL_INT *ierr );
 	
-	dcsrilu0(&n, A_mtx->values, ia, ja, bilu0, ipar, dpar, &ierr);
+	dcsrilu0(&n, A_mtx->values, ia, ja, M_mtx->values, ipar, dpar, &ierr);
 	
 	std::cout << "factorization finished\n";
 	
 	//////////////////////////////////////
 
 	
-	mkl_sparse_d_create_csr(M_mkl, SPARSE_INDEX_BASE_ZERO, destA.n, destA.n, destA.row_ptr, destA.row_ptr + 1, destA.col_indx, bilu0);
+	mkl_sparse_d_create_csr(M_mkl, SPARSE_INDEX_BASE_ZERO, M_mtx->n, M_mtx->n, M_mtx->row_ptr, M_mtx->row_ptr + 1, M_mtx->col_indx, M_mtx->values);
+	
 	mkl_sparse_order(*M_mkl);
 
 	ksp->setPC(M_mkl);
@@ -212,12 +213,10 @@ sparse_status_t ILU0_ca::setUp() {
 	// ksp->print(&U_mtxArr.at(1).at(0));		
 	// std:: cout << "sizes: " << betaArr.at(0).at(0).size() << ", " << gammaArr.at(0).at(0).size() << ", " << deltaArr.at(0).at(0).size() << std::endl;
 
-	ksp->destroyMtx(&destA);
 	mkl_free(perm);
 	mkl_free(iperm);
 	mkl_free(ia);
 	mkl_free(ja);
-	mkl_free(bilu0);
 	mkl_free(b_row_ptr);
 	mkl_free(b_col_indx);
 

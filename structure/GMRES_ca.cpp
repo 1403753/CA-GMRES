@@ -136,7 +136,17 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 	double                                  *H_s;          // is square with odd dimension to ensure at least one real value bc. we initially needed to pick 's' out of '2s' ritzvalues.
 	double                                  h_ij;
 	double                                  h_jp1j;
-	struct matrix_descr                     descr;
+	struct matrix_descr                     descr, descr2;
+	sparse_matrix_t               					*M_mkl = ksp->getM_mkl();   // n x n preconditioned matrix M == ilu0(A)
+	
+	sparse_index_base_t indexingM;
+	size_t nM, mM;
+	size_t *rows_startM;
+	size_t *rows_endM;
+	size_t *col_indxM;
+	double *valuesM;
+	
+
 	
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 	
@@ -151,8 +161,11 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 	double                                  *wr, *wi;      // real and imag part of ritz values
 	// double																   *scale;
 	size_t                                  i, j;          // index in for-loops
-
-	w = (double *)mkl_calloc(n, sizeof(double), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	double																	*help;
+	
+	w = (double *)mkl_malloc(n * sizeof(double), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	help = (double *)mkl_malloc(n * sizeof(double), 64);if(help == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	
 	H_s = (double *)mkl_calloc((s + 1)*s, sizeof(double), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	////////////////////////////
@@ -162,7 +175,19 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 	for(j = 0; j < s; ++j) {
 
 		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A, descr, &Q[n*j], 0, w); // multply with inv(LU)*A instead of A. so additionally solve for L and U.
-		
+
+		// descr2.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
+		// descr2.mode = SPARSE_FILL_MODE_LOWER;
+		// descr2.diag = SPARSE_DIAG_UNIT;
+	
+	
+		// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, w, help);
+
+		// descr2.mode = SPARSE_FILL_MODE_UPPER;
+		// descr2.diag = SPARSE_DIAG_NON_UNIT;
+
+		// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, help, w);
+
 		for(i = 0; i < j + 1; ++i) {
 
 			h_ij = cblas_ddot(n, w, 1, &Q[i*n], 1);
@@ -204,6 +229,7 @@ sparse_status_t GMRES_ca::gmres_init(size_t n,
 
 	// mkl_free(scale);
 	mkl_free(w);
+	mkl_free(help);
 	mkl_free(wr);
 	mkl_free(wi);
 	mkl_free(H_s);
@@ -225,20 +251,21 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	// double                        *tx;                        // true solution
 	double 						            *zeta;                      // rotated beta*e1
 	double                        imag;                       // imaginary part of Ritz value for Newton Basis	
+	double                        *help;                       // imaginary part of Ritz value for Newton Basis	
 	bool                          restart = true;             // restart as long as value is true
 
 	std::vector<ic_pair_t>        theta_vals;                 // ritz values in modified leja ordering	
 
-	// sparse_status_t               stat;
+	sparse_status_t               stat;
 	sparse_matrix_t               *A_mkl = ksp->getA_mkl();       // n x n matrix A
 	Mtx_CSR                       *A_mtx = ksp->getA_mtx();   // n x n matrix A
-	// sparse_matrix_t               *M_mkl = ksp->getM_mkl();   // n x n preconditioned matrix M == ilu0(A)
+	sparse_matrix_t               *M_mkl = ksp->getM_mkl();   // n x n preconditioned matrix M == ilu0(A)
 	size_t                        n = A_mtx->n;               // dim(A)
 	const size_t                  s = ksp->getS();            // stepsize number of 'inner iterations'
 	const size_t                  t = ksp->getT();            // number of 'outer iterations' before restart
 	const size_t                  m = s*t;                    // restart length
 	std::vector<std::pair<double, double>> cs(m+1);           // cs stores givens rotations for reduction of H	
-	struct matrix_descr           descr;
+	struct matrix_descr           descr, descr2;
 
 	V = (double *)mkl_malloc(n*s * sizeof(double), 64);if(V == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	Q = (double *)mkl_calloc(n*(m + 1), sizeof(double), 64);if(Q == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -250,6 +277,9 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	R_k = (double *)mkl_calloc(s*s, sizeof(double), 64);if(R_k == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k[0] = 1;
 
+	help = (double *)mkl_malloc(n * sizeof(double), 64);if(help == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+
+	
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 	
 	mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
@@ -289,6 +319,19 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 			
 			// A*x - lambda*x
 			mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &Q[n*(s*k)], 0, V); // solve for L and U as well
+
+			// descr2.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
+			// descr2.mode = SPARSE_FILL_MODE_LOWER;
+			// descr2.diag = SPARSE_DIAG_UNIT;
+		
+		
+			// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, V, help);
+
+			// descr2.mode = SPARSE_FILL_MODE_UPPER;
+			// descr2.diag = SPARSE_DIAG_NON_UNIT;
+
+			// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, help, V);			
+			
 			
 			cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
 
@@ -301,6 +344,18 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 
 				mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &V[n*(i - 1)], 0, &V[n*i]); // solve for L and U as well
 
+				descr2.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
+				descr2.mode = SPARSE_FILL_MODE_LOWER;
+				descr2.diag = SPARSE_DIAG_UNIT;
+			
+				stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, &V[n*i], help);
+
+				// descr2.mode = SPARSE_FILL_MODE_UPPER;
+				// descr2.diag = SPARSE_DIAG_NON_UNIT;
+
+				// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, help, &V[n*i]);	
+				
+				
 				cblas_daxpy(n, -theta_vals.at(i).second.real(), &V[n*(i - 1)], 1, &V[n*i], 1);
 
 				if (imag < 0) {
@@ -349,6 +404,7 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	mkl_free(R_k);
 	mkl_free(r);
 	mkl_free(zeta);	
+	mkl_free(help);	
 	
 	// ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
 	
