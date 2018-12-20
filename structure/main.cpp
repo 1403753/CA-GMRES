@@ -35,6 +35,7 @@ int main() {
 	sparse_matrix_t               A_mkl;                          // n x n matrix A
 	double                        *b;
 	double                        *x;
+	double                        *tx;
 	// sparse_matrix_t               M_mkl;                          // n x n preconditioned matrix M == ilu0(A)
 	KSP						 							  ksp;							 						  // linear solver context	
 	ILU0_ca												ilu0;														// PCType
@@ -55,12 +56,12 @@ int main() {
 		exit(1);	
 	
 	// read matrix
-	mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/goodwin.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
+	mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
 
@@ -69,14 +70,15 @@ int main() {
 	struct matrix_descr           descr;
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
-	b = (double *) mkl_malloc((n) * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	x = (double *) mkl_calloc((n), sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	b = (double *) mkl_malloc(n * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	x = (double *) mkl_malloc(n * sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	tx = (double *) mkl_malloc(n * sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	
 	for (size_t i = 0; i < n; ++i)
-		b[i] = 1;
+		tx[i] = 1;
 	
-	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, b, 0, b);	
+	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
 	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
@@ -113,6 +115,7 @@ int main() {
 	mkl_sparse_destroy(A_mkl);
 	// mkl_free(dest);
 	mkl_free(x);
+	mkl_free(tx);
 	mkl_free(b);
 	mkl_free_buffers();
 	return 0;
