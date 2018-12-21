@@ -17,7 +17,7 @@ GMRES_ca::~GMRES_ca() {
 
 sparse_status_t GMRES_ca::mpk(double *x, double *dest) {
 	
-	IPCType *prec = ksp->getIPCType();
+	// IPCType *pc = ksp->getIPCType();
 	
 	
 	
@@ -134,17 +134,10 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	double                                  *H_s;          // is square with odd dimension to ensure at least one real value bc. we initially needed to pick 's' out of '2s' ritzvalues.
 	double                                  h_ij;
 	double                                  h_jp1j;
-	struct matrix_descr                     descr, descr2;
+	struct matrix_descr                     descr;
 	sparse_matrix_t               					*A_mkl = ksp->getA_mkl();   // n x n matrix A
 	size_t                                  n = ksp->getA_mtx()->n;
-	
-	sparse_index_base_t indexingM;
-	size_t nM, mM;
-	size_t *rows_startM;
-	size_t *rows_endM;
-	size_t *col_indxM;
-	double *valuesM;
-	
+		
 	IPCType *pc = ksp->getIPCType();
 
 	
@@ -159,7 +152,7 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	char                                    job = 'E';     // eigenvalues only are required
 	const char                              compz = 'N';   // no Schur vectors are computed
 	double                                  *wr, *wi;      // real and imag part of ritz values
-	// double																   *scale;
+	// double																  *scale;
 	size_t                                  i, j;          // index in for-loops
 	
 	w = (double *)mkl_malloc(n * sizeof(double), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -210,15 +203,22 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 
 	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	wi = (double *)mkl_malloc(s*sizeof(double), 64);if(wi == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+
+	///////////////////////////////////
+	//  balancing prob. not needed!  //
+	///////////////////////////////////
+
 	// scale = (double *)mkl_malloc((s + 1)*sizeof(double), 64);if(scale == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-
-// balancing prob. not needed!
-	// job = 'N'; // neither scaled nor pivoted
-//LAPACKE_dgebal( int matrix_layout, char job, lapack_int n, double* a, lapack_int lda, lapack_int* ilo, lapack_int* ihi, double* scale );
+	// job = 'S'; // 'N' == neither scaled nor pivoted, 'S' == scaled, 'P' == pivoted, 'B' == both scaled and pivoted
+// LAPACKE_dgebal( int matrix_layout, char job, lapack_int n, double* a, lapack_int lda, lapack_int* ilo, lapack_int* ihi, double* scale );
 	// LAPACKE_dgebal(LAPACK_ROW_MAJOR, job, s, H_s, s, &ilo, &ihi, scale);	
+	// job = 'E'; // eigenvalues only are required
+	// mkl_free(scale);
 
-	// job = 'E';
-
+	////////////////////////
+	//  end of balancing  //
+	////////////////////////
+	
 //LAPACKE_dhseqr(int matrix_layout, char job, char compz, lapack_int n, lapack_int ilo, lapack_int ihi,
 							// double *h, lapack_int ldh, double *wr, double *wi, double *z, lapack_int ldz);
 	LAPACKE_dhseqr(LAPACK_ROW_MAJOR, job, compz, s, ilo, ihi, H_s, s, wr, wi, nullptr, s);	
@@ -229,7 +229,6 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 
 	modified_leya_ordering(s, wr, wi, theta_vals);
 
-	// mkl_free(scale);
 	mkl_free(w);
 	mkl_free(wr);
 	mkl_free(wi);
@@ -259,7 +258,6 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	sparse_status_t               stat;
 	sparse_matrix_t               *A_mkl = ksp->getA_mkl();       // n x n matrix A
 	Mtx_CSR                       *A_mtx = ksp->getA_mtx();   // n x n matrix A
-	sparse_matrix_t               *M_mkl = ksp->getM_mkl();   // n x n preconditioned matrix M == ilu0(A)
 	size_t                        n = A_mtx->n;               // dim(A)
 	const size_t                  s = ksp->getS();            // stepsize number of 'inner iterations'
 	const size_t                  t = ksp->getT();            // number of 'outer iterations' before restart
@@ -379,7 +377,7 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 			//  TSQR  //
 			////////////
 			
-			tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
+			stat = tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
 			
 			update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
 			reduce_H(H_reduced, s, m, k, zeta, cs);
@@ -414,7 +412,7 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	
 	// prec->destroy_MtxArrs();
 
-	return SPARSE_STATUS_SUCCESS;
+	return stat;
 }
 
 bool GMRES_ca::is_conj_pair(complex_t a, complex_t b) {
@@ -428,7 +426,7 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 	ritz_vals.reserve(s);
 	
 	for(size_t i = 0; i < s; ++i)
-		ritz_vals.emplace_back(ic_pair_t(1, complex_t(wr[i], wi[i])));		
+		ritz_vals.push_back(ic_pair_t(1, complex_t(wr[i], wi[i])));		
 		
 	std::stable_sort(ritz_vals.begin( ), ritz_vals.end( ), [ ]( const ic_pair_t &lhs, const ic_pair_t &rhs ) {
 			return lhs.second.real() < rhs.second.real();
@@ -455,6 +453,9 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 	}
 
 	ritz_vals.shrink_to_fit();
+	
+	for (auto d:ritz_vals)
+		std::cout << d.second << "; " << d.first << std::endl;	
 	
 	std::vector<size_t> k_index;
 
@@ -526,7 +527,7 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 		for (auto &z: ritz_vals) {
 			z.second /= (Capacity / Capacity_old);
 		}
-		
+
 		for (auto &t: theta_vals)
 			t.second /= (Capacity / Capacity_old);
 		
@@ -552,11 +553,10 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 		
 		size_t idx = max_zprod - zprod.begin();
 		
-
-		
 		if(ritz_vals.at(k_index.at(idx)).second.imag() != 0) {
 			
 			if(ritz_vals.at(k_index.at(idx)).second.imag() < 0) {
+				
 				if (!is_conj_pair(ritz_vals.at(k_index.at(idx) - 1).second, ritz_vals.at(k_index.at(idx)).second)) 
 					throw std::invalid_argument( "Input out of order");
 				
@@ -570,6 +570,7 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 			
 			
 			} else {
+
 				if (!is_conj_pair(ritz_vals.at(k_index.at(idx)).second, ritz_vals.at(k_index.at(idx + 1)).second))
 					throw std::invalid_argument( "Input out of order");
 				

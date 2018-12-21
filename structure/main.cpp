@@ -58,14 +58,14 @@ int main() {
 	// read matrix
 	// mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/goodwin.mtx", &A_mkl);
+	mmtReader.read_matrix_from_file("../matrix_market/goodwin.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
-	mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
-
-	mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
+	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl); // too small, not working properly
+	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl); // too small, not working properly
+	
+	mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // we need the n here
 	
 	struct matrix_descr           descr;
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
@@ -80,7 +80,7 @@ int main() {
 	
 	std::cout << "true x:\n";
 	
-	for(size_t i = 0; i < 10; ++i)
+	for(size_t i = 0; i < (n < 10 ? n : 10); ++i)
 		std::cout << tx[i] << std::endl;
 	
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
@@ -117,7 +117,8 @@ int main() {
 	// gmres.mpk(x, dest);
 	ksp.solve(x, b);
 	
-	for (size_t i = 0; i < 10; ++i)
+	std::cout << "solution x:" << std::endl;
+	for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
 		std::cout << x[i] << "\n";
 		
 	

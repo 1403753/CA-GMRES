@@ -13,11 +13,11 @@ ILU0_ca::~ILU0_ca() {
 }
 
 sparse_status_t ILU0_ca::mpk(double *x, double *y, size_t s) {
-	struct matrix_descr descr;
-	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
+	// struct matrix_descr descr;
+	// descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
 	return SPARSE_STATUS_SUCCESS;
-};
+}
 
 sparse_status_t ILU0_ca::precondition(double *x) {
 
@@ -36,8 +36,8 @@ sparse_status_t ILU0_ca::precondition(double *x) {
 	
 	stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr, x, x);		
 	
-	return SPARSE_STATUS_SUCCESS;
-};
+	return stat;
+}
 
 sparse_status_t ILU0_ca::setUp() {
 
@@ -45,14 +45,13 @@ sparse_status_t ILU0_ca::setUp() {
 	Mtx_CSR *A_mtx = ksp->getA_mtx();
 	size_t n = A_mtx->n;
 	size_t nz = A_mtx->nz;
-	size_t s = ksp->getS();	
+
 	Mtx_CSR *M_mtx = ksp->getM_mtx();
 	ksp->createMtx(M_mtx, n, nz);
 
 	const std::shared_ptr<Mtx_CSR> M_ptr = ksp->getM_ptr();
 	ksp->createMtx(M_ptr.get(), n, nz);
 	
-	sparse_matrix_t *A_mkl = ksp->getA_mkl();
 	sparse_matrix_t *M_mkl = ksp->getM_mkl();
 	// size_t nWeights = 2; // <- set this to 1 eventually
 	// this->nParts = n < (size_t) mkl_get_max_threads() ? 2 : (size_t) mkl_get_max_threads();
@@ -109,9 +108,7 @@ sparse_status_t ILU0_ca::setUp() {
 	dpar[30] = 1.0e-16; // compare value to diagonal
 	dpar[31] = 1.0e-10;	// the value that will be set on the diagonal
 
-
-
-	size_t *ia, *ja, ierr;
+	size_t *ia, *ja, ierr = 0;
 	ia = (size_t*) mkl_malloc((n + 1) * sizeof(size_t), 64); if(ia == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 	ja = (size_t*) mkl_malloc(nz * sizeof(size_t), 64); if(ja == NULL) {return SPARSE_STATUS_ALLOC_FAILED;}
 
@@ -163,12 +160,11 @@ sparse_status_t ILU0_ca::setUp() {
 								 // MKL_INT *ierr );
 	
 	dcsrilu0(&n, A_mtx->values, ia, ja, M_ptr->values, ipar, dpar, &ierr);
-	
-	std::cout << "factorization finished\n";
-	
-	//////////////////////////////////////
+	if (ierr != 0)
+		throw std::invalid_argument("couldn't compute preconditioner");
+	std::cout << "factorization finished, status: " << ierr << std::endl;	
 
-	
+
 	mkl_sparse_d_create_csr(M_mkl, SPARSE_INDEX_BASE_ZERO, M_ptr->n, M_mtx->n, M_ptr->row_ptr, M_ptr->row_ptr + 1, M_ptr->col_indx, M_ptr->values);
 	
 	mkl_sparse_order(*M_mkl);

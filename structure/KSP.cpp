@@ -66,14 +66,16 @@ void KSP::setOperator(sparse_matrix_t *A_mkl) {
 }
 
 void KSP::setPC(sparse_matrix_t *M_mkl) {
-	sparse_index_base_t indexing;
-	size_t n, m;
-	size_t *rows_start;
-	size_t *rows_end;
-	size_t *col_indx;
-	double *values;
-	
+
 	this->M_mkl = *M_mkl;
+
+	// sparse_index_base_t indexing;
+	// size_t n, m;
+	// size_t *rows_start;
+	// size_t *rows_end;
+	// size_t *col_indx;
+	// double *values;
+	
 	// mkl_sparse_d_export_csr(this->M_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
 	
 	// this->M_mtx->n = n;
