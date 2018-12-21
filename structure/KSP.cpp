@@ -1,6 +1,7 @@
 #include "KSP.hpp"
 
-KSP::KSP() : A_mkl{nullptr}, M_mkl{nullptr}, A_mtx{new Mtx_CSR()}, M_mtx{new Mtx_CSR()}, kspType{nullptr}, pcType{nullptr} { }
+
+KSP::KSP() : A_mkl{nullptr}, M_mkl{nullptr}, A_mtx{new Mtx_CSR()}, M_mtx{new Mtx_CSR()}, M_ptr{std::make_shared<Mtx_CSR>()}, kspType{nullptr}, pcType{nullptr} { }
 
 void KSP::print(Mtx_CSR *P) {
 size_t kp = 0;
@@ -115,6 +116,7 @@ KSP::~KSP() {
 	mkl_sparse_destroy(M_mkl);
 	// destroyMtx(this->A_mtx);
 	destroyMtx(this->M_mtx);
+	destroyMtx(this->M_ptr.get());
 	delete this->A_mtx;
 	delete this->M_mtx;
 }

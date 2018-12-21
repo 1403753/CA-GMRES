@@ -17,6 +17,9 @@
 #include "IKSPType.hpp"
 #include "IPCType.hpp"
 
+#include <memory>
+
+
 class IKSPType;
 class IPCType;
 
@@ -44,6 +47,7 @@ class KSP {
 	sparse_matrix_t						M_mkl;
 	Mtx_CSR										*A_mtx;
 	Mtx_CSR										*M_mtx;
+	const std::shared_ptr<Mtx_CSR> M_ptr;
 	IKSPType 								  *kspType;
 	IPCType										*pcType;
 public:
@@ -65,6 +69,7 @@ public:
 	sparse_matrix_t* getM_mkl() {return &this->M_mkl;};
 	Mtx_CSR* getA_mtx() {return this->A_mtx;};
 	Mtx_CSR* getM_mtx() {return this->M_mtx;};
+	const std::shared_ptr<Mtx_CSR> getM_ptr() {return this->M_ptr;};
 	IPCType* getIPCType() {return this->pcType;};
 	void setA_mtx(Mtx_CSR *A_mtx) {this->A_mtx = A_mtx;};
 	void setM_mtx(Mtx_CSR *M_mtx) {this->M_mtx = M_mtx;};

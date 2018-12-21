@@ -60,8 +60,8 @@ int main() {
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/goodwin.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
-	mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
+	mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
+	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl);
 
@@ -76,7 +76,12 @@ int main() {
 
 	
 	for (size_t i = 0; i < n; ++i)
-		tx[i] = 1;
+		tx[i] = 0.1*(i%3 + 1);
+	
+	std::cout << "true x:\n";
+	
+	for(size_t i = 0; i < 10; ++i)
+		std::cout << tx[i] << std::endl;
 	
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
 	
@@ -111,6 +116,10 @@ int main() {
 	
 	// gmres.mpk(x, dest);
 	ksp.solve(x, b);
+	
+	for (size_t i = 0; i < 10; ++i)
+		std::cout << x[i] << "\n";
+		
 	
 	mkl_sparse_destroy(A_mkl);
 	// mkl_free(dest);

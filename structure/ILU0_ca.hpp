@@ -25,6 +25,8 @@ public:
 	sparse_status_t find(Mtx_CSR *A_mtx, std::vector<size_t>& alphaArr, std::vector<std::vector<size_t>>& betaArr,
 											 std::vector<std::vector<size_t>>& gammaArr, std::vector<std::vector<size_t>>& deltaArr);
 	sparse_status_t setUp();
+	sparse_status_t precondition(double *x);
+	sparse_status_t mpk(double *x, double *y, size_t s);
 	std::vector<std::vector<Mtx_CSR>> *getA_mtxArr() { return &this->A_mtxArr;}
 	std::vector<std::vector<Mtx_CSR>> *getL_mtxArr() { return &this->L_mtxArr;}
 	std::vector<std::vector<Mtx_CSR>> *getU_mtxArr() { return &this->U_mtxArr;}
