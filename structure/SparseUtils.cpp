@@ -1,16 +1,10 @@
 #include "SparseUtils.hpp"
 
-sparse_status_t permute_Vec(double *v, const size_t *perm, const size_t n, double *dest) {
-	if (dest) {
-		for (size_t i = 0; i < n; ++i)
-			dest[i] = v[perm[i]];
-	} else {
-		for (size_t i = 0; i < n; ++i) {
-			double temp = v[i];
-			v[i] = v[perm[i]];
-			v[perm[i]] = temp;
-		}
-	}
+sparse_status_t permute_Vec(const size_t n, const size_t *perm, double *x, double *dest) {
+
+	for (size_t i = 0; i < n; ++i)
+		dest[perm[i]] = x[i];
+	
 	return SPARSE_STATUS_SUCCESS;
 }
 
@@ -19,7 +13,7 @@ Copyright (c) 2003, The Regents of the University of California, through
 Lawrence Berkeley National Laboratory (subject to receipt of any required 
 approvals from U.S. Dept. of Energy)
 */
-sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t *pinv, const size_t *q)
+sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t *q, const size_t *pinv)
 {
 	size_t t, j, k, n = A->n, inz = 0, *Ap, *Ai, *Cp, *Ci;
 	double *Cx, *Ax;
@@ -31,7 +25,6 @@ sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t *pinv,
 	Cp = dest->row_ptr;
 	Ci = dest->col_indx;
 	Cx = dest->values;
-
 
 	for (k = 0; k < n; k++) {
 		Cp[k] = inz; // row k of C is row pinv[k] of A

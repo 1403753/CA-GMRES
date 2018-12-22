@@ -1,0 +1,15 @@
+==29429==
+==29429== HEAP SUMMARY:
+==29429==     in use at exit: 319,974 bytes in 129 blocks
+==29429==   total heap usage: 13,279 allocs, 13,150 frees, 16,683,719 bytes allocated
+==29429==
+==29429== LEAK SUMMARY:
+==29429==    definitely lost: 0 bytes in 0 blocks
+==29429==    indirectly lost: 0 bytes in 0 blocks
+==29429==      possibly lost: 84,960 bytes in 49 blocks
+==29429==    still reachable: 235,014 bytes in 80 blocks
+==29429==         suppressed: 0 bytes in 0 blocks
+==29429== Rerun with --leak-check=full to see details of leaked memory
+==29429==
+==29429== For counts of detected and suppressed errors, rerun with: -v
+==29429== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

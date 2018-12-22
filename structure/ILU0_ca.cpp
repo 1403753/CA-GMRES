@@ -4,17 +4,27 @@
 
 #include <papi.h>
 
-ILU0_ca::ILU0_ca() {
+ILU0_ca::ILU0_ca() : help{nullptr} {
 
 }
 
 ILU0_ca::~ILU0_ca() {
-
+	// if(help)
+		// mkl_free(help);
 }
 
-sparse_status_t ILU0_ca::mpk(double *x, double *y, size_t s) {
-	// struct matrix_descr descr;
-	// descr.type = SPARSE_MATRIX_TYPE_GENERAL;
+sparse_status_t ILU0_ca::mv(double *x, double *y, struct matrix_descr descr) {
+
+	sparse_matrix_t *A_mkl = ksp->getA_mkl();
+
+	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x, 0, y); // multply with inv(LU)*A instead of A. so additionally solve for L and U.
+	precondition(y);
+	
+	// size_t n = ksp->getA_mtx()->n;		
+	// permute_Vec(n, perm, x, y);
+	// mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, y, 0, this->help); // multply with inv(LU)*A instead of A. so additionally solve for L and U.
+	// precondition(this->help);
+	// permute_Vec(n, iperm, this->help, y);
 
 	return SPARSE_STATUS_SUCCESS;
 }
@@ -41,13 +51,18 @@ sparse_status_t ILU0_ca::precondition(double *x) {
 
 sparse_status_t ILU0_ca::setUp() {
 
-	size_t bnz, *b_row_ptr, *b_col_indx;
-	Mtx_CSR *A_mtx = ksp->getA_mtx();
-	size_t n = A_mtx->n;
-	size_t nz = A_mtx->nz;
+	// size_t bnz, *b_row_ptr, *b_col_indx;
+	// sparse_matrix_t *A_mkl = ksp->getA_mkl();
+	// Mtx_CSR *A_mtx = ksp->getA_mtx();
+	const std::shared_ptr<Mtx_CSR> A_ptr = ksp->getA_ptr();
 
-	Mtx_CSR *M_mtx = ksp->getM_mtx();
-	ksp->createMtx(M_mtx, n, nz);
+	size_t n = A_ptr->n;
+	size_t nz = A_ptr->nz;
+
+	// this->help = (double*)mkl_malloc(n * sizeof(double), 64);if(help == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	
+	// Mtx_CSR *M_mtx = ksp->getM_mtx();
+	// ksp->createMtx(M_mtx, n, nz);
 
 	const std::shared_ptr<Mtx_CSR> M_ptr = ksp->getM_ptr();
 	ksp->createMtx(M_ptr.get(), n, nz);
@@ -55,7 +70,6 @@ sparse_status_t ILU0_ca::setUp() {
 	sparse_matrix_t *M_mkl = ksp->getM_mkl();
 	// size_t nWeights = 2; // <- set this to 1 eventually
 	// this->nParts = n < (size_t) mkl_get_max_threads() ? 2 : (size_t) mkl_get_max_threads();
-	size_t options[METIS_NOPTIONS];
 	// size_t objval;
 	// size_t *part;
 	// double *P_indx;
@@ -66,9 +80,8 @@ sparse_status_t ILU0_ca::setUp() {
 
 	// part = (size_t *) mkl_malloc(n * sizeof(double), 64);if(part == NULL){return SPARSE_STATUS_ALLOC_FAILED;}	
 
-	at_plus_a(A_mtx, &bnz, &b_row_ptr, &b_col_indx);
+	// at_plus_a(A_mtx, &bnz, &b_row_ptr, &b_col_indx);
 
-	METIS_SetDefaultOptions((idx_t*) options);
 	// options[METIS_OPTION_PTYPE] = METIS_PTYPE_KWAY;     // part k-way
 	// options[METIS_OPTION_PTYPE] = METIS_PTYPE_RB;       // recursive bisection
 	// options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_CUT;  // faster, approximates minimum communication volume
@@ -77,32 +90,63 @@ sparse_status_t ILU0_ca::setUp() {
 	// METIS_PartGraphKway((idx_t*) &n, (idx_t*) &nWeights, (idx_t*) b_row_ptr, (idx_t*) b_col_indx, NULL, NULL,
 											// NULL, (idx_t*) &this->nParts, NULL, NULL, (idx_t*) options, (idx_t*) &objval, (idx_t*) part);	
 
-
+	////////////////////////////////////////////
+	//  the below is needed for permutations  //
+	////////////////////////////////////////////
 	
-	size_t *perm;
-	size_t *iperm;
-	perm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(perm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}		
-	iperm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(iperm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}		
+	// size_t options[METIS_NOPTIONS];
+	// METIS_SetDefaultOptions((idx_t*) options);
+	// perm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(perm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	// iperm = (size_t *) mkl_malloc(n * sizeof(double), 64);if(iperm == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	
 	// METIS NodeND(idx t*nvtxs, idx t*xadj, idx t*adjncy, idx t*vwgt, idx t*options, idx t*perm, idx t*iperm)	
-	METIS_NodeND((idx_t*) &n, (idx_t*) b_row_ptr, (idx_t*) b_col_indx, NULL, NULL, (idx_t*) perm, (idx_t*) iperm);
+	// METIS_NodeND((idx_t*) &n, (idx_t*) b_row_ptr, (idx_t*) b_col_indx, NULL, NULL, (idx_t*) perm, (idx_t*) iperm);
 	
-	for(size_t i = 0; i < n; ++i)
-		perm[i] = iperm[i] = i;
+	// for(size_t i = 0; i < n; ++i)
+		// perm[i] = iperm[i] = i;
+	
+	// for (size_t i = 0; i < n; ++i)
+		// std::cout << perm[i] << ", " << iperm[i] << " <- perm / iperm" << std::endl;
+
+	// permute_Mtx(A_mtx, M_ptr.get(), perm, iperm);	
 		
-	permute_Mtx(A_mtx, M_ptr.get(), perm, iperm);	
+	// for (size_t i = 0; i < nz; ++i) {
+		// A_mtx->col_indx[i] = M_ptr->col_indx[i];
+		// A_mtx->values[i] = M_ptr->values[i];
+	// }
 	
-	std::cout << "metis finished\n";
+	// for (size_t i = 0; i < n +1; ++i) {
+		// A_mtx->row_ptr[i] = M_ptr->row_ptr[i];
+	// }
+	
+	// mkl_sparse_order(*A_mkl);
+	
+	// ksp->print(A_mtx);
+	
+	// std::cout << "metis finished\n";
 
-	// mkl_sparse_destroy(*A_mkl);
+	////////////////////////////////////////////
+	//  the above is needed for permutations  //
+	////////////////////////////////////////////
+	
+	for (size_t i = 0; i < nz; ++i) {
+		M_ptr->col_indx[i] = A_ptr->col_indx[i];
+		M_ptr->values[i] = A_ptr->values[i];
+	}
+	
+	for (size_t i = 0; i < n + 1; ++i) {
+		M_ptr->row_ptr[i] = A_ptr->row_ptr[i];
+	}	
 
-		///////////////
+
+	
+	///////////////
 	// MKL ILU0  //
 	///////////////
 
 	size_t ipar[128];		
 	ipar[1] = 6; // 6 == display all error msgs on screen
-	ipar[30] = 1; // use dpar[31] instead of 0 diagonal; set ipar[30] = 0 to abort computation instead
+	ipar[30] = 0; // use dpar[31] instead of 0 diagonal; set ipar[30] = 0 to abort computation instead
 
 	double dpar[128];
 	dpar[30] = 1.0e-16; // compare value to diagonal
@@ -143,11 +187,11 @@ sparse_status_t ILU0_ca::setUp() {
 	////////////////////	
 
 	for(size_t i = 0; i < n + 1; ++i) {
-		ia[i] = A_mtx->row_ptr[i] + 1;
+		ia[i] = A_ptr->row_ptr[i] + 1;
 	}
 	
 	for(size_t i = 0; i < nz; ++i) {
-		ja[i] = A_mtx->col_indx[i] + 1;
+		ja[i] = A_ptr->col_indx[i] + 1;
 	}
 	
 	// void dcsrilu0 (const MKL_INT *n,
@@ -159,15 +203,14 @@ sparse_status_t ILU0_ca::setUp() {
 								 // const double *dpar,
 								 // MKL_INT *ierr );
 	
-	dcsrilu0(&n, A_mtx->values, ia, ja, M_ptr->values, ipar, dpar, &ierr);
+	dcsrilu0(&n, A_ptr->values, ia, ja, M_ptr->values, ipar, dpar, &ierr);
 	if (ierr != 0)
 		throw std::invalid_argument("couldn't compute preconditioner");
 	std::cout << "factorization finished, status: " << ierr << std::endl;	
 
-
-	mkl_sparse_d_create_csr(M_mkl, SPARSE_INDEX_BASE_ZERO, M_ptr->n, M_mtx->n, M_ptr->row_ptr, M_ptr->row_ptr + 1, M_ptr->col_indx, M_ptr->values);
+	mkl_sparse_d_create_csr(M_mkl, SPARSE_INDEX_BASE_ZERO, M_ptr->n, M_ptr->n, M_ptr->row_ptr, M_ptr->row_ptr + 1, M_ptr->col_indx, M_ptr->values);
 	
-	mkl_sparse_order(*M_mkl);
+	// mkl_sparse_order(*M_mkl);
 
 	ksp->setPC(M_mkl);
 
@@ -247,12 +290,10 @@ sparse_status_t ILU0_ca::setUp() {
 	// ksp->print(&U_mtxArr.at(1).at(0));		
 	// std:: cout << "sizes: " << betaArr.at(0).at(0).size() << ", " << gammaArr.at(0).at(0).size() << ", " << deltaArr.at(0).at(0).size() << std::endl;
 
-	mkl_free(perm);
-	mkl_free(iperm);
 	mkl_free(ia);
 	mkl_free(ja);
-	mkl_free(b_row_ptr);
-	mkl_free(b_col_indx);
+	// mkl_free(b_row_ptr);
+	// mkl_free(b_col_indx);
 
 	return SPARSE_STATUS_SUCCESS;
 }

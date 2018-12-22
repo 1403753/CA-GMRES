@@ -7,21 +7,20 @@
 
 #include "GMRES_ca.hpp"
 
-GMRES_ca::GMRES_ca() {
+sparse_status_t permute_V(const size_t n, const size_t *perm, double *x, double *dest) {
 	
+	for (size_t i = 0; i < n; ++i)
+		dest[perm[i]] = x[i];
+	
+	return SPARSE_STATUS_SUCCESS;
+}
+
+GMRES_ca::GMRES_ca() {
+
 }
 
 GMRES_ca::~GMRES_ca() {
 
-}
-
-sparse_status_t GMRES_ca::mpk(double *x, double *dest) {
-	
-	// IPCType *pc = ksp->getIPCType();
-	
-	
-	
-	return SPARSE_STATUS_SUCCESS;
 }
 
 sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, double *R_k, std::vector<ic_pair_t>  theta_vals, size_t s, size_t m, size_t k) {
@@ -32,7 +31,7 @@ sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, doub
 		cblas_dcopy(s, &R[(m + s + 1)*i + s*k], 1, &R_k[s*(i + 1)], 1);		
 	}
 	
-	// h_underscore_blackletter_(k - 1,k): -h_blackletter_0 * R_(k - 1, k)
+	// h_underscore_blackletter_(k - 1,k): -h_blackletter_0nrm * R_(k - 1, k)
 	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s*k, s - 1, s*k, -1, H, m + 1, R, m + s + 1, 1, &H[(m + 1)*(s*k + 1)], m + 1);
 	
 	// h_underscore_blackletter_(k - 1,k): R_(k-1,k)*B_
@@ -135,8 +134,7 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	double                                  h_ij;
 	double                                  h_jp1j;
 	struct matrix_descr                     descr;
-	sparse_matrix_t               					*A_mkl = ksp->getA_mkl();   // n x n matrix A
-	size_t                                  n = ksp->getA_mtx()->n;
+	size_t                                  n = ksp->getA_ptr()->n;
 		
 	IPCType *pc = ksp->getIPCType();
 
@@ -156,7 +154,6 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	size_t                                  i, j;          // index in for-loops
 	
 	w = (double *)mkl_malloc(n * sizeof(double), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	
 	H_s = (double *)mkl_calloc((s + 1)*s, sizeof(double), 64);if(H_s == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	////////////////////////////
@@ -166,22 +163,8 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	for(j = 0; j < s; ++j) {
 		
 		// params: sparse_matrix_t (matrix), double *x (vector), double *y (result), size_t (stepsize)
-		// pc->mpk(A, &Q[n*j], w, 1);
 
-		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &Q[n*j], 0, w); // multply with inv(LU)*A instead of A. so additionally solve for L and U.
-		
-		pc->precondition(w);
-		// descr2.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
-		// descr2.mode = SPARSE_FILL_MODE_LOWER;
-		// descr2.diag = SPARSE_DIAG_UNIT;
-	
-	
-		// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, w, help);
-
-		// descr2.mode = SPARSE_FILL_MODE_UPPER;
-		// descr2.diag = SPARSE_DIAG_NON_UNIT;
-
-		// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, help, w);
+		pc->mv(&Q[n*j], w, descr);
 
 		for(i = 0; i < j + 1; ++i) {
 
@@ -204,9 +187,9 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	wi = (double *)mkl_malloc(s*sizeof(double), 64);if(wi == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
-	///////////////////////////////////
-	//  balancing prob. not needed!  //
-	///////////////////////////////////
+	/////////////////////////////
+	//  balancing not needed!  //
+	/////////////////////////////
 
 	// scale = (double *)mkl_malloc((s + 1)*sizeof(double), 64);if(scale == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	// job = 'S'; // 'N' == neither scaled nor pivoted, 'S' == scaled, 'P' == pivoted, 'B' == both scaled and pivoted
@@ -237,34 +220,34 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	return stat;
 }
 
-sparse_status_t GMRES_ca::solve(double *x, double *b) {
+sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	
-	double                        *V;                         // basis for Krylov subspace K(A, v) = span{v, (A^1)v, (A^2)v,...,(A^s-1)v}
-	double                        *Q;                         // orthonormal basis for Krylov subspace K(A,v), Arnoldi output
-	double                        *R;                         // upper triangular matrix containing construction info for H
-                                                            // (at each outer iteration only the last s columns of R are needed)
-	double                        *H;                         // Hessenberg matrix, Arnoldi output
-	double                        *H_reduced;                 // QR factorized H, upper triangular matrix
-  double                        *R_k;                       // s x s submatrix needed for updating H
-	double                        *r;                         // residual vector b - Ax
-	// double                        *x;                         // solution vector x
-	// double                        *tx;                        // true solution
-	double 						            *zeta;                      // rotated beta*e1
-	double                        imag;                       // imaginary part of Ritz value for Newton Basis	
-	bool                          restart = true;             // restart as long as value is true
+	double                                     *V;                         // basis for Krylov subspace K(A, v) = span{v, (A^1)v, (A^2)v,...,(A^s-1)v}
+	double                                     *Q;                         // orthonormal basis for Krylov subspace K(A,v), Arnoldi output
+	double                                     *R;                         // upper triangular matrix containing construction info for H
+                                                                         // (at each outer iteration only the last s columns of R are needed)
+	double                                     *H;                         // Hessenberg matrix, Arnoldi output
+	double                                     *H_reduced;                 // QR factorized H, upper triangular matrix
+  double                                     *R_k;                       // s x s submatrix needed for updating H
+	double                                     *r;                         // residual vector b - Ax
+	double 						                         *zeta;                      // rotated beta*e1
+	double                                     imag;                       // imaginary part of Ritz value for Newton Basis	
+	bool                                       restart = true;             // restart as long as value is true
 
-	std::vector<ic_pair_t>        theta_vals;                 // ritz values in modified leja ordering	
+	std::vector<ic_pair_t>                     theta_vals;                 // ritz values in modified leja ordering	
 
-	sparse_status_t               stat;
-	sparse_matrix_t               *A_mkl = ksp->getA_mkl();       // n x n matrix A
-	Mtx_CSR                       *A_mtx = ksp->getA_mtx();   // n x n matrix A
-	size_t                        n = A_mtx->n;               // dim(A)
-	const size_t                  s = ksp->getS();            // stepsize number of 'inner iterations'
-	const size_t                  t = ksp->getT();            // number of 'outer iterations' before restart
-	const size_t                  m = s*t;                    // restart length
-	std::vector<std::pair<double, double>> cs(m+1);           // cs stores givens rotations for reduction of H	
-	struct matrix_descr           descr;
-
+	sparse_status_t                            stat;
+	sparse_matrix_t                            *A_mkl = ksp->getA_mkl();   // n x n matrix A
+	const std::shared_ptr<Mtx_CSR>             A_ptr = ksp->getA_ptr();    // n x n matrix A
+	size_t                                     n = A_ptr->n;               // dim(A)
+	const size_t                               s = ksp->getS();            // stepsize number of 'inner iterations'
+	const size_t                               t = ksp->getT();            // number of 'outer iterations' before restart
+	const size_t                               m = s*t;                    // restart length
+	std::vector<std::pair<double, double>>     cs(m+1);                    // cs stores givens rotations for reduction of H	
+	struct matrix_descr                        descr;
+	double                                     *x;
+	double                                     rRes;
+	
 	V = (double *)mkl_malloc(n*s * sizeof(double), 64);if(V == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	Q = (double *)mkl_calloc(n*(m + 1), sizeof(double), 64);if(Q == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R = (double *)mkl_calloc((m + s + 1)*s, sizeof(double), 64);if(R == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -272,133 +255,206 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	H_reduced = (double *)mkl_calloc((m + 1)*m, sizeof(double), 64);if(H_reduced == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	r = (double *)mkl_malloc(n * sizeof(double), 64);if(r == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	zeta = (double *)mkl_calloc(m + 1, sizeof(double), 64);if(zeta == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k = (double *)mkl_calloc(s*s, sizeof(double), 64);if(R_k == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k[0] = 1;
 
 	IPCType *pc = ksp->getIPCType();
-
-	
+		
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 	
 	mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
 	mkl_sparse_optimize(*A_mkl);	
 	
-	pc->precondition(b);
+	size_t iter = 0; // number of total iterations
+	size_t k;
+	double beta, r_0nrm;
 	
-	double beta = cblas_dnrm2(n, b, 1);
+	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
 
-	zeta[0] = beta;
+	for (size_t i = 0; i < n; ++i) {
+		r[i] = b[i] - r[i];
+	}
 
-	cblas_daxpy(n, 1 / beta, b, 1, Q, 1);
-
-	gmres_init(H, H_reduced, Q, theta_vals, s, m);
-
-	// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
-
-	////////////////
-  //  reduce H  //
-	////////////////
-
-	reduce_H(H_reduced, s, m, 0, zeta, cs);	
-
-	// after H_reduced is reduced, zeta contains s+1 values
-
+	// permute_V(n, pc->perm, r, x);
+	// pc->precondition(x);
+	// permute_V(n, pc->iperm, x, r);	
+	pc->precondition(r);
+	
+	r_0nrm = cblas_dnrm2(n, r, 1);
+	
 	do{
 
+		k = 0;
+		
+		for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
+			std::cout << x_0[i] << std::scientific << std::endl;
+		
+		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);	
+
+		for (size_t i = 0; i < n; ++i) {
+			r[i] = b[i] - r[i];
+		}
+
+		// permute_V(n, pc->perm, r, x);
+		// pc->precondition(x);
+		// permute_V(n, pc->iperm, x, r);
+		pc->precondition(r);
+
+		beta = cblas_dnrm2(n, r, 1);
+
+		zeta[0] = beta;
+
+		rRes = std::abs(zeta[0]) / r_0nrm;
+
+		std::cout << "\n============= initial rel. res.: ";
+		printf("%e, %e\n",rRes, ksp->getRTol() );			
+		
+		beta = 1 / beta;
+		
+		cblas_daxpy(n, beta, r, 1, Q, 1);
+
+		gmres_init(H, H_reduced, Q, theta_vals, s, m);
+
+		// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
+
+		reduce_H(H_reduced, s, m, 0, zeta, cs);	
+	
+		// after H_reduced is reduced, zeta contains s+1 values
+
+		rRes = std::abs(zeta[s]) / r_0nrm;
+
+		std::cout << "\n============= rel. res.: ";
+		printf("%e, %e\n",rRes, ksp->getRTol() );		
+
+		iter += s;
+
+		if (rRes < ksp->getRTol() || iter >= ksp->getMaxit()) {
+			restart = false;
+			++k;
+		}
+
 		// outer iterations before restart
-		for (size_t k = 1; k < t; ++k) {
+		if (restart) {
+			for (k = 1; k < t; ++k) {
 
-			// compute A_mkl*q_(s+1) and store result in V[:,0]
+				// compute A_mkl*q_(s+1) and store result in V[:,0]
 
-			mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
-			mkl_sparse_optimize(*A_mkl);				
-		  
-			///////////
-			//  MPK  //
-			///////////
-			
-			// A*x - lambda*x
-			mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &Q[n*(s*k)], 0, V); // solve for L and U as well
-			
-			pc->precondition(V);
-			// descr2.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
-			// descr2.mode = SPARSE_FILL_MODE_LOWER;
-			// descr2.diag = SPARSE_DIAG_UNIT;
-		
-		
-			// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, V, help);
+				mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
+				mkl_sparse_optimize(*A_mkl);				
 
-			// descr2.mode = SPARSE_FILL_MODE_UPPER;
-			// descr2.diag = SPARSE_DIAG_NON_UNIT;
+				///////////
+				//  MPK  //
+				///////////
 
-			// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, help, V);			
-			
-			
-			cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
+				// A*x - lambda*x
+				pc->mv(&Q[n*(s*k)], V, descr);
 
-			for (size_t i = 1; i < s; ++i) {
+				cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
 
-				imag = theta_vals.at(i).second.imag();
+				for (size_t i = 1; i < s; ++i) {
 
-				// leave in for debug, small matrix may not be sparse enough
-				// stat = mkl_sparse_d_create_csr (&A_mkl, SPARSE_INDEX_BASE_ZERO, n, n, minfo.rows_start, minfo.rows_end, minfo.col_indx, minfo.values);
+					imag = theta_vals.at(i).second.imag();
 
-				mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, &V[n*(i - 1)], 0, &V[n*i]); // solve for L and U as well
-				
-				pc->precondition(&V[n*i]);
+					pc->mv(&V[n*(i - 1)], &V[n*i], descr);
 
-				// descr2.type = SPARSE_MATRIX_TYPE_TRIANGULAR;
-				// descr2.mode = SPARSE_FILL_MODE_LOWER;
-				// descr2.diag = SPARSE_DIAG_UNIT;
-			
-				// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, &V[n*i], help);
+					cblas_daxpy(n, -theta_vals.at(i).second.real(), &V[n*(i - 1)], 1, &V[n*i], 1);
 
-				// descr2.mode = SPARSE_FILL_MODE_UPPER;
-				// descr2.diag = SPARSE_DIAG_NON_UNIT;
-
-				// stat = mkl_sparse_d_trsv (SPARSE_OPERATION_NON_TRANSPOSE, 1, *M_mkl, descr2, help, &V[n*i]);	
-				
-				
-				cblas_daxpy(n, -theta_vals.at(i).second.real(), &V[n*(i - 1)], 1, &V[n*i], 1);
-
-				if (imag < 0) {
-					cblas_daxpy(n, imag*imag, &V[n*(i - 2)], 1, &V[n*i], 1);
+					if (imag < 0) {
+						cblas_daxpy(n, imag*imag, &V[n*(i - 2)], 1, &V[n*i], 1);
+					}
 				}
-			}
 
-			////////////////////////////
-			//  "BLOCK" GRAM SCHMIDT  //
-			////////////////////////////
+				////////////////////////////
+				//  "BLOCK" GRAM SCHMIDT  //
+				////////////////////////////
 
-			cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k) + 1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
-			cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k) + 1, -1, Q, n, R, m + s + 1, 1, V, n);
+				cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k) + 1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
+				cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k) + 1, -1, Q, n, R, m + s + 1, 1, V, n);
 
-			////////////
-			//  TSQR  //
-			////////////
-			
-			stat = tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
-			
-			update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
-			reduce_H(H_reduced, s, m, k, zeta, cs);
+				////////////
+				//  TSQR  //
+				////////////
 
-			std::cout << "\n============= rel. res.:\n";
-			printf("%e\n", std::abs(zeta[s*k + 1]) / beta);
-			
-		} // end for "outer iteration"
+				stat = tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
+	
+				update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
+				reduce_H(H_reduced, s, m, k, zeta, cs);
+				
+				// std::cout << "s: " << s << ", k: " << k << std::endl;
+				
+				// for (size_t i = 0; i < m + 1; ++i) {
+					// std::cout << zeta[i] << std::endl;
+				// }
+				
+				rRes = std::abs(zeta[s*(k + 1)]) / r_0nrm;
+				
+				std::cout << "\n============= rel. res.: ";
+				printf("%e, %e\n",rRes, ksp->getRTol() );
 
-		restart = false;
+				iter += s;
+				
+				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit()) {
+					++k;
+					restart = false;
+					break;
+				}
+			} // end for "outer iteration"
+		}
 
+		////////////////////////
+		//  solve the system  //
+		////////////////////////
+
+		cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m + 1, zeta, 1);
+		cblas_dgemv (CblasColMajor, CblasNoTrans, n, m, 1, Q, n, zeta, 1, 0, x, 1);
+		
+		for (size_t i = 0; i < n; ++i) {
+			x_0[i] = x_0[i] + x[i];
+		}
+		
+		if (restart) {
+			std::fill(zeta, zeta+(m+1), 0);
+			std::fill(H, H+((m + 1)*m), 0);
+			std::fill(H_reduced, H_reduced+((m + 1)*m), 0);
+			std::fill(Q, Q+(n*(m + 1)), 0);
+			std::fill(R, R+((m + s + 1)*s), 0);
+			std::fill(R_k, R_k+(s*s), 0);
+			R_k[0] = 1;
+			theta_vals.clear();
+			cs.clear();
+			cs.resize(m+1);
+		}
+		
 	} while(restart);
-
 	
-	/////////////////////////////////////////
-	//  solve the system (standard GMRES)  //
-	/////////////////////////////////////////
+		std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << std::endl;
+		// std::cout << "\n\nt: " << t << ", k: " << k << std::endl;
+		// std::cout << "\n\n============= H reduced:\n";
+		// for (size_t i = 0; i < m+1; ++i) {
+			// for (size_t j = 0; j < m; ++j) {
+				// printf("%.2f ", H_reduced[(m+1)*j + i]);
+			// }
+			// std::cout << std::endl;
+		// }
+		// std::cout << std::endl;	
+		
+		// std::cout << "\n\n============= Q:\n";
+		// for (size_t i = 0; i < 15; ++i) {
+			// for (size_t j = 0; j < m + 1; ++j) {
+				// printf("%.2f ", Q[15*j + i]);
+			// }
+			// std::cout << std::endl;
+		// }
+		// std::cout << std::endl;	
+		
+		// std::cout << "\n\n============= zeta:\n";
+		// for(size_t o = 0; o < m + 1; ++o)
+			// std::cout << zeta[o] << std::endl;	
 	
-	cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, m, H_reduced, m + 1, zeta, 1);	
-	cblas_dgemv (CblasColMajor, CblasNoTrans, n, m, 1, Q, n, zeta, 1, 0, x, 1);	
 
+
+	mkl_free(x);
 	mkl_free(V);
 	mkl_free(Q);
 	mkl_free(R);
@@ -408,10 +464,6 @@ sparse_status_t GMRES_ca::solve(double *x, double *b) {
 	mkl_free(r);
 	mkl_free(zeta);	
 	
-	// ILU0_ca *prec = (ILU0_ca*) ksp->getIPCType();
-	
-	// prec->destroy_MtxArrs();
-
 	return stat;
 }
 
@@ -454,8 +506,8 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 
 	ritz_vals.shrink_to_fit();
 	
-	for (auto d:ritz_vals)
-		std::cout << d.second << "; " << d.first << std::endl;	
+	// for (auto d:ritz_vals)
+		// std::cout << d.second << "; " << d.first << std::endl;	
 	
 	std::vector<size_t> k_index;
 
@@ -641,9 +693,9 @@ sparse_status_t GMRES_ca::tsqr(double *V, double *Q, double *R_, const size_t m,
 	
 	mworkquery = (double *)mkl_malloc(sizeof(double), 64);if (mworkquery == NULL)throw std::invalid_argument("malloc error: allocating memory for mworkquery failed.");
 	
-	/************************/
-	/*  store Q explicitly  */
-	/************************/
+	//////////////////////////
+	//  store Q explicitly  //
+	//////////////////////////
 	
 	/* Workspace query */
 	dgemqr(&side, &trans, &m, &n, &n, V, &m, t, &tsize, Q, &m, mworkquery, &lmwork, &info);

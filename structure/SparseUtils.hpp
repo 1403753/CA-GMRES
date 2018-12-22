@@ -7,7 +7,7 @@
 
 enum Gr_Part {GRAPH_LOWER, GRAPH_UPPER, GRAPH_COMPLETE};
 
-sparse_status_t permute_Vec(double *v, const size_t *perm, const size_t n, double *dest);
+sparse_status_t permute_Vec(const size_t n, const size_t *perm, double *x, double *dest);
 
 
 sparse_status_t extract(const Mtx_CSR *A,  // CSR input-Matrix

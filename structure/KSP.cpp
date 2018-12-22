@@ -1,7 +1,7 @@
 #include "KSP.hpp"
 
 
-KSP::KSP() : A_mkl{nullptr}, M_mkl{nullptr}, A_mtx{new Mtx_CSR()}, M_mtx{new Mtx_CSR()}, M_ptr{std::make_shared<Mtx_CSR>()}, kspType{nullptr}, pcType{nullptr} { }
+KSP::KSP() : A_mkl{nullptr}, M_mkl{nullptr}, A_ptr{std::make_shared<Mtx_CSR>()}, M_ptr{std::make_shared<Mtx_CSR>()}, kspType{nullptr}, pcType{nullptr} { }
 
 void KSP::print(Mtx_CSR *P) {
 size_t kp = 0;
@@ -57,12 +57,13 @@ void KSP::setOperator(sparse_matrix_t *A_mkl) {
 	
 	this->A_mkl = A_mkl;
 	mkl_sparse_d_export_csr(*this->A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
+
+	this->A_ptr->n = n;
+	this->A_ptr->row_ptr = rows_start;
+	this->A_ptr->nz = rows_start[n];
+	this->A_ptr->col_indx = col_indx;
+	this->A_ptr->values = values;
 	
-	this->A_mtx->n = n;
-	this->A_mtx->row_ptr = rows_start;
-	this->A_mtx->nz = rows_start[n];	
-	this->A_mtx->col_indx = col_indx;
-	this->A_mtx->values = values;
 }
 
 void KSP::setPC(sparse_matrix_t *M_mkl) {
@@ -117,8 +118,8 @@ void KSP::setUp() {
 KSP::~KSP() {
 	mkl_sparse_destroy(M_mkl);
 	// destroyMtx(this->A_mtx);
-	destroyMtx(this->M_mtx);
+	// destroyMtx(this->M_mtx);
+	// delete this->M_mtx;
 	destroyMtx(this->M_ptr.get());
-	delete this->A_mtx;
-	delete this->M_mtx;
+	// delete this->A_mtx;
 }
