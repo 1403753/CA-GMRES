@@ -6,10 +6,15 @@
 #include "SparseUtils.hpp"
 
 class GMRES_ca : public IKSPType {
-	IPCType *prec;
+	IPCType                          *prec;
+	size_t										       s = 5;
+	size_t										       t = 12;	
 public:
 	GMRES_ca();
+	GMRES_ca(size_t s, size_t t);
 	virtual ~GMRES_ca();
+	// size_t getS() {return this->s;};
+	// size_t getT() {return this->t;};
 	bool is_conj_pair(complex_t a, complex_t b);
 	sparse_status_t modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals);																	
 	sparse_status_t tsqr(double *V, double *Q, double *R_, const size_t m, const size_t n, const size_t st);

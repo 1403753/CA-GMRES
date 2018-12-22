@@ -298,54 +298,54 @@ sparse_status_t ILU0_ca::setUp() {
 	return SPARSE_STATUS_SUCCESS;
 }
 
-sparse_status_t ILU0_ca::destroy_MtxArrs() {
+// sparse_status_t ILU0_ca::destroy_MtxArrs() {
 
-	#pragma omp parallel for
-	for (size_t i = 0; i < this->nParts; ++i) {
-		for (size_t j = 0; j < ksp->getS(); ++j) {
-			ksp->destroyMtx(&this->A_mtxArr.at(i).at(j));
-			ksp->destroyMtx(&this->L_mtxArr.at(i).at(j));
-			ksp->destroyMtx(&this->U_mtxArr.at(i).at(j));
-		}
-	}
+	// #pragma omp parallel for
+	// for (size_t i = 0; i < this->nParts; ++i) {
+		// for (size_t j = 0; j < ksp->getS(); ++j) {
+			// ksp->destroyMtx(&this->A_mtxArr.at(i).at(j));
+			// ksp->destroyMtx(&this->L_mtxArr.at(i).at(j));
+			// ksp->destroyMtx(&this->U_mtxArr.at(i).at(j));
+		// }
+	// }
 	
-	return SPARSE_STATUS_SUCCESS;
-}
+	// return SPARSE_STATUS_SUCCESS;
+// }
 
-sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
-															std::vector<size_t>& alpha, 
-															std::vector<std::vector<size_t>>& betaArr,
-															std::vector<std::vector<size_t>>& gammaArr,
-															std::vector<std::vector<size_t>>& deltaArr)
-{
-	size_t s = ksp->getS();
-	size_t n = A_mtx->n;
-	deltaArr.at(0) = alpha;
+// sparse_status_t ILU0_ca::find(Mtx_CSR *A_mtx,
+															// std::vector<size_t>& alpha, 
+															// std::vector<std::vector<size_t>>& betaArr,
+															// std::vector<std::vector<size_t>>& gammaArr,
+															// std::vector<std::vector<size_t>>& deltaArr)
+// {
+	// size_t s = ksp->getS();
+	// size_t n = A_mtx->n;
+	// deltaArr.at(0) = alpha;
 	
-	for (size_t i = 0; i < s; ++i) {
-		neighborhood(A_mtx, // CSR MATRIX
-								 deltaArr.at(i), // input set
-								 betaArr.at(i), // result vertices for some level of order
-								 n, // the reachabilty order
-								 GRAPH_UPPER
-		);
+	// for (size_t i = 0; i < s; ++i) {
+		// neighborhood(A_mtx, // CSR MATRIX
+								 // deltaArr.at(i), // input set
+								 // betaArr.at(i), // result vertices for some level of order
+								 // n, // the reachabilty order
+								 // GRAPH_UPPER
+		// );
 		
-		neighborhood(A_mtx, // CSR MATRIX
-								 betaArr.at(i), // input set
-								 gammaArr.at(i), // result vertices for some level of order
-								 n, // the reachabilty order
-								 GRAPH_LOWER
-		);
+		// neighborhood(A_mtx, // CSR MATRIX
+								 // betaArr.at(i), // input set
+								 // gammaArr.at(i), // result vertices for some level of order
+								 // n, // the reachabilty order
+								 // GRAPH_LOWER
+		// );
 		
-		neighborhood(A_mtx, // CSR MATRIX
-								 gammaArr.at(i), // input set
-								 deltaArr.at(i), // result vertices for some level of order
-								 1, // the reachabilty order
-								 GRAPH_COMPLETE
-		);
+		// neighborhood(A_mtx, // CSR MATRIX
+								 // gammaArr.at(i), // input set
+								 // deltaArr.at(i), // result vertices for some level of order
+								 // 1, // the reachabilty order
+								 // GRAPH_COMPLETE
+		// );
 				
-		if (i < s - 1)
-			deltaArr.at(i+1) = deltaArr.at(i);
-	}
-	return SPARSE_STATUS_SUCCESS;	
-}
+		// if (i < s - 1)
+			// deltaArr.at(i+1) = deltaArr.at(i);
+	// }
+	// return SPARSE_STATUS_SUCCESS;	
+// }

@@ -47,7 +47,8 @@ void KSP::destroyMtx(Mtx_CSR *Mtx) {
 	}
 }
 
-void KSP::setOperator(sparse_matrix_t *A_mkl) {
+sparse_status_t KSP::setOperator(sparse_matrix_t *A_mkl) {
+	sparse_status_t stat;
 	sparse_index_base_t indexing;
 	size_t n, m;
 	size_t *rows_start;
@@ -56,7 +57,7 @@ void KSP::setOperator(sparse_matrix_t *A_mkl) {
 	double *values;
 	
 	this->A_mkl = A_mkl;
-	mkl_sparse_d_export_csr(*this->A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
+	stat = mkl_sparse_d_export_csr(*this->A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
 
 	this->A_ptr->n = n;
 	this->A_ptr->row_ptr = rows_start;
@@ -64,55 +65,46 @@ void KSP::setOperator(sparse_matrix_t *A_mkl) {
 	this->A_ptr->col_indx = col_indx;
 	this->A_ptr->values = values;
 	
+	return stat;
 }
 
-void KSP::setPC(sparse_matrix_t *M_mkl) {
-
+sparse_status_t KSP::setPC(sparse_matrix_t *M_mkl) {
 	this->M_mkl = *M_mkl;
-
-	// sparse_index_base_t indexing;
-	// size_t n, m;
-	// size_t *rows_start;
-	// size_t *rows_end;
-	// size_t *col_indx;
-	// double *values;
-	
-	// mkl_sparse_d_export_csr(this->M_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values);
-	
-	// this->M_mtx->n = n;
-	// this->M_mtx->row_ptr = rows_start;
-	// this->M_mtx->nz = rows_start[n];	
-	// this->M_mtx->col_indx = col_indx;
-	// this->M_mtx->values = values;
+	return SPARSE_STATUS_SUCCESS;
 }
 
-void KSP::setOptions(size_t s, size_t t, double rTol, double aTol, double dTol, size_t maxit) {
-	this->s = s;
-	this->t = t;
+sparse_status_t KSP::setOptions(double rTol, double aTol, double dTol, size_t maxit) {
 	this->rTol = rTol;
 	this->aTol = aTol;
 	this->dTol = dTol;   
 	this->maxit	= maxit;  
+	return SPARSE_STATUS_SUCCESS;
 }
 
-void KSP::setKSPType(IKSPType *kspType) {
+sparse_status_t KSP::setKSPType(IKSPType *kspType) {
 	this->kspType = kspType;
 	this->kspType->ksp = this;
+	return SPARSE_STATUS_SUCCESS;
 }
 
-void KSP::solve(double *b, double *x) {
+sparse_status_t KSP::solve(double *b, double *x) {
+	sparse_status_t stat = SPARSE_STATUS_EXECUTION_FAILED;
 	if (kspType)
-		this->kspType->solve(b, x);
+		stat = this->kspType->solve(b, x);
+	return stat;
 }
 
-void KSP::setPCType(IPCType *pcType) {
+sparse_status_t KSP::setPCType(IPCType *pcType) {
 	this->pcType = pcType;
-	this->pcType->ksp = this;	
+	this->pcType->ksp = this;
+	return SPARSE_STATUS_SUCCESS;
 }
 
-void KSP::setUp() {
+sparse_status_t KSP::setUp() {
+	sparse_status_t stat = SPARSE_STATUS_EXECUTION_FAILED;
 	if (pcType)
-		this->pcType->setUp();
+		stat = this->pcType->setUp();
+	return stat;
 }
 
 KSP::~KSP() {

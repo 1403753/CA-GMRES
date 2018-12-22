@@ -10,8 +10,8 @@
 #include <vector>
 #include <algorithm>
 #include <complex>
-#include <metis.h>
-#include <omp.h>
+// #include <metis.h>
+// #include <omp.h>
 
 #include "mkl.h"
 #include "IKSPType.hpp"
@@ -33,47 +33,39 @@ struct Mtx_CSR{
 	virtual ~Mtx_CSR() { }
 };
 
-typedef std::complex<double> complex_t; 
-typedef std::pair<size_t, complex_t> ic_pair_t;
+typedef std::complex<double>          complex_t; 
+typedef std::pair<size_t, complex_t>  ic_pair_t;
 
 class KSP {
-	double                    rTol = 1e-10;
-	double                    aTol = 1e-50;
-	double                    dTol = 1e+4;
-	size_t                    maxit = 10000;
-	size_t										s = 5;
-	size_t										t = 12;
-	sparse_matrix_t						*A_mkl;
-	sparse_matrix_t						M_mkl;
-	// Mtx_CSR										*A_mtx;
-	const std::shared_ptr<Mtx_CSR> A_ptr;
-	const std::shared_ptr<Mtx_CSR> M_ptr;
-	IKSPType 								  *kspType;
-	IPCType										*pcType;
+	double                           rTol = 1e-10;
+	double                           aTol = 1e-50;
+	double                           dTol = 1e+4;
+	size_t                           maxit = 1000;
+	sparse_matrix_t						       *A_mkl;
+	sparse_matrix_t						       M_mkl;
+	const std::shared_ptr<Mtx_CSR>   A_ptr;
+	const std::shared_ptr<Mtx_CSR>   M_ptr;
+	IKSPType 								         *kspType;
+	IPCType										       *pcType;
 public:
 	KSP();
 	virtual ~KSP();
 
-	void setOptions(size_t s, size_t t, double rTol, double aTol, double dTol, size_t maxit);
-	void setOperator(sparse_matrix_t *A_mkl);
-	void setPC(sparse_matrix_t *M_mkl);
-	void setPCType(IPCType *pcType);
-	void setKSPType(IKSPType *kspType);
-	void solve(double *b, double *x);
-	void setUp();
+	sparse_status_t setOptions(double rTol, double aTol, double dTol, size_t maxit);
+	sparse_status_t setOperator(sparse_matrix_t *A_mkl);
+	sparse_status_t setPC(sparse_matrix_t *M_mkl);
+	sparse_status_t setPCType(IPCType *pcType);
+	sparse_status_t setKSPType(IKSPType *kspType);
+	sparse_status_t solve(double *b, double *x);
+	sparse_status_t setUp();
 
 	size_t getMaxit() {return this->maxit;};
-	size_t getS() {return this->s;};
-	size_t getT() {return this->t;};
 	double getRTol() {return this->rTol;};
 	sparse_matrix_t* getA_mkl() {return this->A_mkl;};
 	sparse_matrix_t* getM_mkl() {return &this->M_mkl;};
-	// Mtx_CSR* getA_mtx() {return this->A_mtx;};
 	const std::shared_ptr<Mtx_CSR> getA_ptr() {return this->A_ptr;};
 	const std::shared_ptr<Mtx_CSR> getM_ptr() {return this->M_ptr;};
 	IPCType* getIPCType() {return this->pcType;};
-	// void setA_mtx(Mtx_CSR *A_mtx) {this->A_mtx = A_mtx;};
-	// void setM_mtx(Mtx_CSR *M_mtx) {this->M_mtx = M_mtx;};
 	void print(Mtx_CSR *P);
 	void createMtx(Mtx_CSR *Mtx, size_t n, size_t nz);
 	void destroyMtx(Mtx_CSR *Mtx);

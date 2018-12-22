@@ -19,6 +19,10 @@ GMRES_ca::GMRES_ca() {
 
 }
 
+GMRES_ca::GMRES_ca(size_t s, size_t t) : s{s}, t{t} {
+
+}
+
 GMRES_ca::~GMRES_ca() {
 
 }
@@ -240,8 +244,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	sparse_matrix_t                            *A_mkl = ksp->getA_mkl();   // n x n matrix A
 	const std::shared_ptr<Mtx_CSR>             A_ptr = ksp->getA_ptr();    // n x n matrix A
 	size_t                                     n = A_ptr->n;               // dim(A)
-	const size_t                               s = ksp->getS();            // stepsize number of 'inner iterations'
-	const size_t                               t = ksp->getT();            // number of 'outer iterations' before restart
+	// const size_t                               s = ksp->getS();            // stepsize number of 'inner iterations'
+	// const size_t                               t = ksp->getT();            // number of 'outer iterations' before restart
 	const size_t                               m = s*t;                    // restart length
 	std::vector<std::pair<double, double>>     cs(m+1);                    // cs stores givens rotations for reduction of H	
 	struct matrix_descr                        descr;

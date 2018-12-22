@@ -31,17 +31,17 @@ int main() {
 	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 100;                    // maximum number of iterations to use
-	// sparse_status_t               stat;
+	sparse_status_t               stat;
 	sparse_matrix_t               A_mkl;                          // n x n matrix A
 	double                        *b;
 	double                        *x;
 	double                        *tx;
 	KSP						 							  ksp;							 						  // linear solver context	
 	ILU0_ca												ilu0;														// PCType
-	GMRES_ca											gmres;													// KSPType
 	MmtReader											mmtReader;
 	const size_t                  t = 10;                         // number of 'outer iterations' before restart
 	const size_t									s = 5;													// step-size ('inner iterations')
+	GMRES_ca											gmres(s, t);                    // KSPType
 	
 	sparse_index_base_t indexing;	
 	size_t n, m;
@@ -51,7 +51,7 @@ int main() {
 	double *values;
 	
 	// read matrix
-	mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
+	stat = mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/xenon2.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/bmw7st_1.mtx", &A_mkl);
@@ -65,7 +65,7 @@ int main() {
 	struct matrix_descr           descr;
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
-	mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // n is needed
+	stat = mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // n is needed
 	
 	b = (double *) mkl_malloc(n * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -87,13 +87,13 @@ int main() {
 	
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
 
-	ksp.setOperator(&A_mkl);
-	ksp.setKSPType(&gmres);
-	ksp.setPCType(&ilu0);
+	stat = ksp.setOperator(&A_mkl);
+	stat = ksp.setKSPType(&gmres);
+	stat = ksp.setPCType(&ilu0);
 
-	ksp.setOptions(s, t, rTol, aTol, dTol, maxit);
+	stat = ksp.setOptions(rTol, aTol, dTol, maxit);
 
-	ksp.setUp();
+	stat = ksp.setUp();
 	
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);	
@@ -114,12 +114,8 @@ int main() {
 		// std::cout << ".\n.\n.\n";
 	// for (size_t i = n - 10; i < n; ++i) // size_t can't be negative
 		// std::cout << std::scientific << x[i] << "\n";
-	
-	// std::cout << "solution x:" << std::endl;
-	// for (size_t i = 0; i < n; ++i)
-		// std::cout << std::scientific << x[i] << "\n";
 
-	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, tx);	
+	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, tx);	
 
 	for (size_t i = 0; i < n; ++i) {
 		x[i] = b[i] - tx[i];
@@ -135,12 +131,12 @@ int main() {
 	printf("%e\n",rRes);	
 	
 	
-	mkl_sparse_destroy(A_mkl);
+	stat = mkl_sparse_destroy(A_mkl);
 	mkl_free(x);
 	mkl_free(tx);
 	mkl_free(b);
 	mkl_free_buffers();
-	return 0;
+	return stat;
 }
 
 #endif
