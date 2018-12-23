@@ -533,7 +533,7 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 		});
 		
 		if (*max_zprod == (complex_t)0 ) {
-			throw std::invalid_argument("Product to maximize is zero; either there are multiple shifts, or the product underflowed");
+			std::cerr << "WARNING: Product to maximize is zero; either there are multiple shifts, or the product underflowed";
 		} else if (std::isinf((*max_zprod).real()) ||	std::isnan((*max_zprod).real()) )
 			throw std::invalid_argument("Product to maximize is Inf; must have overflowed");
 		
