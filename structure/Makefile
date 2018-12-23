@@ -24,8 +24,8 @@ main: $(OBJ)
 	$(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group \
 	-lgomp -lpthread -lm -ldl \
 	-lpapi \
-	-lgfortran \
-	-L$(LIB) -l:libmetis.a
+	-lgfortran
+	# -L$(LIB) -l:libmetis.a
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) $(INC) -c $< $(DFLAGS)

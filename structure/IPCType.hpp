@@ -8,18 +8,11 @@ class KSP;
 
 class IPCType {
 public:
-	size_t *perm;
-	size_t *iperm;
-
 	KSP *ksp;
 	virtual sparse_status_t mv(double *x, double *y, struct matrix_descr descr) = 0;
 	virtual sparse_status_t setUp() = 0;
 	virtual sparse_status_t precondition(double *x) = 0;
-	virtual ~IPCType() {
-		// mkl_free(perm);
-		// mkl_free(iperm);
-	}
+	virtual ~IPCType(){}
 };
-
 
 #endif

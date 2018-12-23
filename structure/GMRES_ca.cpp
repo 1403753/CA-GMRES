@@ -7,14 +7,6 @@
 
 #include "GMRES_ca.hpp"
 
-sparse_status_t permute_V(const size_t n, const size_t *perm, double *x, double *dest) {
-	
-	for (size_t i = 0; i < n; ++i)
-		dest[perm[i]] = x[i];
-	
-	return SPARSE_STATUS_SUCCESS;
-}
-
 GMRES_ca::GMRES_ca() {
 
 }
@@ -134,7 +126,7 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 {
 	sparse_status_t 			                  stat = SPARSE_STATUS_SUCCESS;
 	double                                  *w;
-	double                                  *H_s;          // is square with odd dimension to ensure at least one real value bc. we initially needed to pick 's' out of '2s' ritzvalues.
+	double                                  *H_s;
 	double                                  h_ij;
 	double                                  h_jp1j;
 	struct matrix_descr                     descr;
@@ -154,7 +146,6 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	char                                    job = 'E';     // eigenvalues only are required
 	const char                              compz = 'N';   // no Schur vectors are computed
 	double                                  *wr, *wi;      // real and imag part of ritz values
-	// double																  *scale;
 	size_t                                  i, j;          // index in for-loops
 	
 	w = (double *)mkl_malloc(n * sizeof(double), 64);if(w == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -190,21 +181,6 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 
 	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	wi = (double *)mkl_malloc(s*sizeof(double), 64);if(wi == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-
-	/////////////////////////////
-	//  balancing not needed!  //
-	/////////////////////////////
-
-	// scale = (double *)mkl_malloc((s + 1)*sizeof(double), 64);if(scale == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	// job = 'S'; // 'N' == neither scaled nor pivoted, 'S' == scaled, 'P' == pivoted, 'B' == both scaled and pivoted
-// LAPACKE_dgebal( int matrix_layout, char job, lapack_int n, double* a, lapack_int lda, lapack_int* ilo, lapack_int* ihi, double* scale );
-	// LAPACKE_dgebal(LAPACK_ROW_MAJOR, job, s, H_s, s, &ilo, &ihi, scale);	
-	// job = 'E'; // eigenvalues only are required
-	// mkl_free(scale);
-
-	////////////////////////
-	//  end of balancing  //
-	////////////////////////
 	
 //LAPACKE_dhseqr(int matrix_layout, char job, char compz, lapack_int n, lapack_int ilo, lapack_int ihi,
 							// double *h, lapack_int ldh, double *wr, double *wi, double *z, lapack_int ldz);
@@ -244,13 +220,14 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	sparse_matrix_t                            *A_mkl = ksp->getA_mkl();   // n x n matrix A
 	const std::shared_ptr<Mtx_CSR>             A_ptr = ksp->getA_ptr();    // n x n matrix A
 	size_t                                     n = A_ptr->n;               // dim(A)
-	// const size_t                               s = ksp->getS();            // stepsize number of 'inner iterations'
-	// const size_t                               t = ksp->getT();            // number of 'outer iterations' before restart
 	const size_t                               m = s*t;                    // restart length
 	std::vector<std::pair<double, double>>     cs(m+1);                    // cs stores givens rotations for reduction of H	
 	struct matrix_descr                        descr;
 	double                                     *x;
 	double                                     rRes;
+	size_t                                     iter = 0;                   // number of total iterations
+	size_t                                     k;                          // index for outer iterations
+	double                                     beta, r_0nrm;               // r-norms
 	
 	V = (double *)mkl_malloc(n*s * sizeof(double), 64);if(V == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	Q = (double *)mkl_calloc(n*(m + 1), sizeof(double), 64);if(Q == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -270,9 +247,6 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
 	mkl_sparse_optimize(*A_mkl);	
 	
-	size_t iter = 0; // number of total iterations
-	size_t k;
-	double beta, r_0nrm;
 	
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
 
@@ -280,9 +254,6 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		r[i] = b[i] - r[i];
 	}
 
-	// permute_V(n, pc->perm, r, x);
-	// pc->precondition(x);
-	// permute_V(n, pc->iperm, x, r);	
 	pc->precondition(r);
 	
 	r_0nrm = cblas_dnrm2(n, r, 1);
@@ -292,7 +263,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		k = 0;
 		
 		for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
-			std::cout << x_0[i] << std::scientific << std::endl;
+			std::cout << std::scientific << x_0[i] << std::endl;
 		
 		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);	
 
@@ -300,9 +271,6 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 			r[i] = b[i] - r[i];
 		}
 
-		// permute_V(n, pc->perm, r, x);
-		// pc->precondition(x);
-		// permute_V(n, pc->iperm, x, r);
 		pc->precondition(r);
 
 		beta = cblas_dnrm2(n, r, 1);
@@ -318,13 +286,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 		cblas_daxpy(n, beta, r, 1, Q, 1);
 
-		gmres_init(H, H_reduced, Q, theta_vals, s, m);
+		gmres_init(H, H_reduced, Q, theta_vals, s, m); // after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
-		// after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
-
-		reduce_H(H_reduced, s, m, 0, zeta, cs);	
-	
-		// after H_reduced is reduced, zeta contains s+1 values
+		reduce_H(H_reduced, s, m, 0, zeta, cs);	// after H_reduced is reduced, zeta contains s+1 values
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
 
@@ -338,8 +302,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 			++k;
 		}
 
-		// outer iterations before restart
 		if (restart) {
+			// outer iterations before restart
 			for (k = 1; k < t; ++k) {
 
 				// compute A_mkl*q_(s+1) and store result in V[:,0]
@@ -351,7 +315,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				//  MPK  //
 				///////////
 
-				// A*x - lambda*x
+				// v_{i + 1} := A*v_i - lambda*v_i
 				pc->mv(&Q[n*(s*k)], V, descr);
 
 				cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
@@ -384,15 +348,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	
 				update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
 				reduce_H(H_reduced, s, m, k, zeta, cs);
-				
-				// std::cout << "s: " << s << ", k: " << k << std::endl;
-				
-				// for (size_t i = 0; i < m + 1; ++i) {
-					// std::cout << zeta[i] << std::endl;
-				// }
-				
+
 				rRes = std::abs(zeta[s*(k + 1)]) / r_0nrm;
-				
+
 				std::cout << "\n============= rel. res.: ";
 				printf("%e, %e\n",rRes, ksp->getRTol() );
 
@@ -432,31 +390,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 	} while(restart);
 	
-		std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << std::endl;
-		// std::cout << "\n\nt: " << t << ", k: " << k << std::endl;
-		// std::cout << "\n\n============= H reduced:\n";
-		// for (size_t i = 0; i < m+1; ++i) {
-			// for (size_t j = 0; j < m; ++j) {
-				// printf("%.2f ", H_reduced[(m+1)*j + i]);
-			// }
-			// std::cout << std::endl;
-		// }
-		// std::cout << std::endl;	
-		
-		// std::cout << "\n\n============= Q:\n";
-		// for (size_t i = 0; i < 15; ++i) {
-			// for (size_t j = 0; j < m + 1; ++j) {
-				// printf("%.2f ", Q[15*j + i]);
-			// }
-			// std::cout << std::endl;
-		// }
-		// std::cout << std::endl;	
-		
-		// std::cout << "\n\n============= zeta:\n";
-		// for(size_t o = 0; o < m + 1; ++o)
-			// std::cout << zeta[o] << std::endl;	
-	
-
+	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << std::endl;
 
 	mkl_free(x);
 	mkl_free(V);
@@ -478,7 +412,6 @@ bool GMRES_ca::is_conj_pair(complex_t a, complex_t b) {
 sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals) {
 	std::vector<ic_pair_t> ritz_vals;
 
-//	ritz_vals.reserve(sizeof(wr) / sizeof(wr[0]));
 	ritz_vals.reserve(s);
 	
 	for(size_t i = 0; i < s; ++i)
@@ -509,10 +442,7 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 	}
 
 	ritz_vals.shrink_to_fit();
-	
-	// for (auto d:ritz_vals)
-		// std::cout << d.second << "; " << d.first << std::endl;	
-	
+		
 	std::vector<size_t> k_index;
 
 	theta_vals.reserve(ritz_vals.size());
@@ -647,16 +577,12 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 		}
 	} //end while
 	
-	// std::cout << std:: endl << "ritz_vals :" << std:: endl;
 	for (auto &p: ritz_vals) {
 		p.second *= Capacity;
-		// std::cout << p.second << "   \tmult: " << p.first << std::endl;
 	}
 	
-	// std::cout << std:: endl << "theta_vals (FINAL):" << std:: endl;
 	for (auto &p: theta_vals) {
 		p.second *= Capacity;
-		// std::cout << p.second << "   \toutlist: " << p.first << std:: endl;
 	}
 	
 	return SPARSE_STATUS_SUCCESS;

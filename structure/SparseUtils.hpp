@@ -26,9 +26,9 @@ sparse_status_t permute_Mtx(const Mtx_CSR *A, Mtx_CSR *dest, const size_t *pinv,
 
 sparse_status_t at_plus_a(
 		const Mtx_CSR *A,
-	  size_t *bnz,         // out - on exit, returns the actual number of nonzeros in matrix A'*A.
+	  size_t *bnz,          // out - on exit, returns the actual number of nonzeros in matrix A'*A.
 	  size_t **b_row_ptr,   // out - size n+1
-	  size_t **b_col_indx    // out - size *bnz
+	  size_t **b_col_indx   // out - size *bnz
 );
 
 #endif

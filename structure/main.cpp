@@ -1,13 +1,12 @@
 
-
-/**************/
-/*  END TODO  */
-/**************/
-
-/*********/
-/* notes */
-/*********/
-
+////////////
+//  TODO  //
+////////////
+/*
+	add non preconditioner-class
+	add residual history
+	add command promt parameter reader
+*/
 
 #ifndef MAIN_HPP
 
@@ -23,11 +22,9 @@ int main() {
 	
 	float                         rtime, ptime, mflops;
 	long long                     flpops;	
-	
-	std::cout.setf(std::ios_base::fixed);
-	std::cout.precision(5);
 
-	double                 		   	rTol = 1e-11;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b || == || r_{k+1} || / || r_0 ||
+	double                 		   	rTol = 1e-11;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
+                                                                // == || r_{k+1} || / || r_0 ||
 	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 100;                    // maximum number of iterations to use
@@ -43,12 +40,13 @@ int main() {
 	const size_t									s = 5;													// step-size ('inner iterations')
 	GMRES_ca											gmres(s, t);                    // KSPType
 	
-	sparse_index_base_t indexing;	
-	size_t n, m;
-	size_t *rows_start;
-	size_t *rows_end;
-	size_t *col_indx;
-	double *values;
+	sparse_index_base_t           indexing;	
+	size_t                        n, m;
+	size_t                        *rows_start;
+	size_t                        *rows_end;
+	size_t                        *col_indx;
+	double                        *values;
+	struct matrix_descr           descr;
 	
 	// read matrix
 	stat = mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
@@ -59,10 +57,9 @@ int main() {
 	// mmtReader.read_matrix_from_file("../matrix_market/dwb512.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/1138_bus.mtx", &A_mkl);
 	// mmtReader.read_matrix_from_file("../matrix_market/nasa4704.mtx", &A_mkl);
-	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl); // too small, not working properly
-	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl); // too small, not working properly
+	// mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl); // too small, to work properly
+	// mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl); // too small, to work properly
 	
-	struct matrix_descr           descr;
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
 	stat = mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // n is needed
@@ -78,13 +75,7 @@ int main() {
 
 	// for (size_t i = 0; i < n; ++i)
 		// x[i] = 1;
-		// x[i] = 0.1*(i%3 + 1);
-		
-	// std::cout << "true x:\n";
-	
-	// for(size_t i = 0; i < (n < 10 ? n : 10); ++i)
-		// std::cout << tx[i] << std::endl;
-	
+
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
 
 	stat = ksp.setOperator(&A_mkl);
@@ -107,13 +98,13 @@ int main() {
 
 	std::cout << "runtime ksp-solve: " << std::scientific << rtime << " seconds." << std::endl;
 
-	// std::cout << "solution x:" << std::endl;
-	// for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
-		// std::cout << std::scientific << x[i] << "\n";
-	// if (n > 10)
-		// std::cout << ".\n.\n.\n";
-	// for (size_t i = n - 10; i < n; ++i) // size_t can't be negative
-		// std::cout << std::scientific << x[i] << "\n";
+	std::cout << "solution x:" << std::endl;
+	for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
+		std::cout << std::scientific << x[i] << "\n";
+	if (n > 10)
+		std::cout << ".\n.\n.\n";
+	for (size_t i = n - 10; i < n; ++i) // size_t can't be negative
+		std::cout << std::scientific << x[i] << "\n";
 
 	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, tx);	
 

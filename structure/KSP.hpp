@@ -10,8 +10,6 @@
 #include <vector>
 #include <algorithm>
 #include <complex>
-// #include <metis.h>
-// #include <omp.h>
 
 #include "mkl.h"
 #include "IKSPType.hpp"
@@ -29,8 +27,8 @@ struct Mtx_CSR{
 	size_t *row_ptr;
 	size_t *col_indx;
 	double *values;
-	Mtx_CSR() : n{0}, nz{0}, row_ptr{nullptr}, col_indx{nullptr}, values{nullptr} {	}
-	virtual ~Mtx_CSR() { }
+	Mtx_CSR() : n{0}, nz{0}, row_ptr{nullptr}, col_indx{nullptr}, values{nullptr}{}
+	virtual ~Mtx_CSR(){}
 };
 
 typedef std::complex<double>          complex_t; 

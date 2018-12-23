@@ -18,8 +18,8 @@ class MmtReader {
 	sparse_matrix_t A;
 public:
 	MmtReader();
-	sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A_mkl);
 	virtual ~MmtReader();
+	sparse_status_t read_matrix_from_file(std::string fname, sparse_matrix_t *A_mkl);
 };
 
 #endif // MMT_READER_HPP
