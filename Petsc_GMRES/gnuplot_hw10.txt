@@ -1,0 +1,62 @@
+set terminal pdfcairo noenhanced
+set output "gnuplot_runtimes.pdf"
+set grid ytics lt 0
+set tics font "Latin Modern Roman, 10"
+set key left top
+set xlabel "procedure"
+set ylabel "runtime"
+set boxwidth 0.5
+set xrange [0:17]
+set style fill solid
+set key font "Latin Modern Roman, 10"
+set logscale y
+set title "runtimes" font "DejaVu Serif, 10"
+plot "__out.txt" using 1:2 title "runtimes" with boxes
+
+set output "gnuplot_res_norms.pdf"
+set xlabel "procedure (label == #iterations)"
+set ylabel "rnorm"
+set xtics rotate by 45 right
+set title "residual norms" font "DejaVu Serif, 10"
+plot "__out.txt" using 1:4:xtic(3) title "rnorms" with boxes
+
+unset xtics
+set xtics
+unset xrange
+set xlabel "#iterations"
+set ylabel "rnorm"
+set title "residual history" font "DejaVu Serif, 10"
+set size 1, 1
+
+unset logscale y
+set output "gnuplot_05out.pdf"
+plot "05out.txt" title "nasa4704, CG, no PC" with lines ls 4 lt rgb "magenta" dashtype 1
+set output "gnuplot_06out.pdf"
+plot "06out.txt" title "bcsstk18, CG, no PC" with lines ls 4 lt rgb "red" dashtype 1
+
+set logscale y
+set output "gnuplot_07out.pdf"
+plot "07out.txt" title "gemat11, BiCGStab, no PC" with lines ls 4 lt rgb "blue" dashtype 1
+set output "gnuplot_08out.pdf"
+plot "08out.txt" title "goodwin, BiCGStab, no PC" with lines ls 4 lt rgb "green" dashtype 1
+
+unset logscale y
+set output "gnuplot_09out.pdf"
+plot "09out.txt" title "nasa4704, CG, Jacobi" with lines ls 4 lt rgb "yellow" dashtype 1
+set output "gnuplot_10out.pdf"
+plot "10out.txt" title "bcsstk18, CG, ICholesky" with lines ls 4 lt rgb "purple" dashtype 1
+set output "gnuplot_11out.pdf"
+plot "11out.txt" title "nasa4704, CG, ICholesky" with lines ls 4 lt rgb "cyan" dashtype 1
+set output "gnuplot_12out.pdf"
+plot "12out.txt" title "bcsstk18, CG, Jacobi" with lines ls 4 lt rgb "black" dashtype 1
+
+set logscale y
+set output "gnuplot_13out.pdf"
+plot "13out.txt" title "gemat11, BiCGStab, Jacobi" with lines ls 4 lt rgb "orange" dashtype 1
+set output "gnuplot_14out.pdf"
+plot "14out.txt" title "goodwin, BiCGStab, ILU" with lines ls 4 lt rgb "grey" dashtype 1
+# plot 15 is inf!
+#set output "gnuplot_15out.pdf"
+#plot "15out.txt" title "gemat11, BiCGStab, ILU" with lines ls 4 lt rgb "beige" dashtype 1
+set output "gnuplot_16out.pdf"
+plot "16out.txt" title "goodwin, BiCGStab, Jacobi" with lines ls 4 lt rgb "coral" dashtype 1

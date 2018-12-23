@@ -1,0 +1,28 @@
+set terminal pdfcairo noenhanced
+set grid ytics lt 0
+set tics font "Latin Modern Roman, 10"
+set key right top
+set xlabel "#iterations"
+set ylabel "rnorm"
+set key font "Latin Modern Roman, 10"
+set logscale y
+set title "'1138_bus.mtx', BiCGStep method, residual history" font "DejaVu Serif, 10"
+
+set output "gnuplot_test.pdf"
+plot "03test.txt" title "no PC" with lines ls 4 lt rgb "blue" dashtype 1, \
+"04test.txt" title "with Jacobi PC" with lines ls 4 lt rgb "red" dashtype 1
+
+set output "gnuplot_test_runtimes.pdf"
+set boxwidth 0.5
+
+set style fill solid
+set xlabel "procedure"
+set ylabel "runtime"
+plot "__test.txt" using 1:2 title "runtimes" with boxes
+
+set output "gnuplot_test_res_norms.pdf"
+set xlabel "procedure (label == #iterations)"
+set ylabel "rnorm"
+set xtics rotate by 45 right
+set title "residual norms" font "DejaVu Serif, 10"
+plot "__test.txt" using 1:4:xtic(3) title "rnorms" with boxes

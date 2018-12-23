@@ -1,0 +1,273 @@
+./main 01 __out.txt -mmt mmt/nasa4704.mtx -sym -random_exact_sol -ksp_type preonly -pc_type c                                                                                                holesky -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4704, n = 4704, nnz = 54730
+Maximum number of NNZ on a line : 1
+A_min: -78023928.478600
+A_max: 117980676.166490
+Finished matrix assembly.
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.58305e+10
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.58305e+10
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.58305e+10
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.58305e+10
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.58305e+10
+./main 02 __out.txt -mmt mmt/bcsstk18.mtx -sym -random_exact_sol -ksp_type preonly -pc_type c                                                                                                holesky -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 11948, n = 11948, nnz = 80519
+Maximum number of NNZ on a line : 1
+A_min: -13182695684.889999
+A_max: 31381916438.279999
+Finished matrix assembly.
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.80489e+13
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.80489e+13
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.80489e+13
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.80489e+13
+Linear solve converged due to CONVERGED_ITS iterations 1
+KSP final norm of residual 1.80489e+13
+./main 03 __out.txt -mmt mmt/gemat11.mtx -random_exact_sol -ksp_type preonly -pc_type lu -ksp                                                                                                _final_residual -ksp_converged_reason
+Matrix properties : m = 4929, n = 4929, nnz = 33185
+Maximum number of NNZ on a line : 1
+A_min: -216.139110
+A_max: 622.593300
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+./main 04 __out.txt -mmt mmt/goodwin.mtx -random_exact_sol -ksp_type preonly -pc_type lu -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 7320, n = 7320, nnz = 324784
+Maximum number of NNZ on a line : 36
+A_min: -5552.000000
+A_max: 9559.000000
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+./main 05 __out.txt -mmt mmt/nasa4704.mtx -sym -random_exact_sol -ksp_type cg -pc_type none -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4704, n = 4704, nnz = 54730
+Maximum number of NNZ on a line : 1
+A_min: -78023928.478600
+A_max: 117980676.166490
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 2.21347e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 2.21347e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 2.21347e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 2.21347e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 2.21347e+13
+./main 06 __out.txt -mmt mmt/bcsstk18.mtx -sym -random_exact_sol -ksp_type cg -pc_type none -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 11948, n = 11948, nnz = 80519
+Maximum number of NNZ on a line : 1
+A_min: -13182695684.889999
+A_max: 31381916438.279999
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 7.46083e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 7.46083e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 7.46083e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 7.46083e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 7.46083e+15
+./main 07 __out.txt -mmt mmt/gemat11.mtx -random_exact_sol -ksp_type bcgs -pc_type none -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4929, n = 4929, nnz = 33185
+Maximum number of NNZ on a line : 1
+A_min: -216.139110
+A_max: 622.593300
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.19166e+06
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.19166e+06
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.19166e+06
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.19166e+06
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.19166e+06
+a01403753@harris:~/exercises/hw10_1$ ./main 08 __out.txt -mmt mmt/goodwin.mtx -random_exact_sol -ksp_type bcgs -pc_type none -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 7320, n = 7320, nnz = 324784
+Maximum number of NNZ on a line : 36
+A_min: -5552.000000
+A_max: 9559.000000
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_DTOL iterations 98
+KSP final norm of residual 4.32816e+09
+Linear solve did not converge due to DIVERGED_DTOL iterations 98
+KSP final norm of residual 4.32816e+09
+Linear solve did not converge due to DIVERGED_DTOL iterations 98
+KSP final norm of residual 4.32816e+09
+Linear solve did not converge due to DIVERGED_DTOL iterations 98
+KSP final norm of residual 4.32816e+09
+Linear solve did not converge due to DIVERGED_DTOL iterations 98
+KSP final norm of residual 4.32816e+09
+./main 09 __out.txt -mmt mmt/nasa4704.mtx -sym -random_exact_sol -ksp_type cg -pc_type jacobi -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4704, n = 4704, nnz = 54730
+Maximum number of NNZ on a line : 1
+A_min: -78023928.478600
+A_max: 117980676.166490
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.63807e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.63807e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.63807e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.63807e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.63807e+13
+./main 10 __out.txt -mmt mmt/bcsstk18.mtx -sym -random_exact_sol -ksp_type cg -pc_type icc -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 11948, n = 11948, nnz = 80519
+Maximum number of NNZ on a line : 1
+A_min: -13182695684.889999
+A_max: 31381916438.279999
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.08819e+16
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.08819e+16
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.08819e+16
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.08819e+16
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 1.08819e+16
+./main 11 __out.txt -mmt mmt/nasa4704.mtx -sym -random_exact_sol -ksp_type cg -pc_type icc -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4704, n = 4704, nnz = 54730
+Maximum number of NNZ on a line : 1
+A_min: -78023928.478600
+A_max: 117980676.166490
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.22838e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.22838e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.22838e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.22838e+13
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 3.22838e+13
+./main 12 __out.txt -mmt mmt/bcsstk18.mtx -sym -random_exact_sol -ksp_type cg -pc_type jacobi -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 11948, n = 11948, nnz = 80519
+Maximum number of NNZ on a line : 1
+A_min: -13182695684.889999
+A_max: 31381916438.279999
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.26481e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.26481e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.26481e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.26481e+15
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.26481e+15
+./main 13 __out.txt -mmt mmt/gemat11.mtx -random_exact_sol -ksp_type bcgs -pc_type jacobi -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4929, n = 4929, nnz = 33185
+Maximum number of NNZ on a line : 1
+A_min: -216.139110
+A_max: 622.593300
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 500833.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 500833.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 500833.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 500833.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 500833.
+./main 14 __out.txt -mmt mmt/goodwin.mtx -random_exact_sol -ksp_type bcgs -pc_type ilu -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 7320, n = 7320, nnz = 324784
+Maximum number of NNZ on a line : 36
+A_min: -5552.000000
+A_max: 9559.000000
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.40058e+10
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.40058e+10
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.40058e+10
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.40058e+10
+Linear solve did not converge due to DIVERGED_ITS iterations 10000
+KSP final norm of residual 4.40058e+10
+./main 15 __out.txt -mmt mmt/gemat11.mtx -random_exact_sol -ksp_type bcgs -pc_type ilu -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 4929, n = 4929, nnz = 33185
+Maximum number of NNZ on a line : 1
+A_min: -216.139110
+A_max: 622.593300
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+Linear solve did not converge due to DIVERGED_PCSETUP_FAILED iterations 0
+               PCSETUP_FAILED due to FACTOR_NUMERIC_ZEROPIVOT
+KSP final norm of residual -nan.
+a01403753@harris:~/exercises/hw10_1$ ./main 16 __out.txt -mmt mmt/goodwin.mtx -random_exact_sol -ksp_type bcgs -pc_type jacobi -ksp_final_residual -ksp_converged_reason
+Matrix properties : m = 7320, n = 7320, nnz = 324784
+Maximum number of NNZ on a line : 36
+A_min: -5552.000000
+A_max: 9559.000000
+Finished matrix assembly.
+Linear solve did not converge due to DIVERGED_DTOL iterations 147
+KSP final norm of residual 5.82378e+12
+Linear solve did not converge due to DIVERGED_DTOL iterations 147
+KSP final norm of residual 5.82378e+12
+Linear solve did not converge due to DIVERGED_DTOL iterations 147
+KSP final norm of residual 5.82378e+12
+Linear solve did not converge due to DIVERGED_DTOL iterations 147
+KSP final norm of residual 5.82378e+12
+Linear solve did not converge due to DIVERGED_DTOL iterations 147
+KSP final norm of residual 5.82378e+12
+a01403753@harris:~/exercises/hw10_1$ gnuplot gnuplot_hw10.txt
+a01403753@harris:~/exercises/hw10_1$
