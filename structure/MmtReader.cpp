@@ -67,9 +67,9 @@ sparse_status_t MmtReader::read_matrix_from_file(std::string fname, sparse_matri
 		}
 
 	}
-		
+
 	file.close();
-	
+
 	stat = mkl_sparse_d_create_coo(&B, SPARSE_INDEX_BASE_ZERO, n, n, nz, &row_indx[0], &col_indx[0], &values[0]);
 	mkl_sparse_order(B);
 	stat = mkl_sparse_convert_csr(B, SPARSE_OPERATION_NON_TRANSPOSE, A_mkl);

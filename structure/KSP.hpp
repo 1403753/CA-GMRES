@@ -59,6 +59,7 @@ public:
 
 	size_t getMaxit() {return this->maxit;};
 	double getRTol() {return this->rTol;};
+	double getDTol() {return this->dTol;};
 	sparse_matrix_t* getA_mkl() {return this->A_mkl;};
 	sparse_matrix_t* getM_mkl() {return &this->M_mkl;};
 	const std::shared_ptr<Mtx_CSR> getA_ptr() {return this->A_ptr;};

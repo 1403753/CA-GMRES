@@ -2,15 +2,18 @@
 #define GMRES_CA_HPP
 
 #include "IKSPType.hpp"
-#include "ILU0_ca.hpp"
+#include "PCILU0_ca.hpp"
 #include "SparseUtils.hpp"
+
+enum Basis {MONOMIAL, NEWTON};
 
 class GMRES_ca : public IKSPType {
 	size_t										       s = 5;
-	size_t										       t = 12;	
+	size_t										       t = 12;
+	Basis                            basis = NEWTON;
 public:
 	GMRES_ca();
-	GMRES_ca(size_t s, size_t t);
+	GMRES_ca(size_t s, size_t t, Basis basis);
 	virtual ~GMRES_ca();
 	sparse_status_t solve(double *x, double *b);
 private:

@@ -11,7 +11,7 @@ GMRES_ca::GMRES_ca() {
 
 }
 
-GMRES_ca::GMRES_ca(size_t s, size_t t) : s{s}, t{t} {
+GMRES_ca::GMRES_ca(size_t s, size_t t, Basis basis) : s{s}, t{t}, basis{basis} {
 
 }
 
@@ -189,8 +189,16 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	// std::cout << std::endl;
 	// for(size_t o = 0; o < s; ++o)
 		// printf("%.10f,\t%.10f\n", wr[o], wi[o]);	
-
-	modified_leya_ordering(s, wr, wi, theta_vals);
+	
+	if (basis == NEWTON) {
+		modified_leya_ordering(s, wr, wi, theta_vals);
+	} else if (basis == MONOMIAL) {
+		theta_vals.reserve(s);
+		for (size_t i = 0; i < s; ++i) {
+			theta_vals.push_back(ic_pair_t(0, 1));
+		}
+	}
+	
 
 	mkl_free(w);
 	mkl_free(wr);
@@ -244,10 +252,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 	
-	mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
-	mkl_sparse_optimize(*A_mkl);	
-	
-	
+	// mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
+	// mkl_sparse_optimize(*A_mkl);	
+
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
 
 	for (size_t i = 0; i < n; ++i) {
@@ -262,8 +269,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 		k = 0;
 		
-		for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
-			std::cout << std::scientific << x_0[i] << std::endl;
+		// for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
+			// std::cout << std::scientific << x_0[i] << std::endl;
 		
 		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);	
 
@@ -276,11 +283,6 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		beta = cblas_dnrm2(n, r, 1);
 
 		zeta[0] = beta;
-
-		rRes = std::abs(zeta[0]) / r_0nrm;
-
-		std::cout << "\n============= initial rel. res.: ";
-		printf("%e, %e\n",rRes, ksp->getRTol() );			
 		
 		beta = 1 / beta;
 		
@@ -292,12 +294,13 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
 
-		std::cout << "\n============= rel. res.: ";
-		printf("%e, %e\n",rRes, ksp->getRTol() );		
-
+		// std::cout << "\n============= rel. res.: ";
+		// printf("%e, %e\n",rRes, ksp->getRTol() );		
+		// std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;
+		
 		iter += s;
 
-		if (rRes < ksp->getRTol() || iter >= ksp->getMaxit()) {
+		if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
 			restart = false;
 			++k;
 		}
@@ -308,8 +311,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 				// compute A_mkl*q_(s+1) and store result in V[:,0]
 
-				mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
-				mkl_sparse_optimize(*A_mkl);				
+				// mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
+				// mkl_sparse_optimize(*A_mkl);				
 
 				///////////
 				//  MPK  //
@@ -351,12 +354,13 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 				rRes = std::abs(zeta[s*(k + 1)]) / r_0nrm;
 
-				std::cout << "\n============= rel. res.: ";
-				printf("%e, %e\n",rRes, ksp->getRTol() );
+				// std::cout << "\n============= rel. res.: ";
+				// printf("%e, %e\n",rRes, ksp->getRTol() );
+				// std::cout << "r_knrm: " << std::abs(zeta[s*(k + 1)]) << ", r_0nrm: " << r_0nrm << std::endl;
 
 				iter += s;
 				
-				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit()) {
+				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
 					++k;
 					restart = false;
 					break;
@@ -390,7 +394,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 	} while(restart);
 	
-	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << std::endl;
+	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[s*k]) << std::endl;
 
 	mkl_free(x);
 	mkl_free(V);

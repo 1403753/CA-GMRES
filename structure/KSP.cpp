@@ -107,6 +107,5 @@ sparse_status_t KSP::setUp() {
 }
 
 KSP::~KSP() {
-	mkl_sparse_destroy(M_mkl);
-	destroyMtx(this->M_ptr.get());
+
 }

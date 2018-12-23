@@ -1,14 +1,18 @@
-#include "ILU0_ca.hpp"
+#include "PCILU0_ca.hpp"
 
-ILU0_ca::ILU0_ca() {
-
-}
-
-ILU0_ca::~ILU0_ca() {
+PCILU0_ca::PCILU0_ca() {
 
 }
 
-sparse_status_t ILU0_ca::mv(double *x, double *y, struct matrix_descr descr) {
+PCILU0_ca::~PCILU0_ca() {
+	if (setup) {
+		const	std::shared_ptr<Mtx_CSR> M_ptr = ksp->getM_ptr();
+		ksp->destroyMtx(M_ptr.get());
+		mkl_sparse_destroy(*this->M_mkl);
+	}
+}
+
+sparse_status_t PCILU0_ca::mv(double *x, double *y, struct matrix_descr descr) {
 
 	sparse_matrix_t *A_mkl = ksp->getA_mkl();
 
@@ -18,7 +22,7 @@ sparse_status_t ILU0_ca::mv(double *x, double *y, struct matrix_descr descr) {
 	return SPARSE_STATUS_SUCCESS;
 }
 
-sparse_status_t ILU0_ca::precondition(double *x) {
+sparse_status_t PCILU0_ca::precondition(double *x) {
 
 	struct matrix_descr descr;
 
@@ -38,17 +42,17 @@ sparse_status_t ILU0_ca::precondition(double *x) {
 	return stat;
 }
 
-sparse_status_t ILU0_ca::setUp() {
-
+sparse_status_t PCILU0_ca::setUp() {
+	this->setup = true;
 	const std::shared_ptr<Mtx_CSR> A_ptr = ksp->getA_ptr();
 
 	size_t n = A_ptr->n;
 	size_t nz = A_ptr->nz;
 
-	const std::shared_ptr<Mtx_CSR> M_ptr = ksp->getM_ptr();
+	const	std::shared_ptr<Mtx_CSR> M_ptr = ksp->getM_ptr();
 	ksp->createMtx(M_ptr.get(), n, nz);
 	
-	sparse_matrix_t *M_mkl = ksp->getM_mkl();
+	M_mkl = ksp->getM_mkl();
 	
 	for (size_t i = 0; i < nz; ++i) {
 		M_ptr->col_indx[i] = A_ptr->col_indx[i];
@@ -64,7 +68,7 @@ sparse_status_t ILU0_ca::setUp() {
 
 	size_t ipar[128];
 	ipar[1] = 6; // 6 == display all error msgs on screen
-	ipar[30] = 0; // use dpar[31] instead of 0 diagonal; set ipar[30] = 0 to abort computation instead
+	ipar[30] = 1; // use dpar[31] instead of 0 diagonal; set ipar[30] = 0 to abort computation instead
 
 	double dpar[128];
 	dpar[30] = 1.0e-16; // compare value to diagonal
