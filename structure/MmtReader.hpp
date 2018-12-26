@@ -7,7 +7,7 @@
 
 #ifndef MMT_READER_HPP
 
-#include "KSP.hpp"
+#include "KSP_ca.hpp"
 #include <fstream>
 #include <string>
 

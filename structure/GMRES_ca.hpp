@@ -3,7 +3,6 @@
 
 #include "IKSPType.hpp"
 #include "PCILU0_ca.hpp"
-#include "SparseUtils.hpp"
 
 enum Basis {MONOMIAL, NEWTON};
 
