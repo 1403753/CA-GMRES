@@ -75,6 +75,8 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 	double                                     h_jp1j;
 	double                                     x1;
 	double                                     x2;
+	size_t                                     i, j;          // indices in for-loops
+	std::vector<std::pair<size_t, double>>*    rHist;
 
 	Q = (double *)mkl_calloc(n*(m + 1), sizeof(double), 64);if(Q == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	H = (double *)mkl_calloc((m + 1)*m, sizeof(double), 64);if(H == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -97,8 +99,11 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 
 	r_0nrm = cblas_dnrm2(n, r, 1);
 
-	size_t                                  i, j;          // indices in for-loops
-	size_t lol = 1;
+	if (ksp->getStoreHist()) {
+		rHist = ksp->getRHist();
+		rHist->reserve(ksp->getMaxit());
+	}
+	
 	do{
 
 		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);	
@@ -158,10 +163,14 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 			cblas_drot(1, &zeta[j], 1, &zeta[j + 1], 1, cs.at(j).first, cs.at(j).second);	
 
 			rRes = std::abs(zeta[j + 1]) / r_0nrm;
-			
+
 			// std::cout << "rel. res.: " << rRes << ", tol: " << ksp->getRTol() << std::endl;
-			
+
 			++iter;
+
+			if (ksp->getStoreHist()) {
+				rHist->push_back(std::pair<size_t, double>(iter, rRes));
+			}					
 			
 			if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
 				++j;

@@ -236,6 +236,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	size_t                                     iter = 0;                   // number of total iterations
 	size_t                                     k;                          // index for outer iterations
 	double                                     beta, r_0nrm;               // r-norms
+	std::vector<std::pair<size_t, double>>*    rHist;
 	
 	V = (double *)mkl_malloc(n*s * sizeof(double), 64);if(V == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	Q = (double *)mkl_calloc(n*(m + 1), sizeof(double), 64);if(Q == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -247,13 +248,11 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k = (double *)mkl_calloc(s*s, sizeof(double), 64);if(R_k == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k[0] = 1;
-
+	
+	
 	IPCType *pc = ksp->getIPCType();
 		
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
-	
-	// mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, 1);
-	// mkl_sparse_optimize(*A_mkl);	
 
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
 
@@ -264,6 +263,11 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	pc->precondition(r);
 	
 	r_0nrm = cblas_dnrm2(n, r, 1);
+	
+	if (ksp->getStoreHist()) {
+		rHist = ksp->getRHist();		
+		rHist->reserve(ksp->getMaxit());
+	}
 	
 	do{
 
@@ -294,11 +298,16 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
 
-		// std::cout << "\n============= rel. res.: ";
-		// printf("%e, %e\n",rRes, ksp->getRTol() );		
-		// std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;
+		std::cout << "\n============= rel. res.: ";
+		printf("%e, %e\n",rRes, ksp->getRTol() );		
+		std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;
+		
 		
 		iter += s;
+
+		if (ksp->getStoreHist()) {
+			rHist->push_back(std::pair<size_t, double>(iter, rRes));
+		}
 
 		if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
 			restart = false;
@@ -353,12 +362,12 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				reduce_H(H_reduced, s, m, k, zeta, cs);
 
 				rRes = std::abs(zeta[s*(k + 1)]) / r_0nrm;
-
-				// std::cout << "\n============= rel. res.: ";
-				// printf("%e, %e\n",rRes, ksp->getRTol() );
-				// std::cout << "r_knrm: " << std::abs(zeta[s*(k + 1)]) << ", r_0nrm: " << r_0nrm << std::endl;
-
+				
 				iter += s;
+				
+				if (ksp->getStoreHist()) {
+					rHist->push_back(std::pair<size_t, double>(iter, rRes));
+				}
 				
 				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
 					++k;

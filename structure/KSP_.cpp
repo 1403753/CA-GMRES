@@ -1,8 +1,8 @@
-#include "KSP_ca.hpp"
+#include "KSP_.hpp"
 
-KSP_ca::KSP_ca() : A_mkl{nullptr}, M_mkl{nullptr}, A_ptr{std::make_shared<Mtx_CSR>()}, M_ptr{std::make_shared<Mtx_CSR>()}, kspType{nullptr}, pcType{nullptr} { }
+KSP_::KSP_() : A_mkl{nullptr}, M_mkl{nullptr}, A_ptr{std::make_shared<Mtx_CSR>()}, M_ptr{std::make_shared<Mtx_CSR>()}, kspType{nullptr}, pcType{nullptr} { }
 
-void KSP_ca::print(Mtx_CSR *P) {
+void KSP_::print(Mtx_CSR *P) {
 size_t kp = 0;
 size_t nz = P->nz;
 	for (size_t i = 0; i < nz; ++i) {
@@ -21,7 +21,7 @@ size_t nz = P->nz;
 	std::cout << P->nz << " nz" << std::endl;
 }
 
-void KSP_ca::createMtx(Mtx_CSR *Mtx, size_t n, size_t nz) {
+void KSP_::createMtx(Mtx_CSR *Mtx, size_t n, size_t nz) {
 	Mtx->n = n;
 	Mtx->nz = nz;
 	Mtx->row_ptr = (size_t *) mkl_malloc((n + 1) * sizeof(size_t), 64);if(Mtx->row_ptr == NULL){return;}
@@ -29,7 +29,7 @@ void KSP_ca::createMtx(Mtx_CSR *Mtx, size_t n, size_t nz) {
 	Mtx->values = (double *) mkl_malloc(nz * sizeof(double), 64);if(Mtx->values == NULL){return;}
 }
 
-void KSP_ca::destroyMtx(Mtx_CSR *Mtx) {
+void KSP_::destroyMtx(Mtx_CSR *Mtx) {
 	if(Mtx) {
 		if (Mtx->row_ptr != nullptr) {
 			mkl_free(Mtx->row_ptr);
@@ -46,7 +46,7 @@ void KSP_ca::destroyMtx(Mtx_CSR *Mtx) {
 	}
 }
 
-sparse_status_t KSP_ca::setOperator(sparse_matrix_t *A_mkl) {
+sparse_status_t KSP_::setOperator(sparse_matrix_t *A_mkl) {
 	sparse_status_t stat;
 	sparse_index_base_t indexing;
 	size_t n, m;
@@ -67,45 +67,46 @@ sparse_status_t KSP_ca::setOperator(sparse_matrix_t *A_mkl) {
 	return stat;
 }
 
-sparse_status_t KSP_ca::setPC(sparse_matrix_t *M_mkl) {
+sparse_status_t KSP_::setPC(sparse_matrix_t *M_mkl) {
 	this->M_mkl = *M_mkl;
 	return SPARSE_STATUS_SUCCESS;
 }
 
-sparse_status_t KSP_ca::setOptions(double rTol, double aTol, double dTol, size_t maxit) {
+sparse_status_t KSP_::setOptions(double rTol, double aTol, double dTol, size_t maxit, bool storeHist) {
 	this->rTol = rTol;
 	this->aTol = aTol;
-	this->dTol = dTol;   
-	this->maxit	= maxit;  
+	this->dTol = dTol; 
+	this->maxit	= maxit;
+	this->storeHist = storeHist;
 	return SPARSE_STATUS_SUCCESS;
 }
 
-sparse_status_t KSP_ca::setKSPType(IKSPType *kspType) {
+sparse_status_t KSP_::setKSPType(IKSPType *kspType) {
 	this->kspType = kspType;
 	this->kspType->ksp = this;
 	return SPARSE_STATUS_SUCCESS;
 }
 
-sparse_status_t KSP_ca::solve(double *b, double *x) {
+sparse_status_t KSP_::solve(double *b, double *x) {
 	sparse_status_t stat = SPARSE_STATUS_EXECUTION_FAILED;
 	if (kspType)
 		stat = this->kspType->solve(b, x);
 	return stat;
 }
 
-sparse_status_t KSP_ca::setPCType(IPCType *pcType) {
+sparse_status_t KSP_::setPCType(IPCType *pcType) {
 	this->pcType = pcType;
 	this->pcType->ksp = this;
 	return SPARSE_STATUS_SUCCESS;
 }
 
-sparse_status_t KSP_ca::setUp() {
+sparse_status_t KSP_::setUp() {
 	sparse_status_t stat = SPARSE_STATUS_EXECUTION_FAILED;
 	if (pcType)
 		stat = this->pcType->setUp();
 	return stat;
 }
 
-KSP_ca::~KSP_ca() {
+KSP_::~KSP_() {
 
 }

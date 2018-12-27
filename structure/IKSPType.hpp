@@ -1,15 +1,15 @@
 #ifndef IKSPTYPE_HPP
 #define IKSPTYPE_HPP
 
-#include "KSP_ca.hpp"
+#include "KSP_.hpp"
 
-class KSP_ca;
+class KSP_;
 
 struct Mtx_CSR;
 
 class IKSPType {
 public:
-	KSP_ca *ksp;
+	KSP_ *ksp;
 	virtual sparse_status_t solve(double *x, double *b) = 0;
 };
 

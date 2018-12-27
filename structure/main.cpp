@@ -3,20 +3,26 @@
 //  TODO  //
 ////////////
 /*
-	add non preconditioner-class
-	add residual history
+	add PAPI measurements
 	add command promt parameter reader
 */
 
 #ifndef MAIN_HPP
 
-#include "KSP_ca.hpp"
+#include "KSP_.hpp"
 #include "GMRES_ca.hpp"
 #include "GMRES.hpp"
 #include "PCILU0_ca.hpp"
 #include "PCNone.hpp"
 #include "MmtReader.hpp"
 #include <papi.h>
+
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
+
+
+#define _USE_MATH_DEFINES
+ #include <cmath>
 
 #include <petscksp.h>
 
@@ -40,11 +46,11 @@ int main(int argc, char **args) {
 	double                        *b;
 	double                        *x;
 	double                        *tx;
-	KSP_ca                        ksp;							 						  // linear solver context	
+	KSP_                          ksp;							 						  // linear solver context	
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	MmtReader											mmtReader;
-	const size_t                  t = 20;                         // number of 'outer iterations' before restart
+	const size_t                  t = 12;                         // number of 'outer iterations' before restart
 	const size_t									s = 5;													// step-size ('inner iterations')
 	// Basis                         basis = MONOMIAL;
 	Basis                         basis = NEWTON;
@@ -58,7 +64,7 @@ int main(int argc, char **args) {
 	size_t                        *col_indx;
 	double                        *values;
 	struct matrix_descr           descr;
-	mkl_set_num_threads(48);
+	mkl_set_num_threads(2);
 	// read matrix
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/e05r0000.mtx", &A_mkl);
 	stat = mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
@@ -82,10 +88,13 @@ int main(int argc, char **args) {
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	tx = (double *) mkl_malloc(n * sizeof(double), 64);if(tx == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
+	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
+  gsl_rng_set(rng, time(NULL)); // Seed with time	
 	
 	for (size_t i = 0; i < n; ++i)
-		tx[i] = 0.1*(i%3 + 1);
+		// tx[i] = 0.1*(i%3 + 1);
 		// tx[i] = 1;
+		tx[i] = gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n);
 
 	// for (size_t i = 0; i < n; ++i)
 		// x[i] = 0.1*(i%3 + 1);
@@ -94,10 +103,10 @@ int main(int argc, char **args) {
 
 	stat = ksp.setOperator(&A_mkl);
 	stat = ksp.setKSPType(&gmres);
-	stat = ksp.setPCType(&ilu0);
-	// stat = ksp.setPCType(&pcnone);
+	// stat = ksp.setPCType(&ilu0);
+	stat = ksp.setPCType(&pcnone);
 
-	stat = ksp.setOptions(rTol, aTol, dTol, maxit);
+	stat = ksp.setOptions(rTol, aTol, dTol, maxit, true);
 
 	stat = ksp.setUp();
 	
@@ -108,11 +117,17 @@ int main(int argc, char **args) {
 
 	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 		exit(1);
-
+	
 	PAPI_shutdown();
 
 	std::cout << "runtime ksp-solve: " << std::scientific << rtime << " seconds." << std::endl;
 
+	std::vector<std::pair<size_t, double>>* rHist = ksp.getRHist();
+	
+	for (auto h:*rHist) {
+		std::cout << "index: " << h.first << ", val: " << h.second << " <- rHist" << std::endl;
+	}
+	
 	std::cout << "solution x:" << std::endl;
 	for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
 		std::cout << std::scientific << x[i] << "\n";
@@ -144,6 +159,7 @@ int main(int argc, char **args) {
 	// petsc(argc, args);
 
 	
+	gsl_rng_free(rng);
 	
 	stat = mkl_sparse_destroy(A_mkl);
 	mkl_free(x);
