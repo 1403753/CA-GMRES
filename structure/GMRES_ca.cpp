@@ -265,8 +265,11 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	r_0nrm = cblas_dnrm2(n, r, 1);
 	
 	if (ksp->getStoreHist()) {
-		rHist = ksp->getRHist();		
+		rHist = ksp->getRHist();
+		rHist->clear();
 		rHist->reserve(ksp->getMaxit());
+		rRes = r_0nrm / r_0nrm;
+		rHist->push_back(std::pair<size_t, double>(0, rRes));
 	}
 	
 	do{
@@ -287,6 +290,14 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		beta = cblas_dnrm2(n, r, 1);
 
 		zeta[0] = beta;
+
+		
+		rRes = std::abs(zeta[0]) / r_0nrm;
+		
+		if (ksp->getStoreHist()) {
+			rHist->pop_back();
+			rHist->push_back(std::pair<size_t, double>(iter, rRes));
+		}
 		
 		beta = 1 / beta;
 		
@@ -294,17 +305,16 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 		gmres_init(H, H_reduced, Q, theta_vals, s, m); // after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
+		iter += s;
+
 		reduce_H(H_reduced, s, m, 0, zeta, cs);	// after H_reduced is reduced, zeta contains s+1 values
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
 
 		std::cout << "\n============= rel. res.: ";
 		printf("%e, %e\n",rRes, ksp->getRTol() );		
-		std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;
+		std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;		
 		
-		
-		iter += s;
-
 		if (ksp->getStoreHist()) {
 			rHist->push_back(std::pair<size_t, double>(iter, rRes));
 		}

@@ -89,7 +89,7 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
-	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
+	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
 
 	for (size_t i = 0; i < n; ++i) {
 		r[i] = b[i] - r[i];
@@ -101,7 +101,11 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 
 	if (ksp->getStoreHist()) {
 		rHist = ksp->getRHist();
+		rHist->clear();
 		rHist->reserve(ksp->getMaxit());
+		if (ksp->getStoreHist()) {
+			rHist->push_back(std::pair<size_t, double>(iter, r_0nrm / r_0nrm));
+		}
 	}
 	
 	do{
@@ -115,9 +119,7 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 		pc->precondition(r);
 
 		beta = cblas_dnrm2(n, r, 1);
-		
-		rRes = beta / r_0nrm;
-
+	
 		zeta[0] = beta;
 		beta = 1 / beta;
 		cblas_daxpy(n, beta, r, 1, Q, 1);

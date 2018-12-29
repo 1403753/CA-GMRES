@@ -15,6 +15,9 @@ public:
 	GMRES_ca(size_t s, size_t t, Basis basis);
 	virtual ~GMRES_ca();
 	sparse_status_t solve(double *x, double *b);
+	sparse_status_t setS(size_t s) {this->s = s; return SPARSE_STATUS_SUCCESS;};
+	sparse_status_t setT(size_t t) {this->t = t; return SPARSE_STATUS_SUCCESS;};
+	sparse_status_t setBasis(Basis basis) {this->basis = basis; return SPARSE_STATUS_SUCCESS;};
 private:
 	bool is_conj_pair(complex_t a, complex_t b);
 	sparse_status_t modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals);																	

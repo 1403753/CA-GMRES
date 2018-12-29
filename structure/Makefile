@@ -42,9 +42,11 @@ run:
 
 burn: main
 	./main
-
+	gnuplot ../gnuplot/residuals.gnu
+	
 vurn: main
 	valgrind ./main
 
+	
 clean:
 	rm -rf *.o main

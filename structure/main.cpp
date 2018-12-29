@@ -22,7 +22,8 @@
 
 
 #define _USE_MATH_DEFINES
- #include <cmath>
+#include <cmath>
+#include <fstream>
 
 #include <petscksp.h>
 
@@ -46,16 +47,20 @@ int main(int argc, char **args) {
 	double                        *b;
 	double                        *x;
 	double                        *tx;
+	double                        *r;
 	KSP_                          ksp;							 						  // linear solver context	
+	KSP_                          ksp2;							 						  // linear solver context	
+	KSP_                          ksp3;							 						  // linear solver context	
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	MmtReader											mmtReader;
-	const size_t                  t = 12;                         // number of 'outer iterations' before restart
-	const size_t									s = 5;													// step-size ('inner iterations')
+	const size_t                  t = 3;                          // number of 'outer iterations' before restart
+	const size_t									s = 20;													// step-size ('inner iterations')
 	// Basis                         basis = MONOMIAL;
-	Basis                         basis = NEWTON;
-	GMRES_ca											gmres(s, t, basis);             // KSPType
-	// GMRES                         gmres(100);                     // KSPType
+	// Basis                         basis = NEWTON;
+	GMRES_ca											gmres_mono(s, t, MONOMIAL);     // KSPType
+	GMRES_ca											gmres_newt(s, t, NEWTON);       // KSPType
+	GMRES                         gmres(60);                      // KSPType
 	
 	sparse_index_base_t           indexing;	
 	size_t                        n, m;
@@ -64,10 +69,13 @@ int main(int argc, char **args) {
 	size_t                        *col_indx;
 	double                        *values;
 	struct matrix_descr           descr;
+	std::ofstream                 file;
+	
 	mkl_set_num_threads(2);
 	// read matrix
+	stat = mmtReader.read_matrix_from_file("../matrix_market/dmat/dmat3.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/e05r0000.mtx", &A_mkl);
-	stat = mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
+	// stat = mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/bcsstk18.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/bcsstk08.mtx", &A_mkl);
@@ -87,6 +95,7 @@ int main(int argc, char **args) {
 	b = (double *) mkl_malloc(n * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	tx = (double *) mkl_malloc(n * sizeof(double), 64);if(tx == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
+	r = (double *) mkl_malloc(n * sizeof(double), 64);if(r == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL)); // Seed with time	
@@ -124,9 +133,13 @@ int main(int argc, char **args) {
 
 	std::vector<std::pair<size_t, double>>* rHist = ksp.getRHist();
 	
+	file.open("../gnuplot/std_gmres.dat");
+	
 	for (auto h:*rHist) {
-		std::cout << "index: " << h.first << ", val: " << h.second << " <- rHist" << std::endl;
+		file << h.first << " " << std::scientific << h.second << std::endl;
 	}
+	
+	file.close();
 	
 	std::cout << "solution x:" << std::endl;
 	for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
@@ -136,21 +149,72 @@ int main(int argc, char **args) {
 	for (size_t i = n - 10; i < n; ++i) // size_t can't be negative
 		std::cout << std::scientific << x[i] << "\n";
 
-	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, tx);	
+	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, r);	
 
 	for (size_t i = 0; i < n; ++i) {
-		x[i] = b[i] - tx[i];
+		x[i] = b[i] - r[i];
 	}
 	double r_knrm = cblas_dnrm2(n, x, 1);
 
 	double r_0nrm = cblas_dnrm2(n, b, 1);
+
 
 	double rRes = r_knrm / r_0nrm;	
 	std::cout << "\n============= final main rel. res.: ";
 	printf("%e\n",rRes);
 	std::cout << "r_knrm: " << r_knrm << ", r_0nrm: " << r_0nrm << std::endl;
 	
+  // gmres_ca NEWTON
 
+	stat = ksp2.setOperator(&A_mkl);
+	stat = ksp2.setKSPType(&gmres_newt);
+	stat = ksp2.setPCType(&pcnone);
+
+	stat = ksp2.setOptions(rTol, aTol, dTol, maxit, true);
+
+	stat = ksp2.setUp();
+	
+	std::fill(x, x + n, 0);
+
+	ksp2.solve(x, b);
+	
+	std::vector<std::pair<size_t, double>>* rHist2 = ksp2.getRHist();
+	
+	file.open("../gnuplot/gmres_newton.dat");
+	
+	
+	for (auto h:*rHist2) {
+		file << h.first << " " << std::scientific << h.second << std::endl;
+	}
+	
+	file.close();
+
+  // gmres_ca MONOMIAL	
+	
+	stat = ksp3.setOperator(&A_mkl);
+	stat = ksp3.setKSPType(&gmres_mono);
+	stat = ksp3.setPCType(&pcnone);
+
+	stat = ksp3.setOptions(rTol, aTol, dTol, maxit, true);
+
+	stat = ksp3.setUp();
+
+	std::fill(x, x + n, 0);
+
+	ksp3.solve(x, b);
+	
+	std::vector<std::pair<size_t, double>>* rHist3 = ksp3.getRHist();
+
+	
+	file.open("../gnuplot/gmres_monomial.dat");
+	
+	
+	for (auto h:*rHist3) {
+		file << h.first << " " << std::scientific << h.second << std::endl;
+	}
+	
+	file.close();
+	
 	
 	/////////////
 	//  PETSc  //
