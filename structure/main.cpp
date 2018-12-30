@@ -49,18 +49,15 @@ int main(int argc, char **args) {
 	double                        *tx;
 	double                        *r;
 	KSP_                          ksp;							 						  // linear solver context	
-	KSP_                          ksp2;							 						  // linear solver context	
-	KSP_                          ksp3;							 						  // linear solver context	
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	MmtReader											mmtReader;
 	const size_t                  t = 3;                          // number of 'outer iterations' before restart
-	const size_t									s = 20;													// step-size ('inner iterations')
+	const size_t									s = 25;													// step-size ('inner iterations')
 	// Basis                         basis = MONOMIAL;
 	// Basis                         basis = NEWTON;
-	GMRES_ca											gmres_mono(s, t, MONOMIAL);     // KSPType
-	GMRES_ca											gmres_newt(s, t, NEWTON);       // KSPType
-	GMRES                         gmres(60);                      // KSPType
+	GMRES_ca											gmres_ca(s, t, NEWTON);         // KSPType
+	GMRES                         gmres(75);                      // KSPType
 	
 	sparse_index_base_t           indexing;	
 	size_t                        n, m;
@@ -133,7 +130,7 @@ int main(int argc, char **args) {
 
 	std::vector<std::pair<size_t, double>>* rHist = ksp.getRHist();
 	
-	file.open("../gnuplot/std_gmres.dat");
+	file.open("../gnuplot/gmres_75.dat");
 	
 	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
@@ -166,24 +163,16 @@ int main(int argc, char **args) {
 	
   // gmres_ca NEWTON
 
-	stat = ksp2.setOperator(&A_mkl);
-	stat = ksp2.setKSPType(&gmres_newt);
-	stat = ksp2.setPCType(&pcnone);
-
-	stat = ksp2.setOptions(rTol, aTol, dTol, maxit, true);
-
-	stat = ksp2.setUp();
+	stat = ksp.setKSPType(&gmres_ca);
 	
 	std::fill(x, x + n, 0);
 
-	ksp2.solve(x, b);
-	
-	std::vector<std::pair<size_t, double>>* rHist2 = ksp2.getRHist();
-	
-	file.open("../gnuplot/gmres_newton.dat");
+	ksp.solve(x, b);
+		
+	file.open("../gnuplot/gmres_newt_25_3.dat");
 	
 	
-	for (auto h:*rHist2) {
+	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
 	}
 	
@@ -191,29 +180,51 @@ int main(int argc, char **args) {
 
   // gmres_ca MONOMIAL	
 	
-	stat = ksp3.setOperator(&A_mkl);
-	stat = ksp3.setKSPType(&gmres_mono);
-	stat = ksp3.setPCType(&pcnone);
-
-	stat = ksp3.setOptions(rTol, aTol, dTol, maxit, true);
-
-	stat = ksp3.setUp();
-
+	gmres_ca.setBasis(MONOMIAL);
+	
 	std::fill(x, x + n, 0);
 
-	ksp3.solve(x, b);
+	ksp.solve(x, b);
 	
-	std::vector<std::pair<size_t, double>>* rHist3 = ksp3.getRHist();
-
-	
-	file.open("../gnuplot/gmres_monomial.dat");
+	file.open("../gnuplot/gmres_mono_25_3.dat");
 	
 	
-	for (auto h:*rHist3) {
+	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
 	}
 	
 	file.close();
+
+	// shorter s
+	
+	gmres_ca.setS(15);
+	gmres_ca.setT(5);
+	
+	std::fill(x, x + n, 0);
+
+	ksp.solve(x, b);
+	
+	file.open("../gnuplot/gmres_mono_15_5.dat");
+
+	for (auto h:*rHist) {
+		file << h.first << " " << std::scientific << h.second << std::endl;
+	}
+
+	file.close();
+	
+	gmres_ca.setBasis(NEWTON);	
+	
+	std::fill(x, x + n, 0);
+
+	ksp.solve(x, b);
+	
+	file.open("../gnuplot/gmres_newt_15_5.dat");
+
+	for (auto h:*rHist) {
+		file << h.first << " " << std::scientific << h.second << std::endl;
+	}
+
+	file.close();		
 	
 	
 	/////////////
