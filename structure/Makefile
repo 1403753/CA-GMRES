@@ -42,7 +42,10 @@ run:
 
 burn: main
 	./main
-	gnuplot ../gnuplot/residuals.gnu
+	gnuplot ../gnuplot/residuals_dmat3_2.gnu
+	# gnuplot ../gnuplot/residuals_dmat2.gnu
+	# gnuplot ../gnuplot/residuals_dmat3.gnu
+	# gnuplot ../gnuplot/residuals_bmw.gnu
 	
 vurn: main
 	valgrind ./main

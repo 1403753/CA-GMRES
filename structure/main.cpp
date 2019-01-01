@@ -52,8 +52,8 @@ int main(int argc, char **args) {
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	MmtReader											mmtReader;
-	const size_t                  t = 3;                          // number of 'outer iterations' before restart
-	const size_t									s = 25;													// step-size ('inner iterations')
+	const size_t									s = 15;													// step-size ('inner iterations')
+	const size_t                  t = 5;                          // number of 'outer iterations' before restart
 	// Basis                         basis = MONOMIAL;
 	// Basis                         basis = NEWTON;
 	GMRES_ca											gmres_ca(s, t, NEWTON);         // KSPType
@@ -71,8 +71,8 @@ int main(int argc, char **args) {
 	mkl_set_num_threads(2);
 	// read matrix
 	stat = mmtReader.read_matrix_from_file("../matrix_market/dmat/dmat3.mtx", &A_mkl);
-	// stat = mmtReader.read_matrix_from_file("../matrix_market/e05r0000.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/watt1.mtx", &A_mkl);
+	// stat = mmtReader.read_matrix_from_file("../matrix_market/e05r0000.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/sparse9x9complex.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/bcsstk18.mtx", &A_mkl);
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/bcsstk08.mtx", &A_mkl);
@@ -130,7 +130,7 @@ int main(int argc, char **args) {
 
 	std::vector<std::pair<size_t, double>>* rHist = ksp.getRHist();
 	
-	file.open("../gnuplot/gmres_75.dat");
+	file.open("../gnuplot/gmres_standard.dat");
 	
 	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
@@ -146,20 +146,7 @@ int main(int argc, char **args) {
 	for (size_t i = n - 10; i < n; ++i) // size_t can't be negative
 		std::cout << std::scientific << x[i] << "\n";
 
-	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, r);	
 
-	for (size_t i = 0; i < n; ++i) {
-		x[i] = b[i] - r[i];
-	}
-	double r_knrm = cblas_dnrm2(n, x, 1);
-
-	double r_0nrm = cblas_dnrm2(n, b, 1);
-
-
-	double rRes = r_knrm / r_0nrm;	
-	std::cout << "\n============= final main rel. res.: ";
-	printf("%e\n",rRes);
-	std::cout << "r_knrm: " << r_knrm << ", r_0nrm: " << r_0nrm << std::endl;
 	
   // gmres_ca NEWTON
 
@@ -169,7 +156,7 @@ int main(int argc, char **args) {
 
 	ksp.solve(x, b);
 		
-	file.open("../gnuplot/gmres_newt_25_3.dat");
+	file.open("../gnuplot/gmres_newt_small_s.dat");
 	
 	
 	for (auto h:*rHist) {
@@ -186,7 +173,7 @@ int main(int argc, char **args) {
 
 	ksp.solve(x, b);
 	
-	file.open("../gnuplot/gmres_mono_25_3.dat");
+	file.open("../gnuplot/gmres_mono_small_s.dat");
 	
 	
 	for (auto h:*rHist) {
@@ -197,14 +184,14 @@ int main(int argc, char **args) {
 
 	// shorter s
 	
-	gmres_ca.setS(15);
-	gmres_ca.setT(5);
+	gmres_ca.setS(25);
+	gmres_ca.setT(3);
 	
 	std::fill(x, x + n, 0);
 
 	ksp.solve(x, b);
 	
-	file.open("../gnuplot/gmres_mono_15_5.dat");
+	file.open("../gnuplot/gmres_mono_large_s.dat");
 
 	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
@@ -212,13 +199,28 @@ int main(int argc, char **args) {
 
 	file.close();
 	
+	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, x, 0, r);	
+
+	for (size_t i = 0; i < n; ++i) {
+		x[i] = b[i] - r[i];
+	}
+	double r_knrm = cblas_dnrm2(n, x, 1);
+
+	double r_0nrm = cblas_dnrm2(n, b, 1);
+
+
+	double rRes = r_knrm / r_0nrm;	
+	std::cout << "\n============= final main rel. res.: ";
+	printf("%e\n",rRes);
+	std::cout << "r_knrm: " << r_knrm << ", r_0nrm: " << r_0nrm << std::endl;	
+	
 	gmres_ca.setBasis(NEWTON);	
 	
 	std::fill(x, x + n, 0);
 
 	ksp.solve(x, b);
 	
-	file.open("../gnuplot/gmres_newt_15_5.dat");
+	file.open("../gnuplot/gmres_newt_large_s.dat");
 
 	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
@@ -240,6 +242,7 @@ int main(int argc, char **args) {
 	mkl_free(x);
 	mkl_free(tx);
 	mkl_free(b);
+	mkl_free(r);
 	mkl_free_buffers();
 
 	return stat;
