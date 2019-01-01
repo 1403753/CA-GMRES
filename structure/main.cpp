@@ -3,6 +3,7 @@
 //  TODO  //
 ////////////
 /*
+	add Monomial basis CA-GMRES without initial standard GMRES
 	add PAPI measurements
 	add command promt parameter reader
 */
