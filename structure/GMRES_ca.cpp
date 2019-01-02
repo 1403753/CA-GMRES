@@ -158,8 +158,20 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	for(j = 0; j < s; ++j) {
 		
 		// params: sparse_matrix_t (matrix), double *x (vector), double *y (result), size_t (stepsize)
+		
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);	
 
 		pc->mv(&Q[n*j], w, descr);
+
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+		
+		this->SpMV += rtime;
+		
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);	
+		
 
 		for(i = 0; i < j + 1; ++i) {
 
@@ -177,6 +189,11 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 		H_reduced[(m + 1)*j + (j + 1)] = h_jp1j;
 
 		cblas_daxpy(n, 1/h_jp1j, w, 1, &Q[n*(j + 1)], 1);
+		
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+		
+		this->MGS += rtime;
 	}
 
 	wr = (double *)mkl_malloc(s*sizeof(double), 64);if(wr == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -190,6 +207,9 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	// for(size_t o = 0; o < s; ++o)
 		// printf("%.10f,\t%.10f\n", wr[o], wi[o]);	
 	
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+		exit(1);
+
 	if (basis == NEWTON) {
 		modified_leya_ordering(s, wr, wi, theta_vals);
 	} else if (basis == MONOMIAL) {
@@ -198,8 +218,14 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 			theta_vals.push_back(ic_pair_t(0, 1));
 		}
 	}
-	
 
+	if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+		exit(1);	
+
+	PAPI_shutdown();
+	
+	this->SDO += rtime;
+	
 	mkl_free(w);
 	mkl_free(wr);
 	mkl_free(wi);
@@ -208,8 +234,15 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 	return stat;
 }
 
+
+
 sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
-	
+	this->SDO = 0;
+	this->SpMV = 0;
+	this->BGS = 0;
+	this->MGS = 0;
+	this->TSQR = 0;
+		
 	double                                     *V;                         // basis for Krylov subspace K(A, v) = span{v, (A^1)v, (A^2)v,...,(A^s-1)v}
 	double                                     *Q;                         // orthonormal basis for Krylov subspace K(A,v), Arnoldi output
 	double                                     *R;                         // upper triangular matrix containing construction info for H
@@ -279,6 +312,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		// for (size_t i = 0; i < (n < 10 ? n : 10); ++i)
 			// std::cout << std::scientific << x_0[i] << std::endl;
 		
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+
 		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);	
 
 		for (size_t i = 0; i < n; ++i) {
@@ -303,14 +339,31 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 		cblas_daxpy(n, beta, r, 1, Q, 1);
 
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+		
+		PAPI_shutdown();
+
+		this->SDO += rtime;
+
 		gmres_init(H, H_reduced, Q, theta_vals, s, m); // after init Q contains s+1 orthonormal basis vectors for the Krylov subspace
 
 		iter += s;
-
+		
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+		
 		reduce_H(H_reduced, s, m, 0, zeta, cs);	// after H_reduced is reduced, zeta contains s+1 values
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
 
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+		
+		PAPI_shutdown();
+
+		this->SDO += rtime;
+				
 		std::cout << "\n============= rel. res.: ";
 		printf("%e, %e\n",rRes, ksp->getRTol() );		
 		std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;		
@@ -337,6 +390,10 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				//  MPK  //
 				///////////
 
+
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);	
+				
 				// v_{i + 1} := A*v_i - lambda*v_i
 				pc->mv(&Q[n*(s*k)], V, descr);
 
@@ -355,26 +412,63 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 					}
 				}
 
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);
+			
+				PAPI_shutdown();
+
+				this->SpMV += rtime;
+				
 				////////////////////////////
 				//  "BLOCK" GRAM SCHMIDT  //
 				////////////////////////////
 
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);				
+				
 				cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, (s*k) + 1, s, n, 1, Q, n, V, n, 0, R, m + s + 1);
 				cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, s, (s*k) + 1, -1, Q, n, R, m + s + 1, 1, V, n);
+
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);
+
+				this->BGS = rtime;
+				
+				PAPI_shutdown();
 
 				////////////
 				//  TSQR  //
 				////////////
-
+				
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);
+				
 				stat = tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
-	
+
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);
+
+				PAPI_shutdown();
+
+				this->TSQR = rtime;
+				
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);				
+				
 				update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
 				reduce_H(H_reduced, s, m, k, zeta, cs);
 
 				rRes = std::abs(zeta[s*(k + 1)]) / r_0nrm;
+
+				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+					exit(1);
+
+				PAPI_shutdown();
+				
+				this->SDO += rtime;
 				
 				iter += s;
-				
+
 				if (ksp->getStoreHist()) {
 					rHist->push_back(std::pair<size_t, double>(iter, rRes));
 				}
@@ -391,12 +485,22 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		//  solve the system  //
 		////////////////////////
 
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+		
 		cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m + 1, zeta, 1);
 		cblas_dgemv (CblasColMajor, CblasNoTrans, n, m, 1, Q, n, zeta, 1, 0, x, 1);
 		
 		for (size_t i = 0; i < n; ++i) {
 			x_0[i] = x_0[i] + x[i];
 		}
+		
+		if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+			exit(1);
+
+		PAPI_shutdown();
+		
+		this->SDO += rtime;
 		
 		if (restart) {
 			std::fill(zeta, zeta+(m+1), 0);
@@ -414,6 +518,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	} while(restart);
 	
 	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[s*k]) << std::endl;
+	std::cout << "SpMV: " << SpMV << ", MGS: " << MGS << ", BGS: " << BGS << ", TSQR: " << TSQR << ", SDO:" << SDO << std::endl;
 
 	mkl_free(x);
 	mkl_free(V);
@@ -427,6 +532,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	
 	return stat;
 }
+
 
 bool GMRES_ca::is_conj_pair(complex_t a, complex_t b) {
 	return (a.real() == b.real() && a.imag() == -b.imag() && a.imag() != 0);

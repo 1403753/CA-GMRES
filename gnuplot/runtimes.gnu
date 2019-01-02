@@ -19,6 +19,6 @@
 	plot 'data1.dat' using ($1+offset):($2+$3+$4+$5) title "SDO" linecolor rgb "#006400" with boxes, \
 			 ''                   using ($1+offset):($3+$4+$5) title "BGM" linecolor rgb "#FFFF00" with boxes, \
 			 ''                   using ($1+offset):($4+$5) title "TSQR" linecolor rgb "#FFA500 " with boxes, \
-			 ''                   using ($1+offset):5 title "SpMV" linecolor rgb "#FF0000" with boxes, \
+			 ''                   using ($1+offset):5 notitle linecolor rgb "#0000FF" with boxes, \
 			 'data2.dat' using ($1+offset+dx):($2+$3) title "MGS" linecolor rgb "#8B008B" with boxes, \
 			 ''                   using ($1+offset+dx):3 title "SpMV" linecolor rgb "#0000FF" with boxes

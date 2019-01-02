@@ -3,6 +3,7 @@
 
 #include "IKSPType.hpp"
 #include "PCILU0_ca.hpp"
+#include <papi.h>
 
 enum Basis {MONOMIAL, NEWTON};
 
@@ -10,6 +11,13 @@ class GMRES_ca : public IKSPType {
 	size_t										       s = 5;
 	size_t										       t = 12;
 	Basis                            basis = NEWTON;
+	float                            SDO = 0;
+	float                            SpMV = 0;
+	float                            BGS = 0;
+	float                            MGS = 0;
+	float                            TSQR = 0;
+	float                            rtime, ptime, mflops;
+	long long                        flpops;	
 public:
 	GMRES_ca();
 	GMRES_ca(size_t s, size_t t, Basis basis);
@@ -18,6 +26,11 @@ public:
 	sparse_status_t setS(size_t s) {this->s = s; return SPARSE_STATUS_SUCCESS;};
 	sparse_status_t setT(size_t t) {this->t = t; return SPARSE_STATUS_SUCCESS;};
 	sparse_status_t setBasis(Basis basis) {this->basis = basis; return SPARSE_STATUS_SUCCESS;};
+	flaot getSDO() {return this->SDO};
+	flaot getSpMV() {return this->SpMV};
+	flaot getBGS() {return this->BGS};
+	flaot getMGS() {return this->MGS};
+	flaot getTSQR() {return this->SDO};
 private:
 	bool is_conj_pair(complex_t a, complex_t b);
 	sparse_status_t modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals);																	

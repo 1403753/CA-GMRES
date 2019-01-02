@@ -42,9 +42,13 @@ run:
 
 burn: main
 	./main
-	gnuplot ../gnuplot/residuals_dmat3_2.gnu
+	# gnuplot ../gnuplot/residuals_runtimes.gnu
+	# gnuplot ../gnuplot/residuals_dmat1.gnu
+	# gnuplot ../gnuplot/residuals_dmat1_2.gnu
 	# gnuplot ../gnuplot/residuals_dmat2.gnu
+	# gnuplot ../gnuplot/residuals_dmat2_2.gnu
 	# gnuplot ../gnuplot/residuals_dmat3.gnu
+	# gnuplot ../gnuplot/residuals_dmat3_2.gnu
 	# gnuplot ../gnuplot/residuals_bmw.gnu
 	
 vurn: main
