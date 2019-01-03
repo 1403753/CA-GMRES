@@ -26,11 +26,11 @@ public:
 	sparse_status_t setS(size_t s) {this->s = s; return SPARSE_STATUS_SUCCESS;};
 	sparse_status_t setT(size_t t) {this->t = t; return SPARSE_STATUS_SUCCESS;};
 	sparse_status_t setBasis(Basis basis) {this->basis = basis; return SPARSE_STATUS_SUCCESS;};
-	flaot getSDO() {return this->SDO};
-	flaot getSpMV() {return this->SpMV};
-	flaot getBGS() {return this->BGS};
-	flaot getMGS() {return this->MGS};
-	flaot getTSQR() {return this->SDO};
+	float getSDO() {return this->SDO;};
+	float getSpMV() {return this->SpMV;};
+	float getBGS() {return this->BGS;};
+	float getMGS() {return this->MGS;};
+	float getTSQR() {return this->SDO;};
 private:
 	bool is_conj_pair(complex_t a, complex_t b);
 	sparse_status_t modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals);																	

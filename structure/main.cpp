@@ -53,12 +53,12 @@ int main(int argc, char **args) {
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	MmtReader											mmtReader;
-	const size_t									s = 15;													// step-size ('inner iterations')
-	const size_t                  t = 5;                          // number of 'outer iterations' before restart
+	const size_t									s = 5;													// step-size ('inner iterations')
+	const size_t                  t = 12;                          // number of 'outer iterations' before restart
 	// Basis                         basis = MONOMIAL;
 	// Basis                         basis = NEWTON;
 	GMRES_ca											gmres_ca(s, t, NEWTON);         // KSPType
-	GMRES                         gmres(75);                      // KSPType
+	GMRES                         gmres(60);                      // KSPType
 	
 	sparse_index_base_t           indexing;	
 	size_t                        n, m;
@@ -185,8 +185,8 @@ int main(int argc, char **args) {
 
 	// shorter s
 	
-	gmres_ca.setS(25);
-	gmres_ca.setT(3);
+	gmres_ca.setS(5);
+	gmres_ca.setT(12);
 	
 	std::fill(x, x + n, 0);
 
@@ -228,8 +228,10 @@ int main(int argc, char **args) {
 	}
 
 	file.close();		
-	
-	
+
+	std::cout << "CA-GMRES: " << "SpMV: " << gmres_ca.getSpMV() << ", MGS: " << gmres_ca.getMGS() << ", BGS: " << gmres_ca.getBGS() << ", TSQR: " << gmres_ca.getTSQR() << ", SDO:" << gmres_ca.getSDO() << std::endl;	
+	std::cout << "GMRES   : " << "SpMV: " << gmres.getSpMV() << ", MGS: " << gmres.getMGS() << std::endl;	
+
 	/////////////
 	//  PETSc  //
 	/////////////

@@ -52,7 +52,8 @@ GMRES::~GMRES() {
 
 
 sparse_status_t GMRES::solve(double *x_0, double *b) {
-	
+	this->SpMV = 0;
+	this->MGS = 0;
 	double                                     *Q;                         // orthonormal basis for Krylov subspace K(A,v), Arnoldi output
 	double                                     *H;                         // Hessenberg matrix, Arnoldi output
 	double                                     *r;                         // residual vector b - Ax
@@ -126,11 +127,24 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 
 		for(j = 0; j < m; ++j) {
 
+			if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+				exit(1);			
+
+			pc->mv(&Q[n*j], w, descr);
+
+			if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+				exit(1);
+
+			PAPI_shutdown();
+
+			this->SpMV += rtime;
+
 			////////////////////////////
 			//  Modfied Gram-Schmidt  //
-			////////////////////////////		
-			
-			pc->mv(&Q[n*j], w, descr);
+			////////////////////////////
+
+			if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+				exit(1);
 
 			for(i = 0; i < j + 1; ++i) {
 
@@ -146,6 +160,13 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 			h_jp1j = 1/h_jp1j;
 
 			cblas_daxpy(n, h_jp1j, w, 1, &Q[n*(j + 1)], 1);
+
+			if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
+				exit(1);
+
+			PAPI_shutdown();
+
+			this->MGS += rtime;
 
 			for (size_t i = 0; i < j; ++i) {
 		// void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
