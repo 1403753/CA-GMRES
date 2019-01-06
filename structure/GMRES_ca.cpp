@@ -6,6 +6,9 @@
  */
 
 #include "GMRES_ca.hpp"
+#include <fstream>
+#include <limits>
+
 
 GMRES_ca::GMRES_ca() {
 
@@ -239,10 +242,12 @@ sparse_status_t GMRES_ca::gmres_init(double *H,
 sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	this->SDO = 0;
 	this->SpMV = 0;
-	this->BGS = 0;
+	this->BCGS = 0;
 	this->MGS = 0;
 	this->TSQR = 0;
-		
+	this->rcond_min = 1;
+	this->rcond_max = 0;
+	
 	double                                     *V;                         // basis for Krylov subspace K(A, v) = span{v, (A^1)v, (A^2)v,...,(A^s-1)v}
 	double                                     *Q;                         // orthonormal basis for Krylov subspace K(A,v), Arnoldi output
 	double                                     *R;                         // upper triangular matrix containing construction info for H
@@ -270,6 +275,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	size_t                                     k;                          // index for outer iterations
 	double                                     beta, r_0nrm;               // r-norms
 	std::vector<std::pair<size_t, double>>*    rHist;
+	double                                     rcond = 0;
 	
 	V = (double *)mkl_malloc(n*s * sizeof(double), 64);if(V == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	Q = (double *)mkl_calloc(n*(m + 1), sizeof(double), 64);if(Q == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -343,9 +349,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
 				
-		std::cout << "\n============= rel. res.: ";
-		printf("%e, %e\n",rRes, ksp->getRTol() );		
-		std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;		
+		// std::cout << "\n============= rel. res.: ";
+		// printf("%e, %e\n",rRes, ksp->getRTol() );		
+		// std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;		
 		
 		if (ksp->getStoreHist()) {
 			rHist->push_back(std::pair<size_t, double>(iter, rRes));
@@ -411,19 +417,19 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 					exit(1);
 
-				this->BGS = rtime;
+				this->BCGS = rtime;
 				
 				PAPI_shutdown();
 
 				////////////
 				//  TSQR  //
 				////////////
-				
+
 				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 					exit(1);
 				
 				stat = tsqr(V, &Q[n*(s*k + 1)], &R[s*k + 1], n, s, m);
-
+				
 				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 					exit(1);
 
@@ -451,6 +457,14 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 				if (ksp->getStoreHist()) {
 					rHist->push_back(std::pair<size_t, double>(iter, rRes));
+					// after tsqr V contains Q and R
+					LAPACKE_dtrcon(LAPACK_COL_MAJOR, 'I', 'U', 'N', s, V, n, &rcond);
+					if (rcond < this->rcond_min) {
+						this->rcond_min = rcond;
+					}
+					if (rcond > this->rcond_max) {
+						this->rcond_max = rcond;
+					}
 				}
 				
 				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
@@ -487,8 +501,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 	} while(restart);
 	
-	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[s*k]) << std::endl;
-
+	// std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[s*k]) << std::endl;
+	
 	mkl_free(x);
 	mkl_free(V);
 	mkl_free(Q);

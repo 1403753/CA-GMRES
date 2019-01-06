@@ -1,0 +1,52 @@
+----------------------------------------------------------------------
+----     ompP General Information     --------------------------------
+----------------------------------------------------------------------
+Start Date      : Sat Jan 05 22:08:47 2019
+End Date        : Sat Jan 05 22:09:24 2019
+Duration        : 37.54 sec
+Application Name: unknown
+Type of Report  : final
+User Time       : 29.80 sec
+System Time     : 18.61 sec
+Max Threads     : 48
+ompP Version    : 0.8.99
+ompP Build Date : Jan  5 2019 21:27:07
+PAPI Support    : not available
+
+----------------------------------------------------------------------
+----     ompP Region Overview     ------------------------------------
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+----     ompP Callgraph     ------------------------------------------
+----------------------------------------------------------------------
+
+  Inclusive  (%)   Exclusive  (%)
+  37.54 (100.0%)   37.54 (100.00%)           [unknown: 48 threads]
+
+----------------------------------------------------------------------
+----     ompP Flat Region Profile (inclusive data)     ---------------
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+----     ompP Callgraph Region Profiles (incl./excl. data)     -------
+----------------------------------------------------------------------
+
+
+----------------------------------------------------------------------
+----     ompP Overhead Analysis Report     ---------------------------
+----------------------------------------------------------------------
+Total runtime (wallclock)   : 37.54 sec [48 threads]
+Number of parallel regions  : 0
+Parallel coverage           : 0.00 sec ( 0.00%)
+
+Parallel regions sorted by wallclock time:
+            Type                            Location      Wallclock (%) 
+                                                 SUM       0.00 ( 0.00) 
+
+Overheads wrt. each individual parallel region:
+          Total        Ovhds (%)  =   Synch  (%)  +  Imbal   (%)  +   Limpar (%)   +    Mgmt (%)
+
+Overheads wrt. whole program:
+          Total        Ovhds (%)  =   Synch  (%)  +  Imbal   (%)  +   Limpar (%)   +    Mgmt (%)
+   SUM     0.00     0.00 ( 0.00)    0.00 ( 0.00)    0.00 ( 0.00)    0.00 ( 0.00)    0.00 ( 0.00)
+
+

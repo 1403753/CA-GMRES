@@ -223,7 +223,7 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 
 	} while(restart);
 
-	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[j]) << "rel. res.: " << std::abs(zeta[j]) / r_0nrm << std::endl;
+	// std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[j]) << "rel. res.: " << std::abs(zeta[j]) / r_0nrm << std::endl;
 
 	mkl_free(w);
 	mkl_free(x);

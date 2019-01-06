@@ -8,8 +8,8 @@ PETSCFLAGS = --mca btl_base_warn_component_unused 0
 PETSC_DIR = /usr/lib/petsc
 MPI_DIR = /usr/include/openmpi
 
-DFLAGS = -g -O0 
-#-ggdb
+DFLAGS = 
+#-g -O3 -ggdb
 
 SRC         := $(wildcard *.cpp)
 OBJ         := $(SRC:.cpp=.o)
@@ -27,22 +27,21 @@ main: $(OBJ)
 	$(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group \
 	-lgomp -lpthread -lm -ldl \
 	-lpapi \
-	-lgfortran \
-	-lpetsc -lmpi
-	# -L$(LIB) -l:libmetis.a
+	-lgfortran
+#	-lpetsc -L$(LIB) -l:libmetis.a
 
 main.o: main.cpp
-	$(CC) $(CFLAGS) $(INC) -c $< $(DFLAGS) -I$(PETSC_DIR)/include -I$(MPI_DIR)
+	$(CC) $(CFLAGS) $(INC) -c $< $(DFLAGS)
 	
 %.o: %.cpp %.hpp
 	$(CC) $(CFLAGS) $(INC) -c $< $(DFLAGS)
 	
 run:
 	mpirun -n 1 ./main $(PETSCFLAGS)
-
+	
 burn: main
 	./main
-	# gnuplot ../gnuplot/residuals_runtimes.gnu
+	gnuplot ../gnuplot/runtimes_matrices.gnu
 	# gnuplot ../gnuplot/residuals_dmat1.gnu
 	# gnuplot ../gnuplot/residuals_dmat1_2.gnu
 	# gnuplot ../gnuplot/residuals_dmat2.gnu

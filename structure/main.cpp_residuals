@@ -86,8 +86,10 @@ int main(int argc, char **args) {
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/mini_test.mtx", &A_mkl); // too small, to work properly
 	// stat = mmtReader.read_matrix_from_file("../matrix_market/CA-ILU(0).mtx", &A_mkl); // too small, to work properly
 	
+	std::streamsize ss = std::cout.precision();
+	
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
-
+	
 	stat = mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // n is needed
 	
 	b = (double *) mkl_malloc(n * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -158,10 +160,10 @@ int main(int argc, char **args) {
 	ksp.solve(x, b);
 		
 	file.open("../gnuplot/gmres_newt_small_s.dat");
-	
-	
-	for (auto h:*rHist) {
-		file << h.first << " " << std::scientific << h.second << std::endl;
+
+	file << rHist->at(0).first << " " << std::scientific << rHist->at(0).second << " " << std::setprecision(2) << gmres_ca.getRcondMin() << " " << gmres_ca.getRcondMax() << std::setprecision(ss) << std::endl;
+	for (size_t i = 1; i < rHist->size(); ++i) {	
+		file << rHist->at(i).first << " " << std::scientific << rHist->at(i).second << std::endl;
 	}
 	
 	file.close();
@@ -177,13 +179,14 @@ int main(int argc, char **args) {
 	file.open("../gnuplot/gmres_mono_small_s.dat");
 	
 	
-	for (auto h:*rHist) {
-		file << h.first << " " << std::scientific << h.second << std::endl;
+	file << rHist->at(0).first << " " << std::scientific << rHist->at(0).second << " " << std::setprecision(2) << gmres_ca.getRcondMin() << " " << gmres_ca.getRcondMax() << std::setprecision(ss) << std::endl;
+	for (size_t i = 1; i < rHist->size(); ++i) {	
+		file << rHist->at(i).first << " " << std::scientific << rHist->at(i).second << std::endl;
 	}
 	
 	file.close();
 
-	// shorter s
+	// bigger s
 	
 	gmres_ca.setS(25);
 	gmres_ca.setT(3);
@@ -194,8 +197,9 @@ int main(int argc, char **args) {
 	
 	file.open("../gnuplot/gmres_mono_large_s.dat");
 
-	for (auto h:*rHist) {
-		file << h.first << " " << std::scientific << h.second << std::endl;
+	file << rHist->at(0).first << " " << std::scientific << rHist->at(0).second << " " << std::setprecision(2) << gmres_ca.getRcondMin() << " " << gmres_ca.getRcondMax() << std::setprecision(ss) << std::endl;
+	for (size_t i = 1; i < rHist->size(); ++i) {	
+		file << rHist->at(i).first << " " << std::scientific << rHist->at(i).second << std::endl;
 	}
 
 	file.close();
@@ -223,8 +227,9 @@ int main(int argc, char **args) {
 	
 	file.open("../gnuplot/gmres_newt_large_s.dat");
 
-	for (auto h:*rHist) {
-		file << h.first << " " << std::scientific << h.second << std::endl;
+	file << rHist->at(0).first << " " << std::scientific << rHist->at(0).second << " " << std::setprecision(2) << gmres_ca.getRcondMin() << " " << gmres_ca.getRcondMax() << std::setprecision(ss) << std::endl;
+	for (size_t i = 1; i < rHist->size(); ++i) {	
+		file << rHist->at(i).first << " " << std::scientific << rHist->at(i).second << std::endl;
 	}
 
 	file.close();		

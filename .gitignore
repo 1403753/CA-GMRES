@@ -37,3 +37,7 @@ metis
 # Files too large
 bmw7st_1.mtx
 xenon2.mtx
+pwtk.mtx
+
+# Tar files
+*.gz

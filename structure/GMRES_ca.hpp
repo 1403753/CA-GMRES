@@ -13,11 +13,14 @@ class GMRES_ca : public IKSPType {
 	Basis                            basis = NEWTON;
 	float                            SDO = 0;
 	float                            SpMV = 0;
-	float                            BGS = 0;
+	float                            BCGS = 0;
 	float                            MGS = 0;
 	float                            TSQR = 0;
 	float                            rtime, ptime, mflops;
-	long long                        flpops;	
+	long long                        flpops;
+	double                           rcond_max = 0;
+	double                           rcond_min = 1;
+	
 public:
 	GMRES_ca();
 	GMRES_ca(size_t s, size_t t, Basis basis);
@@ -28,9 +31,11 @@ public:
 	sparse_status_t setBasis(Basis basis) {this->basis = basis; return SPARSE_STATUS_SUCCESS;};
 	float getSDO() {return this->SDO;};
 	float getSpMV() {return this->SpMV;};
-	float getBGS() {return this->BGS;};
+	float getBCGS() {return this->BCGS;};
 	float getMGS() {return this->MGS;};
 	float getTSQR() {return this->SDO;};
+	double getRcondMin() {return this->rcond_min;};
+	double getRcondMax() {return this->rcond_max;};
 private:
 	bool is_conj_pair(complex_t a, complex_t b);
 	sparse_status_t modified_leya_ordering(size_t s, double *wr, double *wi, std::vector<ic_pair_t> &theta_vals);																	
