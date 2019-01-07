@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{Ascher:2011:FCN:2031413}
+Uri~M. Ascher and Chen Greif.
+\newblock {\em A First Course in Numerical Methods}.
+\newblock Society for Industrial and Applied Mathematics, Philadelphia, PA,
+  USA, 2011.
+
+\bibitem{Grigori}
+Laura Grigori and Sophie Moufawad.
+\newblock Communication avoiding ilu0 preconditioner.
+\newblock {\em SIAM Journal on Scientific Computing}, 37:C217--C246, 04 2015.
+
+\bibitem{Hoemmen:2010:CKS:1970638}
+Mark Hoemmen.
+\newblock {\em Communication-avoiding Krylov Subspace Methods}.
+\newblock PhD thesis, Berkeley, CA, USA, 2010.
+\newblock AAI3413388.
+
+\bibitem{press92a}
+William~H. Press, Saul~A. Teukolsky, William~T. Vetterling, and Brian~P.
+  Flannery.
+\newblock {\em Numerical Recipes in C}.
+\newblock Cambridge University Press, 1992.
+
+\end{thebibliography}

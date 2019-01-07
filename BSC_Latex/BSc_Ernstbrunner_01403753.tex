@@ -1,0 +1,353 @@
+%\documentclass{article}
+\documentclass{scrartcl}
+\makeatletter
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\makeatother
+
+\usepackage{multirow}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lscape}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{xcolor}
+\usepackage{yfonts}
+\usepackage[T1]{fontenc}
+\usepackage[toc,page]{appendix}
+
+
+\usepackage{graphicx}		 % Need this to include images
+\usepackage[hidelinks]{hyperref}
+\usepackage{blkarray}
+\usepackage{cancel}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{pdfpages}
+\usepackage{helvet}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{base}{
+  inputencoding=latin10,
+  emptylines=1,
+  breaklines=true,
+  basicstyle=\small\ttfamily,
+  moredelim=**[is][\color{red}]{@}{@},
+}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+%% Define a HUGE 
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{24.88}{50}}
+\makeatother
+
+\begin{document}             % End of preamble and beginning of text.
+
+ 
+%titlepage
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}{.9\linewidth}
+\flushright
+	      		 
+	%University logo
+    \includegraphics[width=0.5\linewidth]{univie.eps}\par
+\centering 	
+    % Title
+	{\scshape{\HUGE Bachelorarbeit\par}}
+	\vspace{1cm}
+	%Thesis title
+    {\scshape{\Large Implementation and experimental comparison between the COMMUNICATION AVOIDING-GENERALIZED MINIMAL RESIDUAL METHOD and standard GMRES \par}}
+    \vspace{2cm}
+    
+  
+ Verfasser  \linebreak
+ {\Large Robert Ernstbrunner \par}
+ 	\vspace{.7cm}
+angestrebter akademischer Grad\linebreak
+ {\Large Bachelor of Science (BSc)\par}
+	\vspace{.7cm}
+
+\flushleft
+	
+
+\begin{tabular}{ll}
+Wien, 2018	\linebreak
+\vspace{.5cm}&   \\
+  Studienkennzahl lt. Studienblatt: & A 033 521 \vspace{.3cm} \\ 
+  Fachrichtung: & Informatik  - Scientific Computing
+  \vspace{.3cm} \\
+  Betreuerin / Betreuer: & Univ.-Prof. Dipl.-Ing. Dr. Wilfried Gansterer, M.Sc. \\
+ \end{tabular}
+ 
+
+\end{minipage}
+\end{center}
+\clearpage
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+\begin{abstract}
+Abstract
+\end{abstract}
+\section{Introduction}
+
+\section{Notation}
+explain matrix / graph notation
+\section{Related work}
+
+
+\section{Computational kernels}
+introduction; definitions: kernel, communication-avoiding
+\subsection{Matrix powers kernel (MPK)}
+\cite{Hoemmen:2010:CKS:1970638} p.60\\
+Power iteration, SpMV instead of MV, sparse matrix like a graph $\rightarrow$ spacial, temporal locality not as efficiently used as in dense MV. 
+Avoid communication by sending / receiving all necessary values beforehand (look at reachability of graph(A)) and computing s basis vectors without further communication.
+
+\subsection{Tall and skinny QR (TSQR)}
+Unconditionally stable like Householder QR but less communication
+
+\subsection{Block Classical Gram-Schmidt (BCGS)}
+Dense matrix-matrix multiplications $\rightarrow$ less communication (factor $\Theta(s)$ fewer messages) than unblocked CGS. Also, BCGS requires less communication that BMGS.
+No reorthogonalization because solving linear system with (std. GMRES uses unblocked MGS-Arnoldi) CA-GMRES uses TSQR which improves orthogonality of the block columns.
+
+\section{Arnoldi iteration}
+introduction.. produces $AQ = QH$
+\subsection{Arnoldi(s)}
+\subsubsection{The Monomial basis}
+like powermethod, rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but: basis vectors are always linearly independent in exact arithmetic. In machine precision they become inevitably dependent at a certain point $\rightarrow$ need a different basis.
+\subsubsection{The Newton basis}
+polinomial interpolation at shifts $\theta_1$, $\theta_2$, $\ldots$, $\theta_s$.
+\paragraph{Choosing the shifts}
+find estimates of the eigenvalues of A (Ritz values).
+\subparagraph{The modified Leja ordering}
+
+\subparagraph{Avoiding complex arithmetic}
+
+
+\subsection{Arnoldi(s,t)}
+\subsubsection{Introduction}
+\subsubsection{Scaling the first basis vector}
+Arnoldi(s,t) produces $\underline{\textfrak{Q}}$ which differs from MGS-Arnoldi $\underline{\hat{\textfrak{Q}}}$ by a unitary scaling $\underline{\Theta}$ = diag($\theta_1$, $\theta_2$, $\ldots$, $\theta_{st}$, $\theta_{st+1}$) such that $\underline{\hat{\textfrak{Q}}} = \textfrak{\underline{Q}}\underline{\Theta}$. $\rightarrow$
+\begin{itemize}
+\item QR factorization must not change direction of the first column
+\item compute $\theta_1 = \left< r_0, q_1 \right>$ / $\beta$
+\item compute $q_1$ via MGS-Arnoldi (this happens naturally when the first outer iteration is started with MGS-Arnoldi in order to compute Ritz values for the Newton basis)
+\end{itemize}
+\subsubsection{QR factorization update}
+overlapping / non overlapping approach.
+
+\subsubsection{Updating the upper Hessenberg matrix}
+flop optimization. how to apply Givens rotations
+
+\section{CA-GMRES}
+uses Arnoldi(s,t)
+show pseudo code of implemented algorithm
+
+\begin{algorithm} % enter the algorithm environment
+\caption{Newton CA-GMRES} % give the algorithm a caption
+\label{alg1} % and a label for \ref{} commands later in the document
+\begin{algorithmic}[1] % enter the algorithmic environment
+    \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
+    \STATE $r_0:=b-Ax_0$, $\beta := \norm{r_0}_2$, $q_1 := r_0/\beta$
+    \FOR{$k = 0$ to $t-1$ do}
+        \IF{$k = 0$}
+        	\STATE Compute $\underline{Q}_0$ and $\underline{H}_0$ using standard Arnoldi
+        	\STATE Set $\underline{\frak{Q}}_0 := \underline{Q}_0$ and $\underline{\frak{H}}_0 := \underline{H}_0$
+        	\STATE Compute Ritz values from $H_0$ and fix basis conversion matrix $\underline{B}_k$
+			\STATE Reduce $\underline{H}_0$ from upper Hessenberg to upper triangular form using $s$ Givens \\
+\hspace{\algorithmicindent} rotations $G_1$, $G_2$, $ \ldots$, $G_s$. Apply the same rotations in the same order to $\beta e_1$, \\
+\hspace{\algorithmicindent} resulting in the length $s + 1$ vector $\zeta_0$.
+		\ELSE
+			\STATE Compute $\underline{\acute{V}}_k$ using SpMV and one AXPY
+			\STATE $\underline{\acute{\frak{R}}}_{k-1,k} := \underline{\frak{Q}}^T_{k-1} \underline{\acute{V}}_k$
+			\STATE $\underline{\acute{V}}'_k := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k-1}\underline{\acute{\frak{R}}}_{k-1,k}$
+			\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$
+			\STATE Compute $\underline{\frak{H}}_{k-1,1}:= - \frak{H}_{k-1} \frak{R}_{k-1,k} R^{-1}_k + \underline{\frak{R}}_{k-1,k} \underline{B}_k R^{-1}_k$
+			\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{s(k-1)} \frak{R}_{k-1,k} R^{-1}_k$
+			\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
+			\STATE $\underline{\frak{H}}_k := 
+			\begin{pmatrix}
+				\frak{H}_{k - 1} & \underline{\frak{H}}_{k - 1,k} \\
+				h_0 e_1 e^T_{sk} & H_k \\
+				0_{1,sk} & h_k e^T_s \\
+			\end{pmatrix}$
+			\STATE Apply Givens rotations $G_1$, $\ldots$, $G_{sk}$ in order to $\begin{pmatrix}
+	\underline{\frak{H}}_{k - 1,k} \\
+	\underline{H}_k \\
+\end{pmatrix}$.
+			\STATE Reduce $\underline{H}_k$ to upper triangular form using $s$ Givens rotations $G_{sk + 1}$, $\ldots$, $G_{s(k + 1)}$. \\
+\hspace{\algorithmicindent} Apply the rotations in the same order to $\begin{pmatrix}
+	\zeta_{k - 1} \\
+	0_s
+\end{pmatrix}$, resulting in the length \\
+\hspace{\algorithmicindent} \mbox{$s(k + 1) + 1$} vector $\zeta_k$.
+		\ENDIF
+	\STATE Element $s(k + 1) + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
+\hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
+	\IF{converged}
+		\STATE Use the above reduction of $\underline{\frak{H}}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\frak{H}_ky - \beta e_1}_2$
+		\STATE Set $x_k := x_0 + \frak{Q}_k y_k$, and exit
+	\ENDIF
+	\ENDFOR 
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Preconditioning}
+Left, right, split, we consider left preconditioning ($M^{-1}Ax = M^{-1}b$) only.
+Scaling is a special type of preconditioning. \cite{Hoemmen:2010:CKS:1970638} considered two types of scaling in order to prevent rapid basis vector growth:
+\begin{enumerate}
+\item Balancing: replacing $A$ by $A' = DAD^{-1}$ with $D$ diagonal.
+\item Equilibration: replacing $A$ by $A' = D_rAD_c$ with $D_r$ and $D_c$ diagonal.
+\end{enumerate}
+In their experiments solving nonsymmetric linear systems with CA-GMRES \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration established to be quite effective and almost made the basis type irrelevant. We observed something similar after applying the ILU(0) preconditioner to the system.
+\subsubsection{ILU(0) preconditioner}
+$M = LU$ \\
+in CA-GMRES apply $M^{-1}$ to $r_0 = b - Ax_0$ at initialization and to $ q_i = Aq_{i-1}$ int the MPK.
+\subsubsection{CA-ILU(0) preconditioner}
+summarize \cite{Grigori} (can be very long or short, dependent on overall length)
+\subsection{Convergence metrics}
+CA-GMRES produces cheap convergence metric, namely the relative residual $\norm{r_{k+1}}_2$ / $\norm{r_0}_2$. Might not be the best choice, depends too much on initial guess $x_0$.\\
+
+If 
+\begin{itemize}
+\item $\norm{x_0}_2$ too large $\rightarrow$ $\norm{r_0}$ will be large and iteration will stop too early.
+\item $x_0 = 0$ harder to make the relative residual small if $A$ is ill-conditioned and $x_{k+1}$ lies nearly in the nullspace of $A$.
+\end{itemize}
+\subsection{Implementation details}
+language: C++, libraries: intel MKL, profiler: ??? (intel VTune Amplifier, TAU, $\ldots$) could not implement neither the MPK nor the CA-ILU(0) preconditioner due to time constraints. Also Modified Leja ordering does not deal with under / overflow in the product to maximize like in \cite{Hoemmen:2010:CKS:1970638}.
+\subsection{Numerical experiments}
+
+How the true solution $\hat{x}$ was generated: $\hat{x}(k) = u(k) + sin(2\pi k/n)$,
+where the scalar $u(k)$ is chosen from a random uniform [-1, 1] distribution. 
+$\hat{x}$ was chosen in this way because a completely random solution is usually nonphysical, but a highly nonrandom solution (such as a vector of all ones) might be near an eigenvector of the matrix (which would result in artificially rapid convergence of the iterative method).
+
+\begin{center}
+	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat1.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat2.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat3.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat1_2.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat2_2.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat3_2.tex}}		
+\end{center}
+
+
+\subsection{Performance experiments}
+\begin{figure}[H]
+\centering
+	\resizebox{1.0\textwidth}{!}{\input{runtimes_matrices.tex}}
+\caption{left CA-GMRES, right GMRES}
+\end{figure}
+\subsubsection{Summary}
+Conclusion: the MPK is an important kernel and should have been implemented, also restarting with $s$ steps of std. GMRES is not optimal and leaves room for optimization.
+\iffalse
+compute Ritz values of real upper Hessenberg matrix with LAPACK "DHSEQR()"
+\url{http://www.netlib.org/lapack/explore-html/da/dba/group__double_o_t_h_e_rcomputational_gacb35e85b362ce8ccf9d653cc3f8fb89c.html#gacb35e85b362ce8ccf9d653cc3f8fb89c}
+\\
+
+Modified Leja ordering \cite{Hoemmen:2010:CKS:1970638} p.291/292\\
+
+Octave code:\\
+\url{https://github.com/magnusgrandin/ca-lanczos/blob/master/modified_leja.m}
+\fi
+
+\section{Conclusion}
+
+\section*{Krylov subspace methods (summarize this section briefly in introduction)}
+
+\cite{Ascher:2011:FCN:2031413} p.191\\
+\begin{itemize}
+\item short description:\\
+Krylov subspace definition: $\mathcal{K}_k(A, r_0) = span \left\{ r_0, Ar_0, A^2r_0,\ldots,A^{k-1}r_0 \right\}$\\
+
+All iterative methods build and enhance a KSP with every iteration.
+\begin{equation*}
+\textbf{r}_k = \textbf{r}_0 + \sum_{j=1}^{k} c_jA^j\textbf{r}_0 \quad \to \quad \textbf{x}_k = \textbf{x}_0 + \sum_{j=0}^{k-1} c_{j+1}A^j\textbf{r}_0
+\end{equation*}
+what is good for the power method, is bad here, bc. vectors are in theory linearly independent but too close to parallel $\to$ in machine arithmetic they become linearly dependent. Need new basis \ldots 
+\item Arnoldi \cite{Ascher:2011:FCN:2031413} p.192
+\begin{equation*}
+AQ_k = Q_{k+1}H_{k+1,k}
+\end{equation*}
+\item Summary: (\cite{Ascher:2011:FCN:2031413} p. 192)
+	\begin{itemize}
+	\item 1. construct an orthogonal basis for the Krylov subspace;
+	\item 2. define an optimality property;
+	\item 3. use an effective preconditioner.
+	\end{itemize}
+\end{itemize}
+
+\cite{Ascher:2011:FCN:2031413} p.184\\
+\begin{itemize}
+\item short description: most stable and prominent iterative method, for sym pos def matrices only.
+\item Algorithm description (just the basics)
+	\begin{itemize}
+	\item $\norm{x - x_k}_A = min_{y \in \mathcal{K}_k(A, r_0)}\norm{x - y}_A$\\
+	 After $k$-steps, $x_k$ minimizes in the KSP the $A$-norm x - $y$ (only if A is SPD, or else it's not a norm)
+	\item follows basic concept: $\textbf{x}_{new} = x_{old} + constant \cdot search direction$ (better version \textit{steepest descent})
+	\item $\textbf{r}_k$ is multiple of $q_{k+1}$ ($q$ from Arnoldi; $q$ is not directly used in CG)\\
+	$\to$ (1) orthogonal residuals $\textbf{r}_i^T\textbf{r}_k = 0, \quad i < k$\\
+	$\to$ (2) $(x_i - x_{i-1})^T A (x_k - x_{k-1}) = 0 \quad \to \quad\Delta \textbf{x}_i^T A \Delta \textbf{x}_k = 0, \quad  i < k$\\
+	in other words: the corrections in \textbf{x} are orthogonal in the $A$-inner product, hence the term 'conjugate' in CG. The term 'gradients' comes from minimizing the energy equation/quadratic form:
+	\begin{equation*}
+	E(x) = \frac{1}{2} \textbf{x}^TA\textbf{x} - b^T\textbf{x} \to min
+	\end{equation*}	 
+	Set the derivative (gradient) to zero, i.e. $E'(x) = 0$:
+	\begin{equation*}
+	A\textbf{x} - b = 0
+	\end{equation*}
+	and we're back to the original problem. So minimizing energies and solving the linear equation $A\textbf{x} = b$ are basically the same.
+	\item $H$ is symmetric, and therefore tridiagonal. Arnoldi simplifies to Lanczos $\to$ short 'three-term' recurrences (only have to look at a few previous orthogonal vectors, not all of them).
+	\end{itemize}
+\item p.191 what about general matrices? Any non-singular matrix $A$ can be transformed into SPD matrix via $A^TA$ $\to$ bad condition number $\kappa (A)$.\\
+
+\{The condition number of the matrix $A^TA$ is the square of the condition number of $A$ [\ldots] A large condition number both increases the number of iterations required and limits the accuracy to which a solution can be obtained. \cite{press92a} p. 89 (2.7.40)\}
+consider Krylov subspace methods that are directly based on general matrix $A$ $\to$ GMRES
+\end{itemize}
+
+\subsection*{GMRES (summarize this section briefly in introduction)}
+\begin{itemize}
+\item short description: general form of MINRES (=like CG it is only for symmetric matrices, but must not be PD) MINRES minimizes $\norm{\textbf{r}_k}_2$ and CG minimizes energy norm of the residual $\norm{\textbf{r}_k}_{A^{-1}}$ or the energy norm of the error $\norm{\textbf{x}^* - \textbf{x}_k}_A$ respectively. \cite{Ascher:2011:FCN:2031413} (p. 198)
+\item algorithm description:
+\item $\norm{b - A\textbf{x}_k}_2 = min_{y \in \mathcal{K}_k(A, r_0)}\norm{b - Ay}_2$\\
+	 After $k$-steps, $\textbf{x}_k$ minimizes in the KSP the $\ell^2$-norm $b - Ay$
+\item GMRES vs. CG:
+\begin{itemize}
+\item CG forces the residual $\textbf{r}_k$ to be orthogonal to the Krylov subspace $\mathcal{K}_k(A, r_0)$;
+\item GMRES seeks the residual with minimum $\ell_2$-norm within the Krylov subspace.
+\end{itemize}
+\item Summary:\\
+The main components of a single iteration of GMRES are
+\begin{enumerate}
+	\item perform a step of the Arnoldi process;
+	\item update the QR factorization of the updated upper Hessenberg matrix;
+	\item solve the resulting least squares problem.
+	\end{enumerate}
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{BSc_Ernstbrunner_01403753}
+
+\begin{appendices}
+\section*{Appendix A}
+discussion of test matrices
+\end{appendices}
+\end{document}
+% End of document.
