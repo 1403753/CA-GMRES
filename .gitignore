@@ -35,7 +35,7 @@ main
 metis
 
 # Files too large
-bmw7st_1.mtx
+bmw7st1.mtx
 xenon2.mtx
 pwtk.mtx
 

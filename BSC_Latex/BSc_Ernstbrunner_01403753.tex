@@ -108,16 +108,39 @@ Wien, 2018	\linebreak
 Abstract
 \end{abstract}
 \section{Introduction}
+As the CPU-memory performance gap widens the cost for communication increases as well.
 
+Compared to arithmetic costs communication costs are much higher and the widening CPU-memory performance gap promotes the need for communication-avoiding algorithms.\\
+
+Communication avoiding GMRES is based on s-step GMRES \textit{REF[[J. Erhel, A parallel GMRES version for general sparse matrices, Electron. Trans. Numer. Anal., 3 (1995), pp. 160–176.]]}
 \section{Notation}
-explain matrix / graph notation
-\section{Related work}
+For linear algebra, similar notation is considered as in \cite{Hoemmen:2010:CKS:1970638} and \cite{Grigori}.
+\begin{itemize}
+\item Greek letters denote scalars, lower case Roman letters denote vectors (or - based on the context - dimensions), capital Roman letters denote matrices.
+\item Capital letters with two subscripts, e.g. '$V_{m,n}$', denote matrices with $m$ rows and $n$ columns.
+\item Capital \textit{Black letter} letters (e.g. $V$, $Q$ and $R$ in Black letters are represented by $\frak{V}$, $\frak{Q}$ and $\frak{R}$ resp.) denote matrices that are composed out of other matrices. 
+\item $v_k$ denotes the $k^{th}$ vector in a series of vectors $v_0$, $v_1$, $\ldots$, ,  $v_k$, $v_{k+1}$, $\ldots$ of equal length.
+\item Similarly, $V_k$ denotes the $k^{th}$ matrix in a sequence of matrices $V_0$, $V_1$, $\ldots$ , $V_k$, $V_{k+1}$, $\ldots$. Generally all these matrices have the same number of rows. They may or may not have the same number of columns.
+\item If $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\underline{V}_k$ comprises vectors $\left[V_k, v_{s+1} \right]$. The underline means one more column at the end.
+\item If again, $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\acute{V}$ consists of vectors $[v_2, v_3, \ldots, v_s]$. The acute denotes one column less at the beginning.
+\item As a consequence $\underline{\acute{V}}$ denotes one more column at the end and one less column at the beginning, e.g. $\underline{\acute{V}} = [\acute{V}, v_{s+1}]$.
+\item Depending on the context, both underline or/and acute letters can also refer to row as well. 
 
+\item Matlab notation is used for addressing elements of matrices and vectors. For example, given a matrix $A$ of size $n \times n$ and two sets of indices $\alpha$ and $\beta$, $A(\alpha,:)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$. Similarly, $A(\alpha, \beta)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$ and the subset of the columns of $A$ whose indices belong to $\beta$.
+
+\end{itemize}
+
+\section{Related work}
+s-step methods, CA-ILU(0)
 
 \section{Computational kernels}
-introduction; definitions: kernel, communication-avoiding
+%introduction; definitions: kernel, communication-avoiding
+In this thesis \textit{computational kernels} define the parts of an algorithm with the highest costs. These costs include both arithmetic and communication. 
+The term \textit{communication} generally denotes the movement of data either between different processors or between fast and slow memory. Communication optimal algorithms do not eliminate communication completely, but they are constructed with the goal to minimize it. This often results in additional redundant computations.
+
 \subsection{Matrix powers kernel (MPK)}
 \cite{Hoemmen:2010:CKS:1970638} p.60\\
+The Matrix Powers Kernel 
 Power iteration, SpMV instead of MV, sparse matrix like a graph $\rightarrow$ spacial, temporal locality not as efficiently used as in dense MV. 
 Avoid communication by sending / receiving all necessary values beforehand (look at reachability of graph(A)) and computing s basis vectors without further communication.
 
@@ -129,8 +152,16 @@ Dense matrix-matrix multiplications $\rightarrow$ less communication (factor $\T
 No reorthogonalization because solving linear system with (std. GMRES uses unblocked MGS-Arnoldi) CA-GMRES uses TSQR which improves orthogonality of the block columns.
 
 \section{Arnoldi iteration}
+
+first presented in \textit{REF[[ W. E. Arnoldi, The principle of minimized iterations in the solution of the matrix eigenvalue problem, Q. Appl. Maths, 9 (1951), pp. 17–29.]]}\\
+
+s steps of standard Arnoldi produce an $s + 1 \times s$ upper Hessenberg Matrix $\underline{H}$ and $m \times s + 1$ orthonormal vectors $q_1$, $q_2$, $\ldots$, $q_s$, $q_{s + 1}$ that form a basis for the Krylov subspace $\mathcal{K}_{s + 1}\left(A,r\right)$ such that $AQ = \underline{Q} \underline{H}$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt (MGS) is often employed because it provides high numerical stability, however, although not as stable, Classical Gram-Schmidt (CGS) is more suited for parallel implementations because it provides fewer synchronization points.
+
 introduction.. produces $AQ = QH$
 \subsection{Arnoldi(s)}
+
+[238] H. F. Walker, Implementation of the GMRES and Arnoldi methods using Householder transformations, Tech. Rep. UCRL-93589, Lawrence Livermore National Laboratory, Oct. 1985.
+
 \subsubsection{The Monomial basis}
 like powermethod, rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but: basis vectors are always linearly independent in exact arithmetic. In machine precision they become inevitably dependent at a certain point $\rightarrow$ need a different basis.
 \subsubsection{The Newton basis}
@@ -154,12 +185,127 @@ Arnoldi(s,t) produces $\underline{\textfrak{Q}}$ which differs from MGS-Arnoldi 
 \subsubsection{QR factorization update}
 overlapping / non overlapping approach.
 
-\subsubsection{Updating the upper Hessenberg matrix}
+\cite{Hoemmen:2010:CKS:1970638} assumably have some errors in their notation, so the process is outlined slightly differently below.
+
+$[\underline{\frak{Q}}_0, \underline{\acute{V}}_1 ] = [\underline{\frak{Q}}_0, \underline{\acute{Q}}_1 ] \cdot 
+\begin{pmatrix}
+	I_{s + 1, s + 1} & \underline{\acute{\frak{R}}}_{0,1} \\
+	0_{s,s + 1} & \underline{\acute{R}}_1 \\
+\end{pmatrix}$ \\
+
+BGS $\ldots$\\
+
+$AV_k = \underline{V}_k\underline{B}_k$ \\
+
+$A [\frak{Q}_{k - 1}, V_k] = [\frak{Q}_{k - 1}, \underline{V}_k]\underline{\frak{B}}_k$ \\
+
+where $\underline{\frak{B}}_k$ satisfies:
+$\underline{\frak{B}}_k = 
+\begin{pmatrix}
+	\frak{H}_{k - 1} & 0_{sk, s} \\
+	h_{k - 1} e_1 e^T_{sk} & \underline{B}_k \\
+\end{pmatrix}$ with $\frak{H}_0 := H_0$ \\
+
+$A [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] \cdot 
+\begin{pmatrix}
+	I_{sk + 1, sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
+	0_{s - 1, sk + 1} &\acute{R}_k \\
+\end{pmatrix}
+ = [ \underline{\frak{Q}}_{k - 1}, \underline{\acute{Q}}_k ] \cdot 
+\begin{pmatrix}
+	I_{sk + 1, sk + 1} & \underline{\acute{\frak{R}}}_{k - 1, k} \\
+	0_{s, sk + 1} & \underline{\acute{R}}_k \\
+\end{pmatrix} \cdot
+\begin{pmatrix}
+	\frak{H}_{k - 1} & 0_{sk, s} \\
+	h_{k - 1} e_1 e^T_{sk} & \underline{B}_k \\
+\end{pmatrix}
+$ \\
+
+We have
+\begin{eqnarray*}
+	A [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] = [ \underline{\frak{Q}}_{k - 1}, \underline{\acute{Q}}_k ] \underline{\frak{H}}_k
+\end{eqnarray*}
+
+therefore,
+\begin{eqnarray*}
+	\underline{\frak{H}}_k = 
+	\begin{pmatrix}
+		I_{sk + 1, sk + 1} & \underline{\acute{\frak{R}}}_{k - 1, k} \\
+		0_{s, sk + 1} & \underline{\acute{R}}_k \\
+	\end{pmatrix} \cdot
+	\begin{pmatrix}
+		\frak{H}_{k - 1} & 0_{sk, s} \\
+		h_{k - 1} e_1 e^T_{sk} & \underline{B}_k \\
+	\end{pmatrix} \cdot
+	\begin{pmatrix}
+		I_{sk + 1, sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
+		0_{s - 1, sk + 1} &\acute{R}_k \\
+	\end{pmatrix}^{-1}
+\end{eqnarray*}
+\iffalse
+Repartitioning the R factor. \\
+
+$\underline{\frak{R}}_k =
+\begin{pmatrix}
+	I_{sk + 1, sk + 1} & \underline{\acute{\frak{R}}}_{k - 1, k} \\
+	0_{s, sk + 1} & \underline{\acute{R}}_k \\
+\end{pmatrix} = 
+\begin{pmatrix}
+	I_{sk, sk} & \underline{\frak{R}}_{k - 1, k} \\
+	0_{s + 1, sk} & \underline{R}_k \\
+\end{pmatrix}$
+
+$\frak{R}_k =
+\begin{pmatrix}
+	I_{sk + 1, sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
+	0_{s - 1, sk + 1} & \acute{R}_k \\
+\end{pmatrix} = 
+\begin{pmatrix}
+	I_{sk, sk} & \frak{R}_{k - 1, k} \\
+	0_{s, sk} & R_k \\
+\end{pmatrix}$
+\fi
+\subsubsection{Reconstructing the upper Hessenberg matrix}
 flop optimization. how to apply Givens rotations
 
 \section{CA-GMRES}
-uses Arnoldi(s,t)
-show pseudo code of implemented algorithm
+%uses Arnoldi(s,t)
+%show pseudo code of implemented algorithm \\
+The GMRES method starts with an initial approximate solution $x_0$ and initial residual $r_0 = b - Ax_0$ and finds a correction $z_k$ at iteration $k$ which solves the least-squares problem 
+\begin{equation}
+	\text{min}_{z_k} \norm{b - A(x_0 + z_k)}_2
+\end{equation}
+where $z_k$ is determined in the Krylov subspace 
+\begin{equation*}
+	 \mathcal{K}_k(A, r_0) = \text{span}\{r_0, Ar_0, \ldots, A^{k-1}r_0\}.
+\end{equation*}
+The solution at iteration $k$ is then formed by $x_k = x_0 + z_k$.
+Since $\{r_0, Ar_0, \ldots, A^{k-1}r_0\}$ is usually ill-conditioned the Arnoldi method is incorporated to produce $k + 1$ orthonormal basis vectors $\underline{Q}_k = [q_1, q_2, \ldots, q_k, q_{k + 1}]$ with $q_1 = r_0/\norm{r_0}_2$ and a $k + 1 \times k$ upper Hessenberg coefficient matrix $\underline{H}_k$ where
+\begin{equation*}
+	AQ_k = \underline{Q}_k\underline{H}_k.
+\end{equation*}
+With these conditions $z_k$ can be defined as $z_k = Q_ky$ such that
+\begin{eqnarray*}
+	\text{min}_{z_k} \norm{b - A(x_0 + z_k)}_2 &=& \text{min}_y \norm{r_0 - AQ_ky}_2 \\
+	 &=& \text{min}_{y} \lVert r_0 - \underline{Q}_k \underline{H}_k y \rVert_2.
+\end{eqnarray*}
+Since $q_1 = r_0/\norm{r_0}_2$ and $\underline{Q}_k$ is orthonormal, one has
+\begin{eqnarray} 
+	\text{min}_y \lVert r_0 - \underline{Q}_k \underline{H}_k y \rVert_2 &=& \text{min}_{y} \lVert \underline{Q}^T_k r_0 - \underline{H}_k y \rVert_2 \nonumber \\ \label{eq:stdgmreslsp}
+	&=& \text{min}_{y} \norm{\beta e_1 - \underline{H}_k y}_2 
+\end{eqnarray}
+with $\beta = \norm{r_0}_2$.
+$\underline{H}_k$ is then factored as $\underline{H}_k = \underline{G}_k \underline{R}_k$ with $\underline{G}_k$ being a product of $k$ Givens rotations and $\underline{R}_k$ being upper triangular. The upper triangular system to solve is then given by
+\begin{equation*}
+	\text{min}_y \norm{\beta \underline{G}^T_k e_1 - \underline{R}_k y}_2
+\end{equation*}
+The solution can then be obtained by computing $x_k = x_0 + Q_ky$. Note that the absolute value of the last coordinate of $\beta \underline{G}^T_k e_1$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$. 
+
+The CA-GMRES algorithm solves a different least-squares problem than ~\eqref{eq:stdgmreslsp}.
+\begin{equation}
+	\text{min}_y \norm{\beta e_1 - \underline{R} \underline{B} R^{-1} y}_2
+\end{equation}
 
 \begin{algorithm} % enter the algorithm environment
 \caption{Newton CA-GMRES} % give the algorithm a caption
@@ -176,10 +322,10 @@ show pseudo code of implemented algorithm
 \hspace{\algorithmicindent} rotations $G_1$, $G_2$, $ \ldots$, $G_s$. Apply the same rotations in the same order to $\beta e_1$, \\
 \hspace{\algorithmicindent} resulting in the length $s + 1$ vector $\zeta_0$.
 		\ELSE
-			\STATE Compute $\underline{\acute{V}}_k$ using SpMV and one AXPY
+			\STATE Compute $\underline{\acute{V}}_k$ using SpMV and 1-2  AXPY
 			\STATE $\underline{\acute{\frak{R}}}_{k-1,k} := \underline{\frak{Q}}^T_{k-1} \underline{\acute{V}}_k$
 			\STATE $\underline{\acute{V}}'_k := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k-1}\underline{\acute{\frak{R}}}_{k-1,k}$
-			\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$
+			\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$ using TSQR
 			\STATE Compute $\underline{\frak{H}}_{k-1,1}:= - \frak{H}_{k-1} \frak{R}_{k-1,k} R^{-1}_k + \underline{\frak{R}}_{k-1,k} \underline{B}_k R^{-1}_k$
 			\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{s(k-1)} \frak{R}_{k-1,k} R^{-1}_k$
 			\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
@@ -240,12 +386,9 @@ where the scalar $u(k)$ is chosen from a random uniform [-1, 1] distribution.
 $\hat{x}$ was chosen in this way because a completely random solution is usually nonphysical, but a highly nonrandom solution (such as a vector of all ones) might be near an eigenvector of the matrix (which would result in artificially rapid convergence of the iterative method).
 
 \begin{center}
-	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat1.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat2.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat3.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat1_2.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat2_2.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{residuals_dmat3_2.tex}}		
+	\resizebox{1.0\textwidth}{!}{\input{dmat1.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{dmat2.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{dmat3.tex}}
 \end{center}
 
 

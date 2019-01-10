@@ -1,3 +1,7 @@
-1 1.00875 0.833703
-2 0.62503 0.685382
-3 0.713253 0.56396
+nr mname MGS SpMV \shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,12),\,for\,all\,test\,matrices,\\\footnotesize\,using\,8\,threads\,and\,restart\,length\,60}
+1 \\footnotesize\\,bcsstk18 3.05502 0.929939
+2 \\footnotesize\\,watt1 0.750133 0.579647
+3 \\footnotesize\\,bmw7st1 1.31264 0.998597
+4 \\footnotesize\\,xenon2 1.36625 1.01644
+5 \\footnotesize\\,pwtk 1.20512 0.982077
+1 \\footnotesize\\,dwb512 0.163975 0.753862

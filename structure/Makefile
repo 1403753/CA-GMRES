@@ -8,8 +8,8 @@ PETSCFLAGS = --mca btl_base_warn_component_unused 0
 PETSC_DIR = /usr/lib/petsc
 MPI_DIR = /usr/include/openmpi
 
-DFLAGS = 
-#-g -O3 -ggdb
+DFLAGS = -g -O0
+# -ggdb
 
 SRC         := $(wildcard *.cpp)
 OBJ         := $(SRC:.cpp=.o)
@@ -38,11 +38,27 @@ main.o: main.cpp
 	
 run:
 	mpirun -n 1 ./main $(PETSCFLAGS)
+
+
+plot: main
+	./main 8 speedup 10 5 12 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,12),\,for\,all\,test\,matrices,\\\footnotesize\,using\,8\,threads\,and\,restart\,length\,60}' \
+	dwb512
+	# pwtk
+	# bcsstk18 watt1 bmw7st1 xenon2 
+	gnuplot ../gnuplot/runtimes_matrices.gnu
+
+	#./main 2 residuals dmat1 120 15 8 20 6 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+05\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
+	#gnuplot ../gnuplot/residuals_dmat.gnu
+	#./main 2 residuals dmat2 120 15 8 20 6 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+10\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
+	#gnuplot ../gnuplot/residuals_dmat.gnu
+	#./main 2 residuals dmat3 120 15 8 20 6 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+15\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
+	#gnuplot ../gnuplot/residuals_dmat.gnu
 	
+
 burn: main
 	./main
-	gnuplot ../gnuplot/runtimes_matrices.gnu
-	# gnuplot ../gnuplot/residuals_dmat1.gnu
+	# gnuplot ../gnuplot/runtimes_matrices.gnu
+	gnuplot ../gnuplot/residuals_dmat.gnu
 	# gnuplot ../gnuplot/residuals_dmat1_2.gnu
 	# gnuplot ../gnuplot/residuals_dmat2.gnu
 	# gnuplot ../gnuplot/residuals_dmat2_2.gnu

@@ -14,8 +14,8 @@ class GMRES_ca : public IKSPType {
 	float                            SDO = 0;
 	float                            SpMV = 0;
 	float                            BCGS = 0;
-	float                            MGS = 0;
 	float                            TSQR = 0;
+	float                            INIT = 0;
 	float                            rtime, ptime, mflops;
 	long long                        flpops;
 	double                           rcond_max = 0;
@@ -32,8 +32,8 @@ public:
 	float getSDO() {return this->SDO;};
 	float getSpMV() {return this->SpMV;};
 	float getBCGS() {return this->BCGS;};
-	float getMGS() {return this->MGS;};
 	float getTSQR() {return this->SDO;};
+	float getINIT() {return this->INIT;};
 	double getRcondMin() {return this->rcond_min;};
 	double getRcondMax() {return this->rcond_max;};
 private:
