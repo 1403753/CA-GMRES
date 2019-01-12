@@ -18,7 +18,7 @@ void res_solve(std::string fname, std::string fdir, std::string mname, KSP_ *ksp
 		file << fname << " " << st << " " << mname << std::endl;
 	} else if (dynamic_cast<GMRES_ca*>(kspType)) {
 		std::streamsize ss = std::cout.precision();
-		file << fname << " " << s << " " << t << " " << std::setprecision(2) << ((GMRES_ca*) kspType)->getRcondMin() << " " << ((GMRES_ca*) kspType)->getRcondMax() << std::setprecision(ss) << std::endl;
+		file << fname << " " << s << " " << t << " " << std::setprecision(2) << std::scientific << ((GMRES_ca*) kspType)->getRcondMin() << " " << ((GMRES_ca*) kspType)->getRcondMax() << std::setprecision(ss) << std::endl;
 	} else exit(1);
 	
 	for (auto h:*rHist) {
@@ -47,7 +47,7 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	MmtReader											mmtReader;
 	// size_t                        s = 15;													// step-size ('inner iterations')
 	// size_t                        t = 8;                          // number of 'outer iterations' before restart
-	GMRES_ca											gmres_ca(s1, t1, NEWTON);         // KSPType
+	GMRES_ca											gmres_ca(s2, t2, NEWTON);         // KSPType
 	GMRES                         gmres(st);                     // KSPType
 	
 	sparse_index_base_t           indexing;	
@@ -80,6 +80,7 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	
 	for (size_t i = 0; i < n; ++i)
 		tx[i] = gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n);
+		// tx[i] = 1;	
 	
 	// start with initial guess
 	// for (size_t i = 0; i < n; ++i)
@@ -90,13 +91,13 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 
 	stat = ksp.setOptions(rTol, aTol, dTol, maxit, true);
 	stat = ksp.setOperator(&A_mkl);
-
-	res_solve(fname, "../gnuplot/gmres_standard.dat", mname, &ksp, &gmres, &pcnone, x, b, st, st, st);
-	
-  // gmres_ca NEWTON
+  
+	// gmres_ca NEWTON
+	res_solve(fname, "../gnuplot/gmres_newt_small_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s1, t1, s1*t1);
 
 	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_newt_small_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s1, t1, s1*t1);
+		res_solve(fname, "../gnuplot/gmres_standard.dat", mname, &ksp, &gmres, &pcnone, x, b, st, st, st);
+
 
 	gmres_ca.setBasis(MONOMIAL);
 
@@ -109,13 +110,13 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	gmres_ca.setT(t2);
 	
 	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_mono_large_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s2, t2, s2*t2);	
+	res_solve(fname, "../gnuplot/gmres_mono_large_s.dat", mname, &ksp, &gmres_ca, &ilu0, x, b, s2, t2, s2*t2);	
 	
 	gmres_ca.setBasis(NEWTON);	
-	
+
 	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_newt_large_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s2, t2, s2*t2);	
-	
+	res_solve(fname, "../gnuplot/gmres_newt_large_s.dat", mname, &ksp, &gmres_ca, &ilu0, x, b, s2, t2, s2*t2);	
+
 
 	gsl_rng_free(rng);
 

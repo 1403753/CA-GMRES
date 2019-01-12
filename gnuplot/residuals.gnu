@@ -53,9 +53,9 @@
 	set title mname
 	
 	plot '../gnuplot/gmres_standard.dat' using 1:2 title '\scriptsize GMRES('. m .')' linecolor "black" with lines, \
-		'../gnuplot/gmres_mono_small_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Monomial-GMRES(' . s1 . ',' . t1 . ') \newline \tiny min, max rcond \#: ' . cmin1 . ', ' . cmax1 . '\end{minipage}' linecolor "blue" pt 6 ps 1 , \
-		'../gnuplot/gmres_newt_small_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Newton-GMRES(' . s1 . ',' . t1 . ') \newline \tiny min, max rcond \#: ' . cmin2 . ', ' . cmax2 . '\end{minipage}' linecolor "green" pt 8 ps 1, \
-		'../gnuplot/gmres_mono_large_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Monomial-GMRES(' . s2 . ',' . t2 . ') \newline \tiny min, max rcond \#: ' . cmin3 . ', ' . cmax3 . '\end{minipage}' linecolor "magenta" pt 6 ps 1, \
-		'../gnuplot/gmres_newt_large_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Newton-GMRES(' . s2 . ',' . t2 . ') \newline \tiny min, max rcond \#: ' . cmin4 . ', ' . cmax4 . '\end{minipage}' linecolor "cyan" pt 8 ps 1
+		'../gnuplot/gmres_mono_small_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Monomial-GMRES(' . s1 . ',' . t1 . ') \newline \tiny min, max basis rcond \#: ' . cmin1 . ', ' . cmax1 . '\end{minipage}' linecolor "blue" pt 6 ps 1 , \
+		'../gnuplot/gmres_newt_small_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Newton-GMRES(' . s1 . ',' . t1 . ') \newline \tiny min, max basis rcond \#: ' . cmin2 . ', ' . cmax2 . '\end{minipage}' linecolor "green" pt 8 ps 1, \
+		'../gnuplot/gmres_mono_large_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Monomial-GMRES(' . s2 . ',' . t2 . ') \newline \tiny min, max basis rcond \#: ' . cmin3 . ', ' . cmax3 . '\end{minipage}' linecolor "magenta" pt 6 ps 1, \
+		'../gnuplot/gmres_newt_large_s.dat' using 1:2 title '\begin{minipage}[l]{.95\textwidth} \scriptsize Newton-GMRES(' . s2 . ',' . t2 . ') \newline \tiny min, max basis rcond \#: ' . cmin4 . ', ' . cmax4 . '\end{minipage}' linecolor "cyan" pt 8 ps 1
 
 	set out
