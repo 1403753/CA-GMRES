@@ -16,8 +16,12 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{lscape}
+
 \usepackage{algorithmic}
 \usepackage{algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
 \usepackage{xcolor}
 \usepackage{yfonts}
 \usepackage[T1]{fontenc}
@@ -85,12 +89,13 @@ angestrebter akademischer Grad\linebreak
 	
 
 \begin{tabular}{ll}
-Wien, 2018	\linebreak
+Wien, 2019	\linebreak
 \vspace{.5cm}&   \\
   Studienkennzahl lt. Studienblatt: & A 033 521 \vspace{.3cm} \\ 
   Fachrichtung: & Informatik  - Scientific Computing
   \vspace{.3cm} \\
-  Betreuerin / Betreuer: & Univ.-Prof. Dipl.-Ing. Dr. Wilfried Gansterer, M.Sc. \\
+  Betreuerin / Betreuer: & Univ.-Prof. Dipl.-Ing. Dr.\\ 
+  & Wilfried Gansterer, M.Sc. \\
  \end{tabular}
  
 
@@ -113,19 +118,21 @@ As the CPU-memory performance gap widens the cost for communication increases as
 Compared to arithmetic costs communication costs are much higher and the widening CPU-memory performance gap promotes the need for communication-avoiding algorithms.\\
 
 Communication avoiding GMRES is based on s-step GMRES \textit{REF[[J. Erhel, A parallel GMRES version for general sparse matrices, Electron. Trans. Numer. Anal., 3 (1995), pp. 160–176.]]}
+
+\newpage
 \section{Notation}
 For linear algebra, similar notation is considered as in \cite{Hoemmen:2010:CKS:1970638} and \cite{Grigori}.
 \begin{itemize}
 \item Greek letters denote scalars, lower case Roman letters denote vectors (or - based on the context - dimensions), capital Roman letters denote matrices.
-\item Capital letters with two subscripts, e.g. '$V_{m,n}$', denote matrices with $m$ rows and $n$ columns.
+\item Capital letters with two subscripts, e.g. '$V_{m, n}$', denote matrices with $m$ rows and $n$ columns.
 \item Capital \textit{Black letter} letters (e.g. $V$, $Q$ and $R$ in Black letters are represented by $\frak{V}$, $\frak{Q}$ and $\frak{R}$ resp.) denote matrices that are composed out of other matrices. 
 \item $v_k$ denotes the $k^{th}$ vector in a series of vectors $v_0$, $v_1$, $\ldots$, ,  $v_k$, $v_{k+1}$, $\ldots$ of equal length.
 \item Similarly, $V_k$ denotes the $k^{th}$ matrix in a sequence of matrices $V_0$, $V_1$, $\ldots$ , $V_k$, $V_{k+1}$, $\ldots$. Generally all these matrices have the same number of rows. They may or may not have the same number of columns.
 \item If $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\underline{V}_k$ comprises vectors $\left[V_k, v_{s+1} \right]$. The underline means one more column at the end.
 \item If again, $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\acute{V}$ consists of vectors $[v_2, v_3, \ldots, v_s]$. The acute denotes one column less at the beginning.
 \item As a consequence $\underline{\acute{V}}$ denotes one more column at the end and one less column at the beginning, e.g. $\underline{\acute{V}} = [\acute{V}, v_{s+1}]$.
-\item Depending on the context, both underline or/and acute letters can also refer to row as well. 
-
+\item Depending on the context, both underline or/and acute letters can also refer to rows as well. 
+\item $0_{m, n}$ is defined as an $m \times n$ matrix consisting of zeros and $e_k$ denotes the $k^{\text{th}}$ canonical vector with its dimension depending on the context.
 \item Matlab notation is used for addressing elements of matrices and vectors. For example, given a matrix $A$ of size $n \times n$ and two sets of indices $\alpha$ and $\beta$, $A(\alpha,:)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$. Similarly, $A(\alpha, \beta)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$ and the subset of the columns of $A$ whose indices belong to $\beta$.
 
 \end{itemize}
@@ -135,8 +142,8 @@ s-step methods, CA-ILU(0)
 
 \section{Computational kernels}
 %introduction; definitions: kernel, communication-avoiding
-In this thesis \textit{computational kernels} define the parts of an algorithm with the highest costs. These costs include both arithmetic and communication. 
-The term \textit{communication} generally denotes the movement of data either between different processors or between fast and slow memory. Communication optimal algorithms do not eliminate communication completely, but they are constructed with the goal to minimize it. This often results in additional redundant computations.
+In this thesis \textit{computational kernels} define the parts of an algorithm with the highest costs. These costs include both arithmetic operations and communication.
+The term \textit{communication} generally denotes the movement of data either between different processors or between fast and slow memory. Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way such that reduction of communication is prioritized. This often results in new challenges, e.g., the  CA-ILU(0) algorithm (section~\ref{sec:ca-ilu}) has to balance between communication and redundant computations; CA-GMRES (section~\ref{sec:ca-gmres}) incorporates additional techniques to deal with ill-conditioned basis vectors.
 
 \subsection{Matrix powers kernel (MPK)}
 \cite{Hoemmen:2010:CKS:1970638} p.60\\
@@ -161,6 +168,27 @@ introduction.. produces $AQ = QH$
 \subsection{Arnoldi(s)}
 
 [238] H. F. Walker, Implementation of the GMRES and Arnoldi methods using Householder transformations, Tech. Rep. UCRL-93589, Lawrence Livermore National Laboratory, Oct. 1985.
+
+source above! \texttt{At the heart of Arnoldi’s method is a Gram-Schmidt process, and so we refer to the
+GMRES implementation of [8] as the Gram-Schmidt implementation. The basic form
+of Arnoldi’s method given above employs the classical Gram-Schmidt process, which
+is numerically untrustworthy. Because of roundoff, there may be severe loss of orthogonality among the computed Vm’S. In practice, it is usual to implement Arnoldi’s
+method using the modified Gram-Schmidt process (see Golub and Van Loan [4]).
+Mathematically, this is just a rearrangement of the classical process; computationally,
+it has superior properties.
+Even the modified Gram-Schmidt process can fail to perform well if the vectors on
+which it operates are not sufficiently independent. Indeed, if S (sl,... ,sin) is an
+n m matrix the columns of which are to be orthonormalized and if Q (ql,. qm)
+is the computed result of applying modified Gram-Schmidt to the columns of S using
+floating point arithmetic with unit rounding error u, then Bjorck [1] has shown that
+(1.6) QTQ I + E, [IEll2
+where the condition number 2(S) is the ratio of the largest singular value of S to the
+smallest. It follows that at the mth step of Arnoldi’s method using modified GramSchmidt, Vm+ may have a significantly nonzero conponent in the span of {vl,. Vm}
+if 2((vl,...,vm,Avm)) is large, i. e., if Avm is nearly in the span of {vl,...,Vm}.
+Shad [7, p. 214 has suggested that the Gram-Schmidt process in Arnoldi’s method
+may be an important source of errors in the full and incomplete orthogonalization
+methods ([6],[7]), which are related to GMRES.
+}
 
 \subsubsection{The Monomial basis}
 like powermethod, rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but: basis vectors are always linearly independent in exact arithmetic. In machine precision they become inevitably dependent at a certain point $\rightarrow$ need a different basis.
@@ -269,53 +297,83 @@ $\frak{R}_k =
 \subsubsection{Reconstructing the upper Hessenberg matrix}
 flop optimization. how to apply Givens rotations
 
-\section{CA-GMRES}
+\section{CA-GMRES} \label{sec:ca-gmres}
 %uses Arnoldi(s,t)
 %show pseudo code of implemented algorithm \\
+
+
+\subsection{GMRES(m)}
+\begin{algorithm}[H]
+\caption{GMRES(m)}
+\label{alg:gmres(m)}
+\begin{algorithmic}[1]
+    \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
+    \STATE $r_0:=b-Ax_0$, $\beta := \norm{r_0}_2$, $q_0 := r_0/\beta$, $\underline{Q}_0 := q_0$, $\underline{H}_0 := \varnothing$
+    \FOR{$k = 1$ to $m$}
+		\STATE Compute $q_k$ and $h_k$ using MGS-Arnoldi
+		\STATE set $\underline{Q}_k := [Q_{k-1},q_k]$ and $\underline{H}_k := [\underline{H}_{k -1}, h_k]$
+		\STATE Reduce ${h_k}$ of $\underline{H}_k$ from upper Hessenberg to upper triangular form using $k$ \\
+		\hspace{\algorithmicindent} Givens rotations $G_1$, $G_2$, $ \ldots$, $G_{k}$. Apply the same rotations in the same order \\ 
+		\hspace{\algorithmicindent} to $\beta e_1$,  resulting in the length $k + 1$ vector $\zeta_{k}$.
+		\STATE Element $k + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
+\hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
+	\IF{converged}
+		\STATE Use the above reduction of $\underline{H}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{H}_k y - \beta e_1}_2$
+		\STATE Set $x_k := x_0 + Q_k y_k$, and exit
+	\ENDIF
+	\ENDFOR 
+\end{algorithmic}
+\end{algorithm}
+
 The GMRES method starts with an initial approximate solution $x_0$ and initial residual $r_0 = b - Ax_0$ and finds a correction $z_k$ at iteration $k$ which solves the least-squares problem 
 \begin{equation}
-	\text{min}_{z_k} \norm{b - A(x_0 + z_k)}_2
+	z_k := \text{argmin}_{z} \norm{b - A(x_0 + z)}_2
 \end{equation}
 where $z_k$ is determined in the Krylov subspace 
 \begin{equation*}
 	 \mathcal{K}_k(A, r_0) = \text{span}\{r_0, Ar_0, \ldots, A^{k-1}r_0\}.
 \end{equation*}
 The solution at iteration $k$ is then formed by $x_k = x_0 + z_k$.
-Since $\{r_0, Ar_0, \ldots, A^{k-1}r_0\}$ is usually ill-conditioned the Arnoldi method is incorporated to produce $k + 1$ orthonormal basis vectors $\underline{Q}_k = [q_1, q_2, \ldots, q_k, q_{k + 1}]$ with $q_1 = r_0/\norm{r_0}_2$ and a $k + 1 \times k$ upper Hessenberg coefficient matrix $\underline{H}_k$ where
+Since $\{r_0, Ar_0, \ldots, A^{k-1}r_0\}$ is usually ill-conditioned the Arnoldi method is incorporated to produce $k + 1$ orthonormal basis vectors $\underline{Q} = [q_1, q_2, \ldots, q_k, q_{k + 1}]$ with $q_1 = r_0/\norm{r_0}_2$ and a $k + 1 \times k$ upper Hessenberg coefficient matrix $\underline{H}$ where
 \begin{equation*}
-	AQ_k = \underline{Q}_k\underline{H}_k.
+	AQ = \underline{Q}\underline{H}.
 \end{equation*}
-With these conditions $z_k$ can be defined as $z_k = Q_ky$ such that
+With these conditions $z_k$ can be defined as $z := Qy$ such that 
 \begin{eqnarray*}
-	\text{min}_{z_k} \norm{b - A(x_0 + z_k)}_2 &=& \text{min}_y \norm{r_0 - AQ_ky}_2 \\
-	 &=& \text{min}_{y} \lVert r_0 - \underline{Q}_k \underline{H}_k y \rVert_2.
+	\text{argmin}_{z} \norm{b - A(x_0 + z)}_2 &=& \text{argmin}_y \norm{r_0 - AQy}_2 \\
+	 &=& \text{argmin}_{y} \lVert r_0 - \underline{Q} \underline{H} y \rVert_2.
 \end{eqnarray*}
-Since $q_1 = r_0/\norm{r_0}_2$ and $\underline{Q}_k$ is orthonormal, one has
-\begin{eqnarray} 
-	\text{min}_y \lVert r_0 - \underline{Q}_k \underline{H}_k y \rVert_2 &=& \text{min}_{y} \lVert \underline{Q}^T_k r_0 - \underline{H}_k y \rVert_2 \nonumber \\ \label{eq:stdgmreslsp}
-	&=& \text{min}_{y} \norm{\beta e_1 - \underline{H}_k y}_2 
+Since $q_1 = r_0/\norm{r_0}_2$ and $\underline{Q}$ is orthonormal, one has
+\begin{eqnarray} \label{eq:stdgmreslsp}
+	\text{argmin}_y \lVert r_0 - \underline{Q} \underline{H} y \rVert_2 &=& \text{argmin}_{y} \lVert \underline{Q}^T r_0 - \underline{H} y \rVert_2 \nonumber \\
+	&=& \text{argmin}_{y} \norm{\beta e_1 - \underline{H} y}_2 
 \end{eqnarray}
 with $\beta = \norm{r_0}_2$.
-$\underline{H}_k$ is then factored as $\underline{H}_k = \underline{G}_k \underline{R}_k$ with $\underline{G}_k$ being a product of $k$ Givens rotations and $\underline{R}_k$ being upper triangular. The upper triangular system to solve is then given by
+$\underline{H}$ is then factored as $\underline{H} = G\underline{U}$ with $G$ being a product of $k$ Givens rotations, $\underline{U} = 
+\begin{pmatrix}
+	U \\
+	0_{1, k}
+\end{pmatrix}$
+and $U$ being upper triangular. The triangular system to solve is then given by
 \begin{equation*}
-	\text{min}_y \norm{\beta \underline{G}^T_k e_1 - \underline{R}_k y}_2
+	y_k := \text{argmin}_y \norm{\beta G^T e_1 - \underline{U} y}_2
 \end{equation*}
-The solution can then be obtained by computing $x_k = x_0 + Q_ky$. Note that the absolute value of the last coordinate of $\beta \underline{G}^T_k e_1$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$. 
+The solution is obtained by computing $x_k = x_0 + Qy_k$. Note that the absolute value of the last coordinate of $\beta G^T e_1$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$. \\
 
-The CA-GMRES algorithm solves a different least-squares problem than ~\eqref{eq:stdgmreslsp}.
+The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:stdgmreslsp}:
 \begin{equation}
-	\text{min}_y \norm{\beta e_1 - \underline{R} \underline{B} R^{-1} y}_2
+	\text{argmin}_y \norm{\beta e_1 - \underline{R} \underline{B} R^{-1} y}_2
 \end{equation}
 
-\begin{algorithm} % enter the algorithm environment
-\caption{Newton CA-GMRES} % give the algorithm a caption
-\label{alg1} % and a label for \ref{} commands later in the document
-\begin{algorithmic}[1] % enter the algorithmic environment
+\begin{algorithm}[H]
+\caption{Newton CA-GMRES}
+\label{alg:ca-gmres}
+\begin{algorithmic}[1]
     \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
     \STATE $r_0:=b-Ax_0$, $\beta := \norm{r_0}_2$, $q_1 := r_0/\beta$
-    \FOR{$k = 0$ to $t-1$ do}
+    \FOR{$k = 0$ to $t-1$}
         \IF{$k = 0$}
-        	\STATE Compute $\underline{Q}_0$ and $\underline{H}_0$ using standard Arnoldi
+        	\STATE Compute $\underline{Q}_0$ and $\underline{H}_0$ using MGS-Arnoldi
         	\STATE Set $\underline{\frak{Q}}_0 := \underline{Q}_0$ and $\underline{\frak{H}}_0 := \underline{H}_0$
         	\STATE Compute Ritz values from $H_0$ and fix basis conversion matrix $\underline{B}_k$
 			\STATE Reduce $\underline{H}_0$ from upper Hessenberg to upper triangular form using $s$ Givens \\
@@ -349,7 +407,7 @@ The CA-GMRES algorithm solves a different least-squares problem than ~\eqref{eq:
 	\STATE Element $s(k + 1) + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
 \hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
 	\IF{converged}
-		\STATE Use the above reduction of $\underline{\frak{H}}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\frak{H}_ky - \beta e_1}_2$
+		\STATE Use the above reduction of $\underline{\frak{H}}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{\frak{H}}_k y - \beta e_1}_2$
 		\STATE Set $x_k := x_0 + \frak{Q}_k y_k$, and exit
 	\ENDIF
 	\ENDFOR 
@@ -366,8 +424,8 @@ Scaling is a special type of preconditioning. \cite{Hoemmen:2010:CKS:1970638} co
 In their experiments solving nonsymmetric linear systems with CA-GMRES \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration established to be quite effective and almost made the basis type irrelevant. We observed something similar after applying the ILU(0) preconditioner to the system.
 \subsubsection{ILU(0) preconditioner}
 $M = LU$ \\
-in CA-GMRES apply $M^{-1}$ to $r_0 = b - Ax_0$ at initialization and to $ q_i = Aq_{i-1}$ int the MPK.
-\subsubsection{CA-ILU(0) preconditioner}
+in CA-GMRES apply $M^{-1}$ to $r_0 = b - Ax_0$ at initialization and to $ q_i = Aq_{i-1}$ in the MPK.
+\subsubsection{CA-ILU(0) preconditioner} \label{sec:ca-ilu}
 summarize \cite{Grigori} (can be very long or short, dependent on overall length)
 \subsection{Convergence metrics}
 CA-GMRES produces cheap convergence metric, namely the relative residual $\norm{r_{k+1}}_2$ / $\norm{r_0}_2$. Might not be the best choice, depends too much on initial guess $x_0$.\\
@@ -378,7 +436,25 @@ If
 \item $x_0 = 0$ harder to make the relative residual small if $A$ is ill-conditioned and $x_{k+1}$ lies nearly in the nullspace of $A$.
 \end{itemize}
 \subsection{Implementation details}
-language: C++, libraries: intel MKL, profiler: ??? (intel VTune Amplifier, TAU, $\ldots$) could not implement neither the MPK nor the CA-ILU(0) preconditioner due to time constraints. Also Modified Leja ordering does not deal with under / overflow in the product to maximize like in \cite{Hoemmen:2010:CKS:1970638}.
+language: C++, libraries: intel MKL,
+
+The Intel$\textregistered$ Math Kernel Library has been optimized by exploiting both processor and system features and
+capabilities. Special care has been given to those routines that most profit from cache-management
+techniques. These especially include matrix-matrix operation routines such as dgemm().
+In addition, code optimization techniques have been applied to minimize dependencies of scheduling integer
+and floating-point units on the results within the processor.
+The major optimization techniques used throughout the library include:
+• Loop unrolling to minimize loop management costs
+• Blocking of data to improve data reuse opportunities
+• Copying to reduce chances of data eviction from cache
+• Data prefetching to help hide memory latency
+• Multiple simultaneous operations (for example, dot products in dgemm) to eliminate stalls due to
+arithmetic unit pipelines
+• Use of hardware features such as the SIMD arithmetic units, where appropriate
+These are techniques from which the arithmetic code benefits the most.
+
+
+ profiler: ??? (intel VTune Amplifier, TAU, $\ldots$) could not implement neither the MPK nor the CA-ILU(0) preconditioner due to time constraints. Also Modified Leja ordering does not deal with under / overflow in the product to maximize like in \cite{Hoemmen:2010:CKS:1970638}.
 \subsection{Numerical experiments}
 
 How the true solution $\hat{x}$ was generated: $\hat{x}(k) = u(k) + sin(2\pi k/n)$,
@@ -389,6 +465,9 @@ $\hat{x}$ was chosen in this way because a completely random solution is usually
 	\resizebox{1.0\textwidth}{!}{\input{dmat1.tex}}
 	\resizebox{1.0\textwidth}{!}{\input{dmat2.tex}}
 	\resizebox{1.0\textwidth}{!}{\input{dmat3.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{watt1.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{watt1_ilu0.tex}}
+	\resizebox{1.0\textwidth}{!}{\input{pwtk.tex}}
 \end{center}
 
 
@@ -442,7 +521,7 @@ AQ_k = Q_{k+1}H_{k+1,k}
 \item short description: most stable and prominent iterative method, for sym pos def matrices only.
 \item Algorithm description (just the basics)
 	\begin{itemize}
-	\item $\norm{x - x_k}_A = min_{y \in \mathcal{K}_k(A, r_0)}\norm{x - y}_A$\\
+	\item $\norm{x - x_k}_A = \text{argmin}_{y \in \mathcal{K}_k(A, r_0)}\norm{x - y}_A$\\
 	 After $k$-steps, $x_k$ minimizes in the KSP the $A$-norm x - $y$ (only if A is SPD, or else it's not a norm)
 	\item follows basic concept: $\textbf{x}_{new} = x_{old} + constant \cdot search direction$ (better version \textit{steepest descent})
 	\item $\textbf{r}_k$ is multiple of $q_{k+1}$ ($q$ from Arnoldi; $q$ is not directly used in CG)\\
@@ -469,7 +548,7 @@ consider Krylov subspace methods that are directly based on general matrix $A$ $
 \begin{itemize}
 \item short description: general form of MINRES (=like CG it is only for symmetric matrices, but must not be PD) MINRES minimizes $\norm{\textbf{r}_k}_2$ and CG minimizes energy norm of the residual $\norm{\textbf{r}_k}_{A^{-1}}$ or the energy norm of the error $\norm{\textbf{x}^* - \textbf{x}_k}_A$ respectively. \cite{Ascher:2011:FCN:2031413} (p. 198)
 \item algorithm description:
-\item $\norm{b - A\textbf{x}_k}_2 = min_{y \in \mathcal{K}_k(A, r_0)}\norm{b - Ay}_2$\\
+\item $\norm{b - A\textbf{x}_k}_2 = argmin_{y \in \mathcal{K}_k(A, r_0)}\norm{b - Ay}_2$\\
 	 After $k$-steps, $\textbf{x}_k$ minimizes in the KSP the $\ell^2$-norm $b - Ay$
 \item GMRES vs. CG:
 \begin{itemize}
@@ -487,7 +566,7 @@ The main components of a single iteration of GMRES are
 
 \bibliographystyle{plain}
 \bibliography{BSc_Ernstbrunner_01403753}
-
+ \listofalgorithms
 \begin{appendices}
 \section*{Appendix A}
 discussion of test matrices
