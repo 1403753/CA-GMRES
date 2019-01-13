@@ -42,7 +42,7 @@ private:
 	sparse_status_t tsqr(double *V, double *Q, double *R_, const size_t m, const size_t n, const size_t st);
 	sparse_status_t gmres_init(double *H, double *H_reduced, double *Q, std::vector<ic_pair_t> &theta_vals, size_t s, size_t m);
 	sparse_status_t reduce_H(double *H, size_t s, size_t m, size_t k, double *zeta, std::vector<std::pair<double, double>> &sc);
-	sparse_status_t update_H(double *H, double *H_reduced, double *R, double *R_k, std::vector<ic_pair_t>  theta_vals, size_t s, size_t m, size_t k);																	
+	sparse_status_t update_H(double *H, double *H_reduced, double *R, double *R_k, std::vector<ic_pair_t>  theta_vals, std::vector<double> *scales, size_t s, size_t m, size_t k);																	
 };
 
 #endif

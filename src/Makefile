@@ -50,12 +50,15 @@ plot: main
 
 	#gnuplot ../gnuplot/runtimes_matrices.gnu
 
+	./main 2 residuals xenon2 20 5 4 10 2 \\shortstack{Xenon2}
+	gnuplot ../gnuplot/residuals.gnu
+	
 	###########
 	#  WATT1  #
 	###########
 	
-	./main 2 residuals watt1 30 3 10 5 6 \\shortstack{Watt1}
-	gnuplot ../gnuplot/residuals_watt1.gnu
+	# ./main 2 residuals watt1 30 3 10 5 6 \\shortstack{Watt1}
+	# gnuplot ../gnuplot/residuals_watt1.gnu
 
 	####################
 	#  WATT1 + ILU(0)  #

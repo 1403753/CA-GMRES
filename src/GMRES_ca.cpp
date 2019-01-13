@@ -22,7 +22,7 @@ GMRES_ca::~GMRES_ca() {
 
 }
 
-sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, double *R_k, std::vector<ic_pair_t>  theta_vals, size_t s, size_t m, size_t k) {
+sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, double *R_k, std::vector<ic_pair_t>  theta_vals, std::vector<double> *scales, size_t s, size_t m, size_t k) {
 	sparse_status_t stat = SPARSE_STATUS_SUCCESS;
 	double      imag;
 
@@ -34,11 +34,11 @@ sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, doub
 	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s*k, s - 1, s*k, -1, H, m + 1, R, m + s + 1, 1, &H[(m + 1)*(s*k + 1)], m + 1);
 	
 	// h_underscore_blackletter_(k - 1,k): R_(k-1,k)*B_
-	cblas_daxpy(s*k, 1, R, 1, &H[(m + 1)*(s*k)], 1);
+	cblas_daxpy(s*k, scales->at(0)/*scale*/, R, 1, &H[(m + 1)*(s*k)], 1);
 
 	for (size_t i = 1; i < s; ++i) {
 		cblas_daxpy(s*k, theta_vals.at(i).second.real(), &R[(m + s + 1)*(i - 1)], 1, &H[(m + 1)*(s*k + i)], 1);
-		cblas_daxpy(s*k, 1, &R[(m + s + 1)*i], 1, &H[(m + 1)*(s*k + i)], 1);
+		cblas_daxpy(s*k, scales->at(i)/*scale*/, &R[(m + s + 1)*i], 1, &H[(m + 1)*(s*k + i)], 1);
 		imag = theta_vals.at(i).second.imag();
 		if (imag < 0)
 			cblas_daxpy(s*k, -(imag*imag), &R[(m + s + 1)*(i - 2)], 1, &H[(m + 1)*(s*k + i)], 1);
@@ -50,7 +50,7 @@ sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, doub
 	// H_k: R_k * B_k
 	for (size_t i = 0; i < s - 1; ++i) {
 		cblas_daxpy(i + 1, theta_vals.at(i).second.real(), &R_k[s*i], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
-		cblas_daxpy(i + 2, 1, &R_k[s*(i + 1)], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
+		cblas_daxpy(i + 2, scales->at(i)/*scale*/, &R_k[s*(i + 1)], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
 		imag = theta_vals.at(i).second.imag();
 		if (imag < 0)
 			cblas_daxpy(s, -(imag*imag), &R_k[s*(i - 1)], 1, &H[(m + 1)*(s*k + i) + s*k], 1);
@@ -62,7 +62,7 @@ sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, doub
 		cblas_daxpy(s, -(imag*imag), &R_k[s*(s - 2)], 1, &H[(m + 1)*(s*k + (s - 1)) + s*k], 1);
 
 	// h_k: roh_k * b_k (here b_k is 1)
-	H[(m + 1)*(s*(k + 1) - 1) + s*(k + 1)] = R[(m + s + 1)*(s - 1) + s*(k + 1)] * 1;
+	H[(m + 1)*(s*(k + 1) - 1) + s*(k + 1)] = R[(m + s + 1)*(s - 1) + s*(k + 1)] * scales->at(s - 1)/*scale*/;
 	
 	int info;
 	info = LAPACKE_dtrtri (LAPACK_COL_MAJOR, 'U', 'N', s, R_k, s);
@@ -77,7 +77,7 @@ sparse_status_t GMRES_ca::update_H(double *H, double *H_reduced, double *R, doub
 	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, s, s, s, 1, &H[(m + 1)*(s*k) + s*k], m + 1, R_k, s, 0, &H_reduced[(m + 1)*(s*k) + s*k], m + 1);	
 
 	// H_k: + roh~^-1*b_k*z*es^T
-	cblas_daxpy(s, R_k[s*s - 1]*1, &R[(m + s + 1)*(s - 1) + s*k], 1, &H_reduced[(m + 1)*(s*(k + 1) - 1) + s*k], 1);
+	cblas_daxpy(s, R_k[s*s - 1] * scales->at(s - 1)/*scale*/, &R[(m + s + 1)*(s - 1) + s*k], 1, &H_reduced[(m + 1)*(s*(k + 1) - 1) + s*k], 1);
 
 	// h_k: times roh~^-1
 	H[(m + 1)*(s*(k + 1) - 1) + s*(k + 1)] *= R_k[s*s - 1];
@@ -261,7 +261,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	bool                                       restart = true;             // restart as long as value is true
 
 	std::vector<ic_pair_t>                     theta_vals;                 // ritz values in modified leja ordering	
-
+	std::vector<double>                        scales;                     // scales for basis column scaling
+	
 	sparse_status_t                            stat;
 	sparse_matrix_t                            *A_mkl = ksp->getA_mkl();   // n x n matrix A
 	const std::shared_ptr<Mtx_CSR>             A_ptr = ksp->getA_ptr();    // n x n matrix A
@@ -376,6 +377,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 			// outer iterations before restart
 			for (k = 1; k < t; ++k) {
 
+				scales.clear();
+				scales.reserve(s);
+			
 				// compute A_mkl*q_(s+1) and store result in V[:,0]
 
 				// mkl_sparse_set_mv_hint(*A_mkl, SPARSE_OPERATION_NON_TRANSPOSE, descr, s);
@@ -392,7 +396,10 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				pc->mv(&Q[n*(s*k)], V, descr);
 
 				cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
-
+				
+				scales.push_back(cblas_dnrm2(n, V, 1));
+				/*scale->*/ cblas_dscal(n, 1/scales.at(0), V, 1);
+				
 				for (size_t i = 1; i < s; ++i) {
 
 					imag = theta_vals.at(i).second.imag();
@@ -404,7 +411,16 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 					if (imag < 0) {
 						cblas_daxpy(n, imag*imag, &V[n*(i - 2)], 1, &V[n*i], 1);
 					}
+					
+					scales.push_back(cblas_dnrm2(n, &V[n*i], 1));
+					/*scale->*/ cblas_dscal(n, 1/scales.at(i), &V[n*i], 1);
+					
 				}
+				
+				// std::cout << "scales:\n";
+				// for (auto s: scales) {
+					// std::cout << s << std::endl;
+				// }
 				
 				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 					exit(1);
@@ -449,7 +465,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 					exit(1);				
 				
-				update_H(H, H_reduced, R, R_k, theta_vals, s, m, k);
+				update_H(H, H_reduced, R, R_k, theta_vals, &scales, s, m, k);
 				
 				if (PAPI_flops(&rtime, &ptime, &flpops, &mflops) < PAPI_OK)
 					exit(1);

@@ -64,12 +64,11 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	
 	// read matrix
 	stat = mmtReader.read_matrix_from_file(std::string("../matrix_market/") + fname + std::string(".mtx"), &A_mkl);
-	
-	
+
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
-	
+
 	stat = mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // n is needed
-	
+
 	b = (double *) mkl_malloc(n * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	tx = (double *) mkl_malloc(n * sizeof(double), 64);if(tx == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
@@ -77,11 +76,11 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL)); // Seed with time	
-	
+
 	for (size_t i = 0; i < n; ++i)
 		tx[i] = gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n);
 		// tx[i] = 1;	
-	
+
 	// start with initial guess
 	// for (size_t i = 0; i < n; ++i)
 		// x[i] = 0.1*(i%3 + 1);
