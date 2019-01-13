@@ -54,8 +54,8 @@ plot: main
 	#  WATT1  #
 	###########
 	
-	# ./main 2 residuals watt1 30 3 10 5 6 \\shortstack{Watt1}
-	# gnuplot ../gnuplot/residuals_watt1.gnu
+	./main 2 residuals watt1 30 3 10 5 6 \\shortstack{Watt1}
+	gnuplot ../gnuplot/residuals_watt1.gnu
 
 	####################
 	#  WATT1 + ILU(0)  #
@@ -65,8 +65,8 @@ plot: main
 	# gnuplot ../gnuplot/residuals_watt1_ilu0.gnu
 
 	
-	./main 2 residuals pwtk 20 5 4 5 4 \\shortstack{pwtk}
-	gnuplot ../gnuplot/residuals_pwtk.gnu
+	# ./main 2 residuals pwtk 20 5 4 5 4 \\shortstack{pwtk}
+	# gnuplot ../gnuplot/residuals_pwtk.gnu
 	
 	#./main 2 residuals dmat1 120 15 8 20 6 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+05\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
 	#gnuplot ../gnuplot/residuals.gnu

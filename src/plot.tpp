@@ -30,7 +30,7 @@ void res_solve(std::string fname, std::string fdir, std::string mname, KSP_ *ksp
 
 sparse_status_t generate_residual_plot(std::string fname, std::string mname, size_t st, size_t s1, size_t t1, size_t s2, size_t t2) {
 
-	double                 		   	rTol = 1e-11;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
+	double                 		   	rTol = 1e-16;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
                                                                 // == || r_{k+1} || / || r_0 ||
 	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
@@ -47,7 +47,7 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	MmtReader											mmtReader;
 	// size_t                        s = 15;													// step-size ('inner iterations')
 	// size_t                        t = 8;                          // number of 'outer iterations' before restart
-	GMRES_ca											gmres_ca(s2, t2, NEWTON);         // KSPType
+	GMRES_ca											gmres_ca(s1, t1, NEWTON);         // KSPType
 	GMRES                         gmres(st);                     // KSPType
 	
 	sparse_index_base_t           indexing;	
@@ -110,12 +110,12 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	gmres_ca.setT(t2);
 	
 	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_mono_large_s.dat", mname, &ksp, &gmres_ca, &ilu0, x, b, s2, t2, s2*t2);	
+	res_solve(fname, "../gnuplot/gmres_mono_large_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s2, t2, s2*t2);	
 	
 	gmres_ca.setBasis(NEWTON);	
 
 	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_newt_large_s.dat", mname, &ksp, &gmres_ca, &ilu0, x, b, s2, t2, s2*t2);	
+	res_solve(fname, "../gnuplot/gmres_newt_large_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s2, t2, s2*t2);	
 
 
 	gsl_rng_free(rng);
