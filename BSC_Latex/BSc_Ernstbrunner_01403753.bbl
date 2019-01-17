@@ -6,6 +6,17 @@ Uri~M. Ascher and Chen Greif.
 \newblock Society for Industrial and Applied Mathematics, Philadelphia, PA,
   USA, 2011.
 
+\bibitem{doi:10.1093/imanum/14.4.563}
+Z.~BAI, D.~HU, and L.~REICHEL.
+\newblock A newton basis gmres implementation.
+\newblock {\em IMA Journal of Numerical Analysis}, 14(4):563--581, 1994.
+
+\bibitem{Erhel95aparallel}
+Jocelyne Erhel.
+\newblock A parallel gmres version for general sparse matrices.
+\newblock {\em Electronic Transactions on Numerical Analysis}, 3:160--176,
+  1995.
+
 \bibitem{Grigori}
 Laura Grigori and Sophie Moufawad.
 \newblock Communication avoiding ilu0 preconditioner.

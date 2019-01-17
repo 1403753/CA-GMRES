@@ -1,21 +1,36 @@
 
-void res_solve(std::string fname, std::string fdir, std::string mname, KSP_ *ksp, IKSPType *kspType, IPCType *pcType, double *x, double *b, size_t s, size_t t, size_t st) {
-
+sparse_status_t res_solve(std::string fname, std::string fdir, std::string title, size_t n, sparse_matrix_t *A_mkl, IKSPType *kspType, IPCType *pcType, double *b, size_t s, size_t t, size_t st) {
+	
 	std::ofstream file;
+	sparse_status_t               stat;
+	
+	double                 		   	rTol = 1e-20;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
+                                                                // == || r_{k+1} || / || r_0 ||
+	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
+	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
+	size_t                        maxit = 1000;                   // maximum number of iterations to use	
+	double *x;
+	KSP_ ksp;	
+	
+	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
-	ksp->setKSPType(kspType);
-	ksp->setPCType(pcType);
-	
-	ksp->setUp();
-	
-	ksp->solve(x, b);
-	
-	std::vector<std::pair<size_t, double>>* rHist = ksp->getRHist();
-	
+	ksp.setOptions(rTol, aTol, dTol, maxit, true);
+
+	ksp.setOperator(A_mkl);
+
+	ksp.setKSPType(kspType);
+	ksp.setPCType(pcType);
+
+	ksp.setUp();
+
+	stat = ksp.solve(x, b);
+
+	std::vector<std::pair<size_t, double>>* rHist = ksp.getRHist();
+
 	file.open(fdir);
-	
+
 	if(dynamic_cast<GMRES*>(kspType)) {
-		file << fname << " " << st << " " << mname << std::endl;
+		file << fname << " " << st << " " << title << std::endl;
 	} else if (dynamic_cast<GMRES_ca*>(kspType)) {
 		std::streamsize ss = std::cout.precision();
 		file << fname << " " << s << " " << t << " " << std::setprecision(2) << std::scientific << ((GMRES_ca*) kspType)->getRcondMin() << " " << ((GMRES_ca*) kspType)->getRcondMax() << std::setprecision(ss) << std::endl;
@@ -24,31 +39,26 @@ void res_solve(std::string fname, std::string fdir, std::string mname, KSP_ *ksp
 	for (auto h:*rHist) {
 		file << h.first << " " << std::scientific << h.second << std::endl;
 	}
+
+	mkl_free(x);
+
+	file.close();
 	
-	file.close();	
+	return stat;
 }
 
-sparse_status_t generate_residual_plot(std::string fname, std::string mname, size_t st, size_t s1, size_t t1, size_t s2, size_t t2) {
+sparse_status_t generate_residual_plot(std::string fname, std::string title, size_t st, size_t s1, size_t t1, size_t s2, size_t t2) {
 
-	double                 		   	rTol = 1e-16;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
-                                                                // == || r_{k+1} || / || r_0 ||
-	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
-	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
-	size_t                        maxit = 1000;                   // maximum number of iterations to use
 	sparse_status_t               stat;
 	sparse_matrix_t               A_mkl;                          // n x n matrix A
 	double                        *b;
-	double                        *x;
 	double                        *tx;
 	double                        *r;
-	KSP_                          ksp;							 						  // linear solver context	
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	MmtReader											mmtReader;
-	// size_t                        s = 15;													// step-size ('inner iterations')
-	// size_t                        t = 8;                          // number of 'outer iterations' before restart
-	GMRES_ca											gmres_ca(s1, t1, NEWTON);         // KSPType
-	GMRES                         gmres(st);                     // KSPType
+	GMRES_ca											gmres_ca(s1, t1, NEWTON);     // KSPType
+	GMRES                         gmres(st);                      // KSPType
 	
 	sparse_index_base_t           indexing;	
 	size_t                        n, m;
@@ -58,10 +68,8 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	double                        *values;
 	struct matrix_descr           descr;
 	std::ofstream                 file;
+	std::ifstream                 ifile;
 
-
-
-	
 	// read matrix
 	stat = mmtReader.read_matrix_from_file(std::string("../matrix_market/") + fname + std::string(".mtx"), &A_mkl);
 
@@ -70,57 +78,51 @@ sparse_status_t generate_residual_plot(std::string fname, std::string mname, siz
 	stat = mkl_sparse_d_export_csr(A_mkl, &indexing, &n, &m, &rows_start, &rows_end, &col_indx, &values); // n is needed
 
 	b = (double *) mkl_malloc(n * sizeof(double), 64);if(b == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
-	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	tx = (double *) mkl_malloc(n * sizeof(double), 64);if(tx == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	r = (double *) mkl_malloc(n * sizeof(double), 64);if(r == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL)); // Seed with time	
 
-	for (size_t i = 0; i < n; ++i)
-		tx[i] = gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n);
-		// tx[i] = 1;	
+		
+	// file.open("tx.vec_bcsskt18");
+	
+	// for (size_t i = 0; i < n; ++i) {
+		// tx[i] = (gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n)) *2;
+		// // tx[i] = 1;		
+		// file << std::scientific << std::setprecision(20) << tx[i] << std::endl;
+	// }
+	
+	// file.close();
+
 
 	// start with initial guess
 	// for (size_t i = 0; i < n; ++i)
 		// x[i] = 0.1*(i%3 + 1);
 	
-	
-	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
+	ifile.open("tx.vec");
+	for (size_t i = 0; i < n; ++i) {
+		ifile >> tx[i];
+	}
+	ifile.close();
 
-	stat = ksp.setOptions(rTol, aTol, dTol, maxit, true);
-	stat = ksp.setOperator(&A_mkl);
-  
-	// gmres_ca NEWTON
-	res_solve(fname, "../gnuplot/gmres_newt_small_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s1, t1, s1*t1);
+	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);
 
-	std::fill(x, x + n, 0);
-		res_solve(fname, "../gnuplot/gmres_standard.dat", mname, &ksp, &gmres, &pcnone, x, b, st, st, st);
-
-
+	res_solve(fname, "../gnuplot/gmres_newt_small_s.dat", title, n, &A_mkl, &gmres_ca, &pcnone, b, s1, t1, s1*t1);
 	gmres_ca.setBasis(MONOMIAL);
+	res_solve(fname, "../gnuplot/gmres_mono_small_s.dat", title, n, &A_mkl, &gmres_ca, &pcnone, b, s1, t1, s1*t1);
 
-	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_mono_small_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s1, t1, s1*t1);	
-	
-	// bigger s
-		
 	gmres_ca.setS(s2);
 	gmres_ca.setT(t2);
-	
-	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_mono_large_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s2, t2, s2*t2);	
-	
-	gmres_ca.setBasis(NEWTON);	
 
-	std::fill(x, x + n, 0);
-	res_solve(fname, "../gnuplot/gmres_newt_large_s.dat", mname, &ksp, &gmres_ca, &pcnone, x, b, s2, t2, s2*t2);	
-
+	res_solve(fname, "../gnuplot/gmres_mono_large_s.dat", title, n, &A_mkl, &gmres_ca, &pcnone, b, s2, t2, s2*t2);	
+	gmres_ca.setBasis(NEWTON);
+	res_solve(fname, "../gnuplot/gmres_newt_large_s.dat", title, n, &A_mkl, &gmres_ca, &pcnone, b, s2, t2, s2*t2);
+	res_solve(fname, "../gnuplot/gmres_standard.dat", title, n, &A_mkl, &gmres, &pcnone, b, st, st, st);
 
 	gsl_rng_free(rng);
 
 	stat = mkl_sparse_destroy(A_mkl);
-	mkl_free(x);
 	mkl_free(tx);
 	mkl_free(b);
 	mkl_free(r);
@@ -171,14 +173,14 @@ sparse_status_t speedup_solve(std::string fname, std::string title, size_t idx, 
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_taus2);
   gsl_rng_set(rng, time(NULL)); // Seed with time	
 
-	for (size_t i = 0; i < n; ++i)
-		tx[i] = gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n);	
+	for (size_t i = 0; i < n; ++i) {
+		tx[i] = gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n);
+		// tx[i] = 1;		
+	}	
 	
 	stat = mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);	
 
 	stat = ksp->setOperator(&A_mkl);
-
-
 
 	for (size_t i = 0; i < its; ++i) {
 		
@@ -245,7 +247,7 @@ sparse_status_t generate_speedup_plot(std::vector<std::string> *fnames, std::str
 	// file.close();
 	
 	// file.open("../gnuplot/gmres.dat");
-		// file << "nr" << " " << "mname" << " " << "MGS" << " " << "SpMV" << " " << title << std::endl;
+		// file << "nr" << " " << "title" << " " << "MGS" << " " << "SpMV" << " " << title << std::endl;
 	// file.close();
 
 	stat = ksp.setOptions(rTol, aTol, dTol, maxit, true);

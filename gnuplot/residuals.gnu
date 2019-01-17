@@ -5,7 +5,7 @@
 	set output fname . '.tex'
  	
 	set xrange [0:1000]
-	set yrange [1e-10:1e-0]
+	set yrange [1e-16:1e-0]
 
 	set style fill solid border -1
 	set key at 480, 9e-06

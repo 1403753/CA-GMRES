@@ -76,7 +76,7 @@ int main(int argc, char **args) {
 			
 			std::string title = args[9]; // "\\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+05\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}";
 			generate_residual_plot(fname, title, st, s1, t1, s2, t2);
-			
+
 		} else if (type == "speedup" && argc > 7) {
 			
 			std::istringstream iss_its(args[3]);

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6880 64-bit) (preloaded format=pdflatex 2019.1.2)  12 JAN 2019 20:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6880 64-bit) (preloaded format=pdflatex 2019.1.2)  17 JAN 2019 19:14
 entering extended mode
 **./BSc_Ernstbrunner_01403753.tex
 (BSc_Ernstbrunner_01403753.tex
@@ -90,13 +90,13 @@ Package tocbasic Info: omitting babel extension for `lot'
 Class scrartcl Info: Redefining `\numberline' on input line 5615.
 \bibindent=\dimen102
 )
-LaTeX Info: Redefining \rm on input line 4.
-LaTeX Info: Redefining \sf on input line 5.
-LaTeX Info: Redefining \tt on input line 6.
-LaTeX Info: Redefining \bf on input line 7.
-LaTeX Info: Redefining \it on input line 8.
-LaTeX Info: Redefining \sl on input line 9.
-LaTeX Info: Redefining \sc on input line 10.
+LaTeX Info: Redefining \rm on input line 5.
+LaTeX Info: Redefining \sf on input line 6.
+LaTeX Info: Redefining \tt on input line 7.
+LaTeX Info: Redefining \bf on input line 8.
+LaTeX Info: Redefining \it on input line 9.
+LaTeX Info: Redefining \sl on input line 10.
+LaTeX Info: Redefining \sc on input line 11.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
 Package: multirow 2018/08/03 v2.3 Span multiple rows of a table
@@ -467,24 +467,24 @@ Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS)
 (BSc_Ernstbrunner_01403753.aux)
 \openout1 = `BSc_Ernstbrunner_01403753.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for LY/yfrak/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for LYG/ygoth/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for LY/yfrak/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for LYG/ygoth/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
 
 ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -513,7 +513,7 @@ G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
 \AtBeginShipoutBox=\box43
-Package hyperref Info: Link coloring OFF on input line 61.
+Package hyperref Info: Link coloring OFF on input line 62.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -523,9 +523,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count143
 )
-LaTeX Info: Redefining \ref on input line 61.
-LaTeX Info: Redefining \pageref on input line 61.
-LaTeX Info: Redefining \nameref on input line 61.
+LaTeX Info: Redefining \ref on input line 62.
+LaTeX Info: Redefining \pageref on input line 62.
+LaTeX Info: Redefining \nameref on input line 62.
 
 (BSc_Ernstbrunner_01403753.out) (BSc_Ernstbrunner_01403753.out)
 \@outlinefile=\write3
@@ -541,23 +541,26 @@ Package epstopdf Info: Source file: <univie.eps>
 (epstopdf)                    date: 2019-01-01 14:21:50
 (epstopdf)                    size: 303340 bytes
 (epstopdf)             Output file: <univie-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-01 15:33:35
-(epstopdf)                    size: 44523 bytes
+(epstopdf)                    date: 2019-01-16 16:32:44
+(epstopdf)                    size: 44591 bytes
 (epstopdf)             Command: <epstopdf --outfile=univie-eps-converted-to.pdf
  univie.eps>
-(epstopdf)             \includegraphics on input line 71.
+(epstopdf)             \includegraphics on input line 72.
 Package epstopdf Info: Output file is already uptodate.
-<univie-eps-converted-to.pdf, id=115, 569.12625pt x 285.065pt>
+
+
+pdfTeX warning: pdflatex (file ./univie-eps-converted-to.pdf): PDF inclusion: f
+ound PDF version <1.7>, but at most version <1.5> allowed
+<univie-eps-converted-to.pdf, id=111, 569.12625pt x 285.065pt>
 File: univie-eps-converted-to.pdf Graphic file (type pdf)
 <use univie-eps-converted-to.pdf>
-Package pdftex.def Info: univie-eps-converted-to.pdf  used on input line 71.
+Package pdftex.def Info: univie-eps-converted-to.pdf  used on input line 72.
 (pdftex.def)             Requested size: 188.21371pt x 94.27182pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 91.
-
+LaTeX Font Info:    Try loading font information for U+msa on input line 92.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 91.
+LaTeX Font Info:    Try loading font information for U+msb on input line 92.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -565,14 +568,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {C:/Users/Robert/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./univie-e
 ps-converted-to.pdf>]
-LaTeX Font Info:    Try loading font information for T1+phv on input line 108.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 109.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 108.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 109.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 108.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 109.
 
 (BSc_Ernstbrunner_01403753.toc)
 \tf@toc=\write4
@@ -581,228 +584,328 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
  [2
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 118--119
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 116.
 
- []
 
-[3]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 126.
-
- ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 126.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
 
 
 Package amsfonts Warning: Obsolete command \frak; \mathfrak should be used inst
-ead on input line 128.
+ead on input line 118.
 
-LaTeX Font Info:    Try loading font information for U+euf on input line 128.
+LaTeX Font Info:    Try loading font information for U+euf on input line 118.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\ueuf.fd"
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
-Overfull \hbox (5.7402pt too wide) in paragraph at lines 131--132
+Overfull \hbox (5.7402pt too wide) in paragraph at lines 121--122
 []\T1/cmr/m/n/10.95 If $\OML/cmm/m/it/10.95 V[]$ \T1/cmr/m/n/10.95 is a ma-trix
  con-sist-ing of $\OML/cmm/m/it/10.95 s$ \T1/cmr/m/n/10.95 vec-tors $[]$, $[][]
 $ com-prises vec-tors $[]$.
  []
 
-[4]
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 148.
-
-Underfull \hbox (badness 10000) in paragraph at lines 163--164
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
 
  []
 
-[5]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 191.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 152.
+
+Underfull \hbox (badness 10000) in paragraph at lines 153--157
+
+ []
+
+[4]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 165.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-Overfull \hbox (68.36435pt too wide) in paragraph at lines 172--192
-\T1/cmtt/m/n/10.95 and so we refer to the GMRES implementation of [8] as the Gr
-am-Schmidt implementation.
+Overfull \hbox (17.43901pt too wide) in paragraph at lines 165--166
+[]\T1/cmtt/m/n/10.95 To minimize communication in a parallel setting, the s mon
+omial basis vectors
  []
 
 
-Overfull \hbox (40.0725pt too wide) in paragraph at lines 172--192
+Overfull \hbox (7.66869pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 of the Krylov subspace $\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10
+.95 y; Ay; A\OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 y; [] ; A[]y\OT1/cmr/m/n/10
+.95 ]$ \T1/cmtt/m/n/10.95 are computed with no communication
+ []
+
+
+Overfull \hbox (0.4639pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 using the so-called matrix powers kernel [13]. This requires
+ ghosting and
+ []
+
+
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 computing redundantly on each processor the data required fo
+r computing its
+ []
+
+
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 part of the vectors with no communication. Note that through
+out this paper
+ []
+
+
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 we use the term ghosting to denote the storage of redundant 
+data, of vectors
+ []
+
+
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 or matrices, that do not belong to the processor's assigned 
+domain or part,
+ []
+
+
+Overfull \hbox (9.01479pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 First, the data and the work is split between $\OML/cmm/m/it
+/10.95 P$ \T1/cmtt/m/n/10.95 processors. Each processor
+ []
+
+
+Overfull \hbox (43.12016pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 is assigned a part $\OML/cmm/m/it/10.95 $ \T1/cmtt/m/n/10.9
+5 of the input vector $\OML/cmm/m/it/10.95 y[]$ \T1/cmtt/m/n/10.95 ($\OML/cmm/m
+/it/10.95 y[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 \OT1/cmr/m/n/10.95 )$\T1/
+cmtt/m/n/10.95 ) and $\OML/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10
+.95 ; \OT1/cmr/m/n/10.95 :)$\T1/cmtt/m/n/10.95 , where $\OML/cmm/m/it/10.95  
+\OMS/cmsy/m/n/10.95  \OML/cmm/m/it/10.95 V\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10
+.95 G\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 ))$\T1/cmtt/m/
+n/10.95 .
+ []
+
+
+Overfull \hbox (8.46898pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 till $\OML/cmm/m/it/10.95 y[] \OT1/cmr/m/n/10.95 = \OML/cmm/
+m/it/10.95 Ay[]$ \T1/cmtt/m/n/10.95 without communicating with other processors
+. To do so, each
+ []
+
+
+Overfull \hbox (40.0725pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 processor fetches all the data needed from the neighboring p
+rocessors, to compute
+ []
+
+
+Overfull \hbox (4.05286pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 its part $\OML/cmm/m/it/10.95 $ \T1/cmtt/m/n/10.95 of the $
+\OML/cmm/m/it/10.95 s$ \T1/cmtt/m/n/10.95 vectors. Thus, to compute $\OML/cmm/m
+/it/10.95 y[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 \OT1/cmr/m/n/10.95 )$\T1/
+cmtt/m/n/10.95 , each processor should
+ []
+
+
+Overfull \hbox (12.54663pt too wide) in paragraph at lines 165--166
+\T1/cmtt/m/n/10.95 receive the missing data of $\OML/cmm/m/it/10.95 y[]\OT1/cmr
+/m/n/10.95 (\OML/cmm/m/it/10.95 []\OT1/cmr/m/n/10.95 )$ \T1/cmtt/m/n/10.95 and
+ $\OML/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 []; \OT1/cmr/m/
+n/10.95 :)$ \T1/cmtt/m/n/10.95 from its neighboring processors
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--178
+
+ []
+
+[5]
+Overfull \hbox (5.02742pt too wide) in paragraph at lines 186--197
+[]\T1/cmr/m/n/10.95 source above! \T1/cmtt/m/n/10.95 At the heart of Arnoldi's 
+method is a Gram-Schmidt process, and
+ []
+
+
+Overfull \hbox (45.73087pt too wide) in paragraph at lines 186--197
+\T1/cmtt/m/n/10.95 so we refer to the GMRES implementation of [8] as the Gram-S
+chmidt implementation.
+ []
+
+
+Overfull \hbox (40.0725pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 The basic form of Arnoldi's method given above employs the c
 lassical Gram-Schmidt
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 172--192
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 process, which is numerically untrustworthy. Because of roun
 doff, there may
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 172--192
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 be severe loss of orthogonality among the computed Vm'S. In 
 practice, it is
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 172--192
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 usual to implement Arnoldi's method using the modified Gram-
 Schmidt process
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 172--192
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 (see Golub and Van Loan [4]). Mathematically, this is just a
  rearrangement
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 172--192
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 of the classical process; computationally, it has superior p
 roperties. Even
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 172--192
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 the modified Gram-Schmidt process can fail to perform well i
 f the vectors on
  []
 
 
-Overfull \hbox (34.41412pt too wide) in paragraph at lines 172--192
+Overfull \hbox (34.41412pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 which it operates are not sufficiently independent. Indeed, 
 if S (sl,... ,sin)
  []
 
 
-Overfull \hbox (23.09738pt too wide) in paragraph at lines 172--192
+Overfull \hbox (23.09738pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 is an n m matrix the columns of which are to be orthonormali
 zed and if Q (ql,.
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 172--192
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 qm) is the computed result of applying modified Gram-Schmidt
  to the columns
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 172--192
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 of S using floating point arithmetic with unit rounding erro
 r u, then Bjorck
  []
 
 
-Overfull \hbox (0.4639pt too wide) in paragraph at lines 172--192
+Overfull \hbox (0.4639pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 [1] has shown that (1.6) QTQ I + E, [IEll2 where the conditi
 on number 2(S)
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 172--192
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 is the ratio of the largest singular value of S to the small
 est. It follows
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 172--192
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 that at the mth step of Arnoldi's method using modified Gram
 Schmidt, Vm+ may
  []
 
 
-Overfull \hbox (57.0476pt too wide) in paragraph at lines 172--192
+Overfull \hbox (57.0476pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 have a significantly nonzero conponent in the span of vl,. V
 m if 2((vl,...,vm,Avm))
  []
 
 
-Overfull \hbox (23.09738pt too wide) in paragraph at lines 172--192
+Overfull \hbox (23.09738pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 is large, i. e., if Avm is nearly in the span of vl,...,Vm. 
 Shad [7, p. 214
  []
 
 
-Overfull \hbox (51.38924pt too wide) in paragraph at lines 172--192
+Overfull \hbox (51.38924pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 has suggested that the Gram-Schmidt process in Arnoldi's met
 hod may be an important
  []
 
 
-Overfull \hbox (34.41412pt too wide) in paragraph at lines 172--192
+Overfull \hbox (34.41412pt too wide) in paragraph at lines 186--197
 \T1/cmtt/m/n/10.95 source of errors in the full and incomplete orthogonalizatio
 n methods ([6],[7]),
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 206--209
+
+ []
+
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 218--223
+Underfull \hbox (badness 10000) in paragraph at lines 226--228
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 224--225
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 226--227
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--229
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 230--236
-
- []
-
-
-Overfull \hbox (26.90479pt too wide) in paragraph at lines 237--252
-[]$\OML/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 [[][]\OML/cmm/m/it/10.95 ; []\OT1/cm
-r/m/n/10.95 ] \OMS/cmsy/m/n/10.95  [] \OT1/cmr/m/n/10.95 = [[][]\OML/cmm/m/it/
-10.95 ; [][]\OT1/cmr/m/n/10.95 ] \OMS/cmsy/m/n/10.95  []  []$ 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 237--252
-
- []
-
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 307.
 [7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 360--362
-
- []
-
-[9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 431--432
+Underfull \hbox (badness 10000) in paragraph at lines 293--298
 
  []
 
 
-LaTeX Warning: Command \textregistered invalid in math mode on input line 441.
+Underfull \hbox (badness 10000) in paragraph at lines 299--300
+
+ []
 
 
-LaTeX Warning: Command \textcircled invalid in math mode on input line 441.
+Underfull \hbox (badness 10000) in paragraph at lines 327--328
+
+ []
 
 
-LaTeX Warning: Command \textcircled invalid in math mode on input line 441.
+Underfull \hbox (badness 10000) in paragraph at lines 329--330
 
-[11] (dmat1.tex
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 338--340
+
+ []
+
+[9]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 410.
+ [10] [11]
+Underfull \hbox (badness 10000) in paragraph at lines 467--469
+
+ []
+
+[12] [13]
+Underfull \hbox (badness 10000) in paragraph at lines 543--544
+
+ []
+
+
+LaTeX Warning: Command \textregistered invalid in math mode on input line 553.
+
+
+LaTeX Warning: Command \textcircled invalid in math mode on input line 553.
+
+
+LaTeX Warning: Command \textcircled invalid in math mode on input line 553.
+
+[14] (dmat1.tex
 \gptboxheight=\skip69
 \gptboxwidth=\skip70
 \gptboxtext=\box44
 Package epstopdf Info: Source file: <dmat1.eps>
-(epstopdf)                    date: 2019-01-08 18:35:29
-(epstopdf)                    size: 29496 bytes
+(epstopdf)                    date: 2019-01-14 20:42:16
+(epstopdf)                    size: 29403 bytes
 (epstopdf)             Output file: <dmat1-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-08 18:36:53
-(epstopdf)                    size: 17506 bytes
+(epstopdf)                    date: 2019-01-16 16:32:45
+(epstopdf)                    size: 17071 bytes
 (epstopdf)             Command: <epstopdf --outfile=dmat1-eps-converted-to.pdf 
 dmat1.eps>
 (epstopdf)             \includegraphics on input line 125.
@@ -811,18 +914,18 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat1-eps-converted-to.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<dmat1-eps-converted-to.pdf, id=275, 361.35pt x 252.945pt>
+<dmat1-eps-converted-to.pdf, id=314, 361.35pt x 252.945pt>
 File: dmat1-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat1-eps-converted-to.pdf>
 Package pdftex.def Info: dmat1-eps-converted-to.pdf  used on input line 125.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
 ) (dmat2.tex
 Package epstopdf Info: Source file: <dmat2.eps>
-(epstopdf)                    date: 2019-01-08 18:35:44
-(epstopdf)                    size: 29343 bytes
+(epstopdf)                    date: 2019-01-14 20:44:11
+(epstopdf)                    size: 29320 bytes
 (epstopdf)             Output file: <dmat2-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-08 18:36:54
-(epstopdf)                    size: 17155 bytes
+(epstopdf)                    date: 2019-01-16 16:32:46
+(epstopdf)                    size: 16921 bytes
 (epstopdf)             Command: <epstopdf --outfile=dmat2-eps-converted-to.pdf 
 dmat2.eps>
 (epstopdf)             \includegraphics on input line 125.
@@ -831,18 +934,18 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat2-eps-converted-to.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<dmat2-eps-converted-to.pdf, id=276, 361.35pt x 252.945pt>
+<dmat2-eps-converted-to.pdf, id=315, 361.35pt x 252.945pt>
 File: dmat2-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat2-eps-converted-to.pdf>
 Package pdftex.def Info: dmat2-eps-converted-to.pdf  used on input line 125.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
 ) (dmat3.tex
 Package epstopdf Info: Source file: <dmat3.eps>
-(epstopdf)                    date: 2019-01-08 18:35:58
-(epstopdf)                    size: 29347 bytes
+(epstopdf)                    date: 2019-01-14 20:44:27
+(epstopdf)                    size: 29296 bytes
 (epstopdf)             Output file: <dmat3-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-08 18:36:56
-(epstopdf)                    size: 17203 bytes
+(epstopdf)                    date: 2019-01-16 16:32:46
+(epstopdf)                    size: 16838 bytes
 (epstopdf)             Command: <epstopdf --outfile=dmat3-eps-converted-to.pdf 
 dmat3.eps>
 (epstopdf)             \includegraphics on input line 125.
@@ -851,37 +954,122 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat3-eps-converted-to.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<dmat3-eps-converted-to.pdf, id=277, 361.35pt x 252.945pt>
+<dmat3-eps-converted-to.pdf, id=316, 361.35pt x 252.945pt>
 File: dmat3-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat3-eps-converted-to.pdf>
 Package pdftex.def Info: dmat3-eps-converted-to.pdf  used on input line 125.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
-) (watt1.tex
-Package epstopdf Info: Source file: <watt1.eps>
+) (dmat1_scale.tex
+Package epstopdf Info: Source file: <dmat1_scale.eps>
+(epstopdf)                    date: 2019-01-14 20:42:16
+(epstopdf)                    size: 29403 bytes
+(epstopdf)             Output file: <dmat1_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:47
+(epstopdf)                    size: 17075 bytes
+(epstopdf)             Command: <epstopdf --outfile=dmat1_scale-eps-converted-t
+o.pdf dmat1_scale.eps>
+(epstopdf)             \includegraphics on input line 125.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./dmat1_scale-eps-converted-to.pdf): PDF inclusi
+on: found PDF version <1.7>, but at most version <1.5> allowed
+<dmat1_scale-eps-converted-to.pdf, id=317, 361.35pt x 252.945pt>
+File: dmat1_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use dmat1_scale-eps-converted-to.pdf>
+Package pdftex.def Info: dmat1_scale-eps-converted-to.pdf  used on input line 1
+25.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (dmat2_scale.tex
+Package epstopdf Info: Source file: <dmat2_scale.eps>
+(epstopdf)                    date: 2019-01-14 20:42:38
+(epstopdf)                    size: 29320 bytes
+(epstopdf)             Output file: <dmat2_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:48
+(epstopdf)                    size: 16877 bytes
+(epstopdf)             Command: <epstopdf --outfile=dmat2_scale-eps-converted-t
+o.pdf dmat2_scale.eps>
+(epstopdf)             \includegraphics on input line 125.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./dmat2_scale-eps-converted-to.pdf): PDF inclusi
+on: found PDF version <1.7>, but at most version <1.5> allowed
+<dmat2_scale-eps-converted-to.pdf, id=318, 361.35pt x 252.945pt>
+File: dmat2_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use dmat2_scale-eps-converted-to.pdf>
+Package pdftex.def Info: dmat2_scale-eps-converted-to.pdf  used on input line 1
+25.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (dmat3_scale.tex
+Package epstopdf Info: Source file: <dmat3_scale.eps>
+(epstopdf)                    date: 2019-01-14 20:42:52
+(epstopdf)                    size: 29296 bytes
+(epstopdf)             Output file: <dmat3_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:48
+(epstopdf)                    size: 16821 bytes
+(epstopdf)             Command: <epstopdf --outfile=dmat3_scale-eps-converted-t
+o.pdf dmat3_scale.eps>
+(epstopdf)             \includegraphics on input line 125.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./dmat3_scale-eps-converted-to.pdf): PDF inclusi
+on: found PDF version <1.7>, but at most version <1.5> allowed
+<dmat3_scale-eps-converted-to.pdf, id=319, 361.35pt x 252.945pt>
+File: dmat3_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use dmat3_scale-eps-converted-to.pdf>
+Package pdftex.def Info: dmat3_scale-eps-converted-to.pdf  used on input line 1
+25.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (watt1_noscale.tex
+Package epstopdf Info: Source file: <watt1_noscale.eps>
 (epstopdf)                    date: 2019-01-12 20:19:51
 (epstopdf)                    size: 43592 bytes
-(epstopdf)             Output file: <watt1-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-12 20:20:36
+(epstopdf)             Output file: <watt1_noscale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:49
 (epstopdf)                    size: 54233 bytes
-(epstopdf)             Command: <epstopdf --outfile=watt1-eps-converted-to.pdf 
-watt1.eps>
+(epstopdf)             Command: <epstopdf --outfile=watt1_noscale-eps-converted
+-to.pdf watt1_noscale.eps>
 (epstopdf)             \includegraphics on input line 123.
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file ./watt1-eps-converted-to.pdf): PDF inclusion: fo
-und PDF version <1.7>, but at most version <1.5> allowed
-<watt1-eps-converted-to.pdf, id=278, 361.35pt x 252.945pt>
-File: watt1-eps-converted-to.pdf Graphic file (type pdf)
-<use watt1-eps-converted-to.pdf>
-Package pdftex.def Info: watt1-eps-converted-to.pdf  used on input line 123.
+pdfTeX warning: pdflatex (file ./watt1_noscale-eps-converted-to.pdf): PDF inclu
+sion: found PDF version <1.7>, but at most version <1.5> allowed
+<watt1_noscale-eps-converted-to.pdf, id=320, 361.35pt x 252.945pt>
+File: watt1_noscale-eps-converted-to.pdf Graphic file (type pdf)
+<use watt1_noscale-eps-converted-to.pdf>
+Package pdftex.def Info: watt1_noscale-eps-converted-to.pdf  used on input line
+ 123.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (watt1_scale.tex
+Package epstopdf Info: Source file: <watt1_scale.eps>
+(epstopdf)                    date: 2019-01-15 02:25:09
+(epstopdf)                    size: 38260 bytes
+(epstopdf)             Output file: <watt1_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:50
+(epstopdf)                    size: 40418 bytes
+(epstopdf)             Command: <epstopdf --outfile=watt1_scale-eps-converted-t
+o.pdf watt1_scale.eps>
+(epstopdf)             \includegraphics on input line 123.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./watt1_scale-eps-converted-to.pdf): PDF inclusi
+on: found PDF version <1.7>, but at most version <1.5> allowed
+<watt1_scale-eps-converted-to.pdf, id=321, 361.35pt x 252.945pt>
+File: watt1_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use watt1_scale-eps-converted-to.pdf>
+Package pdftex.def Info: watt1_scale-eps-converted-to.pdf  used on input line 1
+23.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
 ) (watt1_ilu0.tex
 Package epstopdf Info: Source file: <watt1_ilu0.eps>
 (epstopdf)                    date: 2019-01-12 19:15:55
 (epstopdf)                    size: 21352 bytes
 (epstopdf)             Output file: <watt1_ilu0-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-12 19:18:03
+(epstopdf)                    date: 2019-01-16 16:32:50
 (epstopdf)                    size: 5787 bytes
 (epstopdf)             Command: <epstopdf --outfile=watt1_ilu0-eps-converted-to
 .pdf watt1_ilu0.eps>
@@ -891,40 +1079,184 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./watt1_ilu0-eps-converted-to.pdf): PDF inclusio
 n: found PDF version <1.7>, but at most version <1.5> allowed
-<watt1_ilu0-eps-converted-to.pdf, id=279, 361.35pt x 252.945pt>
+<watt1_ilu0-eps-converted-to.pdf, id=322, 361.35pt x 252.945pt>
 File: watt1_ilu0-eps-converted-to.pdf Graphic file (type pdf)
 <use watt1_ilu0-eps-converted-to.pdf>
 Package pdftex.def Info: watt1_ilu0-eps-converted-to.pdf  used on input line 12
 3.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
-) (pwtk.tex
-Package epstopdf Info: Source file: <pwtk.eps>
-(epstopdf)                    date: 2019-01-12 20:16:18
-(epstopdf)                    size: 32865 bytes
-(epstopdf)             Output file: <pwtk-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-12 20:17:52
-(epstopdf)                    size: 25988 bytes
-(epstopdf)             Command: <epstopdf --outfile=pwtk-eps-converted-to.pdf p
-wtk.eps>
+) (pwtk_noscale.tex
+Package epstopdf Info: Source file: <pwtk_noscale.eps>
+(epstopdf)                    date: 2019-01-14 19:37:26
+(epstopdf)                    size: 36032 bytes
+(epstopdf)             Output file: <pwtk_noscale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:51
+(epstopdf)                    size: 34850 bytes
+(epstopdf)             Command: <epstopdf --outfile=pwtk_noscale-eps-converted-
+to.pdf pwtk_noscale.eps>
 (epstopdf)             \includegraphics on input line 119.
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file ./pwtk-eps-converted-to.pdf): PDF inclusion: fou
-nd PDF version <1.7>, but at most version <1.5> allowed
-<pwtk-eps-converted-to.pdf, id=280, 361.35pt x 252.945pt>
-File: pwtk-eps-converted-to.pdf Graphic file (type pdf)
-<use pwtk-eps-converted-to.pdf>
-Package pdftex.def Info: pwtk-eps-converted-to.pdf  used on input line 119.
+pdfTeX warning: pdflatex (file ./pwtk_noscale-eps-converted-to.pdf): PDF inclus
+ion: found PDF version <1.7>, but at most version <1.5> allowed
+<pwtk_noscale-eps-converted-to.pdf, id=323, 361.35pt x 252.945pt>
+File: pwtk_noscale-eps-converted-to.pdf Graphic file (type pdf)
+<use pwtk_noscale-eps-converted-to.pdf>
+Package pdftex.def Info: pwtk_noscale-eps-converted-to.pdf  used on input line 
+119.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
-) [12 <./dmat1-eps-converted-to.pdf>] [13 <./dmat2-eps-converted-to.pdf> <./dma
-t3-eps-converted-to.pdf>] [14 <./watt1-eps-converted-to.pdf> <./watt1_ilu0-eps-
-converted-to.pdf>] (runtimes_matrices.tex
+) (pwtk_scale.tex
+Package epstopdf Info: Source file: <pwtk_scale.eps>
+(epstopdf)                    date: 2019-01-14 19:25:20
+(epstopdf)                    size: 36044 bytes
+(epstopdf)             Output file: <pwtk_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:52
+(epstopdf)                    size: 35041 bytes
+(epstopdf)             Command: <epstopdf --outfile=pwtk_scale-eps-converted-to
+.pdf pwtk_scale.eps>
+(epstopdf)             \includegraphics on input line 119.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./pwtk_scale-eps-converted-to.pdf): PDF inclusio
+n: found PDF version <1.7>, but at most version <1.5> allowed
+<pwtk_scale-eps-converted-to.pdf, id=324, 361.35pt x 252.945pt>
+File: pwtk_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use pwtk_scale-eps-converted-to.pdf>
+Package pdftex.def Info: pwtk_scale-eps-converted-to.pdf  used on input line 11
+9.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (bmw7st1.tex
+Package epstopdf Info: Source file: <bmw7st1.eps>
+(epstopdf)                    date: 2019-01-14 21:13:23
+(epstopdf)                    size: 35575 bytes
+(epstopdf)             Output file: <bmw7st1-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:52
+(epstopdf)                    size: 32710 bytes
+(epstopdf)             Command: <epstopdf --outfile=bmw7st1-eps-converted-to.pd
+f bmw7st1.eps>
+(epstopdf)             \includegraphics on input line 123.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./bmw7st1-eps-converted-to.pdf): PDF inclusion: 
+found PDF version <1.7>, but at most version <1.5> allowed
+<bmw7st1-eps-converted-to.pdf, id=325, 361.35pt x 252.945pt>
+File: bmw7st1-eps-converted-to.pdf Graphic file (type pdf)
+<use bmw7st1-eps-converted-to.pdf>
+Package pdftex.def Info: bmw7st1-eps-converted-to.pdf  used on input line 123.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (bmw7st1_scale.tex
+Package epstopdf Info: Source file: <bmw7st1_scale.eps>
+(epstopdf)                    date: 2019-01-14 21:15:09
+(epstopdf)                    size: 35411 bytes
+(epstopdf)             Output file: <bmw7st1_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:53
+(epstopdf)                    size: 32614 bytes
+(epstopdf)             Command: <epstopdf --outfile=bmw7st1_scale-eps-converted
+-to.pdf bmw7st1_scale.eps>
+(epstopdf)             \includegraphics on input line 123.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./bmw7st1_scale-eps-converted-to.pdf): PDF inclu
+sion: found PDF version <1.7>, but at most version <1.5> allowed
+<bmw7st1_scale-eps-converted-to.pdf, id=326, 361.35pt x 252.945pt>
+File: bmw7st1_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use bmw7st1_scale-eps-converted-to.pdf>
+Package pdftex.def Info: bmw7st1_scale-eps-converted-to.pdf  used on input line
+ 123.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (xenon2.tex
+Package epstopdf Info: Source file: <xenon2.eps>
+(epstopdf)                    date: 2019-01-14 20:24:32
+(epstopdf)                    size: 35211 bytes
+(epstopdf)             Output file: <xenon2-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:54
+(epstopdf)                    size: 32610 bytes
+(epstopdf)             Command: <epstopdf --outfile=xenon2-eps-converted-to.pdf
+ xenon2.eps>
+(epstopdf)             \includegraphics on input line 121.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./xenon2-eps-converted-to.pdf): PDF inclusion: f
+ound PDF version <1.7>, but at most version <1.5> allowed
+<xenon2-eps-converted-to.pdf, id=327, 361.35pt x 252.945pt>
+File: xenon2-eps-converted-to.pdf Graphic file (type pdf)
+<use xenon2-eps-converted-to.pdf>
+Package pdftex.def Info: xenon2-eps-converted-to.pdf  used on input line 121.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (xenon2_scale.tex
+Package epstopdf Info: Source file: <xenon2_scale.eps>
+(epstopdf)                    date: 2019-01-14 20:20:34
+(epstopdf)                    size: 35211 bytes
+(epstopdf)             Output file: <xenon2_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:54
+(epstopdf)                    size: 32624 bytes
+(epstopdf)             Command: <epstopdf --outfile=xenon2_scale-eps-converted-
+to.pdf xenon2_scale.eps>
+(epstopdf)             \includegraphics on input line 121.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./xenon2_scale-eps-converted-to.pdf): PDF inclus
+ion: found PDF version <1.7>, but at most version <1.5> allowed
+<xenon2_scale-eps-converted-to.pdf, id=328, 361.35pt x 252.945pt>
+File: xenon2_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use xenon2_scale-eps-converted-to.pdf>
+Package pdftex.def Info: xenon2_scale-eps-converted-to.pdf  used on input line 
+121.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (bcsstk18_noscale.tex
+Package epstopdf Info: Source file: <bcsstk18_noscale.eps>
+(epstopdf)                    date: 2019-01-15 21:57:20
+(epstopdf)                    size: 35972 bytes
+(epstopdf)             Output file: <bcsstk18_noscale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-15 22:00:08
+(epstopdf)                    size: 34410 bytes
+(epstopdf)             Command: <epstopdf --outfile=bcsstk18_noscale-eps-conver
+ted-to.pdf bcsstk18_noscale.eps>
+(epstopdf)             \includegraphics on input line 121.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./bcsstk18_noscale-eps-converted-to.pdf): PDF in
+clusion: found PDF version <1.7>, but at most version <1.5> allowed
+<bcsstk18_noscale-eps-converted-to.pdf, id=329, 361.35pt x 252.945pt>
+File: bcsstk18_noscale-eps-converted-to.pdf Graphic file (type pdf)
+<use bcsstk18_noscale-eps-converted-to.pdf>
+Package pdftex.def Info: bcsstk18_noscale-eps-converted-to.pdf  used on input l
+ine 121.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (bcsstk18_scale.tex
+Package epstopdf Info: Source file: <bcsstk18_scale.eps>
+(epstopdf)                    date: 2019-01-15 21:59:24
+(epstopdf)                    size: 35612 bytes
+(epstopdf)             Output file: <bcsstk18_scale-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-01-16 16:32:55
+(epstopdf)                    size: 33949 bytes
+(epstopdf)             Command: <epstopdf --outfile=bcsstk18_scale-eps-converte
+d-to.pdf bcsstk18_scale.eps>
+(epstopdf)             \includegraphics on input line 121.
+Package epstopdf Info: Output file is already uptodate.
+
+
+pdfTeX warning: pdflatex (file ./bcsstk18_scale-eps-converted-to.pdf): PDF incl
+usion: found PDF version <1.7>, but at most version <1.5> allowed
+<bcsstk18_scale-eps-converted-to.pdf, id=330, 361.35pt x 252.945pt>
+File: bcsstk18_scale-eps-converted-to.pdf Graphic file (type pdf)
+<use bcsstk18_scale-eps-converted-to.pdf>
+Package pdftex.def Info: bcsstk18_scale-eps-converted-to.pdf  used on input lin
+e 121.
+(pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
+) (runtimes_matrices.tex
 Package epstopdf Info: Source file: <runtimes_matrices.eps>
 (epstopdf)                    date: 2019-01-09 16:15:04
 (epstopdf)                    size: 25735 bytes
 (epstopdf)             Output file: <runtimes_matrices-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-01-09 19:22:35
+(epstopdf)                    date: 2019-01-16 16:32:56
 (epstopdf)                    size: 3610 bytes
 (epstopdf)             Command: <epstopdf --outfile=runtimes_matrices-eps-conve
 rted-to.pdf runtimes_matrices.eps>
@@ -934,33 +1266,41 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./runtimes_matrices-eps-converted-to.pdf): PDF i
 nclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<runtimes_matrices-eps-converted-to.pdf, id=305, 361.35pt x 252.945pt>
+<runtimes_matrices-eps-converted-to.pdf, id=331, 361.35pt x 252.945pt>
 File: runtimes_matrices-eps-converted-to.pdf Graphic file (type pdf)
 <use runtimes_matrices-eps-converted-to.pdf>
 Package pdftex.def Info: runtimes_matrices-eps-converted-to.pdf  used on input 
 line 130.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
-) [15 <./pwtk-eps-converted-to.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 497--499
+) [15 <./dmat1-eps-converted-to.pdf>] [16 <./dmat2-eps-converted-to.pdf> <./dma
+t3-eps-converted-to.pdf>] [17 <./dmat1_scale-eps-converted-to.pdf> <./dmat2_sca
+le-eps-converted-to.pdf>] [18 <./dmat3_scale-eps-converted-to.pdf> <./watt1_nos
+cale-eps-converted-to.pdf>] [19 <./watt1_scale-eps-converted-to.pdf> <./watt1_i
+lu0-eps-converted-to.pdf>] [20 <./pwtk_noscale-eps-converted-to.pdf> <./pwtk_sc
+ale-eps-converted-to.pdf>] [21 <./bmw7st1-eps-converted-to.pdf> <./bmw7st1_scal
+e-eps-converted-to.pdf>] [22 <./xenon2-eps-converted-to.pdf> <./xenon2_scale-ep
+s-converted-to.pdf>] [23 <./bcsstk18_noscale-eps-converted-to.pdf> <./bcsstk18_
+scale-eps-converted-to.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 703--705
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 499--501
+Underfull \hbox (badness 10000) in paragraph at lines 705--707
 
  []
 
-[16 <./runtimes_matrices-eps-converted-to.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 519--521
+[24 <./runtimes_matrices-eps-converted-to.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 725--727
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 541--542
+Underfull \hbox (badness 10000) in paragraph at lines 747--748
 
  []
 
-[17] (BSc_Ernstbrunner_01403753.bbl [18])
+[25] (BSc_Ernstbrunner_01403753.bbl [26])
 
 Class scrartcl Warning: \float@listhead detected!
 (scrartcl)              Implementation of \float@listhead became
@@ -972,37 +1312,37 @@ Class scrartcl Warning: \float@listhead detected!
 (scrartcl)              Loading of package `scrhack' may help to
 (scrartcl)              avoid this warning, if you are using a
 (scrartcl)              a package that still implements the
-(scrartcl)              deprecated \float@listhead interface  on input line 569
+(scrartcl)              deprecated \float@listhead interface  on input line 775
 .
 
 (BSc_Ernstbrunner_01403753.loa)
 \tf@loa=\write5
 \openout5 = `BSc_Ernstbrunner_01403753.loa'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 574.
- [19]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 574.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 780.
+ [27]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 780.
  (BSc_Ernstbrunner_01403753.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 574.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 574.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 780.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 780.
 Package rerunfilecheck Info: File `BSc_Ernstbrunner_01403753.out' has not chang
 ed.
-(rerunfilecheck)             Checksum: DC94E0A050EDA45F6AFB2C175897D49C;1921.
+(rerunfilecheck)             Checksum: 7C8678129F4918DEDB68DD5B9BF08521;1838.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 4.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 574.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 780.
  ) 
 Here is how much of TeX's memory you used:
- 12081 strings out of 492946
- 186363 string characters out of 3135525
- 389791 words of memory out of 3000000
- 15639 multiletter control sequences out of 15000+200000
+ 12232 strings out of 492946
+ 190533 string characters out of 3135525
+ 421593 words of memory out of 3000000
+ 15714 multiletter control sequences out of 15000+200000
  41073 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,15n,51p,9119b,627s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,15n,51p,9133b,725s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
 \ecbx2074.pk>{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc} <C:\User
 s\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0900.p
@@ -1029,9 +1369,9 @@ cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/euler/eufm10
 .pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pf
 b><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program 
 Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on BSc_Ernstbrunner_01403753.pdf (19 pages, 483208 bytes).
+Output written on BSc_Ernstbrunner_01403753.pdf (27 pages, 823863 bytes).
 PDF statistics:
- 759 PDF objects out of 1000 (max. 8388607)
- 108 named destinations out of 1000 (max. 500000)
- 265 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 880 PDF objects out of 1000 (max. 8388607)
+ 151 named destinations out of 1000 (max. 500000)
+ 312 words of extra memory for PDF output out of 10000 (max. 10000000)
 

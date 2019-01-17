@@ -1,5 +1,6 @@
 %\documentclass{article}
 \documentclass{scrartcl}
+\setlength{\parindent}{0in}
 \makeatletter
 \DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
 \DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
@@ -109,17 +110,6 @@ Wien, 2019	\linebreak
 
 \pagebreak
 
-\begin{abstract}
-Abstract
-\end{abstract}
-\section{Introduction}
-As the CPU-memory performance gap widens the cost for communication increases as well.
-
-Compared to arithmetic costs communication costs are much higher and the widening CPU-memory performance gap promotes the need for communication-avoiding algorithms.\\
-
-Communication avoiding GMRES is based on s-step GMRES \textit{REF[[J. Erhel, A parallel GMRES version for general sparse matrices, Electron. Trans. Numer. Anal., 3 (1995), pp. 160–176.]]}
-
-\newpage
 \section{Notation}
 For linear algebra, similar notation is considered as in \cite{Hoemmen:2010:CKS:1970638} and \cite{Grigori}.
 \begin{itemize}
@@ -132,10 +122,24 @@ For linear algebra, similar notation is considered as in \cite{Hoemmen:2010:CKS:
 \item If again, $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\acute{V}$ consists of vectors $[v_2, v_3, \ldots, v_s]$. The acute denotes one column less at the beginning.
 \item As a consequence $\underline{\acute{V}}$ denotes one more column at the end and one less column at the beginning, e.g. $\underline{\acute{V}} = [\acute{V}, v_{s+1}]$.
 \item Depending on the context, both underline or/and acute letters can also refer to rows as well. 
-\item $0_{m, n}$ is defined as an $m \times n$ matrix consisting of zeros and $e_k$ denotes the $k^{\text{th}}$ canonical vector with its dimension depending on the context.
+\item $0_{m, n}$ is defined as an $m \times n$ matrix consisting of zeros and $e_k$ denotes the $k^{\text{th}}$ canonical vector with the dimension depending on the context.
 \item Matlab notation is used for addressing elements of matrices and vectors. For example, given a matrix $A$ of size $n \times n$ and two sets of indices $\alpha$ and $\beta$, $A(\alpha,:)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$. Similarly, $A(\alpha, \beta)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$ and the subset of the columns of $A$ whose indices belong to $\beta$.
 
 \end{itemize}
+\pagebreak
+
+\begin{abstract}
+Abstract
+\end{abstract}
+\section{Introduction}
+As the CPU-memory performance gap widens the cost for communication increases as well.
+
+Compared to arithmetic costs communication costs are much higher and the widening CPU-memory performance gap promotes the need for communication-avoiding algorithms.\\
+
+The CA-GMRES algorithm was implemented in a shared-memory environment.
+
+Communication avoiding GMRES is based on s-step GMRES 
+\cite{Erhel95aparallel}
 
 \section{Related work}
 s-step methods, CA-ILU(0)
@@ -143,13 +147,23 @@ s-step methods, CA-ILU(0)
 \section{Computational kernels}
 %introduction; definitions: kernel, communication-avoiding
 In this thesis \textit{computational kernels} define the parts of an algorithm with the highest costs. These costs include both arithmetic operations and communication.
-The term \textit{communication} generally denotes the movement of data either between different processors or between fast and slow memory. Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way such that reduction of communication is prioritized. This often results in new challenges, e.g., the  CA-ILU(0) algorithm (section~\ref{sec:ca-ilu}) has to balance between communication and redundant computations; CA-GMRES (section~\ref{sec:ca-gmres}) incorporates additional techniques to deal with ill-conditioned basis vectors.
+The term \textit{communication} generally denotes the movement of data either between different processors in the parallel case or between 'fast' and 'slow' memory in the sequential case, where 'fast' and 'slow' are relative to the two levels examined in the memory hierarchy (e.g. cache and DRAM, or DRAM and disk). Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way such that reduction of communication is prioritized. This often results in new challenges, e.g., the  CA-ILU(0) algorithm (section~\ref{sec:ca-ilu}) has to balance between communication and redundant computations; CA-GMRES (section~\ref{sec:ca-gmres}) incorporates additional techniques to deal with ill-conditioned basis vectors.
 
 \subsection{Matrix powers kernel (MPK)}
 \cite{Hoemmen:2010:CKS:1970638} p.60\\
 The Matrix Powers Kernel 
 Power iteration, SpMV instead of MV, sparse matrix like a graph $\rightarrow$ spacial, temporal locality not as efficiently used as in dense MV. 
-Avoid communication by sending / receiving all necessary values beforehand (look at reachability of graph(A)) and computing s basis vectors without further communication.
+Avoid communication by sending / receiving all necessary values beforehand (look at reachability of graph(A)) and computing s basis vectors without further communication.\\
+
+
+Although, the matrix powers kernel was not implemented in the context of this thesis it is still an essential kernel to avoid communication and therefore, will be briefly summarized here.
+The matrix powers kernel replaces the sparse matrix-vector products that generate the basis for the Krylov subspace $\mathcal{K}_m(A, v) = \left[v, Av, A^2v, \ldots, A^{m-1}v\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. The data and the workload are partitioned among $P$ processors, where each processor gets $A(\alpha,:)$ and $v_0(\alpha)$ with $\alpha$ being the subset assigned to the specific processor. by a factor $\Theta(s)$ and the matrix has to be loaded from slow to fast memory only once instead of $s$.  than  each processor is assigned a part $\alpha$ of the input vector $v_0$ and $A(\alpha,:)$.
+
+
+\texttt{To minimize communication in a parallel setting, the s monomial basis vectors of the Krylov subspace $[y, Ay, A2y, \ldots, A^sy]$ are computed with no communication using the so-called matrix powers kernel [13]. This requires ghosting and computing redundantly on each processor the data required for computing its part of the vectors with no communication. Note that throughout this paper we use the term ghosting to denote the storage of redundant data, of vectors or matrices, that do not belong to the processor's assigned domain or part, but are needed for future computations.\\
+First, the data and the work is split between $P$ processors. Each processor is assigned a part $\alpha$ of the input vector $y_0$ ($y_0(\alpha)$) and $A(\alpha, :)$, where $\alpha \subseteq V(G(A))$. Then, each processor has to compute the same part $\alpha$ of $y_1 = Ay_0$, $y_2 = Ay_1$, till $y_s = Ay_{s - 1}$ without communicating with other processors. To do so, each 
+processor fetches all the data needed from the neighboring processors, to compute its part $\alpha$ of the $s$ vectors. Thus, to compute $y_s(\alpha)$, each processor should receive the missing data of $y_0(\eta_s)$ and $A(\eta_s, :)$ from its neighboring processors and store it redundantly, where $\eta_s = R(G(A), \alpha, s)$. Finally, each processor computes the set $R(G(A), \alpha, s - i)$ of the vectors $y_i$ for $i = 1, 2, \ldots, s$ without any communication with the other processors.}
+
 
 \subsection{Tall and skinny QR (TSQR)}
 Unconditionally stable like Householder QR but less communication
@@ -174,33 +188,96 @@ GMRES implementation of [8] as the Gram-Schmidt implementation. The basic form
 of Arnoldi’s method given above employs the classical Gram-Schmidt process, which
 is numerically untrustworthy. Because of roundoff, there may be severe loss of orthogonality among the computed Vm’S. In practice, it is usual to implement Arnoldi’s
 method using the modified Gram-Schmidt process (see Golub and Van Loan [4]).
-Mathematically, this is just a rearrangement of the classical process; computationally,
-it has superior properties.
-Even the modified Gram-Schmidt process can fail to perform well if the vectors on
-which it operates are not sufficiently independent. Indeed, if S (sl,... ,sin) is an
-n m matrix the columns of which are to be orthonormalized and if Q (ql,. qm)
-is the computed result of applying modified Gram-Schmidt to the columns of S using
-floating point arithmetic with unit rounding error u, then Bjorck [1] has shown that
-(1.6) QTQ I + E, [IEll2
-where the condition number 2(S) is the ratio of the largest singular value of S to the
-smallest. It follows that at the mth step of Arnoldi’s method using modified GramSchmidt, Vm+ may have a significantly nonzero conponent in the span of {vl,. Vm}
+Mathematically, this is just a rearrangement of the classical process; computationally, it has superior properties.
+Even the modified Gram-Schmidt process can fail to perform well if the vectors on which it operates are not sufficiently independent. Indeed, if S (sl,... ,sin) is an n m matrix the columns of which are to be orthonormalized and if Q (ql,. qm) is the computed result of applying modified Gram-Schmidt to the columns of S using floating point arithmetic with unit rounding error u, then Bjorck [1] has shown that (1.6) QTQ I + E, [IEll2 where the condition number 2(S) is the ratio of the largest singular value of S to the smallest. It follows that at the mth step of Arnoldi’s method using modified GramSchmidt, Vm+ may have a significantly nonzero conponent in the span of {vl,. Vm}
 if 2((vl,...,vm,Avm)) is large, i. e., if Avm is nearly in the span of {vl,...,Vm}.
-Shad [7, p. 214 has suggested that the Gram-Schmidt process in Arnoldi’s method
-may be an important source of errors in the full and incomplete orthogonalization
+Shad [7, p. 214 has suggested that the Gram-Schmidt process in Arnoldi’s method may be an important source of errors in the full and incomplete orthogonalization
 methods ([6],[7]), which are related to GMRES.
 }
 
 \subsubsection{The Monomial basis}
-like powermethod, rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but: basis vectors are always linearly independent in exact arithmetic. In machine precision they become inevitably dependent at a certain point $\rightarrow$ need a different basis.
+The Monomial basis in s-step Krylov methods is given by 
+\begin{equation*}
+\mathcal{K}_{s + 1}(A, v) = [v, Av, A^2v, \ldots, A^sv]
+\end{equation*}
+and has a change of basis matrix
+\begin{equation*}
+\underline{B} = [\sigma_1 e_2, \sigma_2 e_3, \ldots, \sigma_s e_{s + 1}].
+\end{equation*}
+with scaling factors $\sigma_1, \ldots, \sigma_s$.
+The Monomial basis is also known as the \textit{power method} which is an iterative method for finding the principal eigenvalue and corresponding eigenvector of a matrix by repeatedly applying a starting vector to the matrix. If the matrix and starting vector satisfy certain conditions, the basis converges to the principal eigenvector. In theory, the basis is still linearly independent in exact arithmetic. In machine precision they become inevitably dependent at a certain point. \\
+
+scaling the rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but:  $\rightarrow$ need a different basis.
 \subsubsection{The Newton basis}
+The Newton basis in s-step Krylov methods is given by 
+\begin{equation*}
+\mathcal{K}_{s + 1}(A, v) = \left[v, (A - \theta_1 I )v, (A - \theta_2 I )(A - \theta_1 I )v, \ldots, \displaystyle\prod_{i = 1}^s (A - \theta_i I )v\right]
+\end{equation*}
+and has a change of basis matrix
+\begin{equation*}
+\underline{B} = 
+\begin{pmatrix}
+\theta_1 & 0 & \ldots & 0 \\
+\sigma_1 & \theta_2 & \ddots & \vdots \\
+0 & \sigma_2 & \ddots & 0 \\
+\vdots & \ddots & \ddots & \theta_s \\
+0 & 0 & \ldots & \sigma_s 
+\end{pmatrix}
+\end{equation*}
+with scaling factors $\sigma_1, \ldots, \sigma_s$.\\
+
 polinomial interpolation at shifts $\theta_1$, $\theta_2$, $\ldots$, $\theta_s$.
 \paragraph{Choosing the shifts}
 find estimates of the eigenvalues of A (Ritz values).
-\subparagraph{The modified Leja ordering}
+\paragraph{The modified Leja ordering}
 
-\subparagraph{Avoiding complex arithmetic}
+\paragraph{Avoiding complex arithmetic}
+Like the eigenvalues of a real matrix, the Ritz values can also be complex conjugate pairs. The modified Leja ordering ensures that these pairs are ordered consecutively with leading positive imaginary entries, i.e. $\theta_{j + 1} = \overline{\theta}_j$ with $\Im(\theta_j) > 0$. Complex arithmetic doubles the storage and floating point operations and therefore, should be avoided. Instead of computing $v_{j + 1} = (A - \theta_j I)v_j$ and $v_{j + 2} = (A - \overline{\theta}_j I)v_{j + 1}$ like one would normally do, Bai et al. \cite{doi:10.1093/imanum/14.4.563} suggest that complex arithmetic can be avoided by setting
+\begin{equation}
+v_{j + 1} = (A - \Re(\theta_j) I )v_j
+\end{equation}
+and
+\begin{equation}
+v_{j + 2} = (A - \Re(\theta_j) I )v_{k + 1} + \Im(\theta_j)^2 v_j.
+\end{equation}
+It can easily be shown that 
+\begin{eqnarray*}
+v_{j + 2} &=& (A - \Re(\theta_j) I )^2v_{j} + \Im(\theta_j)^2 v_j \\
+&=& (A - \overline{\theta}_j I )(A - \theta_j I )v_{j}.
+\end{eqnarray*}
 
+This also affects the change of basis matrix $\underline{B}$. If the Ritz values contain complex conjugate pairs, $\underline{B}$ is tridiagonal. E.g., if $\theta_1$ through $\theta_s$ are real, with the exception of $\theta_j$ and $\theta_{j + 1}$ being a complex conjugate pair, the change of basis matrix is given by
+\begin{equation*}
+\iffalse
+\begin{matrix}
+\ddots & \ddots & \ddots & \ddots & \\
+& \sigma_{j - 1} & $\scalebox{.7}[1]{$\Re$(}$ \theta_j$\scalebox{.7}[1]{$)$}$ & $\scalebox{.7}[1]{$-\Im($}$\theta_j$\scalebox{.7}[1]{$)$}$^2 & \\
+& 0 & \sigma_j & $\scalebox{.7}[1]{$\Re$(}$ \theta_{j + 1}$\scalebox{.7}[1]{$)$}$ & \\
+& & 0 & \sigma_{j + 1} & \\
+& & \ddots & \ddots & \ddots \\
+\end{matrix}
+\fi
+\underline{B} =
+\begin{pmatrix}
+\theta_1 & 0 & \ldots & \ldots & \ldots & 0 \\
+\sigma_1 & \ddots & \ddots & \ddots & \ddots & \vdots \\
+0 & \ddots & $\scalebox{.7}[1]{$\Re$(}$ \theta_j$\scalebox{.7}[1]{$)$}$ & $\scalebox{.7}[1]{$-\Im($}$\theta_j$\scalebox{.7}[1]{$)$}$^2 & \ddots & \vdots \\
+\vdots & \ddots & \sigma_j & $\scalebox{.7}[1]{$\Re$(}$ \theta_{j + 1}$\scalebox{.7}[1]{$)$}$ & \ddots & \vdots \\
+\vdots & \ddots & \ddots & \sigma_{j + 1} & \ddots & 0 \\
+\vdots & \ddots & \ddots & \ddots & \ddots & \theta_s \\
+0 & \ldots & \ldots & \ldots & 0 & \sigma_s \\
+\end{pmatrix}.
+\end{equation*}
 
+\subparagraph{Performance notes}
+Avoiding complex arithmetic in that way necessitates an extra SpMV operation in the Newton basis which, in the worst case, leads to as many floating point operations as in the Chebychev basis. However, in their performance analysis Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} observed that the runtime of the Newton basis was still close to the runtime of the Monomial basis. \\
+\cite{Hoemmen:2010:CKS:1970638} further point out that this approach might lose accuracy when $\theta_{j - 1}$ is real and $\theta_j$ and $\theta_{j + 1}$ form a complex conjugate pair with $\Re(\theta_j) = \theta_{j - 1} $. Then
+\begin{eqnarray*}
+v_j &=& (A - \theta_{j - 1} I )v_{j - 1} \\
+v_{j + 1} &=& (A - \Re(\theta_j) I )(A - \theta_{j - 1} I )v_{j - 1} \\
+		  &=& (A - \theta_{j - 1} I )^2v_{j - 1}
+\end{eqnarray*}
+is equivalent to computing the monomial basis with a possibly ill-conditioned  matrix $A - \theta_{j - 1} I$. This might occur if the Ritz values reside within an ellipse with a long vertical axis and very short horizontal axis.
 \subsection{Arnoldi(s,t)}
 \subsubsection{Introduction}
 \subsubsection{Scaling the first basis vector}
@@ -213,8 +290,6 @@ Arnoldi(s,t) produces $\underline{\textfrak{Q}}$ which differs from MGS-Arnoldi 
 \subsubsection{QR factorization update}
 overlapping / non overlapping approach.
 
-\cite{Hoemmen:2010:CKS:1970638} assumably have some errors in their notation, so the process is outlined slightly differently below.
-
 $[\underline{\frak{Q}}_0, \underline{\acute{V}}_1 ] = [\underline{\frak{Q}}_0, \underline{\acute{Q}}_1 ] \cdot 
 \begin{pmatrix}
 	I_{s + 1, s + 1} & \underline{\acute{\frak{R}}}_{0,1} \\
@@ -223,23 +298,53 @@ $[\underline{\frak{Q}}_0, \underline{\acute{V}}_1 ] = [\underline{\frak{Q}}_0, \
 
 BGS $\ldots$\\
 
+Repartitioning the R factor:
+
+\begin{eqnarray*}
+\underline{\frak{R}}_k &=&
+\begin{pmatrix}
+	I_{sk + 1, sk + 1} & \underline{\acute{\frak{R}}}_{k - 1, k} \\
+	0_{s, sk + 1} & \underline{\acute{R}}_k \\
+\end{pmatrix} = 
+\begin{pmatrix}
+	I_{sk, sk} & \underline{\frak{R}}_{k - 1, k} \\
+	0_{s + 1, sk} & \underline{R}_k \\
+\end{pmatrix} \\
+\frak{R}_k &=&
+\begin{pmatrix}
+	I_{sk + 1, sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
+	0_{s - 1, sk + 1} & \acute{R}_k \\
+\end{pmatrix} = 
+\begin{pmatrix}
+	I_{sk, sk} & \frak{R}_{k - 1, k} \\
+	0_{s, sk} & R_k \\
+\end{pmatrix}
+\end{eqnarray*}
+$R_k$ and $\underline{\acute{R}}_k$ are $s \times s$ matrices, $\underline{R}_k$ is $s + 1 \times s + 1$ and $\acute{R}_k$ is $s - 1 \times s - 1$.
+\subsubsection{Reconstructing the upper Hessenberg matrix}
+flop optimization. how to apply Givens rotations
+
 $AV_k = \underline{V}_k\underline{B}_k$ \\
 
 $A [\frak{Q}_{k - 1}, V_k] = [\frak{Q}_{k - 1}, \underline{V}_k]\underline{\frak{B}}_k$ \\
 
 where $\underline{\frak{B}}_k$ satisfies:
-$\underline{\frak{B}}_k = 
+\begin{equation} \label{eq:B_blackletter_k_}
+\underline{\frak{B}}_k = 
 \begin{pmatrix}
 	\frak{H}_{k - 1} & 0_{sk, s} \\
 	h_{k - 1} e_1 e^T_{sk} & \underline{B}_k \\
-\end{pmatrix}$ with $\frak{H}_0 := H_0$ \\
+\end{pmatrix}
+\end{equation}
+with $\frak{H}_0 := H_0$ \\
 
-$A [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] \cdot 
+\begin{eqnarray*}
+&A& [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] \cdot 
 \begin{pmatrix}
 	I_{sk + 1, sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
 	0_{s - 1, sk + 1} &\acute{R}_k \\
-\end{pmatrix}
- = [ \underline{\frak{Q}}_{k - 1}, \underline{\acute{Q}}_k ] \cdot 
+\end{pmatrix} \\
+&=& [ \underline{\frak{Q}}_{k - 1}, \underline{\acute{Q}}_k ] \cdot 
 \begin{pmatrix}
 	I_{sk + 1, sk + 1} & \underline{\acute{\frak{R}}}_{k - 1, k} \\
 	0_{s, sk + 1} & \underline{\acute{R}}_k \\
@@ -248,13 +353,12 @@ $A [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] \cdot
 	\frak{H}_{k - 1} & 0_{sk, s} \\
 	h_{k - 1} e_1 e^T_{sk} & \underline{B}_k \\
 \end{pmatrix}
-$ \\
+\end{eqnarray*}
 
 We have
 \begin{eqnarray*}
 	A [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] = [ \underline{\frak{Q}}_{k - 1}, \underline{\acute{Q}}_k ] \underline{\frak{H}}_k
 \end{eqnarray*}
-
 therefore,
 \begin{eqnarray*}
 	\underline{\frak{H}}_k = 
@@ -271,31 +375,30 @@ therefore,
 		0_{s - 1, sk + 1} &\acute{R}_k \\
 	\end{pmatrix}^{-1}
 \end{eqnarray*}
-\iffalse
-Repartitioning the R factor. \\
 
-$\underline{\frak{R}}_k =
-\begin{pmatrix}
-	I_{sk + 1, sk + 1} & \underline{\acute{\frak{R}}}_{k - 1, k} \\
-	0_{s, sk + 1} & \underline{\acute{R}}_k \\
-\end{pmatrix} = 
-\begin{pmatrix}
-	I_{sk, sk} & \underline{\frak{R}}_{k - 1, k} \\
-	0_{s + 1, sk} & \underline{R}_k \\
-\end{pmatrix}$
+\begin{equation}\label{eq:h_blackletter_k_}
+\underline{\frak{H}}_{k - 1, k} := -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k
+\end{equation}
 
-$\frak{R}_k =
+\paragraph{A different approach}
+In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} computed 2$s$ Ritz values, picked $s$ out of them and applied the Modified Leja Ordering. This improved the condition of the Newton basis and lead to (better) convergence. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, one has to consider that these 2$s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. This might not always be the case. E.g., the 2$s$ Ritz values could consist of complex conjugate pairs only. If $s$ is odd, there is no way this would fit without splitting a complex conjugate pair. Remember that in order to avoid complex arithmetic the consecutive order of a complex conjugate pair must be preserved. A way to address this could be to incorporate all computed Ritz values, i.e. to apply 2$s$ Ritz values over two outer iterations of Arnoldi(s,t). This slightly changes the way~\eqref{eq:h_blackletter_k_} is computed. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the first change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from~$\eqref{eq:B_blackletter_k_}$ by an additional entry above $\underline{B}_k$.
+\begin{equation}
+\underline{\frak{B}}_{k} = 
 \begin{pmatrix}
-	I_{sk + 1, sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
-	0_{s - 1, sk + 1} & \acute{R}_k \\
-\end{pmatrix} = 
-\begin{pmatrix}
-	I_{sk, sk} & \frak{R}_{k - 1, k} \\
-	0_{s, sk} & R_k \\
-\end{pmatrix}$
-\fi
-\subsubsection{Reconstructing the upper Hessenberg matrix}
-flop optimization. how to apply Givens rotations
+	\frak{H}_{k - 1} & -e_{sk} e^T_1 \Im (\theta_s)^2 \\
+	h_{k - 1} e_1 e^T_{sk} & \underline{B}_k
+\end{pmatrix}.
+\end{equation}
+
+\eqref{eq:h_blackletter_k_} then changes to
+\begin{equation}
+\underline{\frak{H}}_{k - 1, k} := -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k + e_{sk} e_s g
+\end{equation}
+with
+\begin{equation*}
+g := - \Im (\theta_s)^2 e_{s} e^T_1  R^{-1}_{k}.
+\end{equation*}
+This approach was addressed only theoretically here and therefore, is subject to further investigation.
 
 \section{CA-GMRES} \label{sec:ca-gmres}
 %uses Arnoldi(s,t)
@@ -304,24 +407,28 @@ flop optimization. how to apply Givens rotations
 
 \subsection{GMRES(m)}
 \begin{algorithm}[H]
-\caption{GMRES(m)}
+\caption{restarted GMRES(m)}
 \label{alg:gmres(m)}
 \begin{algorithmic}[1]
     \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
-    \STATE $r_0:=b-Ax_0$, $\beta := \norm{r_0}_2$, $q_0 := r_0/\beta$, $\underline{Q}_0 := q_0$, $\underline{H}_0 := \varnothing$
-    \FOR{$k = 1$ to $m$}
-		\STATE Compute $q_k$ and $h_k$ using MGS-Arnoldi
-		\STATE set $\underline{Q}_k := [Q_{k-1},q_k]$ and $\underline{H}_k := [\underline{H}_{k -1}, h_k]$
-		\STATE Reduce ${h_k}$ of $\underline{H}_k$ from upper Hessenberg to upper triangular form using $k$ \\
+    \STATE restart := true
+    \WHILE{restart}
+    	\STATE $r_0:=b - Ax_0$, $\beta := \norm{r_0}_2$, $q_0 := r_0/\beta$, $\underline{Q}_0 := q_0$, $\underline{H}_0 := \varnothing$
+    	\FOR{$k = 1$ to $m$}
+			\STATE Compute $q_k$ and $h_k$ using MGS-Arnoldi
+			\STATE Set $\underline{Q}_k := [Q_{k-1},q_k]$ and $\underline{H}_k := [\underline{H}_{k -1}, h_k]$
+			\STATE Reduce ${h_k}$ of $\underline{H}_k$ from upper Hessenberg to upper triangular form using $k$ \\
 		\hspace{\algorithmicindent} Givens rotations $G_1$, $G_2$, $ \ldots$, $G_{k}$. Apply the same rotations in the same order \\ 
 		\hspace{\algorithmicindent} to $\beta e_1$,  resulting in the length $k + 1$ vector $\zeta_{k}$.
-		\STATE Element $k + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
+			\STATE Element $k + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
 \hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
-	\IF{converged}
+		\IF{converged}
+			\STATE restart = false, and exit for loop		
+		\ENDIF
+		\ENDFOR
 		\STATE Use the above reduction of $\underline{H}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{H}_k y - \beta e_1}_2$
-		\STATE Set $x_k := x_0 + Q_k y_k$, and exit
-	\ENDIF
-	\ENDFOR 
+		\STATE Set $x_0 := x_0 + Q_k y_k$
+	\ENDWHILE 
 \end{algorithmic}
 \end{algorithm}
 
@@ -349,16 +456,16 @@ Since $q_1 = r_0/\norm{r_0}_2$ and $\underline{Q}$ is orthonormal, one has
 	&=& \text{argmin}_{y} \norm{\beta e_1 - \underline{H} y}_2 
 \end{eqnarray}
 with $\beta = \norm{r_0}_2$.
-$\underline{H}$ is then factored as $\underline{H} = G\underline{U}$ with $G$ being a product of $k$ Givens rotations, $\underline{U} = 
+$\underline{H}$ is then factored into $\underline{H} = \underline{G}\underline{U}$ with square matrix $\underline{G}$ being a product of $k$ Givens rotations, $\underline{U} = 
 \begin{pmatrix}
 	U \\
 	0_{1, k}
 \end{pmatrix}$
 and $U$ being upper triangular. The triangular system to solve is then given by
 \begin{equation*}
-	y_k := \text{argmin}_y \norm{\beta G^T e_1 - \underline{U} y}_2
+	y_k := \text{argmin}_y \norm{\beta \underline{G}^T e_1 - \underline{U} y}_2
 \end{equation*}
-The solution is obtained by computing $x_k = x_0 + Qy_k$. Note that the absolute value of the last coordinate of $\beta G^T e_1$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$. \\
+The solution is obtained by computing $x_k = x_0 + Qy_k$. Note that the absolute value of the last coordinate of $\beta \underline{G}^T e_1$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$. \\
 
 The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:stdgmreslsp}:
 \begin{equation}
@@ -366,21 +473,24 @@ The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:s
 \end{equation}
 
 \begin{algorithm}[H]
-\caption{Newton CA-GMRES}
+\caption{restarted Newton CA-GMRES}
 \label{alg:ca-gmres}
 \begin{algorithmic}[1]
     \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
-    \STATE $r_0:=b-Ax_0$, $\beta := \norm{r_0}_2$, $q_1 := r_0/\beta$
+	\STATE restart := true
+	\WHILE{restart}
+    \STATE $r_0:=\textcolor{red}{b-Ax_0}$, $\beta := \norm{r_0}_2$, $q_1 := r_0/\beta$, 
     \FOR{$k = 0$ to $t-1$}
         \IF{$k = 0$}
         	\STATE Compute $\underline{Q}_0$ and $\underline{H}_0$ using MGS-Arnoldi
         	\STATE Set $\underline{\frak{Q}}_0 := \underline{Q}_0$ and $\underline{\frak{H}}_0 := \underline{H}_0$
         	\STATE Compute Ritz values from $H_0$ and fix basis conversion matrix $\underline{B}_k$
 			\STATE Reduce $\underline{H}_0$ from upper Hessenberg to upper triangular form using $s$ Givens \\
-\hspace{\algorithmicindent} rotations $G_1$, $G_2$, $ \ldots$, $G_s$. Apply the same rotations in the same order to $\beta e_1$, \\
-\hspace{\algorithmicindent} resulting in the length $s + 1$ vector $\zeta_0$.
+\hspace{\algorithmicindent} rotations $G_1$, $G_2$, $ \ldots$, $G_s$. Apply the same rotations in the same order to \\
+\hspace{\algorithmicindent} $\beta e_1$, resulting in the length $s + 1$ vector $\zeta_0$.
 		\ELSE
-			\STATE Compute $\underline{\acute{V}}_k$ using SpMV and 1-2  AXPY
+			\STATE Set $v_{sk + 1} := q_{sk + 1}$
+			\STATE Compute $\underline{\acute{V}}_k$ where $v_{i + 1} = \textcolor{red}{(A - \theta_i I) v_i}, i = sk + 1:sk + s$
 			\STATE $\underline{\acute{\frak{R}}}_{k-1,k} := \underline{\frak{Q}}^T_{k-1} \underline{\acute{V}}_k$
 			\STATE $\underline{\acute{V}}'_k := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k-1}\underline{\acute{\frak{R}}}_{k-1,k}$
 			\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$ using TSQR
@@ -397,20 +507,22 @@ The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:s
 	\underline{\frak{H}}_{k - 1,k} \\
 	\underline{H}_k \\
 \end{pmatrix}$.
-			\STATE Reduce $\underline{H}_k$ to upper triangular form using $s$ Givens rotations $G_{sk + 1}$, $\ldots$, $G_{s(k + 1)}$. \\
-\hspace{\algorithmicindent} Apply the rotations in the same order to $\begin{pmatrix}
+			\STATE Reduce $\underline{H}_k$ to upper triangular form using $s$ Givens rotations $G_{sk + 1}$, $\ldots$, \\
+\hspace{\algorithmicindent} $G_{s(k + 1)}$. Apply the rotations in the same order to $\begin{pmatrix}
 	\zeta_{k - 1} \\
 	0_s
-\end{pmatrix}$, resulting in the length \\
-\hspace{\algorithmicindent} \mbox{$s(k + 1) + 1$} vector $\zeta_k$.
+\end{pmatrix}$, resulting in the \\
+\hspace{\algorithmicindent} length \mbox{$s(k + 1) + 1$} vector $\zeta_k$.
 		\ENDIF
-	\STATE Element $s(k + 1) + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
-\hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
+	\STATE Element $s(k + 1) + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current \\
+\hspace{\algorithmicindent} residual $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
 	\IF{converged}
-		\STATE Use the above reduction of $\underline{\frak{H}}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{\frak{H}}_k y - \beta e_1}_2$
-		\STATE Set $x_k := x_0 + \frak{Q}_k y_k$, and exit
+		\STATE restart = false, and exit for loop
 	\ENDIF
-	\ENDFOR 
+	\ENDFOR
+	\STATE Use the above reduction of $\underline{\frak{H}}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{\frak{H}}_k y - \beta e_1}_2$
+	\STATE Set $x_0 := x_0 + \frak{Q}_k y_k$
+	\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
 
@@ -422,10 +534,10 @@ Scaling is a special type of preconditioning. \cite{Hoemmen:2010:CKS:1970638} co
 \item Equilibration: replacing $A$ by $A' = D_rAD_c$ with $D_r$ and $D_c$ diagonal.
 \end{enumerate}
 In their experiments solving nonsymmetric linear systems with CA-GMRES \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration established to be quite effective and almost made the basis type irrelevant. We observed something similar after applying the ILU(0) preconditioner to the system.
-\subsubsection{ILU(0) preconditioner}
-$M = LU$ \\
-in CA-GMRES apply $M^{-1}$ to $r_0 = b - Ax_0$ at initialization and to $ q_i = Aq_{i-1}$ in the MPK.
+
 \subsubsection{CA-ILU(0) preconditioner} \label{sec:ca-ilu}
+$M = LU$ \\
+Algorithm~\ref{alg:ca-gmres} in CA-GMRES apply $M^{-1}$ to the red parts, i.e. replace $r_0 = b - Ax_0$ by $r_0 = M^{-1}(b - Ax_0)$ and  $v_{i + 1} = (A - \theta_i)v_i$ by $v_{i + 1} = M^{-1}((A - \theta_i)v_i)$
 summarize \cite{Grigori} (can be very long or short, dependent on overall length)
 \subsection{Convergence metrics}
 CA-GMRES produces cheap convergence metric, namely the relative residual $\norm{r_{k+1}}_2$ / $\norm{r_0}_2$. Might not be the best choice, depends too much on initial guess $x_0$.\\
@@ -461,22 +573,116 @@ How the true solution $\hat{x}$ was generated: $\hat{x}(k) = u(k) + sin(2\pi k/n
 where the scalar $u(k)$ is chosen from a random uniform [-1, 1] distribution. 
 $\hat{x}$ was chosen in this way because a completely random solution is usually nonphysical, but a highly nonrandom solution (such as a vector of all ones) might be near an eigenvector of the matrix (which would result in artificially rapid convergence of the iterative method).
 
-\begin{center}
-	\resizebox{1.0\textwidth}{!}{\input{dmat1.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{dmat2.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{dmat3.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{watt1.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{watt1_ilu0.tex}}
-	\resizebox{1.0\textwidth}{!}{\input{pwtk.tex}}
-\end{center}
-
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{dmat1.tex}}
+	\caption{•••}
+	\label{fig:dmat1}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{dmat2.tex}}
+	\caption{•••}
+	\label{fig:dmat2}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{dmat3.tex}}	
+	\caption{•••}
+	\label{fig:dmat3}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{dmat1_scale.tex}}
+	\caption{•••}
+	\label{fig:dmat1_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{dmat2_scale.tex}}
+	\caption{•••}
+	\label{fig:dmat2_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{dmat3_scale.tex}}
+	\caption{•••}
+	\label{fig:dmat3_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{watt1_noscale.tex}}
+	\caption{not scaled}
+	\label{fig:watt1_noscale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{watt1_scale.tex}}
+	\caption{•••}
+	\label{fig:watt1_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{watt1_ilu0.tex}}
+	\caption{without basis vector scaling}
+	\label{fig:watt1_ilu0}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{pwtk_noscale.tex}}
+	\caption{•••}
+	\label{fig:pwtk_noscale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{pwtk_scale.tex}}
+	\caption{•••}
+	\label{fig:pwtk_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{bmw7st1.tex}}
+	\caption{•••}
+	\label{fig:bmw7st1}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{bmw7st1_scale.tex}}
+	\caption{•••}
+	\label{fig:bmw7st1_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{xenon2.tex}}
+	\caption{•••}
+	\label{fig:xenon2}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{xenon2_scale.tex}}
+	\caption{•••}
+	\label{fig:xenon2_scale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{bcsstk18_noscale.tex}}
+	\caption{•••}
+	\label{fig:bcsstk18_noscale}
+\end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{bcsstk18_scale.tex}}
+	\caption{•••}
+	\label{fig:bcsstk18_scale}
+\end{figure}
 
 \subsection{Performance experiments}
 \begin{figure}[H]
-\centering
+	\centering
 	\resizebox{1.0\textwidth}{!}{\input{runtimes_matrices.tex}}
-\caption{left CA-GMRES, right GMRES}
+	\caption{left CA-GMRES, right GMRES}
 \end{figure}
+
 \subsubsection{Summary}
 Conclusion: the MPK is an important kernel and should have been implemented, also restarting with $s$ steps of std. GMRES is not optimal and leaves room for optimization.
 \iffalse

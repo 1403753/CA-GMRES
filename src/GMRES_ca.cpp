@@ -353,7 +353,12 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		PAPI_shutdown();
 
 		this->INIT += rtime;
-
+		
+		std::cout << "theta_vals:\n";
+		for (auto t: theta_vals) {
+			std::cout << t.second << std::endl;
+		}
+		
 		iter += s;
 
 		reduce_H(H_reduced, s, m, 0, zeta, cs);	// after H_reduced is reduced, zeta contains s+1 values
@@ -397,8 +402,12 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 				cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
 				
+				// scales.push_back(1);
+				// scales.push_back(V[cblas_idamax (n, V, 1)]);
 				scales.push_back(cblas_dnrm2(n, V, 1));
-				/*scale->*/ cblas_dscal(n, 1/scales.at(0), V, 1);
+				cblas_dscal(n, 1/scales.at(0), V, 1);
+				
+				
 				
 				for (size_t i = 1; i < s; ++i) {
 
@@ -412,11 +421,13 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 						cblas_daxpy(n, imag*imag, &V[n*(i - 2)], 1, &V[n*i], 1);
 					}
 					
+					// scales.push_back(1);
+					// scales.push_back(V[n*i + cblas_idamax (n, &V[n*i], 1)]);
 					scales.push_back(cblas_dnrm2(n, &V[n*i], 1));
-					/*scale->*/ cblas_dscal(n, 1/scales.at(i), &V[n*i], 1);
+					cblas_dscal(n, 1/scales.at(i), &V[n*i], 1);
 					
 				}
-				
+
 				// std::cout << "scales:\n";
 				// for (auto s: scales) {
 					// std::cout << s << std::endl;
@@ -507,8 +518,10 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m + 1, zeta, 1);
 		cblas_dgemv (CblasColMajor, CblasNoTrans, n, m, 1, Q, n, zeta, 1, 0, x, 1);
 		
+		// std::cout << "solution:" <<std::endl;
 		for (size_t i = 0; i < n; ++i) {
 			x_0[i] = x_0[i] + x[i];
+			// std::cout << x_0[i] << std::endl;
 		}
 
 		if (restart) {
@@ -670,7 +683,7 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 		});
 
 		if (*max_zprod == (complex_t)0 ) {
-			std::cerr << "WARNING: Product to maximize is zero; either there are multiple shifts, or the product underflowed";
+			std::cerr << "WARNING: Product to maximize is zero; either there are multiple shifts, or the product underflowed" << std::endl;
 		} else if (std::isinf((*max_zprod).real()) ||	std::isnan((*max_zprod).real()) )
 			throw std::invalid_argument("Product to maximize is Inf; must have overflowed");
 		
@@ -688,10 +701,9 @@ sparse_status_t GMRES_ca::modified_leya_ordering(size_t s, double *wr, double *w
 
 				k_index.erase(k_index.begin() + idx - 1);
 				k_index.erase(k_index.begin() + idx - 1);
-				
-				L += 2;	
-			
-			
+
+				L += 2;
+
 			} else {
 
 				if (!is_conj_pair(ritz_vals.at(k_index.at(idx)).second, ritz_vals.at(k_index.at(idx + 1)).second))
