@@ -72,16 +72,16 @@ plot: main
 	#  WATT1 + ILU(0)  #
 	####################
 
-	# ./main 2 residuals watt1 30 5 6 15 2 \\shortstack{Watt1}
-	# gnuplot ../gnuplot/residuals_watt1_ilu0.gnu
+	./main 2 residuals watt1 30 5 6 15 2 \\shortstack{Watt1}
+	gnuplot ../gnuplot/Watt1_pcnone_s3_t10_s5_t6/residuals_watt1_ilu0.gnu
 
 	############
 	#  Xenon2  #
 	############
 
 	# ./main 2 residuals xenon2 60 5 12 10 6 \\shortstack{Xenon2}
-	# gnuplot ../gnuplot/residuals.gnu
 	# gnuplot ../gnuplot/Xenon2/residuals_xenon2.gnu
+	# gnuplot ../gnuplot/residuals.gnu
 
 	##########
 	#  pwtk  #
@@ -94,8 +94,8 @@ plot: main
 	#  bcsstk18  #
 	##############
 	
-	./main 2 residuals bcsstk18 60 5 12 10 6 \\shortstack{bcsstk08}
-	gnuplot ../gnuplot/bcsstk18/residuals_bcsstk18.gnu
+	# ./main 2 residuals bcsstk18 60 5 12 10 6 \\shortstack{bcsstk08}
+	# gnuplot ../gnuplot/bcsstk18/residuals_bcsstk18.gnu
 	
 	##########
 	#  dmat  #

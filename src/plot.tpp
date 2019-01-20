@@ -4,7 +4,7 @@ sparse_status_t res_solve(std::string fname, std::string fdir, std::string title
 	std::ofstream file;
 	sparse_status_t               stat;
 	
-	double                 		   	rTol = 1e-20;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
+	double                 		   	rTol = 1e-11;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
                                                                 // == || r_{k+1} || / || r_0 ||
 	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase

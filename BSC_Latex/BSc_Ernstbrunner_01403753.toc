@@ -1,32 +1,34 @@
-\contentsline {section}{\numberline {1}Notation}{3}{section.1}% 
-\contentsline {section}{\numberline {2}Introduction}{4}{section.2}% 
-\contentsline {section}{\numberline {3}Related work}{4}{section.3}% 
-\contentsline {section}{\numberline {4}Computational kernels}{4}{section.4}% 
-\contentsline {subsection}{\numberline {4.1}Matrix powers kernel (MPK)}{4}{subsection.4.1}% 
-\contentsline {subsection}{\numberline {4.2}Tall and skinny QR (TSQR)}{5}{subsection.4.2}% 
-\contentsline {subsection}{\numberline {4.3}Block Classical Gram-Schmidt (BCGS)}{5}{subsection.4.3}% 
-\contentsline {section}{\numberline {5}Arnoldi iteration}{5}{section.5}% 
-\contentsline {subsection}{\numberline {5.1}Arnoldi(s)}{6}{subsection.5.1}% 
-\contentsline {subsubsection}{\numberline {5.1.1}The Monomial basis}{6}{subsubsection.5.1.1}% 
-\contentsline {subsubsection}{\numberline {5.1.2}The Newton basis}{7}{subsubsection.5.1.2}% 
-\contentsline {paragraph}{\nonumberline Choosing the shifts}{7}{section*.2}% 
-\contentsline {paragraph}{\nonumberline The modified Leja ordering}{7}{section*.3}% 
-\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{7}{section*.4}% 
-\contentsline {subparagraph}{\nonumberline Performance notes}{8}{section*.5}% 
-\contentsline {subsection}{\numberline {5.2}Arnoldi(s,t)}{8}{subsection.5.2}% 
-\contentsline {subsubsection}{\numberline {5.2.1}Introduction}{8}{subsubsection.5.2.1}% 
-\contentsline {subsubsection}{\numberline {5.2.2}Scaling the first basis vector}{8}{subsubsection.5.2.2}% 
-\contentsline {subsubsection}{\numberline {5.2.3}QR factorization update}{9}{subsubsection.5.2.3}% 
-\contentsline {subsubsection}{\numberline {5.2.4}Reconstructing the upper Hessenberg matrix}{9}{subsubsection.5.2.4}% 
-\contentsline {paragraph}{\nonumberline A different approach}{10}{section*.6}% 
-\contentsline {section}{\numberline {6}CA-GMRES}{11}{section.6}% 
-\contentsline {subsection}{\numberline {6.1}GMRES(m)}{11}{subsection.6.1}% 
-\contentsline {subsection}{\numberline {6.2}Preconditioning}{14}{subsection.6.2}% 
-\contentsline {subsubsection}{\numberline {6.2.1}CA-ILU(0) preconditioner}{14}{subsubsection.6.2.1}% 
-\contentsline {subsection}{\numberline {6.3}Convergence metrics}{14}{subsection.6.3}% 
-\contentsline {subsection}{\numberline {6.4}Implementation details}{14}{subsection.6.4}% 
-\contentsline {subsection}{\numberline {6.5}Numerical experiments}{15}{subsection.6.5}% 
-\contentsline {subsection}{\numberline {6.6}Performance experiments}{24}{subsection.6.6}% 
-\contentsline {subsubsection}{\numberline {6.6.1}Summary}{24}{subsubsection.6.6.1}% 
-\contentsline {section}{\numberline {7}Conclusion}{24}{section.7}% 
-\contentsline {section}{Appendices}{27}{section*.11}% 
+\contentsline {section}{\numberline {1}TODO}{3}{section.1}% 
+\contentsline {section}{\numberline {2}Notation}{4}{section.2}% 
+\contentsline {section}{\numberline {3}Introduction}{5}{section.3}% 
+\contentsline {section}{\numberline {4}Related work}{6}{section.4}% 
+\contentsline {section}{\numberline {5}Computational kernels}{6}{section.5}% 
+\contentsline {subsection}{\numberline {5.1}Matrix powers kernel}{6}{subsection.5.1}% 
+\contentsline {subsubsection}{\numberline {5.1.1}Preconditioned matrix powers kernel}{6}{subsubsection.5.1.1}% 
+\contentsline {subsection}{\numberline {5.2}Tall and skinny QR}{7}{subsection.5.2}% 
+\contentsline {subsection}{\numberline {5.3}Block Classical Gram-Schmidt with TSQR}{8}{subsection.5.3}% 
+\contentsline {section}{\numberline {6}Arnoldi iteration}{8}{section.6}% 
+\contentsline {subsection}{\numberline {6.1}Arnoldi(s)}{8}{subsection.6.1}% 
+\contentsline {subsubsection}{\numberline {6.1.1}The Monomial basis}{9}{subsubsection.6.1.1}% 
+\contentsline {subsubsection}{\numberline {6.1.2}The Newton basis}{9}{subsubsection.6.1.2}% 
+\contentsline {paragraph}{\nonumberline Choosing the shifts}{9}{section*.6}% 
+\contentsline {paragraph}{\nonumberline The modified Leja ordering}{10}{section*.7}% 
+\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{10}{section*.8}% 
+\contentsline {subparagraph}{\nonumberline Performance notes}{10}{section*.9}% 
+\contentsline {subsection}{\numberline {6.2}Arnoldi(s,t)}{11}{subsection.6.2}% 
+\contentsline {subsubsection}{\numberline {6.2.1}Introduction}{11}{subsubsection.6.2.1}% 
+\contentsline {subsubsection}{\numberline {6.2.2}Scaling the first basis vector}{11}{subsubsection.6.2.2}% 
+\contentsline {subsubsection}{\numberline {6.2.3}QR factorization update}{11}{subsubsection.6.2.3}% 
+\contentsline {subsubsection}{\numberline {6.2.4}Reconstructing the upper Hessenberg matrix}{11}{subsubsection.6.2.4}% 
+\contentsline {paragraph}{\nonumberline A different approach}{12}{section*.10}% 
+\contentsline {section}{\numberline {7}CA-GMRES}{13}{section.7}% 
+\contentsline {subsection}{\numberline {7.1}GMRES(m)}{13}{subsection.7.1}% 
+\contentsline {subsection}{\numberline {7.2}Preconditioning}{16}{subsection.7.2}% 
+\contentsline {subsubsection}{\numberline {7.2.1}CA-ILU(0) preconditioner}{16}{subsubsection.7.2.1}% 
+\contentsline {subsection}{\numberline {7.3}Convergence metrics}{16}{subsection.7.3}% 
+\contentsline {subsection}{\numberline {7.4}Implementation details}{16}{subsection.7.4}% 
+\contentsline {subsection}{\numberline {7.5}Numerical experiments}{17}{subsection.7.5}% 
+\contentsline {subsection}{\numberline {7.6}Performance experiments}{26}{subsection.7.6}% 
+\contentsline {subsubsection}{\numberline {7.6.1}Summary}{26}{subsubsection.7.6.1}% 
+\contentsline {section}{\numberline {8}Conclusion}{26}{section.8}% 
+\contentsline {section}{Appendices}{29}{section*.15}% 

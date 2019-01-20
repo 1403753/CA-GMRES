@@ -23,13 +23,14 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
-\usepackage{xcolor}
+
+\usepackage[dvipsnames]{xcolor}
 \usepackage{yfonts}
 \usepackage[T1]{fontenc}
 \usepackage[toc,page]{appendix}
 
 
-\usepackage{graphicx}		 % Need this to include images
+\usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
 \usepackage{blkarray}
 \usepackage{cancel}
@@ -38,11 +39,32 @@
 \usepackage{color}
 \usepackage{pdfpages}
 \usepackage{helvet}
+\usepackage{tikz}
+\usetikzlibrary{graphs}
+\tikzset{
+  block/.style={
+    draw,
+    rectangle,
+    minimum height=3cm,
+    minimum width=2cm,
+    align=center
+  },
+  subblock/.style={
+    draw,
+    rectangle,
+    minimum height=.1.5cm,
+    minimum width=0.5cm,
+    align=center
+  },
+  line/.style={->,>=latex'}
+}
+
 
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{babyblueeyes}{rgb}{0.63, 0.79, 0.95}
 
 \lstdefinestyle{base}{
   inputencoding=latin10,
@@ -109,24 +131,56 @@ Wien, 2019	\linebreak
 \tableofcontents
 
 \pagebreak
+\section{TODO}
+\begin{itemize}
+\item describe tsqr
+\item describe block gram-schmidt
+\item describe arnoldi
+\item describe arnoldi(s)
+\item describe arnoldi(s,t)
+\item describe CA-GMRES
+\item write implementation details
+\item write numerical experiments
+\item write performance experiments
+\item write introduction
+\item write abstract
+\end{itemize}
 
+\pagebreak
 \section{Notation}
-For linear algebra, similar notation is considered as in \cite{Hoemmen:2010:CKS:1970638} and \cite{Grigori}.
+Similar notation is considered as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} and Grigori et al. \cite{Grigori}.
+\subsection*{Linear Algebra}
 \begin{itemize}
 \item Greek letters denote scalars, lower case Roman letters denote vectors (or - based on the context - dimensions), capital Roman letters denote matrices.
 \item Capital letters with two subscripts, e.g. '$V_{m, n}$', denote matrices with $m$ rows and $n$ columns.
 \item Capital \textit{Black letter} letters (e.g. $V$, $Q$ and $R$ in Black letters are represented by $\frak{V}$, $\frak{Q}$ and $\frak{R}$ resp.) denote matrices that are composed out of other matrices. 
 \item $v_k$ denotes the $k^{th}$ vector in a series of vectors $v_0$, $v_1$, $\ldots$, ,  $v_k$, $v_{k+1}$, $\ldots$ of equal length.
 \item Similarly, $V_k$ denotes the $k^{th}$ matrix in a sequence of matrices $V_0$, $V_1$, $\ldots$ , $V_k$, $V_{k+1}$, $\ldots$. Generally all these matrices have the same number of rows. They may or may not have the same number of columns.
-\item If $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\underline{V}_k$ comprises vectors $\left[V_k, v_{s+1} \right]$. The underline means one more column at the end.
-\item If again, $V_k$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, $\acute{V}$ consists of vectors $[v_2, v_3, \ldots, v_s]$. The acute denotes one column less at the beginning.
+\item If $V$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, then $\underline{V} = \left[V, v_{s+1} \right]$. The underline denotes one more column at the end.
+\item If again, $V$ is a matrix consisting of $s$ vectors $\left[v_1, v_2, \ldots, v_s\right]$, then $\acute{V} = [v_2, v_3, \ldots, v_s]$. The acute denotes one column less at the beginning.
 \item As a consequence $\underline{\acute{V}}$ denotes one more column at the end and one less column at the beginning, e.g. $\underline{\acute{V}} = [\acute{V}, v_{s+1}]$.
 \item Depending on the context, both underline or/and acute letters can also refer to rows as well. 
 \item $0_{m, n}$ is defined as an $m \times n$ matrix consisting of zeros and $e_k$ denotes the $k^{\text{th}}$ canonical vector with the dimension depending on the context.
 \item Matlab notation is used for addressing elements of matrices and vectors. For example, given a matrix $A$ of size $n \times n$ and two sets of indices $\alpha$ and $\beta$, $A(\alpha,:)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$. Similarly, $A(\alpha, \beta)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$ and the subset of the columns of $A$ whose indices belong to $\beta$.
-
 \end{itemize}
 \pagebreak
+\subsection*{Graph Notation}
+\begin{itemize}
+\item $G(A)$ denotes the directed graph of $A$ with $G(A) = \{V,E\}$ where $V(G(A))$ is the set of vertices of $G(A)$ and $E(G(A))$ is the set of edges of $G(A)$.
+\item $R(G(A), \alpha)$ denotes the set of vertices in $G(A)$ that are reachable from any vertex in the set $\alpha$, including $\alpha$.
+\item $R(G(A), \alpha, m)$ denotes the set of vertices in $G(A)$ that are reachable by paths of length at most $m$ from any vertex in $\alpha$.
+\end{itemize}
+\subsection*{Terms and definitions}
+\begin{itemize}
+\item \textbf{Fetching}: the movement of data. This could either be \textit{reading} , \textit{copying} or \textit{sending} and \textit{receiving} messages.
+\item \textbf{Ghosting}: the storage of redundant data that does not belong to a processors assigned domain.
+\end{itemize}
+\subsection*{Abbreviations}
+\begin{itemize}
+\item \textbf{MPK}: matrix powers kernel
+\item \textbf{TSQR}: tall and skinny qr
+\item \textbf{BCGS}: Block Classical Gram-Schmidt
+\end{itemize}
 
 \begin{abstract}
 Abstract
@@ -140,35 +194,157 @@ The CA-GMRES algorithm was implemented in a shared-memory environment.
 
 Communication avoiding GMRES is based on s-step GMRES 
 \cite{Erhel95aparallel}
+\\
+
+The term \textit{communication} generally denotes the movement of data either between different processors in the parallel case or between 'fast' and 'slow' memory in the sequential case, where 'fast' and 'slow' are relative to the two levels examined in the memory hierarchy (e.g., cache and DRAM, or DRAM and disk). Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way such that reduction of communication is prioritized. This often results in new challenges, e.g., the  CA-ILU(0) algorithm (section~\ref{sec:ca-ilu}) has to balance between communication and redundant computations; CA-GMRES (section~\ref{sec:ca-gmres}) incorporates additional techniques to deal with ill-conditioned basis vectors.
 
 \section{Related work}
 s-step methods, CA-ILU(0)
 
 \section{Computational kernels}
 %introduction; definitions: kernel, communication-avoiding
-In this thesis \textit{computational kernels} define the parts of an algorithm with the highest costs. These costs include both arithmetic operations and communication.
-The term \textit{communication} generally denotes the movement of data either between different processors in the parallel case or between 'fast' and 'slow' memory in the sequential case, where 'fast' and 'slow' are relative to the two levels examined in the memory hierarchy (e.g. cache and DRAM, or DRAM and disk). Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way such that reduction of communication is prioritized. This often results in new challenges, e.g., the  CA-ILU(0) algorithm (section~\ref{sec:ca-ilu}) has to balance between communication and redundant computations; CA-GMRES (section~\ref{sec:ca-gmres}) incorporates additional techniques to deal with ill-conditioned basis vectors.
+In this thesis \textit{computational kernels} define parts of an algorithm with significantly high costs, relatively speaking. These costs include both arithmetic operations and communication.
 
-\subsection{Matrix powers kernel (MPK)}
+
+\subsection{Matrix powers kernel}
+Although, the matrix powers kernel was not implemented in the context of this thesis, it is an essential part to avoid communication and therefore, will be briefly summarized here.\\
+
+The MPK replaces the sparse matrix-vector products in s-step methods that generate the basis for the Krylov subspace $\mathcal{K}_{s + 1}(A, v) = \left[v, Av, A^2v, \ldots, A^{s}v\right] = \left[v_1, v_2, \ldots, v_{s + 1}\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. However, the MPK sends a factor $\Theta(s)$ less messages than $s$ SpMV invocations and the matrix has to be loaded from slow to fast memory only once.
+In order to achieve this, the data and the workload are distributed among $P$ processors, where each processor is assigned a part $\alpha$ of $A(\alpha,:)$ and $v_1(\alpha)$ with $\alpha \subseteq V(G(A))$. Then, each processor fetches $A(\eta,:)$ and $v_1(\eta)$, with $\eta = R(G(A), \alpha, s) - \alpha$ in order to compute $s$ more vectors $v_2(\alpha), v_3(\alpha), \ldots, v_{s + 1}(\alpha)$ without communication. Since
+\begin{equation*}
+\alpha \subseteq R(G(A),\alpha, 1) \subseteq \ldots \subseteq R(G(A),\alpha, s - 1) \subseteq R(G(A),\alpha, s)
+\end{equation*} it is clear that larger steps eventually lead to increasing amounts of ghosted data and floating point operations.
+
+\subsubsection{Preconditioned matrix powers kernel}
+Iterative methods often require a preconditioner that, when applied, fundamentally changes the MPK. In order to avoid communication, highly parallelizable preconditioners come to mind. E.g., Nuentsa et al. \cite{nuen11c} present their parallel GMRES with a multiplicative Schwarz preconditioner. Grigori et al. \cite{Grigori} developed \textit{CA-ILU(0)}, a very interesting type of preconditioner that, at first glance, seems unfit to work in a parallel and communication-avoiding manner. Section~\ref{sec:ca-ilu} summarizes their work.
+
+\iffalse
 \cite{Hoemmen:2010:CKS:1970638} p.60\\
 The Matrix Powers Kernel 
 Power iteration, SpMV instead of MV, sparse matrix like a graph $\rightarrow$ spacial, temporal locality not as efficiently used as in dense MV. 
 Avoid communication by sending / receiving all necessary values beforehand (look at reachability of graph(A)) and computing s basis vectors without further communication.\\
-
-
-Although, the matrix powers kernel was not implemented in the context of this thesis it is still an essential kernel to avoid communication and therefore, will be briefly summarized here.
-The matrix powers kernel replaces the sparse matrix-vector products that generate the basis for the Krylov subspace $\mathcal{K}_m(A, v) = \left[v, Av, A^2v, \ldots, A^{m-1}v\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. The data and the workload are partitioned among $P$ processors, where each processor gets $A(\alpha,:)$ and $v_0(\alpha)$ with $\alpha$ being the subset assigned to the specific processor. by a factor $\Theta(s)$ and the matrix has to be loaded from slow to fast memory only once instead of $s$.  than  each processor is assigned a part $\alpha$ of the input vector $v_0$ and $A(\alpha,:)$.
-
-
 \texttt{To minimize communication in a parallel setting, the s monomial basis vectors of the Krylov subspace $[y, Ay, A2y, \ldots, A^sy]$ are computed with no communication using the so-called matrix powers kernel [13]. This requires ghosting and computing redundantly on each processor the data required for computing its part of the vectors with no communication. Note that throughout this paper we use the term ghosting to denote the storage of redundant data, of vectors or matrices, that do not belong to the processor's assigned domain or part, but are needed for future computations.\\
 First, the data and the work is split between $P$ processors. Each processor is assigned a part $\alpha$ of the input vector $y_0$ ($y_0(\alpha)$) and $A(\alpha, :)$, where $\alpha \subseteq V(G(A))$. Then, each processor has to compute the same part $\alpha$ of $y_1 = Ay_0$, $y_2 = Ay_1$, till $y_s = Ay_{s - 1}$ without communicating with other processors. To do so, each 
 processor fetches all the data needed from the neighboring processors, to compute its part $\alpha$ of the $s$ vectors. Thus, to compute $y_s(\alpha)$, each processor should receive the missing data of $y_0(\eta_s)$ and $A(\eta_s, :)$ from its neighboring processors and store it redundantly, where $\eta_s = R(G(A), \alpha, s)$. Finally, each processor computes the set $R(G(A), \alpha, s - i)$ of the vectors $y_i$ for $i = 1, 2, \ldots, s$ without any communication with the other processors.}
+\fi
+
+\subsection{Tall and skinny QR}
+TSQR is a QR decomposition algorithm especially suited for $m \times n$ matrices with $m \gg n$. The parallel TSQR is summarized below. For a more detailed description as well as a description of the sequential algorithm see~\cite{Demmel:2012:CPS:2340316.2340324}. First, the matrix $A$ is split up into $P$ parts with each submatrix having size $m/P \times n$. Parallel TSQR then passes $P - 1$ stages with one QR factorization per stage (see Figure~\ref{fig:tsqr}). Let's assume $P = 4$, then 
+\begin{equation*}
+A =
+\begin{pmatrix}
+A_0\\A_1\\A_2\\A_3
+\end{pmatrix}.
+\end{equation*}
+At stage zero the QR factorizations of the submatrices are computed
+\begin{equation*}
+A_0 = Q_{00}R_{00}, \qquad A_1 = Q_{10}R_{10}, \qquad A_2 = Q_{20}R_{20}, \qquad A_3 = Q_{30}R_{30}.
+\end{equation*}
+The next stage merges the $R$-factors and computes new QR-factorizations
+\begin{equation*}
+\begin{pmatrix}
+R_{00} \\
+R_{10}
+\end{pmatrix} =
+Q_{01}R_{01} \qquad \text{and} \qquad
+\begin{pmatrix}
+R_{20} \\
+R_{30}
+\end{pmatrix} = 
+Q_{11}R_{11}.
+\end{equation*}
+This procedure is repeated until all submatrices have been united. A final QR factorization is performed which results in the following decomposition
+\begin{equation}
+A =
+\begin{pmatrix}
+A_0\\A_1\\A_2\\A_3
+\end{pmatrix} =
+\left(
+	\begin{array}{c|c|c|c}
+	Q_{00} & & & \\
+	\hline
+	& Q_{10} & & \\
+	\hline
+	& & Q_{20} & \\
+	\hline
+	& & & Q_{30}
+	\end{array}
+	\right) \cdot
+\left(
+	\begin{array}{c|c}
+		Q_{01} & \\
+		\hline
+		& Q_{11} 
+	\end{array}
+\right) \cdot
+Q_{02} \cdot R_{02}.
+\end{equation}
+
+Unconditionally stable like Householder QR but less communication 
+\\
+\begin{figure}
+\begin{center}
+\tikz [new set = A,
+	   new set = Q,
+	   new set = QQ,
+	   new set = R,
+	   new set = RR
+	   ] {
+
+\node [set = A, rectangle, minimum width=0.7cm, fill=babyblueeyes] at (1,3) {$A_0$};
+\node [set = A, rectangle, minimum width=0.7cm, fill=babyblueeyes] at (1,2) {$A_1$};
+\node [set = A, rectangle, minimum width=0.7cm, fill=babyblueeyes] at (1,1) {$A_2$};
+\node [set = A, rectangle, minimum width=0.7cm, fill=babyblueeyes] at (1,0) {$A_3$};
+\node (Q00) [set = Q] at (2.5,3) {$Q_{00}$};
+\node (Q10) [set = Q] at (2.5,2) {$Q_{10}$};
+\node (Q20) [set = Q] at (2.5,1) {$Q_{20}$};
+\node (Q30) [set = Q] at (2.5,0) {$Q_{30}$};
+\node [set = R, rectangle,
+		minimum height=1.6cm,
+		minimum width=0.7cm,
+		align=center,
+		fill=babyblueeyes] at (3.2,2.5) {};
+\node [set = R, rectangle,
+		minimum height=1.6cm,
+		minimum width=0.7cm,
+		align=center,
+		fill=babyblueeyes] at (3.2,0.5) {};
+
+\node (Q01) [set = QQ] at (4.7, 2.5) {$Q_{01}$};
+
+\node (Q11) [set = QQ] at (4.7, 0.5) {$Q_{11}$};
+
+\node [set = RR, rectangle,
+		minimum height=2.6cm,
+		minimum width=0.7cm,
+		align=center,
+		fill=babyblueeyes] at (5.4, 1.5) {};
+
+\node (Q02R02) [set = QQ] at (7.2, 1.5) {$Q_{02}R_{02}$};
+
+\node (R01) at (5.4, 2.5) {$R_{01}$};
+\node (R11) at (5.4, 0.5) {$R_{11}$};
+\node (R00) at (3.2, 3) {$R_{00}$};
+\node (R10) at (3.2, 2) {$R_{10}$};
+\node (R20) at (3.2, 1) {$R_{20}$};
+\node (R30) at (3.2, 0) {$R_{30}$};
+
+\graph { 
+	(A) ->[matching] (Q),
+	(R) ->[matching] (QQ),
+	(RR) ->[matching] (Q02R02)
+	};
+}
+\end{center}
+\caption{Parallel TSQR on a binary tree of four processors. The first subscript indicates the sequence number for a stage, the second subscript is the stage number}
+\label{fig:tsqr}
+\end{figure}
 
 
-\subsection{Tall and skinny QR (TSQR)}
-Unconditionally stable like Householder QR but less communication
 
-\subsection{Block Classical Gram-Schmidt (BCGS)}
+$\cite{doi:10.1137/080725763}$ how to modify the usual Householder QR factorization in a numerically stable way so that it produces an $R$ factor with nonnegative real diagonal entries. The resulting sequential QR factorization can then be used as the local QR factorization in our TSQR algorithm, so that TSQR also produces an $R$ factor with nonnegative diagonal entries.
+
+\subsection{Block Classical Gram-Schmidt with TSQR}
 Dense matrix-matrix multiplications $\rightarrow$ less communication (factor $\Theta(s)$ fewer messages) than unblocked CGS. Also, BCGS requires less communication that BMGS.
 No reorthogonalization because solving linear system with (std. GMRES uses unblocked MGS-Arnoldi) CA-GMRES uses TSQR which improves orthogonality of the block columns.
 
@@ -205,7 +381,7 @@ and has a change of basis matrix
 \underline{B} = [\sigma_1 e_2, \sigma_2 e_3, \ldots, \sigma_s e_{s + 1}].
 \end{equation*}
 with scaling factors $\sigma_1, \ldots, \sigma_s$.
-The Monomial basis is also known as the \textit{power method} which is an iterative method for finding the principal eigenvalue and corresponding eigenvector of a matrix by repeatedly applying a starting vector to the matrix. If the matrix and starting vector satisfy certain conditions, the basis converges to the principal eigenvector. In theory, the basis is still linearly independent in exact arithmetic. In machine precision they become inevitably dependent at a certain point. \\
+The Monomial basis is also known as the \textit{power method} which is an iterative method for finding the principal eigenvalue and corresponding eigenvector of a matrix by repeatedly applying a starting vector to the matrix. If the matrix and starting vector satisfy certain conditions, the basis converges to the principal eigenvector. Ideally, a basis has orthogonal basis vectors and should not converge. In theory, the converged basis is still linearly independent in exact arithmetic. In machine precision, the basis vectors become inevitably dependent at some point. \\
 
 scaling the rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but:  $\rightarrow$ need a different basis.
 \subsubsection{The Newton basis}
@@ -232,7 +408,7 @@ find estimates of the eigenvalues of A (Ritz values).
 \paragraph{The modified Leja ordering}
 
 \paragraph{Avoiding complex arithmetic}
-Like the eigenvalues of a real matrix, the Ritz values can also be complex conjugate pairs. The modified Leja ordering ensures that these pairs are ordered consecutively with leading positive imaginary entries, i.e. $\theta_{j + 1} = \overline{\theta}_j$ with $\Im(\theta_j) > 0$. Complex arithmetic doubles the storage and floating point operations and therefore, should be avoided. Instead of computing $v_{j + 1} = (A - \theta_j I)v_j$ and $v_{j + 2} = (A - \overline{\theta}_j I)v_{j + 1}$ like one would normally do, Bai et al. \cite{doi:10.1093/imanum/14.4.563} suggest that complex arithmetic can be avoided by setting
+Like the eigenvalues of a real matrix, the Ritz values can also come in complex conjugate pairs. The modified Leja ordering ensures that these pairs are ordered consecutively with leading positive imaginary entries, i.e. $\theta_{j + 1} = \overline{\theta}_j$ with $\Im(\theta_j) > 0$. Complex arithmetic doubles the storage and floating point operations and therefore, should be avoided. Instead of computing $v_{j + 1} = (A - \theta_j I)v_j$ and $v_{j + 2} = (A - \overline{\theta}_j I)v_{j + 1}$ like one would normally do, Bai et al. \cite{doi:10.1093/imanum/14.4.563} suggest that complex arithmetic can be skipped by setting
 \begin{equation}
 v_{j + 1} = (A - \Re(\theta_j) I )v_j
 \end{equation}
@@ -381,7 +557,7 @@ therefore,
 \end{equation}
 
 \paragraph{A different approach}
-In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} computed 2$s$ Ritz values, picked $s$ out of them and applied the Modified Leja Ordering. This improved the condition of the Newton basis and lead to (better) convergence. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, one has to consider that these 2$s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. This might not always be the case. E.g., the 2$s$ Ritz values could consist of complex conjugate pairs only. If $s$ is odd, there is no way this would fit without splitting a complex conjugate pair. Remember that in order to avoid complex arithmetic the consecutive order of a complex conjugate pair must be preserved. A way to address this could be to incorporate all computed Ritz values, i.e. to apply 2$s$ Ritz values over two outer iterations of Arnoldi(s,t). This slightly changes the way~\eqref{eq:h_blackletter_k_} is computed. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the first change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from~$\eqref{eq:B_blackletter_k_}$ by an additional entry above $\underline{B}_k$.
+In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} computed 2$s$ Ritz values, picked $s$ of them and applied the Modified Leja Ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, one has to consider that these 2$s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. Consider the following. If the 2$s$ Ritz values solely consist of complex conjugate pairs and $s$ is odd, there is no way this would fit without splitting a complex conjugate pair. To address this issue one could either omit the positive imaginary part of the last Ritz value or incorporate all computed values, i.e. apply 2$s$ Ritz values over two outer iterations of Arnoldi($s$,$t$). Since computing 2$s$ Ritz values yields in better approximations of the eigenvalues, there is no reason why one should not incorporate them all. This slightly changes the way equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the first change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from equation~\eqref{eq:B_blackletter_k_} with
 \begin{equation}
 \underline{\frak{B}}_{k} = 
 \begin{pmatrix}
@@ -390,7 +566,7 @@ In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} c
 \end{pmatrix}.
 \end{equation}
 
-\eqref{eq:h_blackletter_k_} then changes to
+As mentioned before, equation~\eqref{eq:h_blackletter_k_} then changes to
 \begin{equation}
 \underline{\frak{H}}_{k - 1, k} := -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k + e_{sk} e_s g
 \end{equation}
@@ -398,7 +574,6 @@ with
 \begin{equation*}
 g := - \Im (\theta_s)^2 e_{s} e^T_1  R^{-1}_{k}.
 \end{equation*}
-This approach was addressed only theoretically here and therefore, is subject to further investigation.
 
 \section{CA-GMRES} \label{sec:ca-gmres}
 %uses Arnoldi(s,t)
@@ -533,7 +708,7 @@ Scaling is a special type of preconditioning. \cite{Hoemmen:2010:CKS:1970638} co
 \item Balancing: replacing $A$ by $A' = DAD^{-1}$ with $D$ diagonal.
 \item Equilibration: replacing $A$ by $A' = D_rAD_c$ with $D_r$ and $D_c$ diagonal.
 \end{enumerate}
-In their experiments solving nonsymmetric linear systems with CA-GMRES \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration established to be quite effective and almost made the basis type irrelevant. We observed something similar after applying the ILU(0) preconditioner to the system.
+In their experiments solving nonsymmetric linear systems with CA-GMRES \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration proved quite effective and almost made the basis type irrelevant. We observed something similar after applying the ILU(0) preconditioner.
 
 \subsubsection{CA-ILU(0) preconditioner} \label{sec:ca-ilu}
 $M = LU$ \\
@@ -775,7 +950,17 @@ The main components of a single iteration of GMRES are
  \listofalgorithms
 \begin{appendices}
 \section*{Appendix A}
-discussion of test matrices
+discussion of test matrices \\
+
+\begin{tabular}{l|r|r}
+Name & Dim & nnz \\
+\hline
+bmw & 141K & 3.7M \\
+bcsstk18 & 12K & 149K \\
+pwtk & 218K & 3.7M \\
+watt1 & 1856 & 11550 \\
+xenon2 & 157K & 3.9M
+\end{tabular}
 \end{appendices}
 \end{document}
 % End of document.

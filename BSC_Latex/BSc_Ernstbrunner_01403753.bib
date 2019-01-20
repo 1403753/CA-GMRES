@@ -68,3 +68,54 @@ eprint = {/oup/backfile/content_public/journal/imajna/14/4/10.1093/imanum/14.4.5
     volume = {3},
     pages = {160--176}
 }
+
+@ARTICLE{nuen11c,
+  author = {Nuentsa Wakam, D. and Atenekeng Kahou, G.-A.},
+  title = {Parallel {GMRES} with a multiplicative Schwarz preconditioner},
+  journal = {ARIMA},
+  volume = {14},
+  pages = {81-99},
+  year = {2011},
+  abstract = {
+      This paper presents a robust hybrid solver for linear systems that combines a Krylov subspace method as accelerator with a Schwarz-based preconditioner. This preconditioner uses an explicit formulation associated to one iteration of the multiplicative Schwarz method. The Newton-basis GMRES, which aim at expressing a good data parallelism between subdomains is used as accelerator. In the first part of this paper, we present the pipeline parallelism that is obtained when the multiplicative Schwarz preconditioner is used to build the Krylov basis for the GMRES method. This is referred as the first level of parallelism. In the second part, we introduce a second level of parallelism inside the subdomains. For Schwarz-based preconditioners, the number of subdommains are keeped small to provide a robust solver. Therefore, the linear systems associated to subdomains are solved efficiently with this approach.
+Numerical experiments are performed on several problems to demonstrate the benefits of using these two levels of parallelism in the solver, mainly in terms of numerical robustness and global efficiency.
+    },
+  x-editorial-board = {yes},
+  x-international-audience = {yes}
+}
+
+@article{Demmel:2012:CPS:2340316.2340324,
+ author = {Demmel, James and Grigori, Laura and Hoemmen, Mark and Langou, Julien},
+ title = {Communication-optimal Parallel and Sequential QR and LU Factorizations},
+ journal = {SIAM J. Sci. Comput.},
+ issue_date = {January 2012},
+ volume = {34},
+ number = {1},
+ month = feb,
+ year = {2012},
+ issn = {1064-8275},
+ pages = {206--239},
+ numpages = {34},
+ url = {http://dx.doi.org/10.1137/080731992},
+ doi = {10.1137/080731992},
+ acmid = {2340324},
+ publisher = {Society for Industrial and Applied Mathematics},
+ address = {Philadelphia, PA, USA},
+ keywords = {LU factorization, QR factorization, linear algebra},
+}
+
+@article{doi:10.1137/080725763,
+author = {Demmel, J. and Hoemmen, M. and Hida, Y. and Riedy, E.},
+title = {Nonnegative Diagonals and High Performance on Low-Profile Matrices from Householder QR},
+journal = {SIAM Journal on Scientific Computing},
+volume = {31},
+number = {4},
+pages = {2832-2841},
+year = {2009},
+doi = {10.1137/080725763},
+
+URL = {https://doi.org/10.1137/080725763},
+
+eprint = {https://doi.org/10.1137/080725763}
+
+}

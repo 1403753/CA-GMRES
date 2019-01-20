@@ -11,6 +11,18 @@ Z.~BAI, D.~HU, and L.~REICHEL.
 \newblock A newton basis gmres implementation.
 \newblock {\em IMA Journal of Numerical Analysis}, 14(4):563--581, 1994.
 
+\bibitem{doi:10.1137/080725763}
+J.~Demmel, M.~Hoemmen, Y.~Hida, and E.~Riedy.
+\newblock Nonnegative diagonals and high performance on low-profile matrices
+  from householder qr.
+\newblock {\em SIAM Journal on Scientific Computing}, 31(4):2832--2841, 2009.
+
+\bibitem{Demmel:2012:CPS:2340316.2340324}
+James Demmel, Laura Grigori, Mark Hoemmen, and Julien Langou.
+\newblock Communication-optimal parallel and sequential qr and lu
+  factorizations.
+\newblock {\em SIAM J. Sci. Comput.}, 34(1):206--239, February 2012.
+
 \bibitem{Erhel95aparallel}
 Jocelyne Erhel.
 \newblock A parallel gmres version for general sparse matrices.
@@ -27,6 +39,11 @@ Mark Hoemmen.
 \newblock {\em Communication-avoiding Krylov Subspace Methods}.
 \newblock PhD thesis, Berkeley, CA, USA, 2010.
 \newblock AAI3413388.
+
+\bibitem{nuen11c}
+D.~Nuentsa~Wakam and G.-A. Atenekeng~Kahou.
+\newblock Parallel {GMRES} with a multiplicative schwarz preconditioner.
+\newblock {\em ARIMA}, 14:81--99, 2011.
 
 \bibitem{press92a}
 William~H. Press, Saul~A. Teukolsky, William~T. Vetterling, and Brian~P.

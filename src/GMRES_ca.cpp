@@ -288,10 +288,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k = (double *)mkl_calloc(s*s, sizeof(double), 64);if(R_k == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 	R_k[0] = 1;
-	
-	
+
 	IPCType *pc = ksp->getIPCType();
-		
+
 	descr.type = SPARSE_MATRIX_TYPE_GENERAL;
 
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);
@@ -299,11 +298,11 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 	for (size_t i = 0; i < n; ++i) {
 		r[i] = b[i] - r[i];
 	}
-		
+
 	pc->precondition(r);
-	
+
 	r_0nrm = cblas_dnrm2(n, r, 1);
-	
+
 	if (ksp->getStoreHist()) {
 		rHist = ksp->getRHist();
 		rHist->clear();
@@ -353,11 +352,11 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		PAPI_shutdown();
 
 		this->INIT += rtime;
-		
-		std::cout << "theta_vals:\n";
-		for (auto t: theta_vals) {
-			std::cout << t.second << std::endl;
-		}
+
+		// std::cout << "theta_vals:\n";
+		// for (auto t: theta_vals) {
+			// std::cout << t.second << std::endl;
+		// }
 		
 		iter += s;
 
@@ -402,8 +401,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 
 				cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
 				
-				// scales.push_back(1);
 				// scales.push_back(V[cblas_idamax (n, V, 1)]);
+				// scales.push_back(1);
 				scales.push_back(cblas_dnrm2(n, V, 1));
 				cblas_dscal(n, 1/scales.at(0), V, 1);
 				
@@ -421,8 +420,8 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 						cblas_daxpy(n, imag*imag, &V[n*(i - 2)], 1, &V[n*i], 1);
 					}
 					
-					// scales.push_back(1);
 					// scales.push_back(V[n*i + cblas_idamax (n, &V[n*i], 1)]);
+					// scales.push_back(1);
 					scales.push_back(cblas_dnrm2(n, &V[n*i], 1));
 					cblas_dscal(n, 1/scales.at(i), &V[n*i], 1);
 					
