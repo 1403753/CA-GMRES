@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6880 64-bit) (preloaded format=pdflatex 2019.1.2)  20 JAN 2019 05:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6880 64-bit) (preloaded format=pdflatex 2019.1.2)  21 JAN 2019 04:11
 entering extended mode
 **./BSc_Ernstbrunner_01403753.tex
 (BSc_Ernstbrunner_01403753.tex
@@ -269,6 +269,31 @@ Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 \Gin@req@height=\dimen113
 \Gin@req@width=\dimen114
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+Package: subcaption 2018/05/01 v1.1-162 Sub-captions (AR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+\captionmargin=\dimen115
+\captionmargin@=\dimen116
+\captionwidth=\dimen117
+\caption@tempdima=\dimen118
+\caption@indent=\dimen119
+\caption@parindent=\dimen120
+\caption@hangindent=\dimen121
+)
+Package caption Info: KOMA-Script document class.
+\c@caption@flags=\count111
+\c@ContinuedFloat=\count112
+Package caption Info: float package is loaded.
+)
+\c@subfigure=\count113
+\c@subtable=\count114
+)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty"
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
 
@@ -321,16 +346,16 @@ Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
-\@linkdim=\dimen115
-\Hy@linkcounter=\count111
-\Hy@pagecounter=\count112
+\@linkdim=\dimen122
+\Hy@linkcounter=\count115
+\Hy@pagecounter=\count116
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
-\Hy@SavedSpaceFactor=\count113
+\Hy@SavedSpaceFactor=\count117
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
@@ -342,17 +367,17 @@ Package hyperref Info: Plain pages OFF on input line 4534.
 Package hyperref Info: Backreferencing OFF on input line 4539.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4772.
-\c@Hy@tempcnt=\count114
+\c@Hy@tempcnt=\count118
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\url\url.sty"
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 5125.
-\XeTeXLinkMargin=\dimen116
-\Fld@menulength=\count115
-\Field@Width=\dimen117
-\Fld@charsize=\dimen118
+\XeTeXLinkMargin=\dimen123
+\Fld@menulength=\count119
+\Field@Width=\dimen124
+\Fld@charsize=\dimen125
 Package hyperref Info: Hyper figures OFF on input line 6380.
 Package hyperref Info: Link nesting OFF on input line 6385.
 Package hyperref Info: Hyper index ON on input line 6388.
@@ -362,16 +387,16 @@ Package hyperref Info: Link coloring with OCG OFF on input line 6405.
 Package hyperref Info: PDF/A mode OFF on input line 6410.
 LaTeX Info: Redefining \ref on input line 6450.
 LaTeX Info: Redefining \pageref on input line 6454.
-\Hy@abspage=\count116
-\c@Item=\count117
-\c@Hfootnote=\count118
+\Hy@abspage=\count120
+\c@Item=\count121
+\c@Hfootnote=\count122
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hpdftex.def"
 File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
-\Fld@listcount=\count119
-\c@bookmark@seq@number=\count120
+\Fld@listcount=\count123
+\c@bookmark@seq@number=\count124
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\rerunfilecheck.sty"
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
@@ -382,18 +407,18 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\blkarray\blkarray.sty"
 Package: blkarray 2015/02/27 v0.07 Block array (dpc)
-\c@BAenumi=\count121
-\BA@col=\count122
-\BA@block@cnt=\count123
+\c@BAenumi=\count125
+\BA@col=\count126
+\BA@block@cnt=\count127
 \BA@final@box=\box33
 \BA@first@box=\box34
-\BA@colsep=\dimen119
+\BA@colsep=\dimen126
 \BA@ftn=\toks25
-\BAextrarowheight=\dimen120
-\BAextraheightafterhline=\dimen121
-\BAarrayrulewidth=\dimen122
-\BAdoublerulesep=\dimen123
-\BAfootskip=\dimen124
+\BAextrarowheight=\dimen127
+\BAextraheightafterhline=\dimen128
+\BAarrayrulewidth=\dimen129
+\BAdoublerulesep=\dimen130
+\BAfootskip=\dimen131
 \BA@dashbox=\box35
 \BA@ddashbox=\box36
 )
@@ -403,29 +428,29 @@ Package: cancel 2013/04/12 v2.2 Cancel math terms
 ("C:\Program Files\MiKTeX 2.9\tex\latex\enumitem\enumitem.sty"
 Package: enumitem 2018/11/30 v3.6 Customized lists
 \labelindent=\skip65
-\enit@outerparindent=\dimen125
+\enit@outerparindent=\dimen132
 \enit@toks=\toks26
 \enit@inbox=\box37
-\enitdp@description=\count124
+\enitdp@description=\count128
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
-\lst@mode=\count125
+\lst@mode=\count129
 \lst@gtempboxa=\box38
 \lst@token=\toks27
-\lst@length=\count126
-\lst@currlwidth=\dimen126
-\lst@column=\count127
-\lst@pos=\count128
-\lst@lostspace=\dimen127
-\lst@width=\dimen128
-\lst@newlines=\count129
-\lst@lineno=\count130
-\lst@maxwidth=\dimen129
+\lst@length=\count130
+\lst@currlwidth=\dimen133
+\lst@column=\count131
+\lst@pos=\count132
+\lst@lostspace=\dimen134
+\lst@width=\dimen135
+\lst@newlines=\count133
+\lst@lineno=\count134
+\lst@maxwidth=\dimen136
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
 File: lstmisc.sty 2018/09/02 1.7 (Carsten Heinz)
-\c@lstnumber=\count131
-\lst@skipnumbers=\count132
+\c@lstnumber=\count135
+\lst@skipnumbers=\count136
 \lst@framebox=\box39
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
@@ -438,22 +463,22 @@ Package: pdfpages 2017/10/31 v0.5l Insert pages of external PDF documents (AM)
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\calc.sty"
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count133
-\calc@Bcount=\count134
-\calc@Adimen=\dimen130
-\calc@Bdimen=\dimen131
+\calc@Acount=\count137
+\calc@Bcount=\count138
+\calc@Adimen=\dimen137
+\calc@Bdimen=\dimen138
 \calc@Askip=\skip66
 \calc@Bskip=\skip67
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count135
+\calc@Ccount=\count139
 \calc@Cskip=\skip68
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\eso-pic\eso-pic.sty"
 Package: eso-pic 2018/04/12 v2.0h eso-pic (RN)
 )
-\AM@pagewidth=\dimen132
-\AM@pageheight=\dimen133
+\AM@pagewidth=\dimen139
+\AM@pageheight=\dimen140
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\pdfpages\pppdftex.def"
 File: pppdftex.def 2017/10/31 v0.5l Pdfpages driver for pdfTeX (AM)
@@ -461,7 +486,7 @@ File: pppdftex.def 2017/10/31 v0.5l Pdfpages driver for pdfTeX (AM)
 \AM@pagebox=\box40
 \AM@global@opts=\toks28
 \AM@toc@title=\toks29
-\c@AM@survey=\count136
+\c@AM@survey=\count140
 \AM@templatesizebox=\box41
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\helvet.sty"
@@ -472,8 +497,8 @@ Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\pgf\utilities\pgfrcs.sty"
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-common.tex"
 \pgfutil@everybye=\toks30
-\pgfutil@tempdima=\dimen134
-\pgfutil@tempdimb=\dimen135
+\pgfutil@tempdima=\dimen141
+\pgfutil@tempdimb=\dimen142
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-common-lists.te
 x")) ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-latex.def"
@@ -499,20 +524,20 @@ Package: pgfsys 2014/07/09 v3.0.1a (rcs-revision 1.48)
 x"
 \pgfkeys@tmptoks=\toks33
 ))
-\pgf@x=\dimen136
-\pgf@y=\dimen137
-\pgf@xa=\dimen138
-\pgf@ya=\dimen139
-\pgf@xb=\dimen140
-\pgf@yb=\dimen141
-\pgf@xc=\dimen142
-\pgf@yc=\dimen143
+\pgf@x=\dimen143
+\pgf@y=\dimen144
+\pgf@xa=\dimen145
+\pgf@ya=\dimen146
+\pgf@xb=\dimen147
+\pgf@yb=\dimen148
+\pgf@xc=\dimen149
+\pgf@yc=\dimen150
 \w@pgf@writea=\write3
 \r@pgf@reada=\read1
-\c@pgf@counta=\count137
-\c@pgf@countb=\count138
-\c@pgf@countc=\count139
-\c@pgf@countd=\count140
+\c@pgf@counta=\count141
+\c@pgf@countb=\count142
+\c@pgf@countc=\count143
+\c@pgf@countd=\count144
 \t@pgf@toka=\toks34
 \t@pgf@tokb=\toks35
 \t@pgf@tokc=\toks36
@@ -531,8 +556,8 @@ File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsyssoftpath.code.t
 ex"
 File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
-\pgfsyssoftpath@smallbuffer@items=\count141
-\pgfsyssoftpath@bigbuffer@items=\count142
+\pgfsyssoftpath@smallbuffer@items=\count145
+\pgfsyssoftpath@bigbuffer@items=\count146
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsysprotocol.code.t
 ex"
@@ -543,8 +568,8 @@ Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathcalc.code.tex"
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathutil.code.tex")
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathparser.code.tex"
-\pgfmath@dimen=\dimen144
-\pgfmath@count=\count143
+\pgfmath@dimen=\dimen151
+\pgfmath@count=\count147
 \pgfmath@box=\box43
 \pgfmath@toks=\toks37
 \pgfmath@stack@operand=\toks38
@@ -568,37 +593,37 @@ ex")
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.integerarit
 hmetics.code.tex")))
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfloat.code.tex"
-\c@pgfmathroundto@lastzeros=\count144
+\c@pgfmathroundto@lastzeros=\count148
 ))
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepoints.code.tex
 "
 File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
-\pgf@picminx=\dimen145
-\pgf@picmaxx=\dimen146
-\pgf@picminy=\dimen147
-\pgf@picmaxy=\dimen148
-\pgf@pathminx=\dimen149
-\pgf@pathmaxx=\dimen150
-\pgf@pathminy=\dimen151
-\pgf@pathmaxy=\dimen152
-\pgf@xx=\dimen153
-\pgf@xy=\dimen154
-\pgf@yx=\dimen155
-\pgf@yy=\dimen156
-\pgf@zx=\dimen157
-\pgf@zy=\dimen158
+\pgf@picminx=\dimen152
+\pgf@picmaxx=\dimen153
+\pgf@picminy=\dimen154
+\pgf@picmaxy=\dimen155
+\pgf@pathminx=\dimen156
+\pgf@pathmaxx=\dimen157
+\pgf@pathminy=\dimen158
+\pgf@pathmaxy=\dimen159
+\pgf@xx=\dimen160
+\pgf@xy=\dimen161
+\pgf@yx=\dimen162
+\pgf@yy=\dimen163
+\pgf@zx=\dimen164
+\pgf@zy=\dimen165
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepathconstruct.c
 ode.tex"
 File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
-\pgf@path@lastx=\dimen159
-\pgf@path@lasty=\dimen160
+\pgf@path@lastx=\dimen166
+\pgf@path@lasty=\dimen167
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepathusage.code.
 tex"
 File: pgfcorepathusage.code.tex 2014/11/02  (rcs-revision 1.24)
-\pgf@shorten@end@additional=\dimen161
-\pgf@shorten@start@additional=\dimen162
+\pgf@shorten@end@additional=\dimen168
+\pgf@shorten@start@additional=\dimen169
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorescopes.code.tex
 "
@@ -606,19 +631,19 @@ File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
 \pgfpic=\box44
 \pgf@hbox=\box45
 \pgf@layerbox@main=\box46
-\pgf@picture@serial@count=\count145
+\pgf@picture@serial@count=\count149
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoregraphicstate.co
 de.tex"
 File: pgfcoregraphicstate.code.tex 2014/11/02  (rcs-revision 1.12)
-\pgflinewidth=\dimen163
+\pgflinewidth=\dimen170
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoretransformations
 .code.tex"
 File: pgfcoretransformations.code.tex 2015/08/07  (rcs-revision 1.20)
-\pgf@pt@x=\dimen164
-\pgf@pt@y=\dimen165
-\pgf@pt@temp=\dimen166
+\pgf@pt@x=\dimen171
+\pgf@pt@y=\dimen172
+\pgf@pt@temp=\dimen173
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorequick.code.tex"
 File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
@@ -634,12 +659,12 @@ File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorearrows.code.tex
 "
 File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
-\pgfarrowsep=\dimen167
+\pgfarrowsep=\dimen174
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoreshade.code.tex"
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
-\pgf@max=\dimen168
-\pgf@sys@shading@range@num=\count146
+\pgf@max=\dimen175
+\pgf@sys@shading@range@num=\count150
 ) ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoreimage.code.te
 x"
 File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
@@ -670,8 +695,8 @@ File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\pgf\compatibility\pgfcomp-version-0-65.
 sty"
 Package: pgfcomp-version-0-65 2007/07/03 v3.0.1a (rcs-revision 1.7)
-\pgf@nodesepstart=\dimen169
-\pgf@nodesepend=\dimen170
+\pgf@nodesepstart=\dimen176
+\pgf@nodesepend=\dimen177
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\pgf\compatibility\pgfcomp-version-1-18.
 sty"
@@ -685,8 +710,8 @@ Package: pgfcomp-version-1-18 2007/07/23 v3.0.1a (rcs-revision 1.1)
 Package: pgffor 2013/12/13 v3.0.1a (rcs-revision 1.25)
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmath.code.tex")
-\pgffor@iter=\dimen171
-\pgffor@skip=\dimen172
+\pgffor@iter=\dimen178
+\pgffor@skip=\dimen179
 \pgffor@stack=\toks40
 \pgffor@toks=\toks41
 ))
@@ -696,31 +721,31 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\libraries\pgflibraryplothandlers.
 code.tex"
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
-\pgf@plot@mark@count=\count147
-\pgfplotmarksize=\dimen173
+\pgf@plot@mark@count=\count151
+\pgfplotmarksize=\dimen180
 )
-\tikz@lastx=\dimen174
-\tikz@lasty=\dimen175
-\tikz@lastxsaved=\dimen176
-\tikz@lastysaved=\dimen177
-\tikzleveldistance=\dimen178
-\tikzsiblingdistance=\dimen179
+\tikz@lastx=\dimen181
+\tikz@lasty=\dimen182
+\tikz@lastxsaved=\dimen183
+\tikz@lastysaved=\dimen184
+\tikzleveldistance=\dimen185
+\tikzsiblingdistance=\dimen186
 \tikz@figbox=\box49
 \tikz@figbox@bg=\box50
 \tikz@tempbox=\box51
 \tikz@tempbox@bg=\box52
-\tikztreelevel=\count148
-\tikznumberofchildren=\count149
-\tikznumberofcurrentchild=\count150
-\tikz@fig@count=\count151
+\tikztreelevel=\count152
+\tikznumberofchildren=\count153
+\tikznumberofcurrentchild=\count154
+\tikz@fig@count=\count155
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\modules\pgfmodulematrix.code.tex"
 File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count152
-\pgfmatrixcurrentcolumn=\count153
-\pgf@matrix@numberofcolumns=\count154
+\pgfmatrixcurrentrow=\count156
+\pgfmatrixcurrentcolumn=\count157
+\pgf@matrix@numberofcolumns=\count158
 )
-\tikz@expandcount=\count155
+\tikz@expandcount=\count159
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\frontendlayer\tikz\libraries\tikz
 librarytopaths.code.tex"
@@ -729,42 +754,42 @@ File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.1a (rcs-revision 1.2)
 ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\frontendlayer\tikz\libraries\grap
 hs\tikzlibrarygraphs.code.tex"
 File: tikzlibrarygraphs.code.tex 2015/06/05 v3.0.1a (rcs-revision 1.44)
-\tikz@lib@auto@number=\count156
-\tikz@qnode@count=\count157
+\tikz@lib@auto@number=\count160
+\tikz@qnode@count=\count161
 ) (BSc_Ernstbrunner_01403753.aux)
 \openout1 = `BSc_Ernstbrunner_01403753.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for LY/yfrak/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for LYG/ygoth/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for LY/yfrak/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for LYG/ygoth/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
 
 ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count158
-\scratchdimen=\dimen180
+\scratchcounter=\count162
+\scratchdimen=\dimen187
 \scratchbox=\box53
-\nofMPsegments=\count159
-\nofMParguments=\count160
+\nofMPsegments=\count163
+\nofMParguments=\count164
 \everyMPshowfont=\toks42
-\MPscratchCnt=\count161
-\MPscratchDim=\dimen181
-\MPnumerator=\count162
-\makeMPintoPDFobject=\count163
+\MPscratchCnt=\count165
+\MPscratchDim=\dimen188
+\MPnumerator=\count166
+\makeMPintoPDFobject=\count167
 \everyMPtoPDFconversion=\toks43
 ) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -779,8 +804,12 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box54
-Package hyperref Info: Link coloring OFF on input line 84.
+Package hyperref Info: Link coloring OFF on input line 85.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -788,17 +817,17 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count164
+\c@section@level=\count168
 )
-LaTeX Info: Redefining \ref on input line 84.
-LaTeX Info: Redefining \pageref on input line 84.
-LaTeX Info: Redefining \nameref on input line 84.
+LaTeX Info: Redefining \ref on input line 85.
+LaTeX Info: Redefining \pageref on input line 85.
+LaTeX Info: Redefining \nameref on input line 85.
 
 (BSc_Ernstbrunner_01403753.out) (BSc_Ernstbrunner_01403753.out)
 \@outlinefile=\write4
 \openout4 = `BSc_Ernstbrunner_01403753.out'.
 
-\c@lstlisting=\count165
+\c@lstlisting=\count169
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\pdflscape.sty"
 Package: pdflscape 2016/05/14 v0.11 Display of landscape pages in PDF (HO)
@@ -813,7 +842,7 @@ Package epstopdf Info: Source file: <univie.eps>
 (epstopdf)                    size: 44591 bytes
 (epstopdf)             Command: <epstopdf --outfile=univie-eps-converted-to.pdf
  univie.eps>
-(epstopdf)             \includegraphics on input line 94.
+(epstopdf)             \includegraphics on input line 95.
 Package epstopdf Info: Output file is already uptodate.
 
 
@@ -822,13 +851,13 @@ ound PDF version <1.7>, but at most version <1.5> allowed
 <univie-eps-converted-to.pdf, id=122, 569.12625pt x 285.065pt>
 File: univie-eps-converted-to.pdf Graphic file (type pdf)
 <use univie-eps-converted-to.pdf>
-Package pdftex.def Info: univie-eps-converted-to.pdf  used on input line 94.
+Package pdftex.def Info: univie-eps-converted-to.pdf  used on input line 95.
 (pdftex.def)             Requested size: 188.21371pt x 94.27182pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 114.
+LaTeX Font Info:    Try loading font information for U+msa on input line 115.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 114.
+LaTeX Font Info:    Try loading font information for U+msb on input line 115.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -836,14 +865,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {C:/Users/Robert/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./univie-e
 ps-converted-to.pdf>]
-LaTeX Font Info:    Try loading font information for T1+phv on input line 131.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 132.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 131.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 132.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 131.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 132.
 
 (BSc_Ernstbrunner_01403753.toc)
 \tf@toc=\write5
@@ -852,14 +881,14 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
  [2
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 136.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 137.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 136.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 137.
  [3]
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 152.
@@ -879,208 +908,237 @@ then $[] \OT1/cmr/m/n/10.95 = [\OML/cmm/m/it/10.95 v[]; v[]; [] ; v[]\OT1/cmr/m
 /n/10.95 ]$\T1/cmr/m/n/10.95 .
  []
 
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 191--192
+[4] [5]
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 195--198
+Underfull \hbox (badness 10000) in paragraph at lines 196--199
 
  []
 
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 210--211
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--212
 
  []
 
 [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 353--354
+Underfull \hbox (badness 10000) in paragraph at lines 285--287
 
  []
 
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 372.
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 353.
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
+Overfull \hbox (7.3669pt too wide) in paragraph at lines 357--358
+[] [][] 
+ []
+
+[8]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 387.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-Overfull \hbox (5.02742pt too wide) in paragraph at lines 362--373
+Overfull \hbox (5.02742pt too wide) in paragraph at lines 377--388
 []\T1/cmr/m/n/10.95 source above! \T1/cmtt/m/n/10.95 At the heart of Arnoldi's 
 method is a Gram-Schmidt process, and
  []
 
 
-Overfull \hbox (45.73087pt too wide) in paragraph at lines 362--373
+Overfull \hbox (45.73087pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 so we refer to the GMRES implementation of [8] as the Gram-S
 chmidt implementation.
  []
 
 
-Overfull \hbox (40.0725pt too wide) in paragraph at lines 362--373
+Overfull \hbox (40.0725pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 The basic form of Arnoldi's method given above employs the c
 lassical Gram-Schmidt
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 362--373
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 process, which is numerically untrustworthy. Because of roun
 doff, there may
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 362--373
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 be severe loss of orthogonality among the computed Vm'S. In 
 practice, it is
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 362--373
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 usual to implement Arnoldi's method using the modified Gram-
 Schmidt process
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 362--373
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 (see Golub and Van Loan [4]). Mathematically, this is just a
  rearrangement
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 362--373
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 of the classical process; computationally, it has superior p
 roperties. Even
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 362--373
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 the modified Gram-Schmidt process can fail to perform well i
 f the vectors on
  []
 
 
-Overfull \hbox (34.41412pt too wide) in paragraph at lines 362--373
+Overfull \hbox (34.41412pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 which it operates are not sufficiently independent. Indeed, 
 if S (sl,... ,sin)
  []
 
 
-Overfull \hbox (23.09738pt too wide) in paragraph at lines 362--373
+Overfull \hbox (23.09738pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 is an n m matrix the columns of which are to be orthonormali
 zed and if Q (ql,.
  []
 
 
-Overfull \hbox (6.12227pt too wide) in paragraph at lines 362--373
+Overfull \hbox (6.12227pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 qm) is the computed result of applying modified Gram-Schmidt
  to the columns
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 362--373
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 of S using floating point arithmetic with unit rounding erro
 r u, then Bjorck
  []
 
 
-Overfull \hbox (0.4639pt too wide) in paragraph at lines 362--373
+Overfull \hbox (0.4639pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 [1] has shown that (1.6) QTQ I + E, [IEll2 where the conditi
 on number 2(S)
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 362--373
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 is the ratio of the largest singular value of S to the small
 est. It follows
  []
 
 
-Overfull \hbox (11.78064pt too wide) in paragraph at lines 362--373
+Overfull \hbox (11.78064pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 that at the mth step of Arnoldi's method using modified Gram
 Schmidt, Vm+ may
  []
 
 
-Overfull \hbox (57.0476pt too wide) in paragraph at lines 362--373
+Overfull \hbox (57.0476pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 have a significantly nonzero conponent in the span of vl,. V
 m if 2((vl,...,vm,Avm))
  []
 
 
-Overfull \hbox (23.09738pt too wide) in paragraph at lines 362--373
+Overfull \hbox (23.09738pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 is large, i. e., if Avm is nearly in the span of vl,...,Vm. 
 Shad [7, p. 214
  []
 
 
-Overfull \hbox (51.38924pt too wide) in paragraph at lines 362--373
+Overfull \hbox (51.38924pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 has suggested that the Gram-Schmidt process in Arnoldi's met
 hod may be an important
  []
 
 
-Overfull \hbox (34.41412pt too wide) in paragraph at lines 362--373
+Overfull \hbox (34.41412pt too wide) in paragraph at lines 377--388
 \T1/cmtt/m/n/10.95 source of errors in the full and incomplete orthogonalizatio
 n methods ([6],[7]),
  []
 
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 382--385
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 397--400
+
+ []
+
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 417--419
+
+ []
+
+[11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 516--521
+
+ []
+
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 522--523
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--404
-
- []
-
-[9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 469--474
+Underfull \hbox (badness 10000) in paragraph at lines 557--558
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 475--476
+Underfull \hbox (badness 10000) in paragraph at lines 559--560
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 503--504
+Underfull \hbox (badness 10000) in paragraph at lines 568--570
+
+ []
+
+[14] [15] [16]
+Underfull \hbox (badness 10000) in paragraph at lines 696--698
+
+ []
+
+[17] [18]
+Underfull \hbox (badness 10000) in paragraph at lines 772--773
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 505--506
+LaTeX Warning: Command \textregistered invalid in math mode on input line 782.
 
+
+LaTeX Warning: Command \textcircled invalid in math mode on input line 782.
+
+
+LaTeX Warning: Command \textcircled invalid in math mode on input line 782.
+
+[19]
+Overfull \hbox (40.0725pt too wide) in paragraph at lines 800--801
+\T1/cmtt/m/n/10.95 It is known, but yet unexplained, that sometimes the norm of
+ the Arnoldi residual
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 514--516
-
- []
-
-[11]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 585.
- [12] [13]
-Underfull \hbox (badness 10000) in paragraph at lines 642--644
-
- []
-
-[14] [15]
-Underfull \hbox (badness 10000) in paragraph at lines 718--719
-
+Overfull \hbox (40.0725pt too wide) in paragraph at lines 800--801
+\T1/cmtt/m/n/10.95 converges to zero (for the Householder-GMRES this represents
+ a typical behaviour)
  []
 
 
-LaTeX Warning: Command \textregistered invalid in math mode on input line 728.
+Overfull \hbox (28.75575pt too wide) in paragraph at lines 800--801
+\T1/cmtt/m/n/10.95 even after the true residual norm stagnates. For MGS-GMRES, 
+however, the norms
+ []
 
 
-LaTeX Warning: Command \textcircled invalid in math mode on input line 728.
+Overfull \hbox (17.43901pt too wide) in paragraph at lines 800--801
+\T1/cmtt/m/n/10.95 of the true and Arnoldi residuals stagnate obviously at abou
+t the same level.
+ []
 
-
-LaTeX Warning: Command \textcircled invalid in math mode on input line 728.
-
-[16] (dmat1.tex
+(dmat1.tex
 \gptboxheight=\skip69
 \gptboxwidth=\skip70
 \gptboxtext=\box55
@@ -1098,7 +1156,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat1-eps-converted-to.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<dmat1-eps-converted-to.pdf, id=346, 361.35pt x 252.945pt>
+<dmat1-eps-converted-to.pdf, id=391, 361.35pt x 252.945pt>
 File: dmat1-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat1-eps-converted-to.pdf>
 Package pdftex.def Info: dmat1-eps-converted-to.pdf  used on input line 125.
@@ -1118,7 +1176,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat2-eps-converted-to.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<dmat2-eps-converted-to.pdf, id=347, 361.35pt x 252.945pt>
+<dmat2-eps-converted-to.pdf, id=392, 361.35pt x 252.945pt>
 File: dmat2-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat2-eps-converted-to.pdf>
 Package pdftex.def Info: dmat2-eps-converted-to.pdf  used on input line 125.
@@ -1138,7 +1196,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat3-eps-converted-to.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<dmat3-eps-converted-to.pdf, id=348, 361.35pt x 252.945pt>
+<dmat3-eps-converted-to.pdf, id=393, 361.35pt x 252.945pt>
 File: dmat3-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat3-eps-converted-to.pdf>
 Package pdftex.def Info: dmat3-eps-converted-to.pdf  used on input line 125.
@@ -1158,7 +1216,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat1_scale-eps-converted-to.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<dmat1_scale-eps-converted-to.pdf, id=349, 361.35pt x 252.945pt>
+<dmat1_scale-eps-converted-to.pdf, id=394, 361.35pt x 252.945pt>
 File: dmat1_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat1_scale-eps-converted-to.pdf>
 Package pdftex.def Info: dmat1_scale-eps-converted-to.pdf  used on input line 1
@@ -1179,7 +1237,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat2_scale-eps-converted-to.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<dmat2_scale-eps-converted-to.pdf, id=350, 361.35pt x 252.945pt>
+<dmat2_scale-eps-converted-to.pdf, id=395, 361.35pt x 252.945pt>
 File: dmat2_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat2_scale-eps-converted-to.pdf>
 Package pdftex.def Info: dmat2_scale-eps-converted-to.pdf  used on input line 1
@@ -1200,7 +1258,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./dmat3_scale-eps-converted-to.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<dmat3_scale-eps-converted-to.pdf, id=351, 361.35pt x 252.945pt>
+<dmat3_scale-eps-converted-to.pdf, id=396, 361.35pt x 252.945pt>
 File: dmat3_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use dmat3_scale-eps-converted-to.pdf>
 Package pdftex.def Info: dmat3_scale-eps-converted-to.pdf  used on input line 1
@@ -1221,7 +1279,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./watt1_noscale-eps-converted-to.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<watt1_noscale-eps-converted-to.pdf, id=352, 361.35pt x 252.945pt>
+<watt1_noscale-eps-converted-to.pdf, id=397, 361.35pt x 252.945pt>
 File: watt1_noscale-eps-converted-to.pdf Graphic file (type pdf)
 <use watt1_noscale-eps-converted-to.pdf>
 Package pdftex.def Info: watt1_noscale-eps-converted-to.pdf  used on input line
@@ -1242,7 +1300,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./watt1_scale-eps-converted-to.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<watt1_scale-eps-converted-to.pdf, id=353, 361.35pt x 252.945pt>
+<watt1_scale-eps-converted-to.pdf, id=398, 361.35pt x 252.945pt>
 File: watt1_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use watt1_scale-eps-converted-to.pdf>
 Package pdftex.def Info: watt1_scale-eps-converted-to.pdf  used on input line 1
@@ -1263,7 +1321,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./watt1_ilu0-eps-converted-to.pdf): PDF inclusio
 n: found PDF version <1.7>, but at most version <1.5> allowed
-<watt1_ilu0-eps-converted-to.pdf, id=354, 361.35pt x 252.945pt>
+<watt1_ilu0-eps-converted-to.pdf, id=399, 361.35pt x 252.945pt>
 File: watt1_ilu0-eps-converted-to.pdf Graphic file (type pdf)
 <use watt1_ilu0-eps-converted-to.pdf>
 Package pdftex.def Info: watt1_ilu0-eps-converted-to.pdf  used on input line 12
@@ -1284,7 +1342,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./pwtk_noscale-eps-converted-to.pdf): PDF inclus
 ion: found PDF version <1.7>, but at most version <1.5> allowed
-<pwtk_noscale-eps-converted-to.pdf, id=355, 361.35pt x 252.945pt>
+<pwtk_noscale-eps-converted-to.pdf, id=400, 361.35pt x 252.945pt>
 File: pwtk_noscale-eps-converted-to.pdf Graphic file (type pdf)
 <use pwtk_noscale-eps-converted-to.pdf>
 Package pdftex.def Info: pwtk_noscale-eps-converted-to.pdf  used on input line 
@@ -1305,7 +1363,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./pwtk_scale-eps-converted-to.pdf): PDF inclusio
 n: found PDF version <1.7>, but at most version <1.5> allowed
-<pwtk_scale-eps-converted-to.pdf, id=356, 361.35pt x 252.945pt>
+<pwtk_scale-eps-converted-to.pdf, id=401, 361.35pt x 252.945pt>
 File: pwtk_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use pwtk_scale-eps-converted-to.pdf>
 Package pdftex.def Info: pwtk_scale-eps-converted-to.pdf  used on input line 11
@@ -1326,7 +1384,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./bmw7st1-eps-converted-to.pdf): PDF inclusion: 
 found PDF version <1.7>, but at most version <1.5> allowed
-<bmw7st1-eps-converted-to.pdf, id=357, 361.35pt x 252.945pt>
+<bmw7st1-eps-converted-to.pdf, id=402, 361.35pt x 252.945pt>
 File: bmw7st1-eps-converted-to.pdf Graphic file (type pdf)
 <use bmw7st1-eps-converted-to.pdf>
 Package pdftex.def Info: bmw7st1-eps-converted-to.pdf  used on input line 123.
@@ -1346,7 +1404,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./bmw7st1_scale-eps-converted-to.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<bmw7st1_scale-eps-converted-to.pdf, id=358, 361.35pt x 252.945pt>
+<bmw7st1_scale-eps-converted-to.pdf, id=403, 361.35pt x 252.945pt>
 File: bmw7st1_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use bmw7st1_scale-eps-converted-to.pdf>
 Package pdftex.def Info: bmw7st1_scale-eps-converted-to.pdf  used on input line
@@ -1367,7 +1425,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./xenon2-eps-converted-to.pdf): PDF inclusion: f
 ound PDF version <1.7>, but at most version <1.5> allowed
-<xenon2-eps-converted-to.pdf, id=359, 361.35pt x 252.945pt>
+<xenon2-eps-converted-to.pdf, id=404, 361.35pt x 252.945pt>
 File: xenon2-eps-converted-to.pdf Graphic file (type pdf)
 <use xenon2-eps-converted-to.pdf>
 Package pdftex.def Info: xenon2-eps-converted-to.pdf  used on input line 121.
@@ -1387,7 +1445,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./xenon2_scale-eps-converted-to.pdf): PDF inclus
 ion: found PDF version <1.7>, but at most version <1.5> allowed
-<xenon2_scale-eps-converted-to.pdf, id=360, 361.35pt x 252.945pt>
+<xenon2_scale-eps-converted-to.pdf, id=405, 361.35pt x 252.945pt>
 File: xenon2_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use xenon2_scale-eps-converted-to.pdf>
 Package pdftex.def Info: xenon2_scale-eps-converted-to.pdf  used on input line 
@@ -1408,7 +1466,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./bcsstk18_noscale-eps-converted-to.pdf): PDF in
 clusion: found PDF version <1.7>, but at most version <1.5> allowed
-<bcsstk18_noscale-eps-converted-to.pdf, id=361, 361.35pt x 252.945pt>
+<bcsstk18_noscale-eps-converted-to.pdf, id=406, 361.35pt x 252.945pt>
 File: bcsstk18_noscale-eps-converted-to.pdf Graphic file (type pdf)
 <use bcsstk18_noscale-eps-converted-to.pdf>
 Package pdftex.def Info: bcsstk18_noscale-eps-converted-to.pdf  used on input l
@@ -1429,7 +1487,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./bcsstk18_scale-eps-converted-to.pdf): PDF incl
 usion: found PDF version <1.7>, but at most version <1.5> allowed
-<bcsstk18_scale-eps-converted-to.pdf, id=362, 361.35pt x 252.945pt>
+<bcsstk18_scale-eps-converted-to.pdf, id=407, 361.35pt x 252.945pt>
 File: bcsstk18_scale-eps-converted-to.pdf Graphic file (type pdf)
 <use bcsstk18_scale-eps-converted-to.pdf>
 Package pdftex.def Info: bcsstk18_scale-eps-converted-to.pdf  used on input lin
@@ -1450,41 +1508,47 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./runtimes_matrices-eps-converted-to.pdf): PDF i
 nclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<runtimes_matrices-eps-converted-to.pdf, id=363, 361.35pt x 252.945pt>
+<runtimes_matrices-eps-converted-to.pdf, id=408, 361.35pt x 252.945pt>
 File: runtimes_matrices-eps-converted-to.pdf Graphic file (type pdf)
 <use runtimes_matrices-eps-converted-to.pdf>
 Package pdftex.def Info: runtimes_matrices-eps-converted-to.pdf  used on input 
 line 130.
 (pdftex.def)             Requested size: 361.34912pt x 252.94438pt.
-) [17 <./dmat1-eps-converted-to.pdf>] [18 <./dmat2-eps-converted-to.pdf> <./dma
-t3-eps-converted-to.pdf>] [19 <./dmat1_scale-eps-converted-to.pdf> <./dmat2_sca
-le-eps-converted-to.pdf>] [20 <./dmat3_scale-eps-converted-to.pdf> <./watt1_nos
-cale-eps-converted-to.pdf>] [21 <./watt1_scale-eps-converted-to.pdf> <./watt1_i
-lu0-eps-converted-to.pdf>] [22 <./pwtk_noscale-eps-converted-to.pdf> <./pwtk_sc
-ale-eps-converted-to.pdf>] [23 <./bmw7st1-eps-converted-to.pdf> <./bmw7st1_scal
-e-eps-converted-to.pdf>] [24 <./xenon2-eps-converted-to.pdf> <./xenon2_scale-ep
-s-converted-to.pdf>] [25 <./bcsstk18_noscale-eps-converted-to.pdf> <./bcsstk18_
+) [20 <./dmat1-eps-converted-to.pdf>] [21 <./dmat2-eps-converted-to.pdf> <./dma
+t3-eps-converted-to.pdf>] [22 <./dmat1_scale-eps-converted-to.pdf> <./dmat2_sca
+le-eps-converted-to.pdf>] [23 <./dmat3_scale-eps-converted-to.pdf> <./watt1_nos
+cale-eps-converted-to.pdf>] [24 <./watt1_scale-eps-converted-to.pdf> <./watt1_i
+lu0-eps-converted-to.pdf>] [25 <./pwtk_noscale-eps-converted-to.pdf> <./pwtk_sc
+ale-eps-converted-to.pdf>] [26 <./bmw7st1-eps-converted-to.pdf> <./bmw7st1_scal
+e-eps-converted-to.pdf>] [27 <./xenon2-eps-converted-to.pdf> <./xenon2_scale-ep
+s-converted-to.pdf>] [28 <./bcsstk18_noscale-eps-converted-to.pdf> <./bcsstk18_
 scale-eps-converted-to.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 878--880
+Underfull \hbox (badness 10000) in paragraph at lines 933--935
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 880--882
+Underfull \hbox (badness 10000) in paragraph at lines 935--937
 
  []
 
-[26 <./runtimes_matrices-eps-converted-to.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 900--902
+[29 <./runtimes_matrices-eps-converted-to.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 955--957
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 922--923
+Underfull \hbox (badness 10000) in paragraph at lines 977--978
 
  []
 
-[27] (BSc_Ernstbrunner_01403753.bbl [28])
+[30] (BSc_Ernstbrunner_01403753.bbl [31]
+Underfull \hbox (badness 10000) in paragraph at lines 27--31
+[]\T1/cmr/m/n/10.95 James Dem-mel, Laura Grig-ori, Mark Hoem-men, and Julien La
+n-gou.
+ []
+
+)
 
 Class scrartcl Warning: \float@listhead detected!
 (scrartcl)              Implementation of \float@listhead became
@@ -1496,54 +1560,49 @@ Class scrartcl Warning: \float@listhead detected!
 (scrartcl)              Loading of package `scrhack' may help to
 (scrartcl)              avoid this warning, if you are using a
 (scrartcl)              a package that still implements the
-(scrartcl)              deprecated \float@listhead interface  on input line 950
-.
+(scrartcl)              deprecated \float@listhead interface  on input line 100
+5.
 
 (BSc_Ernstbrunner_01403753.loa)
 \tf@loa=\write6
 \openout6 = `BSc_Ernstbrunner_01403753.loa'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 953--954
+Underfull \hbox (badness 10000) in paragraph at lines 1008--1009
 
  []
 
-[29]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 965.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 965.
+[32] [33]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1020.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1020.
  (BSc_Ernstbrunner_01403753.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 965.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 965.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1020.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1020.
 
+Package rerunfilecheck Info: File `BSc_Ernstbrunner_01403753.out' has not chang
+ed.
+(rerunfilecheck)             Checksum: EC03001E8530A436351A5F15AAB53C9A;1929.
 
-Package rerunfilecheck Warning: File `BSc_Ernstbrunner_01403753.out' has change
-d.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `BSc_Ernstbrunner_01403753.out':
-(rerunfilecheck)             Before: 4E497ADC15E55F8DC43153622D7BEF6E;1949
-(rerunfilecheck)             After:  3B2832B3DD007B5E1C76469F286B08B6;1959.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 4.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 965.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1020.
  ) 
 Here is how much of TeX's memory you used:
- 22653 strings out of 492946
- 422192 string characters out of 3135525
- 626854 words of memory out of 3000000
- 25913 multiletter control sequences out of 15000+200000
+ 23770 strings out of 492946
+ 442660 string characters out of 3135525
+ 649796 words of memory out of 3000000
+ 26990 multiletter control sequences out of 15000+200000
  41073 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,15n,70p,9133b,1133s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 64i,15n,70p,9133b,1139s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
 \ecbx2074.pk>{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc} <C:\User
-s\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0900.p
-k> <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\public\yfrak\dpi65
-7\yfrak.pk> <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\
-ec\dpi600\ectt1095.pk> <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfou
+s\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\public\yfrak\dpi657\yfrak.pk>
+ <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\e
+ctt1095.pk> <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\
+ec\dpi600\ecrm0900.pk> <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fonts\pk\ljfou
 r\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users\Robert\AppData\Local\MiKTeX\2.9\fon
 ts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\Robert\AppData\Local\MiK
 TeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk> <C:\Users\Robert\AppDat
@@ -1564,9 +1623,9 @@ cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/euler/eufm10
 .pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pf
 b><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program 
 Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on BSc_Ernstbrunner_01403753.pdf (29 pages, 840482 bytes).
+Output written on BSc_Ernstbrunner_01403753.pdf (33 pages, 854475 bytes).
 PDF statistics:
- 926 PDF objects out of 1000 (max. 8388607)
- 164 named destinations out of 1000 (max. 500000)
+ 977 PDF objects out of 1000 (max. 8388607)
+ 196 named destinations out of 1000 (max. 500000)
  340 words of extra memory for PDF output out of 10000 (max. 10000000)
 

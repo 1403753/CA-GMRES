@@ -11,4 +11,6 @@ dmat_generator.o: dmat_generator.cpp
 	
 run:
 	./dmat_generator
-	
+
+clean:
+	rm -rf *.o dmat_generator

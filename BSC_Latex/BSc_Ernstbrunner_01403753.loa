@@ -1,2 +1,4 @@
-\contentsline {algorithm}{\numberline {1}{\ignorespaces restarted GMRES(m)}}{13}{algorithm.1}% 
-\contentsline {algorithm}{\numberline {2}{\ignorespaces restarted Newton CA-GMRES}}{15}{algorithm.2}% 
+\contentsline {algorithm}{\numberline {1}{\ignorespaces BCGS with TSQR\relax }}{9}{algorithm.1}% 
+\contentsline {algorithm}{\numberline {2}{\ignorespaces Arnoldi($s,t$)\relax }}{13}{algorithm.2}% 
+\contentsline {algorithm}{\numberline {3}{\ignorespaces restarted GMRES(m)\relax }}{16}{algorithm.3}% 
+\contentsline {algorithm}{\numberline {4}{\ignorespaces restarted Newton CA-GMRES\relax }}{18}{algorithm.4}% 

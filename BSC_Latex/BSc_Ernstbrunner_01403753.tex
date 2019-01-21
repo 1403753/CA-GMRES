@@ -31,6 +31,7 @@
 
 
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage[hidelinks]{hyperref}
 \usepackage{blkarray}
 \usepackage{cancel}
@@ -133,7 +134,6 @@ Wien, 2019	\linebreak
 \pagebreak
 \section{TODO}
 \begin{itemize}
-\item describe tsqr
 \item describe block gram-schmidt
 \item describe arnoldi
 \item describe arnoldi(s)
@@ -163,24 +163,25 @@ Similar notation is considered as in Hoemmen et al. \cite{Hoemmen:2010:CKS:19706
 \item $0_{m, n}$ is defined as an $m \times n$ matrix consisting of zeros and $e_k$ denotes the $k^{\text{th}}$ canonical vector with the dimension depending on the context.
 \item Matlab notation is used for addressing elements of matrices and vectors. For example, given a matrix $A$ of size $n \times n$ and two sets of indices $\alpha$ and $\beta$, $A(\alpha,:)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$. Similarly, $A(\alpha, \beta)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$ and the subset of the columns of $A$ whose indices belong to $\beta$.
 \end{itemize}
-\pagebreak
-\subsection*{Graph Notation}
-\begin{itemize}
-\item $G(A)$ denotes the directed graph of $A$ with $G(A) = \{V,E\}$ where $V(G(A))$ is the set of vertices of $G(A)$ and $E(G(A))$ is the set of edges of $G(A)$.
-\item $R(G(A), \alpha)$ denotes the set of vertices in $G(A)$ that are reachable from any vertex in the set $\alpha$, including $\alpha$.
-\item $R(G(A), \alpha, m)$ denotes the set of vertices in $G(A)$ that are reachable by paths of length at most $m$ from any vertex in $\alpha$.
-\end{itemize}
 \subsection*{Terms and definitions}
 \begin{itemize}
 \item \textbf{Fetching}: the movement of data. This could either be \textit{reading} , \textit{copying} or \textit{sending} and \textit{receiving} messages.
 \item \textbf{Ghosting}: the storage of redundant data that does not belong to a processors assigned domain.
 \end{itemize}
+\subsection*{Graph Notation}
+\begin{itemize}
+\item $G(A)$ denotes the directed graph of $A$ with $G(A) = \{V,E\}$ where $V(G(A))$ is the set of vertices of $G(A)$ and $E(G(A))$ is the set of edges of $G(A)$.
+\item $R(G(A), \alpha)$ denotes the set of vertices in $G(A)$ that are reachable from any vertex in the set $\alpha$, including $\alpha$.
+\item $R(G(A), \alpha, m)$ denotes the set of vertices in $G(A)$ that are reachable by paths of length at most $m$ from any vertex in $\alpha$, including $\alpha$.
+\end{itemize}
 \subsection*{Abbreviations}
 \begin{itemize}
 \item \textbf{MPK}: matrix powers kernel
-\item \textbf{TSQR}: tall and skinny qr
+\item \textbf{TSQR}: tall and skinny QR factorization
 \item \textbf{BCGS}: Block Classical Gram-Schmidt
+\item \textbf{MGS}: Modified Gram-Schmidt
 \end{itemize}
+\pagebreak
 
 \begin{abstract}
 Abstract
@@ -203,20 +204,20 @@ s-step methods, CA-ILU(0)
 
 \section{Computational kernels}
 %introduction; definitions: kernel, communication-avoiding
-In this thesis \textit{computational kernels} define parts of an algorithm with significantly high costs, relatively speaking. These costs include both arithmetic operations and communication.
+In this thesis \textit{computational kernels} define parts of an algorithm with significantly high costs, relatively speaking. These costs include both arithmetic operations and communication. The following kernels are essential building blocks of Arnoldi($s,t$) and eventually CA-GMRES.
 
 
 \subsection{Matrix powers kernel}
 Although, the matrix powers kernel was not implemented in the context of this thesis, it is an essential part to avoid communication and therefore, will be briefly summarized here.\\
 
-The MPK replaces the sparse matrix-vector products in s-step methods that generate the basis for the Krylov subspace $\mathcal{K}_{s + 1}(A, v) = \left[v, Av, A^2v, \ldots, A^{s}v\right] = \left[v_1, v_2, \ldots, v_{s + 1}\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. However, the MPK sends a factor $\Theta(s)$ less messages than $s$ SpMV invocations and the matrix has to be loaded from slow to fast memory only once.
+The MPK replaces the sparse matrix-vector products in s-step methods that generate the basis for the Krylov subspace $\mathcal{K}_{s + 1}(A, v) = \left[v, Av, A^2v, \ldots, A^{s}v\right] = \left[v_1, v_2, \ldots, v_{s + 1}\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. However, the MPK sends a factor of $\Theta(s)$ fewer messages than $s$ SpMV invocations and the matrix has to be loaded from slow to fast memory only once.
 In order to achieve this, the data and the workload are distributed among $P$ processors, where each processor is assigned a part $\alpha$ of $A(\alpha,:)$ and $v_1(\alpha)$ with $\alpha \subseteq V(G(A))$. Then, each processor fetches $A(\eta,:)$ and $v_1(\eta)$, with $\eta = R(G(A), \alpha, s) - \alpha$ in order to compute $s$ more vectors $v_2(\alpha), v_3(\alpha), \ldots, v_{s + 1}(\alpha)$ without communication. Since
 \begin{equation*}
 \alpha \subseteq R(G(A),\alpha, 1) \subseteq \ldots \subseteq R(G(A),\alpha, s - 1) \subseteq R(G(A),\alpha, s)
 \end{equation*} it is clear that larger steps eventually lead to increasing amounts of ghosted data and floating point operations.
 
 \subsubsection{Preconditioned matrix powers kernel}
-Iterative methods often require a preconditioner that, when applied, fundamentally changes the MPK. In order to avoid communication, highly parallelizable preconditioners come to mind. E.g., Nuentsa et al. \cite{nuen11c} present their parallel GMRES with a multiplicative Schwarz preconditioner. Grigori et al. \cite{Grigori} developed \textit{CA-ILU(0)}, a very interesting type of preconditioner that, at first glance, seems unfit to work in a parallel and communication-avoiding manner. Section~\ref{sec:ca-ilu} summarizes their work.
+Iterative methods often require a preconditioner that, when applied, fundamentally changes the MPK. In order to avoid communication, highly parallelizable preconditioners come to mind. E.g., Nuentsa et al. \cite{nuen11c} present their parallel GMRES with a multiplicative Schwarz preconditioner. Grigori et al. \cite{Grigori} developed \textit{CA-ILU(0)}, a very interesting type of preconditioner that, at first glance, seems unfit in a parallel and communication-avoiding environment. Section~\ref{sec:ca-ilu} summarizes their work.
 
 \iffalse
 \cite{Hoemmen:2010:CKS:1970638} p.60\\
@@ -229,14 +230,15 @@ processor fetches all the data needed from the neighboring processors, to comput
 \fi
 
 \subsection{Tall and skinny QR}
-TSQR is a QR decomposition algorithm especially suited for $m \times n$ matrices with $m \gg n$. The parallel TSQR is summarized below. For a more detailed description as well as a description of the sequential algorithm see~\cite{Demmel:2012:CPS:2340316.2340324}. First, the matrix $A$ is split up into $P$ parts with each submatrix having size $m/P \times n$. Parallel TSQR then passes $P - 1$ stages with one QR factorization per stage (see Figure~\ref{fig:tsqr}). Let's assume $P = 4$, then 
+TSQR is a QR decomposition algorithm especially suited for $m \times n$ matrices with $m \gg n$. All TSQR versions work on a general tree structure. The highest form of parallelism is achieved if TSQR uses a binary tree. In the sequential case a linear (flat) tree comes into play. Hybrid algorithms use anything in between and the best tree structure may depend on the matrix size and underlying architecture as Demmel et al. explain in~\cite{Demmel:2012:CPS:2340316.2340324}. The parallel TSQR with a binary tree is summarized below. For a more detailed description as well as a description of the sequential algorithm see Demmel et al.~\cite{Demmel:2012:CPS:2340316.2340324}.
+\paragraph{Parallel TSQR} First, the matrix $A$ is split up into $P$ parts with each submatrix having size $m/P \times n$. TSQR on a binary tree then passes $P - 1$ stages where any fast and accurate QR factorization can be applied for each stage. Let's assume $P = 4$, then 
 \begin{equation*}
 A =
 \begin{pmatrix}
 A_0\\A_1\\A_2\\A_3
 \end{pmatrix}.
 \end{equation*}
-At stage zero the QR factorizations of the submatrices are computed
+At stage zero the QR factorization for each submatrix $A_i$ is computed
 \begin{equation*}
 A_0 = Q_{00}R_{00}, \qquad A_1 = Q_{10}R_{10}, \qquad A_2 = Q_{20}R_{20}, \qquad A_3 = Q_{30}R_{30}.
 \end{equation*}
@@ -253,8 +255,8 @@ R_{30}
 \end{pmatrix} = 
 Q_{11}R_{11}.
 \end{equation*}
-This procedure is repeated until all submatrices have been united. A final QR factorization is performed which results in the following decomposition
-\begin{equation}
+This procedure is repeated until one last QR factorization is performed where the final $R$ factor denotes the root of the tree. This results in the following decomposition
+\begin{equation} \label{eq:tsqr}
 A =
 \begin{pmatrix}
 A_0\\A_1\\A_2\\A_3
@@ -280,10 +282,14 @@ A_0\\A_1\\A_2\\A_3
 Q_{02} \cdot R_{02}.
 \end{equation}
 
-Unconditionally stable like Householder QR but less communication 
-\\
+Figure~\ref{fig:tsqr} shows, that this only requires $\mathcal{O}(\log P)$ messages on $P$ processors (a factor of $\Theta (s)$ fewer messages than Householder or MGS). Sequentially, the matrix is read only once, saving a factor of $\Theta(s)$ transferred data between levels of the memory hierarchy (compared to Householder QR or MGS). 
+ Of course,~\eqref{eq:tsqr} is stored implicitly to save storage space.\\
+
+The orthogonality of the $Q$ factor computed by Classical or Modified Gram-Schmidt depends on the condition number of $A$. Householder QR, on the other hand, does not make any assumptions on $\mathcal{K}(A)$, it is \textit{unconditionally} stable. Therefore, Householder QR is a good candidate for the local QR factorizations in TSQR. For reasons explained in section~\ref{sec:scaling_first_basis_vec} one might want TSQR to produce an $R$ factor with real non-negative diagonal entries. Demmel et al. show in $\cite{doi:10.1137/080725763}$ how to modify the usual Householder QR in a numerically stable way so that such a factor is generated. The modified Householder QR factorization can then be incorporated, in order to let TSQR as well produce an $R$ factor with real non-negative diagonal entries.
+
+
 \begin{figure}
-\begin{center}
+	\centering
 \tikz [new set = A,
 	   new set = Q,
 	   new set = QQ,
@@ -335,26 +341,35 @@ Unconditionally stable like Householder QR but less communication
 	(RR) ->[matching] (Q02R02)
 	};
 }
-\end{center}
-\caption{Parallel TSQR on a binary tree of four processors. The first subscript indicates the sequence number for a stage, the second subscript is the stage number}
+\caption{Parallel TSQR on a binary tree of four processors. The first subscript indicates the sequence number for a stage, the second subscript is the stage number.}
 \label{fig:tsqr}
 \end{figure}
 
-
-
-$\cite{doi:10.1137/080725763}$ how to modify the usual Householder QR factorization in a numerically stable way so that it produces an $R$ factor with nonnegative real diagonal entries. The resulting sequential QR factorization can then be used as the local QR factorization in our TSQR algorithm, so that TSQR also produces an $R$ factor with nonnegative diagonal entries.
-
-\subsection{Block Classical Gram-Schmidt with TSQR}
-Dense matrix-matrix multiplications $\rightarrow$ less communication (factor $\Theta(s)$ fewer messages) than unblocked CGS. Also, BCGS requires less communication that BMGS.
+\subsection{Block Gram-Schmidt}
+Dense matrix-matrix multiplications $\rightarrow$ less communication (factor of $\Theta(s)$ fewer messages) than unblocked CGS. Also, BCGS requires less communication that BMGS.
 No reorthogonalization because solving linear system with (std. GMRES uses unblocked MGS-Arnoldi) CA-GMRES uses TSQR which improves orthogonality of the block columns.
 
+\begin{algorithm}[H]
+\caption{BCGS with TSQR}
+\label{alg:bcgs}
+\begin{algorithmic}[1]
+    \REQUIRE $V = \left[V_1, V_2, \ldots, V_M\right]$ where $V$ is $n \times m$. Each $V_k$ is $n \times m_k$, with $\sum^M_{k=1}m_k = m$.
+    \ENSURE \mbox{$Q = \left[Q_1, \ldots, Q_M\right]$, where $\mathcal{R}(Q) = \mathcal{R}(V)$ and $\mathcal{R}(\left[Q_1, \ldots, Q_k \right]) = \mathcal{R}(\left[V_1, \ldots, V_k \right])$}
+    \ENSURE $R: m \times m$ upper triangular matrix.
+    \FOR{k = 1 to $M$}
+    	\STATE $R_{1:k-1,k} := [Q_1, \ldots, Q_{k - 1}]^TV_k$
+    	\STATE $V'_k := V_k - [Q_1, \ldots, Q_{k - 1}]R_{1:k - 1, k}$
+    	\STATE Compute $V'_k = Q_kR_{kk}$ via TSQR
+    \ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
 \section{Arnoldi iteration}
+\subsection{Introduction}
 
-first presented in \textit{REF[[ W. E. Arnoldi, The principle of minimized iterations in the solution of the matrix eigenvalue problem, Q. Appl. Maths, 9 (1951), pp. 17–29.]]}\\
+The Arnoldi iteration is a method for solving sparse non-symmetric eigenvalue problems and was first introduced by W. Arnoldi in \cite{arnoldi:hal-01712943}. $S$ steps of standard Arnoldi produce an $s + 1 \times s$ upper Hessenberg Matrix $\underline{H}$ and $m \times s + 1$ orthonormal vectors $q_1$, $q_2$, $\ldots$, $q_s$, $q_{s + 1}$ that form a basis for the Krylov subspace $\mathcal{K}_{s + 1}(A, r)$, with $AQ = \underline{Q} \underline{H}$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to Classical Gram-Schmidt, however, although not as stable, CGS is more suited for parallel implementations because it provides fewer synchronization points.
+Walker wanted to use Householder QR it provides better orthogonalization than MGS. However, Householder QR requires the vectors to be available all at once. Therefore, Walker produced s monomial basis vectors first and then used Householder QR for orthogonalization. Bai et al. improved on Walkers work by incorporating the Newton basis instead. Greenbaum later showed that loss of orthogonality caused by MGS does not affect accuracy when solving linear systems. Also if MGS is ok, then CGS could also be used with the advantage that it is easily parallelizable.
 
-s steps of standard Arnoldi produce an $s + 1 \times s$ upper Hessenberg Matrix $\underline{H}$ and $m \times s + 1$ orthonormal vectors $q_1$, $q_2$, $\ldots$, $q_s$, $q_{s + 1}$ that form a basis for the Krylov subspace $\mathcal{K}_{s + 1}\left(A,r\right)$ such that $AQ = \underline{Q} \underline{H}$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt (MGS) is often employed because it provides high numerical stability, however, although not as stable, Classical Gram-Schmidt (CGS) is more suited for parallel implementations because it provides fewer synchronization points.
-
-introduction.. produces $AQ = QH$
 \subsection{Arnoldi(s)}
 
 [238] H. F. Walker, Implementation of the GMRES and Arnoldi methods using Householder transformations, Tech. Rep. UCRL-93589, Lawrence Livermore National Laboratory, Oct. 1985.
@@ -408,7 +423,7 @@ find estimates of the eigenvalues of A (Ritz values).
 \paragraph{The modified Leja ordering}
 
 \paragraph{Avoiding complex arithmetic}
-Like the eigenvalues of a real matrix, the Ritz values can also come in complex conjugate pairs. The modified Leja ordering ensures that these pairs are ordered consecutively with leading positive imaginary entries, i.e. $\theta_{j + 1} = \overline{\theta}_j$ with $\Im(\theta_j) > 0$. Complex arithmetic doubles the storage and floating point operations and therefore, should be avoided. Instead of computing $v_{j + 1} = (A - \theta_j I)v_j$ and $v_{j + 2} = (A - \overline{\theta}_j I)v_{j + 1}$ like one would normally do, Bai et al. \cite{doi:10.1093/imanum/14.4.563} suggest that complex arithmetic can be skipped by setting
+Like the eigenvalues of a real matrix, the Ritz values can also occur as complex conjugate pairs. The modified Leja ordering ensures that these pairs are ordered consecutively with leading positive imaginary entries, i.e. $\theta_{j + 1} = \overline{\theta}_j$ with $\Im(\theta_j) > 0$. Complex arithmetic doubles the storage and floating point operations and therefore, should be avoided. Instead of computing $v_{j + 1} = (A - \theta_j I)v_j$ and $v_{j + 2} = (A - \overline{\theta}_j I)v_{j + 1}$ like one would normally do, Bai et al. \cite{doi:10.1093/imanum/14.4.563} suggest that complex arithmetic can be skipped by setting
 \begin{equation}
 v_{j + 1} = (A - \Re(\theta_j) I )v_j
 \end{equation}
@@ -453,10 +468,42 @@ v_j &=& (A - \theta_{j - 1} I )v_{j - 1} \\
 v_{j + 1} &=& (A - \Re(\theta_j) I )(A - \theta_{j - 1} I )v_{j - 1} \\
 		  &=& (A - \theta_{j - 1} I )^2v_{j - 1}
 \end{eqnarray*}
-is equivalent to computing the monomial basis with a possibly ill-conditioned  matrix $A - \theta_{j - 1} I$. This might occur if the Ritz values reside within an ellipse with a long vertical axis and very short horizontal axis.
+is equivalent to computing the monomial basis with a possibly ill-conditioned  matrix $A - \theta_{j - 1} I$. This might occur if the Ritz values reside within an ellipse with a long vertical axis and very short horizontal axis on the complex plane.
 \subsection{Arnoldi(s,t)}
-\subsubsection{Introduction}
-\subsubsection{Scaling the first basis vector}
+
+\begin{algorithm}[H]
+\caption{Arnoldi($s,t$)}
+\label{alg:arnoldi(s,t)}
+\begin{algorithmic}[1]
+    \REQUIRE $n \times n$ matrix $A$ and starting vector $v$ of size $n$\\
+    \ENSURE An orthonormal $n$ by $st + 1$ matrix $\underline{\frak{Q}} = \left[\frak{Q},q_{st + 1}\right]$ whose columns are a basis for the Krylov subspace $\mathcal{K}_{st + 1}(A,r)$, and a non-singular $st + 1$ by $st$ upper Hessenberg matrix $\underline{H}$ such that $AQ = \underline{Q} \underline{H}$
+    \STATE $\beta := \norm{v}_2$, $q_1 := v/\beta$, restart := false
+    \FOR{$k = 0$ to $t - 1$}
+    	\STATE Fix basis conversion matrix $\underline{B}_k$
+    	\STATE Compute $\underline{\acute{V}}$ via MPK
+    	\IF{$k = 0$}
+ 	 		\STATE Compute the QR factorization $\underline{V}_0 = \underline{Q}_0 \underline{R}_0$ via TSQR
+ 	 	\STATE $\underline{\frak{Q}}_0 := \underline{Q}_0$
+    	\STATE $\underline{\frak{H}}_0 := \underline{R}_0 \underline{B}_0 R_0^{-1}$
+    	\ELSE
+    		\STATE $\underline{\acute{\frak{R}}}_{k - 1, k} := \underline{\frak{Q}}^T_{k - 1} \underline{\acute{V}}_k$
+    	\STATE $\underline{\acute{V}}_k' := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k - 1} \underline{\acute{\frak{R}}}_{k - 1, k}$
+    	\STATE Compute QR factorization $\underline{\acute{V}}'_k = \underline{\acute{Q}}_k \underline{\acute{R}}_k$
+    	\STATE Compute $\underline{\frak{H}}_{k - 1, k} := - \frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k$
+		\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k$
+		\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
+    	\STATE $\underline{\frak{H}} : = 
+    	\begin{pmatrix}
+    		\frak{H}_{k - 1} & \frak{H}_{k - 1, k}\\
+    		h_{k - 1} e_1 e_{sk}^T & H_k\\
+    		0_{1,sk} & h_k e^T_s
+    	\end{pmatrix}$
+    	\ENDIF
+	\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Scaling the first basis vector} \label{sec:scaling_first_basis_vec}
 Arnoldi(s,t) produces $\underline{\textfrak{Q}}$ which differs from MGS-Arnoldi $\underline{\hat{\textfrak{Q}}}$ by a unitary scaling $\underline{\Theta}$ = diag($\theta_1$, $\theta_2$, $\ldots$, $\theta_{st}$, $\theta_{st+1}$) such that $\underline{\hat{\textfrak{Q}}} = \textfrak{\underline{Q}}\underline{\Theta}$. $\rightarrow$
 \begin{itemize}
 \item QR factorization must not change direction of the first column
@@ -475,6 +522,13 @@ $[\underline{\frak{Q}}_0, \underline{\acute{V}}_1 ] = [\underline{\frak{Q}}_0, \
 BGS $\ldots$\\
 
 Repartitioning the R factor:
+\begin{eqnarray*}
+	\frak{R}_{k - 1, k} &=& \frak{Q}_{k - 1}^TV_k,\\
+	\underline{\frak{R}}_{k - 1, k} &=& \frak{Q}_{k - 1}^T\underline{V}_k,\\
+	\frak{\acute{R}}_{k - 1, k} &=& \underline{\frak{Q}}_{k - 1}^T\acute{V}_k,\\
+	\underline{\frak{\acute{R}}}_{k - 1, k} &=& \underline{\frak{Q}}_{k - 1}^T\underline{\acute{V}}_k.
+\end{eqnarray*}
+
 
 \begin{eqnarray*}
 \underline{\frak{R}}_k &=&
@@ -670,12 +724,12 @@ The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:s
 			\STATE $\underline{\acute{V}}'_k := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k-1}\underline{\acute{\frak{R}}}_{k-1,k}$
 			\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$ using TSQR
 			\STATE Compute $\underline{\frak{H}}_{k-1,1}:= - \frak{H}_{k-1} \frak{R}_{k-1,k} R^{-1}_k + \underline{\frak{R}}_{k-1,k} \underline{B}_k R^{-1}_k$
-			\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{s(k-1)} \frak{R}_{k-1,k} R^{-1}_k$
+			\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k$
 			\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
 			\STATE $\underline{\frak{H}}_k := 
 			\begin{pmatrix}
 				\frak{H}_{k - 1} & \underline{\frak{H}}_{k - 1,k} \\
-				h_0 e_1 e^T_{sk} & H_k \\
+				h_{k - 1} e_1 e^T_{sk} & H_k \\
 				0_{1,sk} & h_k e^T_s \\
 			\end{pmatrix}$
 			\STATE Apply Givens rotations $G_1$, $\ldots$, $G_{sk}$ in order to $\begin{pmatrix}
@@ -743,6 +797,7 @@ These are techniques from which the arithmetic code benefits the most.
 
  profiler: ??? (intel VTune Amplifier, TAU, $\ldots$) could not implement neither the MPK nor the CA-ILU(0) preconditioner due to time constraints. Also Modified Leja ordering does not deal with under / overflow in the product to maximize like in \cite{Hoemmen:2010:CKS:1970638}.
 \subsection{Numerical experiments}
+\texttt{It is known, but yet unexplained, that sometimes the norm of the Arnoldi residual converges to zero (for the Householder-GMRES this represents a typical behaviour) even after the true residual norm stagnates. For MGS-GMRES, however, the norms of the true and Arnoldi residuals stagnate obviously at about the same level. Greenbaum~\cite{Greenbaum97numericalbehaviour}}
 
 How the true solution $\hat{x}$ was generated: $\hat{x}(k) = u(k) + sin(2\pi k/n)$,
 where the scalar $u(k)$ is chosen from a random uniform [-1, 1] distribution. 

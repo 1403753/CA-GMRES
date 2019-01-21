@@ -35,13 +35,13 @@ int main() {
 	
   size_t n = 10000;
 
-	generate("dmat1.mtx", 1e+05, n);
-	generate("dmat2.mtx", 1e+10, n);
-	generate("dmat3.mtx", 1e+15, n);
+	generate("dmat0.mtx", 1e+03, n);
+	// generate("dmat2.mtx", 1e+10, n);
+	// generate("dmat3.mtx", 1e+15, n);
 
-	generate2("dmat4.mtx", 1e+05, n);
-	generate2("dmat5.mtx", 1e+10, n);
-	generate2("dmat6.mtx", 1e+15, n);
+	// generate2("dmat4.mtx", 1e+05, n);
+	// generate2("dmat5.mtx", 1e+10, n);
+	// generate2("dmat6.mtx", 1e+15, n);
 	
 	return 0;
 }

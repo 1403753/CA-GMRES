@@ -72,8 +72,8 @@ plot: main
 	#  WATT1 + ILU(0)  #
 	####################
 
-	./main 2 residuals watt1 30 5 6 15 2 \\shortstack{Watt1}
-	gnuplot ../gnuplot/Watt1_pcnone_s3_t10_s5_t6/residuals_watt1_ilu0.gnu
+	# ./main 2 residuals watt1 30 5 6 15 2 \\shortstack{Watt1}
+	# gnuplot ../gnuplot/Watt1_pcnone_s3_t10_s5_t6/residuals_watt1_ilu0.gnu
 
 	############
 	#  Xenon2  #
@@ -101,6 +101,9 @@ plot: main
 	#  dmat  #
 	##########	
 
+	./main 2 residuals dmat0 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+02\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
+	gnuplot ../gnuplot/dmat/residuals_dmat.gnu	
+	
 	# ./main 2 residuals dmat1 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+05\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
 	# gnuplot ../gnuplot/dmat/residuals_dmat.gnu
 	# ./main 2 residuals dmat2 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+10\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}

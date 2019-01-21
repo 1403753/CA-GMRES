@@ -1,4 +1,10 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{arnoldi:hal-01712943}
+Walter~Edwin Arnoldi.
+\newblock {The principle of minimized iterations in the solution of the matrix
+  eigenvalue problem}.
+\newblock {\em {Quarterly of Applied Mathematics}}, 9(1):17 -- 29, 1951.
 
 \bibitem{Ascher:2011:FCN:2031413}
 Uri~M. Ascher and Chen Greif.
@@ -28,6 +34,11 @@ Jocelyne Erhel.
 \newblock A parallel gmres version for general sparse matrices.
 \newblock {\em Electronic Transactions on Numerical Analysis}, 3:160--176,
   1995.
+
+\bibitem{Greenbaum97numericalbehaviour}
+A.~Greenbaum, M.~Rozloznik, M.~Rozlo~Zn Ik, and Z.~Strakos.
+\newblock Numerical behaviour of the modified gram-schmidt gmres
+  implementation, 1997.
 
 \bibitem{Grigori}
 Laura Grigori and Sophie Moufawad.
