@@ -440,7 +440,11 @@ TSQR then orthogonalizes these $k + 1$ basis vectors with respect to each other.
 \section{CA-Arnoldi}\label{sec:ca_arnoldi}
 \subsection{Arnoldi Iteration}
 
-The Arnoldi iteration is a method for solving sparse non-symmetric eigenvalue problems and was first introduced by W. Arnoldi in \cite{arnoldi:hal-01712943}. $S$ steps of standard Arnoldi produce an $s + 1 \times s$ upper Hessenberg matrix $\underline{H}$ and $m \times s + 1$ orthonormal vectors $\underline{Q} = [q_1$, $q_2$, $\ldots$, $q_s$, $q_{s + 1}]$, where $AQ = \underline{Q} \underline{H}$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to classical Gram-Schmidt (MGS based Arnoldi is outlined in algorithm~\ref{alg:mgs_arnoldi}). On the other hand, CGS is more suited for parallel implementations, because it provides fewer synchronization points.
+The Arnoldi iteration is a method for solving sparse non-symmetric eigenvalue problems and was first introduced by W. Arnoldi in \cite{arnoldi:hal-01712943}. $S$ steps of standard Arnoldi produce an $s + 1 \times s$ upper Hessenberg matrix $\underline{H}$ and $m \times s + 1$ orthonormal vectors $\underline{Q} = [q_1$, $q_2$, $\ldots$, $q_s$, $q_{s + 1}]$, where 
+\begin{equation} \label{eq:AQ=QH}
+	AQ = \underline{Q} \underline{H}.
+\end{equation}
+ There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to classical Gram-Schmidt (MGS based Arnoldi is outlined in algorithm~\ref{alg:mgs_arnoldi}). On the other hand, CGS is more suited for parallel implementations, because it provides fewer synchronization points.
 Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides better orthogonalization than MGS. Since Householder QR requires the vectors to be available all at once, Walker produced $s$ Monomial basis vectors first. Hoemmen et al. Bai et al. \cite{doi:10.1093/imanum/NewtonGMRES_bai} later improved on Walkers work by replacing the (usually ill-conditioned) Monomial basis with the Newton basis instead. Greenbaum et al. \cite{Greenbaum97numericalbehaviour} later proved, that the loss of orthogonality, that is caused by MGS, usually does not affect the solution of the linear system at all.
 \begin{algorithm}[H]
 \caption{MGS based Arnoldi iteration}
@@ -472,8 +476,25 @@ and has a change of basis matrix
 \begin{equation*}
 \underline{B} = [\sigma_1 e_2, \sigma_2 e_3, \ldots, \sigma_s e_{s + 1}].
 \end{equation*}
-with scaling factors $\sigma_1, \ldots, \sigma_s$.
+with scaling factors $\sigma_1, \ldots, \sigma_s$ that satisfies
+\begin{equation} \label{eq:AV=VB}
+AV = \underline{V} \underline{B}.
+\end{equation}
 The Monomial basis is also known as the \textit{power method} which is an iterative method for finding the principal eigenvalue and corresponding eigenvector of a matrix by repeatedly applying a starting vector to the matrix. If the matrix and starting vector satisfy certain conditions, the basis converges to the principal eigenvector. Ideally, a basis has orthogonal basis vectors and should not converge. In theory, the converged basis is still linearly independent in exact arithmetic. In machine precision, the basis vectors become inevitably dependent at some point. \\
+
+The similarity between (\ref{eq:AV=VB}) and the Arnoldi relation (\ref{eq:AQ=QH}) can be used in order to reconstruct the upper Hessenberg matrix $\underline{H}$ in (\ref{eq:AQ=QH}). The vectors created from the QR factorization of $\underline{V}$ might differ from the ones created by the standard Arnoldi method by a unitary scaling (see section~\ref{sec:scaling_first_basis_vec} for details). For simplicity, it is assumed, that the QR factorization $\underline{V} = \underline{Q} \underline{R}$ produces the same unitary vectors as the usual approach would. From
+\begin{eqnarray*}
+	AV &=& \underline{V} \underline{B}\\
+	AQR &=& \underline{Q} \underline{R} \underline{B}\\
+	AQ &=& \underline{Q} \underline{R} \underline{B} R^{-1}
+\end{eqnarray*}
+emerges
+\begin{equation}
+	\underline{H} = \underline{R} \underline{B} R^{-1}.
+\end{equation}
+\\
+Since $\underline{H}$ is upper Hessenberg, $\underline{B}$ must be at least structurally upper Hessenberg as well. This is in fact the case for the Monomial basis.\\ The Monomial basis may be scaled in order to prevent rapid growth in the length of the basis vectors. 
+
 
 scaling the rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but:  $\rightarrow$ need a different basis.
 \subsubsection{The Newton basis}

@@ -14,15 +14,15 @@
 \contentsline {subsection}{\numberline {7.1}Arnoldi Iteration}{11}{subsection.7.1}% 
 \contentsline {subsection}{\numberline {7.2}Arnoldi(s,t)}{12}{subsection.7.2}% 
 \contentsline {subsubsection}{\numberline {7.2.1}The Monomial basis}{12}{subsubsection.7.2.1}% 
-\contentsline {subsubsection}{\numberline {7.2.2}The Newton basis}{12}{subsubsection.7.2.2}% 
+\contentsline {subsubsection}{\numberline {7.2.2}The Newton basis}{13}{subsubsection.7.2.2}% 
 \contentsline {paragraph}{\nonumberline Choosing the shifts}{13}{section*.9}% 
 \contentsline {paragraph}{\nonumberline The modified Leja ordering}{13}{section*.10}% 
-\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{13}{section*.11}% 
+\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{14}{section*.11}% 
 \contentsline {subparagraph}{\nonumberline Performance notes}{14}{section*.12}% 
 \contentsline {subsubsection}{\numberline {7.2.3}Scaling the first basis vector}{15}{subsubsection.7.2.3}% 
 \contentsline {subsubsection}{\numberline {7.2.4}QR factorization update}{15}{subsubsection.7.2.4}% 
-\contentsline {subsubsection}{\numberline {7.2.5}Reconstructing the upper Hessenberg matrix}{15}{subsubsection.7.2.5}% 
-\contentsline {paragraph}{\nonumberline A different approach}{16}{section*.13}% 
+\contentsline {subsubsection}{\numberline {7.2.5}Reconstructing the upper Hessenberg matrix}{16}{subsubsection.7.2.5}% 
+\contentsline {paragraph}{\nonumberline A different approach}{17}{section*.13}% 
 \contentsline {section}{\numberline {8}CA-GMRES}{17}{section.8}% 
 \contentsline {subsection}{\numberline {8.1}Preconditioning}{19}{subsection.8.1}% 
 \contentsline {subsubsection}{\numberline {8.1.1}CA-ILU(0) preconditioner}{19}{subsubsection.8.1.1}% 
