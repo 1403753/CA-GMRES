@@ -12,18 +12,18 @@ Uri~M. Ascher and Chen Greif.
 \newblock Society for Industrial and Applied Mathematics, Philadelphia, PA,
   USA, 2011.
 
-\bibitem{doi:10.1093/imanum/14.4.563}
+\bibitem{doi:10.1093/imanum/NewtonGMRES_bai}
 Z.~BAI, D.~HU, and L.~REICHEL.
 \newblock A newton basis gmres implementation.
 \newblock {\em IMA Journal of Numerical Analysis}, 14(4):563--581, 1994.
 
-\bibitem{doi:10.1137/080725763}
+\bibitem{doi:10.1137/nonnegdiags_demmel}
 J.~Demmel, M.~Hoemmen, Y.~Hida, and E.~Riedy.
 \newblock Nonnegative diagonals and high performance on low-profile matrices
   from householder qr.
 \newblock {\em SIAM Journal on Scientific Computing}, 31(4):2832--2841, 2009.
 
-\bibitem{Demmel:2012:CPS:2340316.2340324}
+\bibitem{Demmel:2012:CA-QR_demmel}
 James Demmel, Laura Grigori, Mark Hoemmen, and Julien Langou.
 \newblock Communication-optimal parallel and sequential qr and lu
   factorizations.
@@ -61,5 +61,17 @@ William~H. Press, Saul~A. Teukolsky, William~T. Vetterling, and Brian~P.
   Flannery.
 \newblock {\em Numerical Recipes in C}.
 \newblock Cambridge University Press, 1992.
+
+\bibitem{Saad:1986:GGM:14063.14074}
+Youcef Saad and Martin~H Schultz.
+\newblock Gmres: A generalized minimal residual algorithm for solving
+  nonsymmetric linear systems.
+\newblock {\em SIAM J. Sci. Stat. Comput.}, 7(3):856--869, July 1986.
+
+\bibitem{doi:10.1137/Walker}
+H.~Walker.
+\newblock Implementation of the gmres method using householder transformations.
+\newblock {\em SIAM Journal on Scientific and Statistical Computing},
+  9(1):152--163, 1988.
 
 \end{thebibliography}

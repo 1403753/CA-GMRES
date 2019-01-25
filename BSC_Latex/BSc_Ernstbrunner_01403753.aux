@@ -22,108 +22,120 @@
 \citation{Grigori}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Notation}{4}{section.2}\protected@file@percent }
 \citation{Erhel95aparallel}
+\citation{Saad:1986:GGM:14063.14074}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Introduction}{6}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Related work}{6}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Computational kernels}{6}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Matrix powers kernel}{6}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}GMRES}{6}{section.5}\protected@file@percent }
+\citation{Hoemmen:2010:CKS:1970638}
+\newlabel{eq:stdgmreslsp}{{5.2}{7}{GMRES}{equation.5.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Computational kernels}{7}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Matrix powers kernel}{7}{subsection.6.1}\protected@file@percent }
 \citation{nuen11c}
 \citation{Grigori}
-\citation{Demmel:2012:CPS:2340316.2340324}
-\citation{Demmel:2012:CPS:2340316.2340324}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Preconditioned matrix powers kernel}{7}{subsubsection.5.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Tall and skinny QR}{7}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Parallel TSQR}{7}{section*.6}\protected@file@percent }
-\citation{doi:10.1137/080725763}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Parallel TSQR on a binary tree of four processors. The first subscript indicates the sequence number for a stage, the second subscript is the stage number.\relax }}{8}{figure.caption.7}\protected@file@percent }
+\citation{Demmel:2012:CA-QR_demmel}
+\citation{Demmel:2012:CA-QR_demmel}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces GMRES(m)\relax }}{8}{algorithm.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:tsqr}{{1}{8}{Parallel TSQR on a binary tree of four processors. The first subscript indicates the sequence number for a stage, the second subscript is the stage number.\relax }{figure.caption.7}{}}
-\newlabel{eq:tsqr}{{1}{8}{Parallel TSQR}{equation.5.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Block Gram-Schmidt}{8}{subsection.5.3}\protected@file@percent }
+\newlabel{alg:gmres(m)}{{1}{8}{GMRES(m)\relax }{algorithm.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}Preconditioned matrix powers kernel}{8}{subsubsection.6.1.1}\protected@file@percent }
+\citation{Demmel:2012:CA-QR_demmel}
+\citation{doi:10.1137/nonnegdiags_demmel}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Tall and skinny QR}{9}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Parallel TSQR}{9}{section*.6}\protected@file@percent }
+\newlabel{eq:tsqr}{{6.1}{9}{Parallel TSQR}{equation.6.1}{}}
+\citation{Hoemmen:2010:CKS:1970638}
+\citation{Greenbaum97numericalbehaviour}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage, the second subscript is the stage number. The blue boxes represent the processors involved at each stage.\relax }}{10}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:tsqr}{{1}{10}{Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage, the second subscript is the stage number. The blue boxes represent the processors involved at each stage.\relax }{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Block Gram-Schmidt}{10}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:gs}{{6.3}{10}{Block Gram-Schmidt}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline BCGS with TSQR}{10}{section*.8}\protected@file@percent }
 \citation{arnoldi:hal-01712943}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces BCGS with TSQR\relax }}{9}{algorithm.1}\protected@file@percent }
-\newlabel{alg:bcgs}{{1}{9}{BCGS with TSQR\relax }{algorithm.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Arnoldi iteration}{9}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Introduction}{9}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Arnoldi(s)}{9}{subsection.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}The Monomial basis}{10}{subsubsection.6.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}The Newton basis}{10}{subsubsection.6.2.2}\protected@file@percent }
-\citation{doi:10.1093/imanum/14.4.563}
+\citation{doi:10.1137/Walker}
+\citation{doi:10.1093/imanum/NewtonGMRES_bai}
+\citation{Greenbaum97numericalbehaviour}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces BCGS with TSQR\relax }}{11}{algorithm.2}\protected@file@percent }
+\newlabel{alg:bcgs}{{2}{11}{BCGS with TSQR\relax }{algorithm.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}CA-Arnoldi}{11}{section.7}\protected@file@percent }
+\newlabel{sec:ca_arnoldi}{{7}{11}{CA-Arnoldi}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Arnoldi Iteration}{11}{subsection.7.1}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces MGS based Arnoldi iteration\relax }}{12}{algorithm.3}\protected@file@percent }
+\newlabel{alg:mgs_arnoldi}{{3}{12}{MGS based Arnoldi iteration\relax }{algorithm.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Arnoldi(s,t)}{12}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.1}The Monomial basis}{12}{subsubsection.7.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.2}The Newton basis}{12}{subsubsection.7.2.2}\protected@file@percent }
+\citation{doi:10.1093/imanum/NewtonGMRES_bai}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Choosing the shifts}{11}{section*.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline The modified Leja ordering}{11}{section*.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{11}{section*.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Performance notes}{12}{section*.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Arnoldi(s,t)}{13}{subsection.6.3}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Arnoldi($s,t$)\relax }}{13}{algorithm.2}\protected@file@percent }
-\newlabel{alg:arnoldi(s,t)}{{2}{13}{Arnoldi($s,t$)\relax }{algorithm.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Scaling the first basis vector}{13}{subsubsection.6.3.1}\protected@file@percent }
-\newlabel{sec:scaling_first_basis_vec}{{6.3.1}{13}{Scaling the first basis vector}{subsubsection.6.3.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}QR factorization update}{13}{subsubsection.6.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.3}Reconstructing the upper Hessenberg matrix}{14}{subsubsection.6.3.3}\protected@file@percent }
-\newlabel{eq:B_blackletter_k_}{{4}{14}{Reconstructing the upper Hessenberg matrix}{equation.6.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Choosing the shifts}{13}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline The modified Leja ordering}{13}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{13}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Performance notes}{14}{section*.12}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Arnoldi($s,t$)\relax }}{14}{algorithm.4}\protected@file@percent }
+\newlabel{alg:arnoldi(s,t)}{{4}{14}{Arnoldi($s,t$)\relax }{algorithm.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.3}Scaling the first basis vector}{15}{subsubsection.7.2.3}\protected@file@percent }
+\newlabel{sec:scaling_first_basis_vec}{{7.2.3}{15}{Scaling the first basis vector}{subsubsection.7.2.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.4}QR factorization update}{15}{subsubsection.7.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.5}Reconstructing the upper Hessenberg matrix}{15}{subsubsection.7.2.5}\protected@file@percent }
+\newlabel{eq:B_blackletter_k_}{{7.3}{15}{Reconstructing the upper Hessenberg matrix}{equation.7.3}{}}
 \citation{Erhel95aparallel}
 \citation{Hoemmen:2010:CKS:1970638}
-\newlabel{eq:h_blackletter_k_}{{5}{15}{Reconstructing the upper Hessenberg matrix}{equation.6.5}{}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline A different approach}{15}{section*.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}CA-GMRES}{16}{section.7}\protected@file@percent }
-\newlabel{sec:ca-gmres}{{7}{16}{CA-GMRES}{section.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}GMRES(m)}{16}{subsection.7.1}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces restarted GMRES(m)\relax }}{16}{algorithm.3}\protected@file@percent }
-\newlabel{alg:gmres(m)}{{3}{16}{restarted GMRES(m)\relax }{algorithm.3}{}}
-\newlabel{eq:stdgmreslsp}{{9}{17}{GMRES(m)}{equation.7.9}{}}
+\newlabel{eq:h_blackletter_k_}{{7.4}{16}{Reconstructing the upper Hessenberg matrix}{equation.7.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline A different approach}{16}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}CA-GMRES}{17}{section.8}\protected@file@percent }
+\newlabel{sec:ca-gmres}{{8}{17}{CA-GMRES}{section.8}{}}
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces restarted Newton CA-GMRES\relax }}{18}{algorithm.4}\protected@file@percent }
-\newlabel{alg:ca-gmres}{{4}{18}{restarted Newton CA-GMRES\relax }{algorithm.4}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces Newton-GMRES($s,t$)\relax }}{18}{algorithm.5}\protected@file@percent }
+\newlabel{alg:ca-gmres}{{5}{18}{Newton-GMRES($s,t$)\relax }{algorithm.5}{}}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Grigori}
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Preconditioning}{19}{subsection.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.1}CA-ILU(0) preconditioner}{19}{subsubsection.7.2.1}\protected@file@percent }
-\newlabel{sec:ca-ilu}{{7.2.1}{19}{CA-ILU(0) preconditioner}{subsubsection.7.2.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Convergence metrics}{19}{subsection.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Implementation details}{19}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Preconditioning}{19}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.1.1}CA-ILU(0) preconditioner}{19}{subsubsection.8.1.1}\protected@file@percent }
+\newlabel{sec:ca-ilu}{{8.1.1}{19}{CA-ILU(0) preconditioner}{subsubsection.8.1.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Convergence metrics}{19}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Implementation details}{19}{subsection.8.3}\protected@file@percent }
 \citation{Greenbaum97numericalbehaviour}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{20}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:dmat1}{{2}{20}{•••\relax }{figure.caption.13}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Numerical experiments}{20}{subsection.7.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{21}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:dmat2}{{3}{21}{•••\relax }{figure.caption.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{21}{figure.caption.15}\protected@file@percent }
-\newlabel{fig:dmat3}{{4}{21}{•••\relax }{figure.caption.15}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{22}{figure.caption.16}\protected@file@percent }
-\newlabel{fig:dmat1_scale}{{5}{22}{•••\relax }{figure.caption.16}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{22}{figure.caption.17}\protected@file@percent }
-\newlabel{fig:dmat2_scale}{{6}{22}{•••\relax }{figure.caption.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{23}{figure.caption.18}\protected@file@percent }
-\newlabel{fig:dmat3_scale}{{7}{23}{•••\relax }{figure.caption.18}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces not scaled\relax }}{23}{figure.caption.19}\protected@file@percent }
-\newlabel{fig:watt1_noscale}{{8}{23}{not scaled\relax }{figure.caption.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{24}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:watt1_scale}{{9}{24}{•••\relax }{figure.caption.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces without basis vector scaling\relax }}{24}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:watt1_ilu0}{{10}{24}{without basis vector scaling\relax }{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{25}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:pwtk_noscale}{{11}{25}{•••\relax }{figure.caption.22}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{25}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:pwtk_scale}{{12}{25}{•••\relax }{figure.caption.23}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{26}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:bmw7st1}{{13}{26}{•••\relax }{figure.caption.24}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{26}{figure.caption.25}\protected@file@percent }
-\newlabel{fig:bmw7st1_scale}{{14}{26}{•••\relax }{figure.caption.25}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{27}{figure.caption.26}\protected@file@percent }
-\newlabel{fig:xenon2}{{15}{27}{•••\relax }{figure.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{27}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:xenon2_scale}{{16}{27}{•••\relax }{figure.caption.27}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{28}{figure.caption.28}\protected@file@percent }
-\newlabel{fig:bcsstk18_noscale}{{17}{28}{•••\relax }{figure.caption.28}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{28}{figure.caption.29}\protected@file@percent }
-\newlabel{fig:bcsstk18_scale}{{18}{28}{•••\relax }{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{20}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:dmat1}{{2}{20}{•••\relax }{figure.caption.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Numerical experiments}{20}{subsection.8.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{21}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:dmat2}{{3}{21}{•••\relax }{figure.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{21}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:dmat3}{{4}{21}{•••\relax }{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{22}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:dmat1_scale}{{5}{22}{•••\relax }{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{22}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:dmat2_scale}{{6}{22}{•••\relax }{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{23}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:dmat3_scale}{{7}{23}{•••\relax }{figure.caption.19}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces not scaled\relax }}{23}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:watt1_noscale}{{8}{23}{not scaled\relax }{figure.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{24}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:watt1_scale}{{9}{24}{•••\relax }{figure.caption.21}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces without basis vector scaling\relax }}{24}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:watt1_ilu0}{{10}{24}{without basis vector scaling\relax }{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{25}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:pwtk_noscale}{{11}{25}{•••\relax }{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{25}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:pwtk_scale}{{12}{25}{•••\relax }{figure.caption.24}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{26}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:bmw7st1}{{13}{26}{•••\relax }{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{26}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:bmw7st1_scale}{{14}{26}{•••\relax }{figure.caption.26}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{27}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:xenon2}{{15}{27}{•••\relax }{figure.caption.27}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{27}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:xenon2_scale}{{16}{27}{•••\relax }{figure.caption.28}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{28}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:bcsstk18_noscale}{{17}{28}{•••\relax }{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{28}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:bcsstk18_scale}{{18}{28}{•••\relax }{figure.caption.30}{}}
 \citation{Ascher:2011:FCN:2031413}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}Performance experiments}{29}{subsection.7.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces left CA-GMRES, right GMRES\relax }}{29}{figure.caption.30}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.6.1}Summary}{29}{subsubsection.7.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{29}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5}Performance experiments}{29}{subsection.8.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces left CA-GMRES, right GMRES\relax }}{29}{figure.caption.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.5.1}Summary}{29}{subsubsection.8.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Conclusion}{29}{section.9}\protected@file@percent }
 \citation{Ascher:2011:FCN:2031413}
 \citation{Ascher:2011:FCN:2031413}
 \citation{Ascher:2011:FCN:2031413}
@@ -133,16 +145,18 @@
 \bibdata{BSc_Ernstbrunner_01403753}
 \bibcite{arnoldi:hal-01712943}{1}
 \bibcite{Ascher:2011:FCN:2031413}{2}
-\bibcite{doi:10.1093/imanum/14.4.563}{3}
-\bibcite{doi:10.1137/080725763}{4}
-\bibcite{Demmel:2012:CPS:2340316.2340324}{5}
+\bibcite{doi:10.1093/imanum/NewtonGMRES_bai}{3}
+\bibcite{doi:10.1137/nonnegdiags_demmel}{4}
+\bibcite{Demmel:2012:CA-QR_demmel}{5}
 \bibcite{Erhel95aparallel}{6}
 \bibcite{Greenbaum97numericalbehaviour}{7}
 \bibcite{Grigori}{8}
 \bibcite{Hoemmen:2010:CKS:1970638}{9}
 \bibcite{nuen11c}{10}
 \bibcite{press92a}{11}
-\@writefile{toc}{\contentsline {section}{Appendices}{32}{section*.35}\protected@file@percent }
+\bibcite{Saad:1986:GGM:14063.14074}{12}
+\bibcite{doi:10.1137/Walker}{13}
+\@writefile{toc}{\contentsline {section}{Appendices}{33}{section*.36}\protected@file@percent }
 \global\@namedef{scr@dte@section@lastmaxnumwidth}{10.46805pt}
 \global\@namedef{scr@dte@subsection@lastmaxnumwidth}{18.26904pt}
 \global\@namedef{scr@dte@subsubsection@lastmaxnumwidth}{26.73907pt}
