@@ -114,19 +114,7 @@ Wien, 2019	\linebreak
 \tableofcontents
 
 \pagebreak
-\section{TODO}
-\begin{itemize}
-\item describe arnoldi(s)
-\item describe arnoldi(s,t)
-\item describe CA-GMRES
-\item write implementation details
-\item write numerical experiments
-\item write performance experiments
-\item write introduction
-\item write abstract
-\end{itemize}
 
-\pagebreak
 \section{Notation}
 Similar notation is considered as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} and Grigori et al. \cite{Grigori}.
 \subsection*{Linear Algebra}
@@ -251,7 +239,7 @@ The solution is obtained by computing $x_k = x_0 + Qy_k$. Note that the absolute
 
 \section{Computational kernels}
 %introduction; definitions: kernel, communication-avoiding
-In this thesis \textit{computational kernels} define parts of an algorithm with significantly high costs, relatively speaking. These costs include both arithmetic operations and communication. The following kernels make up the essential building blocks of Arnoldi($s,t$) and eventually CA-GMRES.
+In this thesis \textit{computational kernels} define parts of an algorithm with significantly high costs, relatively speaking. These costs include both arithmetic operations and communication. The following kernels make up the essential building blocks in Arnoldi($s,t$) (see section~\ref{sec:ca_arnoldi}) and eventually CA-GMRES (see section~\ref{sec:ca-gmres}).
 
 
 \subsection{Matrix powers kernel}
@@ -444,8 +432,9 @@ The Arnoldi iteration is a method for solving sparse non-symmetric eigenvalue pr
 \begin{equation} \label{eq:AQ=QH}
 	AQ = \underline{Q} \underline{H}.
 \end{equation}
- There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to classical Gram-Schmidt (MGS based Arnoldi is outlined in algorithm~\ref{alg:mgs_arnoldi}). On the other hand, CGS is more suited for parallel implementations, because it provides fewer synchronization points.
-Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides better orthogonalization than MGS. Since Householder QR requires the vectors to be available all at once, Walker produced $s$ Monomial basis vectors first. Hoemmen et al. Bai et al. \cite{doi:10.1093/imanum/NewtonGMRES_bai} later improved on Walkers work by replacing the (usually ill-conditioned) Monomial basis with the Newton basis instead. Greenbaum et al. \cite{Greenbaum97numericalbehaviour} later proved, that the loss of orthogonality, that is caused by MGS, usually does not affect the solution of the linear system at all.
+In the GMRES method the columns of $\underline{Q}$ form a basis for the Krylov Subspace $\mathcal{K}_{s + 1}(A, r_0)$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to classical Gram-Schmidt (MGS based Arnoldi is outlined in algorithm~\ref{alg:mgs_arnoldi}). On the other hand, CGS is more suited for parallel implementations, because it provides fewer synchronization points.
+Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides better orthogonalization than MGS. Since Householder QR requires the vectors to be available all at once, Walker produced $s$ Monomial basis vectors first. Bai et al. \cite{doi:10.1093/imanum/NewtonGMRES_bai} later improved on Walkers work by replacing the (usually ill-conditioned) Monomial basis with the Newton basis. Greenbaum et al. \cite{Greenbaum97numericalbehaviour} later showed, that the loss of orthogonality caused by MGS usually does not affect the solution of the linear system at all. This gave rise to a new communication avoiding version of the Arnoldi method, that will be used by CA-GMRES, namely Arnoldi($s,t$).
+
 \begin{algorithm}[H]
 \caption{MGS based Arnoldi iteration}
 \label{alg:mgs_arnoldi}
@@ -466,6 +455,9 @@ Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides
 \end{algorithm}
 
 \subsection{Arnoldi(s,t)}
+Arnoldi($s,t$) was first introduced by Hoemmen et al. in \cite{Hoemmen:2010:CKS:1970638} and is based on Walkers Householder Arnoldi method \cite{doi:10.1137/Walker} and the $s$-step Arnoldi method of Kim and Chronopoulos \cite{Chronopoulos}. Like Walkers version, Arnoldi($s,t$) produces $s$ basis vectors at once, except that, after $s$ steps, Walkers method must be restarted. This makes choosing a good $s$ difficult. If $s$ is too short, the method may converge too slow or not at all. On the other hand, if $s$ is too large, the method is numerically unstable.\\ Arnoldi($s,t$) decouples the stepsize from the restart length by introducing an additional parameter $t$. The parameter $t$ refers to the number of iterations that produce $s$ orthonormal basis vectors before the method must restart. Therefore, the restart length $m$ is given by $m = s \cdot t$, where $s$ refers to the number of \textit{inner} iterations and $t$ denotes the number of \textit{outer} iterations.
+The $s$-step Arnoldi method of Kim and Chronopoulos also shares this property, but is not as effective in terms of avoiding communication and basis orthogonalization. Also, while Arnoldi($s,t$) can use any $s$-step basis, Kim and Chronopoulos' algorithm is restricted to the Monomial basis.\\
+Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} use the MPK to produce the initial $s$ vectors in Arnoldi($s,t$) and considered the Monomial, the Newton and the Chebychev basis. Depending on the basis type their MPK has to compute either a one-term, two-term, or three-term recurrence respectively.
 
 \subsubsection{The Monomial basis}
 The Monomial basis in s-step Krylov methods is given by 
@@ -476,7 +468,7 @@ and has a change of basis matrix
 \begin{equation*}
 \underline{B} = [\sigma_1 e_2, \sigma_2 e_3, \ldots, \sigma_s e_{s + 1}].
 \end{equation*}
-with scaling factors $\sigma_1, \ldots, \sigma_s$ that satisfies
+(where $\sigma_1, \ldots, \sigma_s$ are scaling factors) that satisfies
 \begin{equation} \label{eq:AV=VB}
 AV = \underline{V} \underline{B}.
 \end{equation}
@@ -489,14 +481,12 @@ The similarity between (\ref{eq:AV=VB}) and the Arnoldi relation (\ref{eq:AQ=QH}
 	AQ &=& \underline{Q} \underline{R} \underline{B} R^{-1}
 \end{eqnarray*}
 emerges
-\begin{equation}
+\begin{equation} \label{H=RBR}
 	\underline{H} = \underline{R} \underline{B} R^{-1}.
 \end{equation}
 \\
-Since $\underline{H}$ is upper Hessenberg, $\underline{B}$ must be at least structurally upper Hessenberg as well. This is in fact the case for the Monomial basis.\\ The Monomial basis may be scaled in order to prevent rapid growth in the length of the basis vectors. 
+Since $\underline{H}$ is upper Hessenberg, $\underline{B}$ must be at least structurally upper Hessenberg as well. This is in fact the case for the Monomial basis. However, there are other bases that provide better numerical stability.
 
-
-scaling the rapidly growing condition number and vector length $\rightarrow$ scale vector to lengh 1, but:  $\rightarrow$ need a different basis.
 \subsubsection{The Newton basis}
 The Newton basis in s-step Krylov methods is given by 
 \begin{equation*}
@@ -513,12 +503,19 @@ and has a change of basis matrix
 0 & 0 & \ldots & \sigma_s 
 \end{pmatrix}
 \end{equation*}
-with scaling factors $\sigma_1, \ldots, \sigma_s$.\\
+with scaling factors $\sigma_1, \ldots, \sigma_s$ and shifts $\theta_1, \ldots, \theta_s$.\\
 
-polinomial interpolation at shifts $\theta_1$, $\theta_2$, $\ldots$, $\theta_s$.
-\paragraph{Choosing the shifts}
-find estimates of the eigenvalues of A (Ritz values).
+Since $\underline{B}$ is structurally Hessenberg, equation (\ref{H=RBR}) holds for the Newton basis as well.\\
+
+%Unlike the Monomial basis, the Newton basis uses a two-term recurrence $v_{i + 1} = Av_i - \theta_i v_i$.\\
+Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}, among many other authors, choose the shifts to be the eigenvalues of the upper Hessenberg matrix $H$ (aka. the \textit{Ritz} values), because the Arnoldi iteration implicitly constructs an interpolating polynomial of the characteristic polynomial of $A$ at these points. Therefore, $A - \theta I$ may be ill-conditioned and several nearly identical shifts in a row could lead to an ill-conditioned basis. Therefore, the shifts have to be ordered in a way that makes the basis as different from the Monomial basis as possible.
+
+Reichel \cite{Reichel1990} showed, that the condition number of the Newton basis grows sub-exponentially compared to the exponential growth for the Monomial basis. However, if the Ritz values are poor approximations of the eigenvalues of $A$ may lead to faster growth of the basis condition number.
+
+%polinomial interpolation at shifts $\theta_1$, $\theta_2$, $\ldots$, $\theta_s$.
+
 \paragraph{The modified Leja ordering}
+
 
 \paragraph{Avoiding complex arithmetic}
 Like the eigenvalues of a real matrix, the Ritz values can also occur as complex conjugate pairs. The modified Leja ordering ensures that these pairs are ordered consecutively with leading positive imaginary entries, i.e. $\theta_{j + 1} = \overline{\theta}_j$ with $\Im(\theta_j) > 0$. Complex arithmetic doubles the storage and floating point operations and therefore, should be avoided. Instead of computing $v_{j + 1} = (A - \theta_j I)v_j$ and $v_{j + 2} = (A - \overline{\theta}_j I)v_{j + 1}$ like one would normally do, Bai et al. \cite{doi:10.1093/imanum/NewtonGMRES_bai} suggest that complex arithmetic can be skipped by setting
@@ -569,37 +566,7 @@ v_{j + 1} &=& (A - \Re(\theta_j) I )(A - \theta_{j - 1} I )v_{j - 1} \\
 is equivalent to computing the Monomial basis with a possibly ill-conditioned  matrix $A - \theta_{j - 1} I$. This might occur, if the Ritz values reside within an ellipse with a long vertical axis and very short horizontal axis on the complex plane.
 
 
-\begin{algorithm}[H]
-\caption{Arnoldi($s,t$)}
-\label{alg:arnoldi(s,t)}
-\begin{algorithmic}[1]
-    \REQUIRE $n \times n$ matrix $A$ and starting vector $v$ of size $n$\\
-    \ENSURE An orthonormal $n$ by $st + 1$ matrix $\underline{\frak{Q}} = \left[\frak{Q},q_{st + 1}\right]$ and a non-singular $st + 1$ by $st$ upper Hessenberg matrix $\underline{H}$ such that $AQ = \underline{Q} \underline{H}$
-    \STATE $\beta := \norm{v}_2$, $q_1 := v/\beta$, restart := false
-    \FOR{$k = 0$ to $t - 1$}
-    	\STATE Fix basis conversion matrix $\underline{B}_k$
-    	\STATE Compute $\underline{\acute{V}}$ via MPK
-    	\IF{$k = 0$}
- 	 		\STATE Compute the QR factorization $\underline{V}_0 = \underline{Q}_0 \underline{R}_0$ via TSQR
- 	 	\STATE $\underline{\frak{Q}}_0 := \underline{Q}_0$
-    	\STATE $\underline{\frak{H}}_0 := \underline{R}_0 \underline{B}_0 R_0^{-1}$
-    	\ELSE
-    		\STATE $\underline{\acute{\frak{R}}}_{k - 1, k} := \underline{\frak{Q}}^T_{k - 1} \underline{\acute{V}}_k$
-    	\STATE $\underline{\acute{V}}_k' := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k - 1} \underline{\acute{\frak{R}}}_{k - 1, k}$
-    	\STATE Compute QR factorization $\underline{\acute{V}}'_k = \underline{\acute{Q}}_k \underline{\acute{R}}_k$
-    	\STATE Compute $\underline{\frak{H}}_{k - 1, k} := - \frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k$
-		\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k$
-		\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
-    	\STATE $\underline{\frak{H}} : = 
-    	\begin{pmatrix}
-    		\frak{H}_{k - 1} & \frak{H}_{k - 1, k}\\
-    		h_{k - 1} e_1 e_{sk}^T & H_k\\
-    		0_{1,sk} & h_k e^T_s
-    	\end{pmatrix}$
-    	\ENDIF
-	\ENDFOR
-\end{algorithmic}
-\end{algorithm}
+
 
 \subsubsection{Scaling the first basis vector} \label{sec:scaling_first_basis_vec}
 Arnoldi(s,t) produces $\underline{\textfrak{Q}}$ which differs from MGS-Arnoldi $\underline{\hat{\textfrak{Q}}}$ by a unitary scaling $\underline{\Theta}$ = diag($\theta_1$, $\theta_2$, $\ldots$, $\theta_{st}$, $\theta_{st+1}$) such that $\underline{\hat{\textfrak{Q}}} = \textfrak{\underline{Q}}\underline{\Theta}$. $\rightarrow$
@@ -709,7 +676,7 @@ therefore,
 \end{equation}
 
 \paragraph{A different approach}
-In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} computed 2$s$ Ritz values, picked $s$ of them and applied the Modified Leja Ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, one has to consider that these 2$s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. Consider the following. If the 2$s$ Ritz values solely consist of complex conjugate pairs and $s$ is odd, there is no way this would fit without splitting a complex conjugate pair. To address this issue one could either omit the positive imaginary part of the last Ritz value or incorporate all computed values, i.e. apply 2$s$ Ritz values over two outer iterations of Arnoldi($s$,$t$). Since computing 2$s$ Ritz values yields in better approximations of the eigenvalues, there is no reason why one should not incorporate them all. This slightly changes the way equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the first change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from equation~\eqref{eq:B_blackletter_k_} with this additional entry
+In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} computed 2$s$ Ritz values, picked $s$ of them and applied the Modified Leja Ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, one has to consider that these 2$s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. Consider the following. If the 2$s$ Ritz values solely consist of complex conjugate pairs and $s$ is odd, there is no way this would fit without splitting a complex conjugate pair. To address this issue and still avoid complex arithmetic one could either compute 2s + 1 Ritz values or simply omit the positive imaginary part of the last Ritz value. Another approach could incorporate all computed values, i.e. apply 2$s$ Ritz values over two outer iterations of Arnoldi($s$,$t$). Since computing 2$s$ Ritz values yields in better approximations of the eigenvalues, one could as well incorporate them all. This slightly changes the way equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the first change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from equation~\eqref{eq:B_blackletter_k_} by that additional entry with
 \begin{equation}
 \underline{\frak{B}}_{k} = 
 \begin{pmatrix}
@@ -718,10 +685,46 @@ In order to get better Eigenvalue approximations Erhel \cite{Erhel95aparallel} c
 \end{pmatrix}.
 \end{equation}
 
-As mentioned before, equation~\eqref{eq:h_blackletter_k_} then changes to
+Equation~\eqref{eq:h_blackletter_k_} then changes to
 \begin{equation}
 \underline{\frak{H}}_{k - 1, k} := -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k - \Im (\theta_s)^2 e_{sk} e^T_1  R^{-1}_{k}.
 \end{equation}
+
+
+\begin{algorithm}[H]
+\caption{Arnoldi($s,t$)}
+\label{alg:arnoldi(s,t)}
+\begin{algorithmic}[1]
+    \REQUIRE $n \times n$ matrix $A$ and starting vector $v$ of size $n$\\
+    \ENSURE An orthonormal $n$ by $st + 1$ matrix $\underline{\frak{Q}} = \left[\frak{Q},q_{st + 1}\right]$ and a non-singular $st + 1$ by $st$ upper Hessenberg matrix $\underline{H}$ such that $AQ = \underline{Q} \underline{H}$
+    \STATE $\beta := \norm{v}_2$, $q_1 := v/\beta$, restart := false
+    \FOR{$k = 0$ to $t - 1$}
+    	\STATE Fix basis conversion matrix $\underline{B}_k$
+    	\STATE Compute $\underline{\acute{V}}$ via MPK
+    	\IF{$k = 0$}
+ 	 		\STATE Compute the QR factorization $\underline{V}_0 = \underline{Q}_0 \underline{R}_0$ via TSQR
+ 	 	\STATE $\underline{\frak{Q}}_0 := \underline{Q}_0$
+    	\STATE $\underline{\frak{H}}_0 := \underline{R}_0 \underline{B}_0 R_0^{-1}$
+    	\ELSE
+    		\STATE $\underline{\acute{\frak{R}}}_{k - 1, k} := \underline{\frak{Q}}^T_{k - 1} \underline{\acute{V}}_k$
+    	\STATE $\underline{\acute{V}}_k' := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k - 1} \underline{\acute{\frak{R}}}_{k - 1, k}$
+    	\STATE Compute QR factorization $\underline{\acute{V}}'_k = \underline{\acute{Q}}_k \underline{\acute{R}}_k$
+    	\STATE Compute $\underline{\frak{H}}_{k - 1, k} := - \frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k$
+		\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k$
+		\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
+    	\STATE $\underline{\frak{H}} : = 
+    	\begin{pmatrix}
+    		\frak{H}_{k - 1} & \frak{H}_{k - 1, k}\\
+    		h_{k - 1} e_1 e_{sk}^T & H_k\\
+    		0_{1,sk} & h_k e^T_s
+    	\end{pmatrix}$
+    	\ENDIF
+	\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+
+
 
 \section{CA-GMRES} \label{sec:ca-gmres}
 %uses Arnoldi(s,t)
@@ -1033,7 +1036,7 @@ The main components of a single iteration of GMRES are
 \bibliography{BSc_Ernstbrunner_01403753}
  \listofalgorithms
 \begin{appendices}
-\section*{Appendix A}
+\section{Test matrices}
 discussion of test matrices \\
 
 \begin{tabular}{l|r|r}
@@ -1045,6 +1048,17 @@ pwtk & 218K & 3.7M \\
 watt1 & 1856 & 11550 \\
 xenon2 & 157K & 3.9M
 \end{tabular}
+
+\section{TODO}
+\begin{itemize}
+\item describe arnoldi(s,t)
+\item describe CA-GMRES
+\item write implementation details
+\item write numerical experiments
+\item write performance experiments
+\item write introduction
+\item write abstract
+\end{itemize}
 \end{appendices}
 \end{document}
 % End of document.

@@ -51,6 +51,13 @@ Mark Hoemmen.
 \newblock PhD thesis, Berkeley, CA, USA, 2010.
 \newblock AAI3413388.
 
+\bibitem{Chronopoulos}
+S~K.~Kim and A~Chronopoulos.
+\newblock An efficient parallel algorithm for extreme eigenvalues of sparse
+  nonsymmetric matrices(please reference in your papers).
+\newblock {\em International Journal of High Performance Computing Applications
+  - IJHPCA}, 6:98--111, 12 1992.
+
 \bibitem{nuen11c}
 D.~Nuentsa~Wakam and G.-A. Atenekeng~Kahou.
 \newblock Parallel {GMRES} with a multiplicative schwarz preconditioner.
@@ -61,6 +68,11 @@ William~H. Press, Saul~A. Teukolsky, William~T. Vetterling, and Brian~P.
   Flannery.
 \newblock {\em Numerical Recipes in C}.
 \newblock Cambridge University Press, 1992.
+
+\bibitem{Reichel1990}
+Lothar Reichel.
+\newblock Newton interpolation at leja points.
+\newblock {\em BIT}, 30(2):332--346, 1990.
 
 \bibitem{Saad:1986:GGM:14063.14074}
 Youcef Saad and Martin~H Schultz.
