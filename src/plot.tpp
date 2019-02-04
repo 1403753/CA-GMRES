@@ -10,7 +10,7 @@ sparse_status_t res_solve(std::string fname, std::string fdir, std::string title
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 1000;                   // maximum number of iterations to use	
 	double *x;
-	KSP_ ksp;	
+	KSM ksp;	
 	
 	x = (double *) mkl_calloc(n, sizeof(double), 64);if(x == NULL){return SPARSE_STATUS_ALLOC_FAILED;}
 
@@ -131,7 +131,7 @@ sparse_status_t generate_residual_plot(std::string fname, std::string title, siz
 	return stat;
 }
 
-sparse_status_t speedup_solve(std::string fname, std::string title, size_t idx, KSP_ *ksp, size_t s, size_t t, size_t its) {
+sparse_status_t speedup_solve(std::string fname, std::string title, size_t idx, KSM *ksp, size_t s, size_t t, size_t its) {
 	
 	sparse_matrix_t               A_mkl;                          // n x n matrix A
 	sparse_index_base_t           indexing;
@@ -237,7 +237,7 @@ sparse_status_t generate_speedup_plot(std::vector<std::string> *fnames, std::str
 	double                        dTol = 1e+4;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 1000;                   // maximum number of iterations to use
 	sparse_status_t               stat;
-	KSP_                          ksp;							 						  // linear solver context	
+	KSM                          ksp;							 						  // linear solver context	
 	PCILU0_ca                     ilu0;                           // PCType
 	PCNone                        pcnone;                         // PCType
 	std::ofstream                 file;	

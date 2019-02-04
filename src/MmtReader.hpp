@@ -7,7 +7,7 @@
 
 #ifndef MMT_READER_HPP
 
-#include "KSP_.hpp"
+#include "KSM.hpp"
 #include <fstream>
 #include <string>
 
@@ -15,7 +15,6 @@
 
 class MmtReader {
 	sparse_matrix_t B;
-	sparse_matrix_t A;
 public:
 	MmtReader();
 	virtual ~MmtReader();

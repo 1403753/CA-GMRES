@@ -1,14 +1,14 @@
 #ifndef IPCTYPE_HPP
 #define IPCTYPE_HPP
 
-#include "KSP_.hpp"
+#include "KSM.hpp"
 
 struct Mtx_CSR;
-class KSP_;
+class KSM;
 
 class IPCType {
 public:
-	KSP_ *ksp;
+	KSM *ksp;
 	virtual sparse_status_t mv(double *x, double *y, struct matrix_descr descr) = 0;
 	virtual sparse_status_t setUp() = 0;
 	virtual sparse_status_t precondition(double *x) = 0;

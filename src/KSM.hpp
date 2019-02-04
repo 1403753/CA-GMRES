@@ -1,5 +1,5 @@
-#ifndef KSP__HPP
-#define KSP__HPP
+#ifndef KSM_HPP
+#define KSM_HPP
 
 #define MKL_MAX_PATH_LEN 4096
 #define MKL_Complex16 std::complex<double>
@@ -34,7 +34,7 @@ struct Mtx_CSR{
 typedef std::complex<double>          complex_t; 
 typedef std::pair<size_t, complex_t>  ic_pair_t;
 
-class KSP_ {
+class KSM {
 	double                                  rTol = 1e-10;
 	double                                  aTol = 1e-50;
 	double                                  dTol = 1e+4;
@@ -48,8 +48,8 @@ class KSP_ {
 	bool                                    storeHist;
 	std::vector<std::pair<size_t, double>>  rHist;	
 public:
-	KSP_();
-	virtual ~KSP_();
+	KSM();
+	virtual ~KSM();
 
 	sparse_status_t setOptions(double rTol, double aTol, double dTol, size_t maxit, bool storeHist);
 	sparse_status_t setOperator(sparse_matrix_t *A_mkl);

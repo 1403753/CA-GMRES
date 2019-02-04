@@ -9,8 +9,7 @@ PETSCFLAGS = --mca btl_base_warn_component_unused 0
 PETSC_DIR = /usr/lib/petsc
 MPI_DIR = /usr/include/openmpi
 
-DFLAGS = 
-# -g -O0
+DFLAGS = -g -O0
 # -ggdb
 
 SRC         := $(wildcard *.cpp)
@@ -58,28 +57,28 @@ plot: main
 	#  bmw  #
 	#########
 
-	# ./main 2 residuals bmw7st1 20 5 4 10 2 \\shortstack{bmw}
+	# ./main 2 residuals bmw7st1 20 5 4 10 2 '\shortstack{bmw}'
 	# gnuplot ../gnuplot/bmw/residuals_bmw.gnu
 	
 	###########
 	#  WATT1  #
 	###########
 
-	# ./main 2 residuals watt1 30 3 10 5 6 \\shortstack{Watt1}
+	# ./main 2 residuals watt1 30 3 10 5 6 '\shortstack{Watt1}'
 	# gnuplot ../gnuplot/Watt1_pcnone_s3_t10_s5_t6/residuals_watt1.gnu
 
 	####################
 	#  WATT1 + ILU(0)  #
 	####################
 
-	# ./main 2 residuals watt1 30 5 6 15 2 \\shortstack{Watt1}
+	# ./main 2 residuals watt1 30 5 6 15 2 '\shortstack{Watt1}'
 	# gnuplot ../gnuplot/Watt1_pcnone_s3_t10_s5_t6/residuals_watt1_ilu0.gnu
 
 	############
 	#  Xenon2  #
 	############
 
-	# ./main 2 residuals xenon2 60 5 12 10 6 \\shortstack{Xenon2}
+	# ./main 2 residuals xenon2 60 5 12 10 6 '\shortstack{Xenon2}'
 	# gnuplot ../gnuplot/Xenon2/residuals_xenon2.gnu
 	# gnuplot ../gnuplot/residuals.gnu
 
@@ -87,30 +86,26 @@ plot: main
 	#  pwtk  #
 	##########
 
-	# ./main 2 residuals pwtk 20 5 4 10 2 \\shortstack{pwtk}
+	# ./main 2 residuals pwtk 20 5 4 10 2 '\shortstack{pwtk}'
 	# gnuplot ../gnuplot/pwtk/residuals_pwtk.gnu
 
 	##############
 	#  bcsstk18  #
 	##############
 	
-	# ./main 2 residuals bcsstk18 60 5 12 10 6 \\shortstack{bcsstk08}
+	# ./main 2 residuals bcsstk18 60 5 12 10 6 '\shortstack{bcsstk08}'
 	# gnuplot ../gnuplot/bcsstk18/residuals_bcsstk18.gnu
 	
 	##########
 	#  dmat  #
 	##########	
-
-	./main 2 residuals dmat0 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+02\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
-	gnuplot ../gnuplot/dmat/residuals_dmat.gnu	
 	
-	# ./main 2 residuals dmat1 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+05\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
+	./main 2 residuals dmat1 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+05\\\footnotesize\,Residual\,2-norm,\,log\,scale}'
+	gnuplot ../gnuplot/dmat/residuals_dmat.gnu
+	# ./main 2 residuals dmat2 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+10\\\footnotesize\,Residual\,2-norm,\,log\,scale}'
 	# gnuplot ../gnuplot/dmat/residuals_dmat.gnu
-	# ./main 2 residuals dmat2 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+10\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
+	# ./main 2 residuals dmat3 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+15\\\footnotesize\,Residual\,2-norm,\,log\,scale}'
 	# gnuplot ../gnuplot/dmat/residuals_dmat.gnu
-	# ./main 2 residuals dmat3 60 15 4 20 3 \\shortstack{\\footnotesize\\,1e+04\\,$\\times$\\,1e+04\\,diagonal,\\,logspace\\,eigs,\\,cond\\,1e+15\\\\\\footnotesize\\,Residual\\,2-norm,\\,log\\,scale}
-	# gnuplot ../gnuplot/dmat/residuals_dmat.gnu
-	
 
 burn: main
 	./main

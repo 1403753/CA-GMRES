@@ -9,11 +9,12 @@
 
 #ifndef MAIN_HPP
 
-#include "KSP_.hpp"
+#include "KSM.hpp"
 #include "GMRES_ca.hpp"
 #include "GMRES.hpp"
 #include "PCILU0_ca.hpp"
 #include "PCNone.hpp"
+#include "PCBJ.hpp"
 #include "MmtReader.hpp"
 
 #include <gsl/gsl_rng.h>
@@ -45,7 +46,13 @@ int main(int argc, char **args) {
 	// std::string fname = "nasa4704";
 	// std::string fname = "minitest"; // too small, to work properly
 	// std::string fname = "CA-ILU(0)"; // too small, to work properly
-	 
+	
+	if(argc <= 5) {
+		PCBJ bj;
+		KSM ksm;
+		GMRES_ca gmres_ca(5,12, MONOMIAL);
+	}
+	
 	if (argc > 5) {
 		std::string type = std::string(args[2]);
 		

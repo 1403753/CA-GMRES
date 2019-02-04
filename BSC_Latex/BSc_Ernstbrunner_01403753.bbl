@@ -51,6 +51,13 @@ Mark Hoemmen.
 \newblock PhD thesis, Berkeley, CA, USA, 2010.
 \newblock AAI3413388.
 
+\bibitem{Joubert_Carey_Chebyshev}
+Wayne~D. Joubert and Graham~F. Carey.
+\newblock Parallelizable restarted iterative methods for nonsymmetric linear
+  systems. part i: Theory.
+\newblock {\em International Journal of Computer Mathematics},
+  44(1-4):243--267, 1992.
+
 \bibitem{Chronopoulos}
 S~K.~Kim and A~Chronopoulos.
 \newblock An efficient parallel algorithm for extreme eigenvalues of sparse

@@ -1,7 +1,7 @@
 #ifndef SPARSE_UTILS_HPP
 #define SPARSE_UTILS_HPP
 
-#include "KSP_.hpp"
+#include "KSM.hpp"
 #include <deque>
 #include <set>
 
