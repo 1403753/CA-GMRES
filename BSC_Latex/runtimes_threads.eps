@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0 EPSF-2.0
-%%Title: xenon2.tex
+%%Title: runtimes_threads.tex
 %%Creator: gnuplot 5.0 patchlevel 7
-%%CreationDate: Sat Feb  9 17:47:48 2019
+%%CreationDate: Sun Feb 10 05:16:37 2019
 %%DocumentFonts: 
 %%BoundingBox: 50 50 410 302
 %%EndComments
@@ -28,7 +28,7 @@ gnudict begin
 /Gamma 1.0 def
 /BackgroundColor {-1.000 -1.000 -1.000} def
 %
-/vshift -73 def
+/vshift -53 def
 /dl1 {
   10.0 Dashlength userlinewidth gnulinewidth div mul mul mul
   Rounded { currentlinewidth 0.75 mul sub dup 0 le { pop 0.01 } if } if
@@ -436,12 +436,12 @@ systemdict /pdfmark known not {
   userdict /pdfmark systemdict /cleartomark get put
 } if
 SDict begin [
-  /Title (xenon2.tex)
+  /Title (runtimes_threads.tex)
   /Subject (gnuplot plot)
   /Creator (gnuplot 5.0 patchlevel 7)
 %  /Producer (gnuplot)
 %  /Keywords ()
-  /CreationDate (Sat Feb  9 17:47:48 2019)
+  /CreationDate (Sun Feb 10 05:16:37 2019)
   /DOCINFO pdfmark
 end
 } ifelse
@@ -487,1765 +487,683 @@ newpath
 LTb
 LCb setrgbcolor
 [] 0 setdash
-858 704 M
+0.500 UL
+LTa
+LCa setrgbcolor
+688 512 M
+6223 0 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+688 512 M
 63 0 V
+6160 0 R
+-63 0 V
 stroke
 LTb
-858 1316 M
+0.500 UL
+LTa
+LCa setrgbcolor
+688 1429 M
+6223 0 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+688 1429 M
 63 0 V
+6160 0 R
+-63 0 V
 stroke
-858 1929 M
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+688 2346 M
+6223 0 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+688 2346 M
 63 0 V
+6160 0 R
+-63 0 V
 stroke
-858 2542 M
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+688 3263 M
+6223 0 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+688 3263 M
 63 0 V
+6160 0 R
+-63 0 V
 stroke
-858 3154 M
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+688 4180 M
+3760 0 V
+2367 0 R
+96 0 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+688 4180 M
 63 0 V
+6160 0 R
+-63 0 V
 stroke
-858 3767 M
-63 0 V
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+1302 512 M
+0 4047 V
 stroke
-858 4379 M
-63 0 V
-stroke
-1453 704 M
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1302 512 M
 0 63 V
+0 3984 R
+0 -63 V
 stroke
-2047 704 M
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+2961 512 M
+0 4047 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+2961 512 M
 0 63 V
+0 3984 R
+0 -63 V
 stroke
-2642 704 M
-0 63 V
-stroke
-3236 704 M
-0 63 V
-stroke
-3831 704 M
-0 63 V
-stroke
-4425 704 M
-0 63 V
-stroke
-5020 704 M
-0 63 V
-stroke
-5614 704 M
-0 63 V
-stroke
-6209 704 M
-0 63 V
-stroke
-6803 704 M
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+4621 512 M
+0 2848 V
+0 1136 R
 0 63 V
 stroke
 1.000 UL
 LTb
-858 4379 M
-858 704 L
-5945 0 V
-0 3675 R
--5945 0 R
+LCb setrgbcolor
+[] 0 setdash
+4621 512 M
+0 63 V
+0 3984 R
+0 -63 V
+stroke
+LTb
+0.500 UL
+LTa
+LCa setrgbcolor
+6280 512 M
+0 2848 V
+0 1136 R
+0 63 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+6280 512 M
+0 63 V
+0 3984 R
+0 -63 V
+stroke
+LTb
+1.000 UL
+LTb
+688 4559 N
+688 512 L
+6223 0 V
+0 4047 V
+-6223 0 V
+Z stroke
 1.000 UP
-stroke
 1.000 UL
 LTb
-1789 2325 N
-0 1626 V
-3231 0 V
-0 -1626 V
--3231 0 V
+1.000 UL
+LTb
+4448 3360 N
+0 1136 V
+2367 0 V
+0 -1136 V
+-2367 0 V
 Z stroke
 % Begin plot #1
 1.000 UL
 LTb
-0.00 0.00 0.00 C LCb setrgbcolor
+0.00 0.39 0.00 C 1.000 895 512 416 918 BoxColFill
+LCb setrgbcolor
+895 512 N
+0 917 V
+415 0 V
+0 -917 V
+-415 0 V
+Z stroke
 1.000 UL
 LTb
-0.00 0.00 0.00 C 1921 3775 M
-327 0 V
-858 4379 M
-6 -357 V
-6 -205 V
-6 -148 V
-6 -156 V
-6 -89 V
-6 -98 V
-6 -74 V
-6 -70 V
-6 -59 V
-5 -60 V
-6 -47 V
-6 -50 V
-6 -41 V
-6 -43 V
-6 -38 V
-6 -34 V
-6 -35 V
-6 -28 V
-6 -32 V
-6 -28 V
-6 -14 V
-6 -17 V
-6 -16 V
-6 -19 V
-6 -20 V
-6 -20 V
-6 -23 V
-5 -22 V
-6 -23 V
-6 -23 V
-6 -22 V
-6 -20 V
-6 -20 V
-6 -16 V
-6 -15 V
-6 -12 V
-6 -12 V
-6 -9 V
-6 -8 V
-6 -10 V
-6 -6 V
-6 -6 V
-6 -6 V
-6 -7 V
-6 -6 V
-5 -8 V
-6 -8 V
-6 -9 V
-6 -8 V
-6 -9 V
-6 -8 V
-6 -9 V
-6 -8 V
-6 -7 V
-6 -7 V
-6 -7 V
-6 -7 V
-6 -6 V
-6 -6 V
-6 -5 V
-6 -4 V
-6 -4 V
-6 -4 V
-5 -3 V
-6 -4 V
-6 -3 V
-6 -3 V
-6 -3 V
-6 -4 V
-6 -3 V
-6 -3 V
-6 -4 V
-6 -3 V
-6 -4 V
-6 -3 V
-6 -3 V
-6 -4 V
-6 -3 V
-6 -4 V
-6 -3 V
-6 -3 V
-5 -3 V
-6 -3 V
-6 -3 V
-6 -2 V
-6 -2 V
-6 -3 V
-6 -2 V
-6 -3 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -3 V
-6 -2 V
-6 -2 V
-6 -3 V
-6 -2 V
-6 -3 V
-6 -3 V
-5 -2 V
-6 -3 V
-stroke 1464 2079 M
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-5 -3 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -2 V
-6 -1 V
-5 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-5 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -2 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-5 -2 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-stroke 2083 1912 M
-6 -1 V
-6 -1 V
-6 -1 V
-5 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -2 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -2 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-stroke 2701 1807 M
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-5 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-5 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-5 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-5 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-stroke 3319 1727 M
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-5 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-5 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-5 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-5 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-stroke 3938 1661 M
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 -1 V
-stroke 4556 1603 M
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-stroke 5174 1552 M
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-5 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 0 V
-stroke 5792 1507 M
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-5 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-stroke 6411 1465 M
-6 -1 V
-6 0 V
-5 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-5 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-5 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-5 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-6 -1 V
-6 0 V
-6 0 V
-stroke
-LTw
+0.00 0.39 0.00 C 1.000 2555 512 416 969 BoxColFill
+LCb setrgbcolor
+2555 512 N
+0 968 V
+415 0 V
+0 -968 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.39 0.00 C 1.000 4214 512 416 1143 BoxColFill
+LCb setrgbcolor
+4214 512 N
+0 1142 V
+415 0 V
+0 -1142 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.39 0.00 C 1.000 5874 512 416 1606 BoxColFill
+LCb setrgbcolor
+5874 512 N
+0 1605 V
+415 0 V
+0 -1605 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.39 0.00 C LTw
 % End plot #1
 % Begin plot #2
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 1.00 0.00 C 1.000 895 512 416 903 BoxColFill
+LCb setrgbcolor
+895 512 N
+0 902 V
+415 0 V
+0 -902 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 1.00 0.00 C 1.000 2555 512 416 948 BoxColFill
+LCb setrgbcolor
+2555 512 N
+0 947 V
+415 0 V
+0 -947 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 1.00 0.00 C 1.000 4214 512 416 1116 BoxColFill
+LCb setrgbcolor
+4214 512 N
+0 1115 V
+415 0 V
+0 -1115 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 1.00 0.00 C 1.000 5874 512 416 1572 BoxColFill
+LCb setrgbcolor
+5874 512 N
+0 1571 V
+415 0 V
+0 -1571 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 1.00 0.00 C LTw
+% End plot #2
+% Begin plot #3
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.65 0.00 C 1.000 895 512 416 900 BoxColFill
+LCb setrgbcolor
+895 512 N
+0 899 V
+415 0 V
+0 -899 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.65 0.00 C 1.000 2555 512 416 945 BoxColFill
+LCb setrgbcolor
+2555 512 N
+0 944 V
+415 0 V
+0 -944 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.65 0.00 C 1.000 4214 512 416 1114 BoxColFill
+LCb setrgbcolor
+4214 512 N
+0 1113 V
+415 0 V
+0 -1113 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.65 0.00 C 1.000 5874 512 416 1568 BoxColFill
+LCb setrgbcolor
+5874 512 N
+0 1567 V
+415 0 V
+0 -1567 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.65 0.00 C LTw
+% End plot #3
+% Begin plot #4
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 1.00 C 1.000 895 512 416 886 BoxColFill
+LCb setrgbcolor
+895 512 N
+0 885 V
+415 0 V
+0 -885 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 2555 512 416 923 BoxColFill
+LCb setrgbcolor
+2555 512 N
+0 922 V
+415 0 V
+0 -922 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 4214 512 416 1087 BoxColFill
+LCb setrgbcolor
+4214 512 N
+0 1086 V
+415 0 V
+0 -1086 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 5874 512 416 1534 BoxColFill
+LCb setrgbcolor
+5874 512 N
+0 1533 V
+415 0 V
+0 -1533 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C LTw
+% End plot #4
+% Begin plot #5
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C 1.000 895 512 416 166 BoxColFill
+LCb setrgbcolor
+895 512 N
+0 165 V
+415 0 V
+0 -165 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.00 0.00 C 1.000 2555 512 416 170 BoxColFill
+LCb setrgbcolor
+2555 512 N
+0 169 V
+415 0 V
+0 -169 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.00 0.00 C 1.000 4214 512 416 199 BoxColFill
+LCb setrgbcolor
+4214 512 N
+0 198 V
+415 0 V
+0 -198 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.00 0.00 C 1.000 5874 512 416 279 BoxColFill
+LCb setrgbcolor
+5874 512 N
+0 278 V
+415 0 V
+0 -278 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.00 0.00 C LTw
+% End plot #5
+% Begin plot #6
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.55 0.00 0.55 C 1.000 1310 512 416 1486 BoxColFill
+LCb setrgbcolor
+1310 512 N
+0 1485 V
+415 0 V
+0 -1485 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.55 0.00 0.55 C 1.000 2970 512 416 1584 BoxColFill
+LCb setrgbcolor
+2970 512 N
+0 1583 V
+415 0 V
+0 -1583 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.55 0.00 0.55 C 1.000 4629 512 416 1812 BoxColFill
+LCb setrgbcolor
+4629 512 N
+0 1811 V
+415 0 V
+0 -1811 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.55 0.00 0.55 C 1.000 6289 512 416 2214 BoxColFill
+LCb setrgbcolor
+6289 512 N
+0 2213 V
+415 0 V
+0 -2213 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.55 0.00 0.55 C LTw
+% End plot #6
+% Begin plot #7
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 1.00 C 1.000 1310 512 416 807 BoxColFill
+LCb setrgbcolor
+1310 512 N
+0 806 V
+415 0 V
+0 -806 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 2970 512 416 839 BoxColFill
+LCb setrgbcolor
+2970 512 N
+0 838 V
+415 0 V
+0 -838 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 4629 512 416 1062 BoxColFill
+LCb setrgbcolor
+4629 512 N
+0 1061 V
+415 0 V
+0 -1061 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 6289 512 416 1444 BoxColFill
+LCb setrgbcolor
+6289 512 N
+0 1443 V
+415 0 V
+0 -1443 V
+-415 0 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C LTw
+% End plot #7
+% Begin plot #8
 1.000 UP
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 0.00 C LTw
+% End plot #8
+LCw setrgbcolor
+1.000 4448 3360 2367 1136 BoxColFill
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+4448 3360 N
+0 1136 V
+2367 0 V
+0 -1136 V
+-2367 0 V
+Z stroke
+% Begin plot #9
+1.000 UL
+LTb
+0.00 0.39 0.00 C LCb setrgbcolor
+1.000 UL
+LTb
+0.00 0.39 0.00 C 1.000 4544 3400 351 80 BoxColFill
+LCb setrgbcolor
+4544 3400 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.39 0.00 C LTw
+% End plot #9
+% Begin plot #10
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 1.00 0.00 C LCb setrgbcolor
+1.000 UL
+LTb
+1.00 1.00 0.00 C 1.000 4544 3560 351 80 BoxColFill
+LCb setrgbcolor
+4544 3560 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+1.00 1.00 0.00 C LTw
+% End plot #10
+% Begin plot #11
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.65 0.00 C LCb setrgbcolor
+1.000 UL
+LTb
+1.00 0.65 0.00 C 1.000 4544 3720 351 80 BoxColFill
+LCb setrgbcolor
+4544 3720 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.65 0.00 C LTw
+% End plot #11
+% Begin plot #12
 1.000 UL
 LTb
 LCb setrgbcolor
 [] 0 setdash
 0.00 0.00 1.00 C LCb setrgbcolor
-1.000 UP
 1.000 UL
 LTb
-0.00 0.00 1.00 C 858 4379 Circle
-888 3424 Circle
-917 3063 Circle
-947 2844 Circle
-977 2687 Circle
-1007 2601 Circle
-1036 2490 Circle
-1066 2397 Circle
-1096 2346 Circle
-1126 2315 Circle
-1155 2273 Circle
-1185 2234 Circle
-1215 2203 Circle
-1244 2184 Circle
-1274 2168 Circle
-1304 2151 Circle
-1334 2134 Circle
-1363 2120 Circle
-1393 2108 Circle
-1423 2097 Circle
-1453 2084 Circle
-1482 2073 Circle
-1512 2063 Circle
-1542 2054 Circle
-1571 2043 Circle
-1601 2033 Circle
-1631 2025 Circle
-1661 2016 Circle
-1690 2007 Circle
-1720 1998 Circle
-1750 1991 Circle
-1779 1983 Circle
-1809 1975 Circle
-1839 1967 Circle
-1869 1960 Circle
-1898 1954 Circle
-1928 1946 Circle
-1958 1939 Circle
-1988 1933 Circle
-2017 1927 Circle
-2047 1920 Circle
-2077 1913 Circle
-2106 1907 Circle
-2136 1902 Circle
-2166 1896 Circle
-2196 1890 Circle
-2225 1885 Circle
-2255 1879 Circle
-2285 1873 Circle
-2315 1868 Circle
-2344 1863 Circle
-2374 1858 Circle
-2404 1853 Circle
-2433 1848 Circle
-2463 1843 Circle
-2493 1838 Circle
-2523 1833 Circle
-2552 1829 Circle
-2582 1824 Circle
-2612 1820 Circle
-2642 1815 Circle
-2671 1811 Circle
-2701 1807 Circle
-2731 1803 Circle
-2760 1798 Circle
-2790 1794 Circle
-2820 1790 Circle
-2850 1786 Circle
-2879 1782 Circle
-2909 1778 Circle
-2939 1774 Circle
-2968 1770 Circle
-2998 1766 Circle
-3028 1762 Circle
-3058 1759 Circle
-3087 1755 Circle
-3117 1751 Circle
-3147 1748 Circle
-3177 1744 Circle
-3206 1741 Circle
-3236 1737 Circle
-3266 1733 Circle
-3295 1730 Circle
-3325 1727 Circle
-3355 1723 Circle
-3385 1720 Circle
-3414 1716 Circle
-3444 1713 Circle
-3474 1710 Circle
-3504 1706 Circle
-3533 1703 Circle
-3563 1700 Circle
-3593 1697 Circle
-3622 1693 Circle
-3652 1690 Circle
-3682 1687 Circle
-3712 1684 Circle
-3741 1681 Circle
-3771 1678 Circle
-3801 1675 Circle
-3831 1672 Circle
-3860 1669 Circle
-3890 1666 Circle
-3920 1663 Circle
-3949 1660 Circle
-3979 1657 Circle
-4009 1654 Circle
-4039 1651 Circle
-4068 1648 Circle
-4098 1645 Circle
-4128 1643 Circle
-4157 1640 Circle
-4187 1637 Circle
-4217 1634 Circle
-4247 1631 Circle
-4276 1629 Circle
-4306 1626 Circle
-4336 1623 Circle
-4366 1620 Circle
-4395 1618 Circle
-4425 1615 Circle
-4455 1612 Circle
-4484 1610 Circle
-4514 1607 Circle
-4544 1604 Circle
-4574 1602 Circle
-4603 1599 Circle
-4633 1597 Circle
-4663 1594 Circle
-4693 1592 Circle
-4722 1589 Circle
-4752 1587 Circle
-4782 1584 Circle
-4811 1582 Circle
-4841 1579 Circle
-4871 1577 Circle
-4901 1574 Circle
-4930 1572 Circle
-4960 1569 Circle
-4990 1567 Circle
-5020 1565 Circle
-5049 1562 Circle
-5079 1560 Circle
-5109 1558 Circle
-5138 1555 Circle
-5168 1553 Circle
-5198 1550 Circle
-5228 1548 Circle
-5257 1546 Circle
-5287 1544 Circle
-5317 1541 Circle
-5346 1539 Circle
-5376 1537 Circle
-5406 1535 Circle
-5436 1532 Circle
-5465 1530 Circle
-5495 1528 Circle
-5525 1526 Circle
-5555 1524 Circle
-5584 1521 Circle
-5614 1519 Circle
-5644 1517 Circle
-5673 1515 Circle
-5703 1513 Circle
-5733 1511 Circle
-5763 1509 Circle
-5792 1507 Circle
-5822 1504 Circle
-5852 1502 Circle
-5882 1500 Circle
-5911 1498 Circle
-5941 1496 Circle
-5971 1494 Circle
-6000 1492 Circle
-6030 1490 Circle
-6060 1488 Circle
-6090 1486 Circle
-6119 1484 Circle
-6149 1482 Circle
-6179 1480 Circle
-6209 1478 Circle
-6238 1476 Circle
-6268 1474 Circle
-6298 1472 Circle
-6327 1470 Circle
-6357 1468 Circle
-6387 1466 Circle
-6417 1464 Circle
-6446 1462 Circle
-6476 1460 Circle
-6506 1458 Circle
-6535 1457 Circle
-6565 1455 Circle
-6595 1453 Circle
-6625 1451 Circle
-6654 1449 Circle
-6684 1447 Circle
-6714 1445 Circle
-6744 1443 Circle
-6773 1441 Circle
-6803 1440 Circle
-2085 3456 Circle
-LTw
-% End plot #2
-% Begin plot #3
+0.00 0.00 1.00 C 1.000 4544 3880 351 80 BoxColFill
+LCb setrgbcolor
+4544 3880 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C LTw
+% End plot #12
+% Begin plot #13
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C LCb setrgbcolor
+1.000 UL
+LTb
+1.00 0.00 0.00 C 1.000 4544 4040 351 80 BoxColFill
+LCb setrgbcolor
+4544 4040 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+1.00 0.00 0.00 C LTw
+% End plot #13
+% Begin plot #14
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.55 0.00 0.55 C LCb setrgbcolor
+1.000 UL
+LTb
+0.55 0.00 0.55 C 1.000 4544 4200 351 80 BoxColFill
+LCb setrgbcolor
+4544 4200 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+0.55 0.00 0.55 C LTw
+% End plot #14
+% Begin plot #15
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 1.00 C LCb setrgbcolor
+1.000 UL
+LTb
+0.00 0.00 1.00 C 1.000 4544 4360 351 80 BoxColFill
+LCb setrgbcolor
+4544 4360 N
+351 0 V
+0 80 V
+-351 0 V
+0 -80 V
+Z stroke
+1.000 UL
+LTb
+0.00 0.00 1.00 C LTw
+% End plot #15
+% Begin plot #16
 1.000 UP
 1.000 UL
 LTb
 LCb setrgbcolor
 [] 0 setdash
-0.00 1.00 0.00 C LCb setrgbcolor
-1.000 UP
-1.000 UL
-LTb
-0.00 1.00 0.00 C 858 4379 TriU
-888 3424 TriU
-917 3063 TriU
-947 2844 TriU
-977 2687 TriU
-1007 2601 TriU
-1036 2490 TriU
-1066 2397 TriU
-1096 2346 TriU
-1126 2315 TriU
-1155 2273 TriU
-1185 2234 TriU
-1215 2203 TriU
-1244 2184 TriU
-1274 2168 TriU
-1304 2151 TriU
-1334 2134 TriU
-1363 2120 TriU
-1393 2108 TriU
-1423 2097 TriU
-1453 2084 TriU
-1482 2073 TriU
-1512 2063 TriU
-1542 2054 TriU
-1571 2043 TriU
-1601 2033 TriU
-1631 2025 TriU
-1661 2016 TriU
-1690 2007 TriU
-1720 1998 TriU
-1750 1991 TriU
-1779 1983 TriU
-1809 1975 TriU
-1839 1967 TriU
-1869 1960 TriU
-1898 1954 TriU
-1928 1946 TriU
-1958 1939 TriU
-1988 1933 TriU
-2017 1927 TriU
-2047 1920 TriU
-2077 1913 TriU
-2106 1907 TriU
-2136 1902 TriU
-2166 1896 TriU
-2196 1890 TriU
-2225 1885 TriU
-2255 1879 TriU
-2285 1873 TriU
-2315 1868 TriU
-2344 1863 TriU
-2374 1858 TriU
-2404 1853 TriU
-2433 1848 TriU
-2463 1843 TriU
-2493 1838 TriU
-2523 1833 TriU
-2552 1829 TriU
-2582 1824 TriU
-2612 1820 TriU
-2642 1815 TriU
-2671 1811 TriU
-2701 1807 TriU
-2731 1803 TriU
-2760 1798 TriU
-2790 1794 TriU
-2820 1790 TriU
-2850 1786 TriU
-2879 1782 TriU
-2909 1778 TriU
-2939 1774 TriU
-2968 1770 TriU
-2998 1766 TriU
-3028 1762 TriU
-3058 1759 TriU
-3087 1755 TriU
-3117 1751 TriU
-3147 1748 TriU
-3177 1744 TriU
-3206 1741 TriU
-3236 1737 TriU
-3266 1733 TriU
-3295 1730 TriU
-3325 1727 TriU
-3355 1723 TriU
-3385 1720 TriU
-3414 1716 TriU
-3444 1713 TriU
-3474 1710 TriU
-3504 1706 TriU
-3533 1703 TriU
-3563 1700 TriU
-3593 1697 TriU
-3622 1693 TriU
-3652 1690 TriU
-3682 1687 TriU
-3712 1684 TriU
-3741 1681 TriU
-3771 1678 TriU
-3801 1675 TriU
-3831 1672 TriU
-3860 1669 TriU
-3890 1666 TriU
-3920 1663 TriU
-3949 1660 TriU
-3979 1657 TriU
-4009 1654 TriU
-4039 1651 TriU
-4068 1648 TriU
-4098 1645 TriU
-4128 1643 TriU
-4157 1640 TriU
-4187 1637 TriU
-4217 1634 TriU
-4247 1631 TriU
-4276 1629 TriU
-4306 1626 TriU
-4336 1623 TriU
-4366 1620 TriU
-4395 1618 TriU
-4425 1615 TriU
-4455 1612 TriU
-4484 1610 TriU
-4514 1607 TriU
-4544 1604 TriU
-4574 1602 TriU
-4603 1599 TriU
-4633 1597 TriU
-4663 1594 TriU
-4693 1592 TriU
-4722 1589 TriU
-4752 1587 TriU
-4782 1584 TriU
-4811 1582 TriU
-4841 1579 TriU
-4871 1577 TriU
-4901 1574 TriU
-4930 1572 TriU
-4960 1569 TriU
-4990 1567 TriU
-5020 1565 TriU
-5049 1562 TriU
-5079 1560 TriU
-5109 1558 TriU
-5138 1555 TriU
-5168 1553 TriU
-5198 1550 TriU
-5228 1548 TriU
-5257 1546 TriU
-5287 1544 TriU
-5317 1541 TriU
-5346 1539 TriU
-5376 1537 TriU
-5406 1535 TriU
-5436 1532 TriU
-5465 1530 TriU
-5495 1528 TriU
-5525 1526 TriU
-5555 1524 TriU
-5584 1521 TriU
-5614 1519 TriU
-5644 1517 TriU
-5673 1515 TriU
-5703 1513 TriU
-5733 1511 TriU
-5763 1509 TriU
-5792 1507 TriU
-5822 1504 TriU
-5852 1502 TriU
-5882 1500 TriU
-5911 1498 TriU
-5941 1496 TriU
-5971 1494 TriU
-6000 1492 TriU
-6030 1490 TriU
-6060 1488 TriU
-6090 1486 TriU
-6119 1484 TriU
-6149 1482 TriU
-6179 1480 TriU
-6209 1478 TriU
-6238 1476 TriU
-6268 1474 TriU
-6298 1472 TriU
-6327 1470 TriU
-6357 1468 TriU
-6387 1466 TriU
-6417 1464 TriU
-6446 1462 TriU
-6476 1460 TriU
-6506 1458 TriU
-6535 1457 TriU
-6565 1455 TriU
-6595 1453 TriU
-6625 1451 TriU
-6654 1449 TriU
-6684 1447 TriU
-6714 1445 TriU
-6744 1443 TriU
-6773 1441 TriU
-6803 1440 TriU
-2085 3137 TriU
-LTw
-% End plot #3
-% Begin plot #4
-1.000 UP
-1.000 UL
-LTb
-LCb setrgbcolor
-[] 0 setdash
-1.00 0.00 1.00 C LCb setrgbcolor
-1.000 UP
-1.000 UL
-LTb
-1.00 0.00 1.00 C 858 4379 Circle
-917 3063 Circle
-977 2687 Circle
-1036 2490 Circle
-1096 2346 Circle
-1155 2273 Circle
-1215 2203 Circle
-1274 2168 Circle
-1334 2134 Circle
-1393 2108 Circle
-1453 2084 Circle
-1512 2063 Circle
-1571 2043 Circle
-1631 2025 Circle
-1690 2007 Circle
-1750 1991 Circle
-1809 1975 Circle
-1869 1960 Circle
-1928 1946 Circle
-1988 1933 Circle
-2047 1920 Circle
-2106 1907 Circle
-2166 1896 Circle
-2225 1885 Circle
-2285 1873 Circle
-2344 1863 Circle
-2404 1853 Circle
-2463 1843 Circle
-2523 1833 Circle
-2582 1824 Circle
-2642 1815 Circle
-2701 1807 Circle
-2760 1798 Circle
-2820 1790 Circle
-2879 1782 Circle
-2939 1774 Circle
-2998 1766 Circle
-3058 1759 Circle
-3117 1751 Circle
-3177 1744 Circle
-3236 1737 Circle
-3295 1730 Circle
-3355 1723 Circle
-3414 1716 Circle
-3474 1710 Circle
-3533 1703 Circle
-3593 1697 Circle
-3652 1690 Circle
-3712 1684 Circle
-3771 1678 Circle
-3831 1672 Circle
-3890 1666 Circle
-3949 1660 Circle
-4009 1654 Circle
-4068 1648 Circle
-4128 1643 Circle
-4187 1637 Circle
-4247 1631 Circle
-4306 1626 Circle
-4366 1620 Circle
-4425 1615 Circle
-4484 1610 Circle
-4544 1604 Circle
-4603 1599 Circle
-4663 1594 Circle
-4722 1589 Circle
-4782 1584 Circle
-4841 1579 Circle
-4901 1574 Circle
-4960 1569 Circle
-5020 1565 Circle
-5079 1560 Circle
-5138 1555 Circle
-5198 1550 Circle
-5257 1546 Circle
-5317 1541 Circle
-5376 1537 Circle
-5436 1532 Circle
-5495 1528 Circle
-5555 1524 Circle
-5614 1519 Circle
-5673 1515 Circle
-5733 1511 Circle
-5792 1507 Circle
-5852 1502 Circle
-5911 1498 Circle
-5971 1494 Circle
-6030 1490 Circle
-6090 1486 Circle
-6149 1482 Circle
-6209 1478 Circle
-6268 1474 Circle
-6327 1470 Circle
-6387 1466 Circle
-6446 1462 Circle
-6506 1458 Circle
-6565 1455 Circle
-6625 1451 Circle
-6684 1447 Circle
-6744 1443 Circle
-6803 1440 Circle
-2085 2818 Circle
-LTw
-% End plot #4
-% Begin plot #5
-1.000 UP
-1.000 UL
-LTb
-LCb setrgbcolor
-[] 0 setdash
-0.00 1.00 1.00 C LCb setrgbcolor
-1.000 UP
-1.000 UL
-LTb
-0.00 1.00 1.00 C 858 4379 TriU
-917 3063 TriU
-977 2687 TriU
-1036 2490 TriU
-1096 2346 TriU
-1155 2273 TriU
-1215 2203 TriU
-1274 2168 TriU
-1334 2134 TriU
-1393 2108 TriU
-1453 2084 TriU
-1512 2063 TriU
-1571 2043 TriU
-1631 2025 TriU
-1690 2007 TriU
-1750 1991 TriU
-1809 1975 TriU
-1869 1960 TriU
-1928 1946 TriU
-1988 1933 TriU
-2047 1920 TriU
-2106 1907 TriU
-2166 1896 TriU
-2225 1885 TriU
-2285 1873 TriU
-2344 1863 TriU
-2404 1853 TriU
-2463 1843 TriU
-2523 1833 TriU
-2582 1824 TriU
-2642 1815 TriU
-2701 1807 TriU
-2760 1798 TriU
-2820 1790 TriU
-2879 1782 TriU
-2939 1774 TriU
-2998 1766 TriU
-3058 1759 TriU
-3117 1751 TriU
-3177 1744 TriU
-3236 1737 TriU
-3295 1730 TriU
-3355 1723 TriU
-3414 1716 TriU
-3474 1710 TriU
-3533 1703 TriU
-3593 1697 TriU
-3652 1690 TriU
-3712 1684 TriU
-3771 1678 TriU
-3831 1672 TriU
-3890 1666 TriU
-3949 1660 TriU
-4009 1654 TriU
-4068 1648 TriU
-4128 1643 TriU
-4187 1637 TriU
-4247 1631 TriU
-4306 1626 TriU
-4366 1620 TriU
-4425 1615 TriU
-4484 1610 TriU
-4544 1604 TriU
-4603 1599 TriU
-4663 1594 TriU
-4722 1589 TriU
-4782 1584 TriU
-4841 1579 TriU
-4901 1574 TriU
-4960 1569 TriU
-5020 1565 TriU
-5079 1560 TriU
-5138 1555 TriU
-5198 1550 TriU
-5257 1546 TriU
-5317 1541 TriU
-5376 1537 TriU
-5436 1532 TriU
-5495 1528 TriU
-5555 1524 TriU
-5614 1519 TriU
-5673 1515 TriU
-5733 1511 TriU
-5792 1507 TriU
-5852 1502 TriU
-5911 1498 TriU
-5971 1494 TriU
-6030 1490 TriU
-6090 1486 TriU
-6149 1482 TriU
-6209 1478 TriU
-6268 1474 TriU
-6327 1470 TriU
-6387 1466 TriU
-6446 1462 TriU
-6506 1458 TriU
-6565 1455 TriU
-6625 1451 TriU
-6684 1447 TriU
-6744 1443 TriU
-6803 1440 TriU
-2085 2499 TriU
-LTw
-% End plot #5
+0.00 0.00 0.00 C LTw
+% End plot #16
 2.000 UL
 LTb
 LCb setrgbcolor
 [] 0 setdash
 1.000 UL
 LTb
-858 4379 M
-858 704 L
-5945 0 V
-0 3675 R
--5945 0 R
+688 4559 N
+688 512 L
+6223 0 V
+0 4047 V
+-6223 0 V
+Z stroke
 1.000 UP
-stroke
+1.000 UL
+LTb
 stroke
 grestore
 end

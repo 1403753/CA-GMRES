@@ -31,8 +31,8 @@
 \contentsline {paragraph}{\nonumberline GMRES(m)}{24}{section*.13}% 
 \contentsline {paragraph}{\nonumberline Monomial-GMRES(s,t)}{24}{section*.14}% 
 \contentsline {paragraph}{\nonumberline Newton-GMRES(s,t)}{24}{section*.15}% 
-\contentsline {section}{\numberline {9}Performance experiments}{34}{section.9}% 
-\contentsline {section}{\numberline {10}Conclusion}{34}{section.10}% 
-\contentsline {section}{Appendices}{36}{section*.36}% 
-\contentsline {section}{\numberline {A}Test matrices}{36}{Appendix.a.A}% 
-\contentsline {section}{\numberline {B}TODO}{36}{Appendix.a.B}% 
+\contentsline {section}{\numberline {9}Performance experiments}{32}{section.9}% 
+\contentsline {section}{\numberline {10}Conclusion}{33}{section.10}% 
+\contentsline {section}{Appendices}{35}{section*.32}% 
+\contentsline {section}{\numberline {A}Test matrices}{35}{Appendix.a.A}% 
+\contentsline {section}{\numberline {B}TODO}{35}{Appendix.a.B}% 
