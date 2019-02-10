@@ -1,11 +1,14 @@
-	set terminal pngcairo  transparent enhanced font "arial,10" fontscale 1.0 size 600, 400 
-	set output 'runtimes.png'
+	set terminal epslatex font 'phv' 8
+	set output 'runtimes_threads.tex'
 
-	set xtics("1" 1, "2" 2, "4" 3, "8" 4)
-	set yrange [0:100]
+	set yrange [0:*]	
+	set offset 0, 0, 2, 0	
 
 	set style fill solid border -1
-	set key invert
+	set key invert reverse Left top right opaque
+	set key box vertical samplen 3
+	set key height 0.1 width -5
+	
 	set grid
 
 	num_of_ksptypes=2
@@ -13,12 +16,22 @@
 	dx=0.5/num_of_ksptypes
 	offset=-0.12
 
-	set xlabel "threads"
-	set ylabel "seconds"
+	set format y '\footnotesize %g'
+	set ytics 0,1,10
 
-	plot 'data1.dat' using ($1+offset):($2+$3+$4+$5) title "SDO" linecolor rgb "#006400" with boxes, \
-			 ''                   using ($1+offset):($3+$4+$5) title "BGM" linecolor rgb "#FFFF00" with boxes, \
-			 ''                   using ($1+offset):($4+$5) title "TSQR" linecolor rgb "#FFA500 " with boxes, \
-			 ''                   using ($1+offset):5 notitle linecolor rgb "#0000FF" with boxes, \
-			 'data2.dat' using ($1+offset+dx):($2+$3) title "MGS" linecolor rgb "#8B008B" with boxes, \
-			 ''                   using ($1+offset+dx):3 title "SpMV" linecolor rgb "#0000FF" with boxes
+	set xlabel '\footnotesize Threads'
+	set ylabel '\footnotesize Relative runtime'
+	
+	mname = system("head -1 " . '../gnuplot/threads_gmres.dat' . " | awk '{print $5}'")
+	
+	set title mname
+	
+	plot '../gnuplot/threads_gmres_ca.dat' using ($1+offset):($2+$3+$4+$5+$6) title '\scriptsize Small dense operations' linecolor rgb '#006400' with boxes, \
+			 ''          using ($1+offset):($3+$4+$5+$6) title '\scriptsize Block Gram-Schmidt' linecolor rgb '#FFFF00' with boxes, \
+			 ''          using ($1+offset):($4+$5+$6) title '\scriptsize TSQR' linecolor rgb '#FFA500 ' with boxes, \
+			 ''          using ($1+offset):($5+$6) title '\scriptsize SpMV' linecolor rgb '#0000FF' with boxes, \
+			 ''          using ($1+offset):6 title '\scriptsize INIT' linecolor rgb 'red' with boxes, \
+			 '../gnuplot/threads_gmres.dat' using ($1+offset+dx):($3+$4) title '\scriptsize MGS' linecolor rgb "#8B008B" with boxes, \
+			 ''                   using ($1+offset+dx):4 title '\scriptsize SpMV' linecolor rgb "#0000FF" with boxes, \
+			 ''                   using ($1):4:xtic(2) notitle with points pt -1
+	set out

@@ -19,38 +19,6 @@ GMRES::~GMRES() {
 
 }
 
-
-
-// sparse_status_t GMRES::reduce_H(double *H, size_t s, size_t m, size_t k, double *zeta, std::vector<std::pair<double, double>> &cs) {
-	// sparse_status_t stat = SPARSE_STATUS_SUCCESS;
-	// double x1;
-	// double x2;
-
-	// for (size_t i = 0; i < s*k; ++i) {
-// // void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-		// cblas_drot(s, &H[(m + 1)*s*k + i], m + 1, &H[(m + 1)*s*k + (i + 1)], m + 1, cs.at(i).first, cs.at(i).second);
-	// }
-
-	// for (size_t i = s*k; i < s*(k+1); ++i) {
-
-		// x1 = H[(m + 1)*i + i];
-		// x2 = H[(m + 1)*i + (i + 1)];
-
-// // void cblas_drotg (double *x1, double *x2, double *c, double *s);
-		// cblas_drotg(&x1, &x2, &cs.at(i).first, &cs.at(i).second);
-
-// // void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-		// cblas_drot(s*(k + 1) - i, &H[(m + 1)*i + i], m + 1, &H[(m + 1)*i + (i + 1)], m + 1, cs.at(i).first, cs.at(i).second);
-
-// // void cblas_drot (const size_t n, double *x, const size_t incx, double *y, const size_t incy, const double c, const double s);
-		// cblas_drot(1, &zeta[i], 1, &zeta[i + 1], 1, cs.at(i).first, cs.at(i).second);
-	// }
-
-	// return stat;
-// }
-
-
-
 sparse_status_t GMRES::solve(double *x_0, double *b) {
 	this->SpMV = 0;
 	this->MGS = 0;
@@ -223,7 +191,7 @@ sparse_status_t GMRES::solve(double *x_0, double *b) {
 
 	} while(restart);
 
-	// std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[j]) << "rel. res.: " << std::abs(zeta[j]) / r_0nrm << std::endl;
+	std::cout << "gmres(m) iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[j]) << std::endl;
 
 	mkl_free(w);
 	mkl_free(x);

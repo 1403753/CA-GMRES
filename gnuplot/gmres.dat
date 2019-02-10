@@ -4,11 +4,3 @@ nr mname MGS SpMV \shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to
 3 \\footnotesize\\,bmw7st1 1.31264 0.998597
 4 \\footnotesize\\,xenon2 1.36625 1.01644
 5 \\footnotesize\\,pwtk 1.20512 0.982077
-1 \\footnotesize\\,dwb512 0.163975 0.753862
-1 \\footnotesize\\,dwb512 0.414655 1.30769
-1 \\footnotesize\\,dwb512 0.384591 1.23179
-1 \\footnotesize\\,dwb512 0.133773 0.570669
-1 \\footnotesize\\,dwb512 0.260741 0.647118
-1 \\footnotesize\\,dwb512 0.41045 1.29185
-1 \\footnotesize\\,dwb512 0.48487 1.33744
-1 \\footnotesize\\,dwb512 0.436017 1.30972

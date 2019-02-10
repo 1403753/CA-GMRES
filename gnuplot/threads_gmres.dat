@@ -1,0 +1,5 @@
+nr thread MGS SpMV \shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,6),\,for\,ILU(0)\,preconditioned\,matrix\\\footnotesize\,Sherman3\,and\,footnotesize\,restart\,length\,30\,for\,various\,numbers\,of\,threads}
+1 1 0.740335 0.878739
+2 2 0.813343 0.913301
+3 4 0.818029 1.15691
+4 8 0.839747 1.57331

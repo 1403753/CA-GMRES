@@ -1,8 +1,6 @@
 	set terminal epslatex font 'phv' 8
 	set output 'runtimes_matrices.tex'
 
-	#set xtics('\footnotesize pwtk' 1, '\footnotesize bmw' 2, '\footnotesize xenon' 3) 
-	#, '\footnotesize xenon' 3, '\footnotesize bmw' 4, '\footnotesize xenon' 5, '\footnotesize bmw' 6, '\footnotesize xenon' 7,)
 	set yrange [0:*]
 	set offset 0, 0, 2, 0
 	

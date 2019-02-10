@@ -14,7 +14,6 @@
 #include "GMRES.hpp"
 #include "PCILU0_ca.hpp"
 #include "PCNone.hpp"
-#include "PCBJ.hpp"
 #include "MmtReader.hpp"
 
 #include <gsl/gsl_rng.h>
@@ -46,13 +45,7 @@ int main(int argc, char **args) {
 	// std::string fname = "nasa4704";
 	// std::string fname = "minitest"; // too small, to work properly
 	// std::string fname = "CA-ILU(0)"; // too small, to work properly
-	
-	if(argc <= 5) {
-		PCBJ bj;
-		KSM ksm;
-		GMRES_ca gmres_ca(5,12, MONOMIAL);
-	}
-	
+
 	if (argc > 5) {
 		std::string type = std::string(args[2]);
 		
@@ -107,6 +100,24 @@ int main(int argc, char **args) {
 			}
 
 			generate_speedup_plot(&fnames, title, s, t, its);
+
+		} else if (type == "threads" && argc > 7) {
+			
+			std::istringstream iss_its(args[3]);
+			std::istringstream iss_s(args[4]);
+			std::istringstream iss_t(args[5]);
+			std::string title = std::string(args[6]);
+			
+			size_t its;
+			size_t s;
+			size_t t;
+			iss_its >> its;
+			iss_s >> s;
+			iss_t >> t;
+			
+			std::string fname = std::string(args[7]);
+
+			generate_thread_plot(fname, title, s, t, its);
 
 		}
 

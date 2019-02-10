@@ -42,16 +42,33 @@ run:
 
 
 plot: main
-	# ./main 8 speedup 2 5 12 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,12),\,for\,all\,test\,matrices,\\\footnotesize\,using\,8\,threads\,and\,restart\,length\,60}' \
+	
+	#############
+	#  threads  #
+	#############
+	
+	# ./main 2 threads 100 5 6 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,6),\,for\,ILU(0)\,preconditioned\,matrix\\\footnotesize\,Sherman3\,and\,footnotesize\,restart\,length\,30\,for\,various\,numbers\,of\,threads}' \
+	# sherman3 2>&1 | tee log.txt
+	# gnuplot ../gnuplot/runtimes_threads.gnu	
+	
+	#############
+	#  speedup  #
+	#############
+
+	# ./main 2 speedup 10 5 12 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,12),\,for\,all\,test\,matrices,\\\footnotesize\,using\,8\,threads\,and\,restart\,length\,60}' \
+	# bcsstk18 
 	# dwb512
 	# pwtk
-	# bcsstk18 watt1 bmw7st1 xenon2 
+	# watt1 bmw7st1 xenon2 
 
-	#gnuplot ../gnuplot/runtimes_matrices.gnu
+	# gnuplot ../gnuplot/runtimes_matrices.gnu
 	
 	###############
 	#  residuals  #
 	###############
+
+	./main 2 residuals sherman3 30 3 10 5 6 '\shortstack{Sherman3}'
+	gnuplot ../gnuplot/residuals.gnu
 	
 	#########
 	#  bmw  #
@@ -78,10 +95,16 @@ plot: main
 	#  Xenon2  #
 	############
 
-	# ./main 2 residuals xenon2 60 5 12 10 6 '\shortstack{Xenon2}'
+	# ./main 2 residuals xenon2 20 5 4 10 2 '\shortstack{Xenon2}'
 	# gnuplot ../gnuplot/Xenon2/residuals_xenon2.gnu
-	# gnuplot ../gnuplot/residuals.gnu
 
+	#####################
+	#  Xenon2 + ILU(0)  #
+	#####################
+
+	# ./main 2 residuals xenon2 20 5 4 10 2 '\shortstack{Xenon2}'
+	# gnuplot ../gnuplot/Xenon2/residuals_xenon2_ilu0.gnu	
+	
 	##########
 	#  pwtk  #
 	##########
@@ -100,8 +123,8 @@ plot: main
 	#  dmat  #
 	##########	
 	
-	./main 2 residuals dmat1 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+05\\\footnotesize\,Residual\,2-norm,\,log\,scale}'
-	gnuplot ../gnuplot/dmat/residuals_dmat.gnu
+	# ./main 2 residuals dmat1 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+05\\\footnotesize\,Residual\,2-norm,\,log\,scale}'
+	# gnuplot ../gnuplot/dmat/residuals_dmat.gnu
 	# ./main 2 residuals dmat2 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+10\\\footnotesize\,Residual\,2-norm,\,log\,scale}'
 	# gnuplot ../gnuplot/dmat/residuals_dmat.gnu
 	# ./main 2 residuals dmat3 60 15 4 20 3 '\shortstack{\footnotesize\,1e+04\,$\times$\,1e+04\,diagonal,\,logspace\,eigs,\,cond\,1e+15\\\footnotesize\,Residual\,2-norm,\,log\,scale}'

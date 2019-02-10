@@ -319,11 +319,11 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 			// std::cout << std::scientific << x_0[i] << std::endl;
 
 		mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, *A_mkl, descr, x_0, 0, r);	
-
+		
 		for (size_t i = 0; i < n; ++i) {
 			r[i] = b[i] - r[i];
 		}
-
+		
 		pc->precondition(r);
 
 		beta = cblas_dnrm2(n, r, 1);
@@ -357,30 +357,28 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		// for (auto t: theta_vals) {
 			// std::cout << t.second << std::endl;
 		// }
-		
-		iter += s;
 
 		reduce_H(H_reduced, s, m, 0, zeta, cs);	// after H_reduced is reduced, zeta contains s+1 values
 
 		rRes = std::abs(zeta[s]) / r_0nrm;
-				
+
 		// std::cout << "\n============= rel. res.: ";
 		// printf("%e, %e\n",rRes, ksp->getRTol() );		
 		// std::cout << "r_knrm: " << std::abs(zeta[s]) << ", r_0nrm: " << r_0nrm << std::endl;		
-		
+
+		iter += s;
+
 		if (ksp->getStoreHist()) {
 			rHist->push_back(std::pair<size_t, double>(iter, rRes));
 		}
-
-		if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
-			restart = false;
-			++k;
-		}
-
+		
 		if (restart) {
 			// outer iterations before restart
 			for (k = 1; k < t; ++k) {
-
+				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || std::abs(zeta[s]) - r_0nrm > ksp->getDTol()) {
+					restart = false;
+					break;
+				}
 				scales.clear();
 				scales.reserve(s);
 			
@@ -402,9 +400,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				cblas_daxpy(n, -theta_vals.at(0).second.real(), &Q[n*(s*k)], 1, V, 1);
 				
 				// scales.push_back(V[cblas_idamax (n, V, 1)]);
-				// scales.push_back(1);
-				scales.push_back(cblas_dnrm2(n, V, 1));
-				cblas_dscal(n, 1/scales.at(0), V, 1);
+				scales.push_back(1);
+				// scales.push_back(cblas_dnrm2(n, V, 1));
+				// cblas_dscal(n, 1/scales.at(0), V, 1);
 				
 				
 				
@@ -421,9 +419,9 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 					}
 					
 					// scales.push_back(V[n*i + cblas_idamax (n, &V[n*i], 1)]);
-					// scales.push_back(1);
-					scales.push_back(cblas_dnrm2(n, &V[n*i], 1));
-					cblas_dscal(n, 1/scales.at(i), &V[n*i], 1);
+					scales.push_back(1);
+					// scales.push_back(cblas_dnrm2(n, &V[n*i], 1));
+					// cblas_dscal(n, 1/scales.at(i), &V[n*i], 1);
 					
 				}
 
@@ -489,7 +487,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 				rRes = std::abs(zeta[s*(k + 1)]) / r_0nrm;
 				
 				iter += s;
-
+				
 				if (ksp->getStoreHist()) {
 					rHist->push_back(std::pair<size_t, double>(iter, rRes));
 					// after tsqr V contains Q and R
@@ -501,22 +499,19 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 						this->rcond_max = rcond;
 					}
 				}
-				
-				if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || rRes > ksp->getDTol()) {
-					++k;
-					restart = false;
-					break;
-				}
 			} // end for "outer iteration"
+			if (rRes < ksp->getRTol() || iter >= ksp->getMaxit() || std::abs(zeta[s]) - r_0nrm > ksp->getDTol()) {
+				restart = false;
+			}
 		}
 
 		////////////////////////
 		//  solve the system  //
 		////////////////////////
-		
+
 		cblas_dtrsv (CblasColMajor, CblasUpper, CblasNoTrans, CblasNonUnit, s*k, H_reduced, m + 1, zeta, 1);
 		cblas_dgemv (CblasColMajor, CblasNoTrans, n, m, 1, Q, n, zeta, 1, 0, x, 1);
-		
+
 		// std::cout << "solution:" <<std::endl;
 		for (size_t i = 0; i < n; ++i) {
 			x_0[i] = x_0[i] + x[i];
@@ -538,7 +533,7 @@ sparse_status_t GMRES_ca::solve(double *x_0, double *b) {
 		
 	} while(restart);
 
-	std::cout << "iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[s*k]) << std::endl;
+	std::cout << "ca-gmres iter: " << iter << ", maxit: " << ksp->getMaxit() << ", r_0nrm: " << r_0nrm << ", r_knrm: " << std::abs(zeta[s*k]) << std::endl;
 
 	mkl_free(x);
 	mkl_free(V);

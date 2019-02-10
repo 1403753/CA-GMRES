@@ -25,7 +25,7 @@
 	set format x '\footnotesize %g'
 	set format y '\footnotesize %1.e'
 	
-	set xtics 100,100,900 
+	set xtics 100,100,1000 
 	#set ytics 1e-10,1e-1,1e+0
 	
 	set ytics ('\footnotesize -4' 1e-4, '\footnotesize -3' 1e-3, '\footnotesize -2' 1e-2, '\footnotesize -1' 1e-1, '\footnotesize 0' 1e-0,)
