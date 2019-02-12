@@ -67,7 +67,7 @@
 \makeatother
 
 \begin{document}             % End of preamble and beginning of text.
-
+\pagenumbering{Roman}
  
 %titlepage
 \thispagestyle{empty}
@@ -117,7 +117,7 @@ Wien, 2019	\linebreak
 
 \pagebreak
 
-\section{Notation}
+\section*{Notation}
 Similar notation is considered as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} and Grigori et al. \cite{Grigori}.
 \subsection*{Linear Algebra}
 \begin{itemize}
@@ -134,17 +134,20 @@ Similar notation is considered as in Hoemmen et al. \cite{Hoemmen:2010:CKS:19706
 \item All matrices and vectors are assumed to be real, if not stated otherwise.
 \item Matlab notation is used for addressing elements of matrices and vectors. For example, given a matrix $A$ of size $n \times n$ and two sets of indices $\alpha$ and $\beta$, $A(\alpha,:)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$. Similarly, $A(\alpha, \beta)$ is a submatrix formed by the subset of the rows of $A$ whose indices belong to $\alpha$ and the subset of the columns of $A$ whose indices belong to $\beta$.
 \end{itemize}
+
 \subsection*{Terms and definitions}
 \begin{itemize}
-\item \textbf{Fetching}: the movement of data. This could either be \textit{reading} , \textit{copying} or \textit{sending} and \textit{receiving} messages.
+\item \textbf{Fetching}: the movement of data. This could either be \textit{reading}, \textit{copying} or \textit{sending} and \textit{receiving} messages.
 \item \textbf{Ghosting}: the storage of redundant data that does not belong to a processors assigned domain.
 \end{itemize}
+
 \subsection*{Graph Notation}
 \begin{itemize}
 \item $G(A)$ denotes the directed graph of $A$ with $G(A) = \{V,E\}$ where $V(G(A))$ is the set of vertices of $G(A)$ and $E(G(A))$ is the set of edges of $G(A)$.
 \item $R(G(A), \alpha)$ denotes the set of vertices in $G(A)$ that are reachable from any vertex in the set $\alpha$, including $\alpha$.
 \item $R(G(A), \alpha, m)$ denotes the set of vertices in $G(A)$ that are reachable by paths of length at most $m$ from any vertex in $\alpha$, including $\alpha$.
 \end{itemize}
+
 \subsection*{Abbreviations}
 \begin{itemize}
 \item \textbf{MPK}: Matrix powers kernel
@@ -153,29 +156,26 @@ Similar notation is considered as in Hoemmen et al. \cite{Hoemmen:2010:CKS:19706
 \item \textbf{MGS}: Modified Gram-Schmidt method
 \item \textbf{BCGS}: Block Classical Gram-Schmidt method
 \item \textbf{MKL}: Intel Math Kernel Library
+\item \textbf{SPD}: symmetric positive definite
 \end{itemize}
 \pagebreak
 
+\pagenumbering{arabic}
 \begin{onecolabstract}
-In this thesis the communication avoiding GMRES method named CA-GMRES of Hoemmen et al. [\textit{Communication-avoiding Krylov Subspace Methods. PhD thesis}, Berkeley, CA, USA, 2010] is examined. CA-GMRES is a Krylov Subspace method based on so called $s$-step methods and enables the solving of large sparse (nonsymmetric) linear systems.\\ Its main advantage over known standard GMRES implementations is the reduction of communication by a factor $s$ both sequentially and in parallel, which often leads to significant performance gains. With the right parameters chosen it often converges at the same rate as standard GMRES. It does so by allowing the basis and the restart length to be separately chosen which adds numerical stability and improves convergence compared to other $s$-step methods.\\ The CA-GMRES method was implemented in a shared-memory environment and then compared to a standard parallel version named GMRES($m$) in order to produce additional numerical and performance results, that further undermine the work and findings of Hoemmen et al..
+In this thesis the communication avoiding GMRES method named CA-GMRES of Hoemmen et al. [\textit{Communication-avoiding Krylov Subspace Methods. PhD thesis}, Berkeley, CA, USA, 2010] is examined. CA-GMRES is a Krylov Subspace method based on so called $s$-step methods and enables the solving of large sparse (nonsymmetric) linear systems.\\ Its main advantage over known standard GMRES implementations is the reduction of communication by a factor $s$ both sequentially and in parallel, while at the same time being able to converge at the same rate as standard GMRES. It does so by allowing the basis and the restart length to be separately chosen, which adds numerical stability and improves convergence compared to other $s$-step methods. This often leads to significant performance gains.\\ The CA-GMRES method was implemented in a shared-memory environment and then compared to a standard parallel version. Moreover, the ILU(0) preconditioner was incorporated and its behavior was analyzed in order to produce additional numerical and performance results that further support the work and findings of Hoemmen et al..
 \end{onecolabstract}
 
 \section{Introduction}
 The costs of an algorithm consist of arithmetic computations and communication.
 Compared to arithmetic, communication costs are much higher and the widening CPU-memory performance gap and increased parallelism in hardware environments further necessitate the construction of communication-avoiding algorithms.\\
+The term \textit{communication} generally denotes the movement of data either between different processors in the parallel case or between 'fast' and 'slow' memory in the sequential case, where 'fast' and 'slow' are relative to the two levels examined in the memory hierarchy (e.g., cache and DRAM, or DRAM and disk). Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way that prioritizes the reduction of communication. This often results in new challenges. E.g., in the case of CA-GMRES (Section~\ref{sec:ca-gmres}), the data dependencies between the sparse matrix-vector multiplies and dot products in the Arnoldi process are broken up, which further necessitates the incorporation of additional techniques and algorithms in order to deal with numerical instabilities and ill-conditioned basis vectors.\\
 
-The term \textit{communication} generally denotes the movement of data either between different processors in the parallel case or between 'fast' and 'slow' memory in the sequential case, where 'fast' and 'slow' are relative to the two levels examined in the memory hierarchy (e.g., cache and DRAM, or DRAM and disk). Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way such that reduction of communication is prioritized. This often results in new challenges, e.g., CA-GMRES (Section~\ref{sec:ca-gmres}) must incorporate additional techniques to deal with ill-conditioned matrices or basis vectors.
+Krylov subspace methods are iterative algorithms that can be used for solving large, sparse linear systems either in real or complex arithmetic. Many scientific computations spend much of their time in Krylov methods. Therefore, it only makes sense to try to improve these methods by reducing their communication cost. Krylov methods can be 'one-sided' or 'two-sided', have long recurrences or short recurrences, and may work for specific matrix types only (e.g., the popular Conjugate Gradient method is one-sided, has short recurrences and works for symmetric matrices only). For a more detailed description of Krylov properties see Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. The Generalized minimal residual method (GMRES) is a one-sided Krylov subspace method that uses long recurrences and works for general matrices. The goal of the communication avoiding version, namely CA-GMRES, is to take $s$ steps for the same communication cost as 1 step, which would be optimal.\\
 
-
-The CA-GMRES algorithm was implemented in a shared-memory environment.
-
-Communication avoiding GMRES is based on s-step GMRES 
-\cite{Erhel95aparallel}
-\\
-
-\pagebreak
+The rest of this thesis is organized as follows. The second section provides related work. The third section introduces GMRES and the basic principles behind the GMRES method. The fourth section explains the most important kernels in the communication avoiding version of the GMRES method. Section five gives insight into the $s$-step based Arnoldi process of Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. Section six presents the communication avoiding GMRES method, explains how a preconditioner can be applied and addresses implementation details. Finally, sections seven and eight show results for the numerical resp. performance experiments and section nine summarizes and concludes on these results.
+ 
 \section{Related work}
-s-step methods, CA-ILU(0)
+
 \pagebreak
 
 \section{GMRES}
@@ -209,37 +209,16 @@ $\underline{H}$ is then factored into $\underline{H} = \underline{G}\underline{U
 	U \\
 	0_{1, k}
 \end{pmatrix}$
-and $U$ being upper triangular. Also, $g$ is defined by $\underline{g} := \beta \underline{G}^T e_1$ without the last entry. The triangular system to solve is then given by
+and $U$ being upper triangular. Also, $\underline{g}$ is defined by $\underline{g} := \beta \underline{G}^T e_1 = \begin{pmatrix}
+g\\
+\gamma
+\end{pmatrix}$,
+where g is a subvector and $\gamma$ is the last entry in $\underline{g}$. The triangular system to solve is then given by
 \begin{equation*}
 	y_k := \text{argmin}_y \norm{g - U y}_2
 \end{equation*}
-The solution at iteration $k$ is obtained by computing $x_k = x_0 + Qy_k$. Note, that the absolute value of the last coordinate of $\underline{g}$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$.
+The solution at iteration $k$ is obtained by computing $x_k = x_0 + Qy_k$. Note, that the absolute value of $\gamma$ is $\norm{b - Ax_k}_2$, the absolute residual at iteration $k$.
 
-\begin{algorithm}
-\caption{GMRES(m)}
-\label{alg:gmres(m)}
-\begin{algorithmic}[1]
-    \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
-    \STATE restart := true
-    \WHILE{restart}
-    	\STATE $r_0:=b - Ax_0$, $\beta := \norm{r_0}_2$, $q_0 := r_0/\beta$, $\underline{Q}_0 := q_0$, $\underline{H}_0 := \varnothing$
-    	\FOR{$k = 1$ to $m$}
-			\STATE Compute $q_k$ and $h_k$ using Algorithm~\ref{alg:mgs_arnoldi}
-			\STATE Set $\underline{Q}_k := [Q_{k-1},q_k]$ and $\underline{H}_k := [\underline{H}_{k -1}, h_k]$
-			\STATE Reduce ${h_k}$ of $\underline{H}_k$ from upper Hessenberg to upper triangular form using $k$ \\
-		\hspace{\algorithmicindent} Givens rotations $G_1$, $G_2$, $ \ldots$, $G_{k}$. Apply the same rotations in the same order \\ 
-		\hspace{\algorithmicindent} to $\beta e_1$,  resulting in the length $k + 1$ vector $\zeta_{k}$.
-			\STATE Element $k + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
-\hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
-		\IF{converged}
-			\STATE restart = false, and exit for loop		
-		\ENDIF
-		\ENDFOR
-		\STATE Use the above reduction of $\underline{H}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{H}_k y - \beta e_1}_2$
-		\STATE Set $x_0 := x_0 + Q_k y_k$
-	\ENDWHILE 
-\end{algorithmic}
-\end{algorithm}
 
 \section{Computational kernels}
 %introduction; definitions: kernel, communication-avoiding
@@ -248,14 +227,14 @@ In this thesis \textit{computational kernels} define parts of an algorithm with 
 
 \subsection{Matrix powers kernel}
 The matrix powers kernel, as described by Hoemmen et al. in \cite{Hoemmen:2010:CKS:1970638}, was not implemented in the context of this thesis. However, it is an essential part to avoid communication and therefore, will be briefly summarized here.\\
-In its basic form, the MPK takes an $n \times n$ matrix $A$ and a starting vector $v_1$ as input and produces $s$ more vectors $Av, A^2v, \ldots, A^sv$. Since $A$ is usually large and sparse, it makes sense to also look at the graph of $A$, namely $G(A)$ in order to apply known graph algorithms. In $s$-step methods, the MPK replaces the sparse matrix-vector products that generate the basis for the Krylov subspace $\mathcal{K}_{s + 1}(A, v) = \left[v, Av, A^2v, \ldots, A^{s}v\right] = \left[v_1, v_2, \ldots, v_{s + 1}\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. The MPK sends a factor of $\Theta(s)$ fewer messages than $s$ SpMV invocations and the matrix has to be read from slow to fast memory only once.
+In its basic form, the MPK takes an $n \times n$ matrix $A$ and a starting vector $v_1$ as input and produces $s$ more vectors $Av, A^2v, \ldots, A^sv$. Since $A$ is usually large and sparse, it makes sense to look at the graph of $A$ as well, namely $G(A)$ in order to apply known graph algorithms. In $s$-step methods, the MPK replaces the sparse matrix-vector products that generate the basis for the Krylov subspace $\mathcal{K}_{s + 1}(A, v) = \left[v, Av, A^2v, \ldots, A^{s}v\right] = \left[v_1, v_2, \ldots, v_{s + 1}\right]$. One invocation of the MPK produces the same amount of basis vectors as $s$ sparse matrix-vector products. The MPK sends a factor of $\Theta(s)$ fewer messages than $s$ SpMV invocations and the matrix has to be read from slow to fast memory only once.
 In order to achieve this, the data and the workload are distributed among $P$ processors, where each processor is assigned a part $\alpha$ of $A(\alpha,:)$ and $v_1(\alpha)$ with $\alpha \subseteq V(G(A))$. Then, each processor fetches $A(\eta,:)$ and $v_1(\eta)$, with $\eta = R(G(A), \alpha, s) - \alpha$ in order to compute $s$ more vectors $v_2(\alpha), v_3(\alpha), \ldots, v_{s + 1}(\alpha)$ without communication. In other words, to compute $v_2(\alpha)$, the superset $\beta = R(G(A),\alpha, 1)$ is required. To compute $v_3(\alpha)$, the set $R(G(A),\beta, 1) = R(G(A),\alpha, 2)$ must be available. In general, to compute $v_{s + 1}(\alpha)$, the set $R(G(A),\alpha, s)$ must be at hand. Since
 \begin{equation*}
 \alpha \subseteq R(G(A),\alpha, 1) \subseteq \ldots \subseteq R(G(A),\alpha, s - 1) \subseteq R(G(A),\alpha, s)
-\end{equation*} it is clear, that larger steps eventually lead to increasing amounts of ghosted data and floating point operations.
+\end{equation*} it is clear that larger steps eventually lead to increasing amounts of ghosted data and floating point operations.
 
 \subsubsection{Preconditioned matrix powers kernel}
-Iterative Krylov methods often require a preconditioner that, when applied, fundamentally changes the MPK. In order to avoid communication, highly parallelizable preconditioners come to mind. E.g., Nuentsa et al. \cite{nuen11c} present their parallel GMRES with a multiplicative Schwarz preconditioner. Grigori et al. \cite{Grigori} developed \textit{CA-ILU(0)}, a very interesting type of preconditioner that, at first glance, seems unfit for a parallel and communication-avoiding environment. Section~\ref{sec:ca-ilu} summarizes their work.
+Iterative Krylov methods often require a preconditioner that, when applied, fundamentally changes the MPK. In order to avoid communication, highly parallelizable preconditioners come to mind. E.g., Nuentsa et al. \cite{nuen11c} present their parallel GMRES with a multiplicative Schwarz preconditioner. Grigori et al. \cite{Grigori} developed CA-ILU(0), a very interesting type of preconditioner that, at first glance, seems unfit for a parallel and communication-avoiding environment. Section~\ref{sec:ca-ilu} summarizes their work.
 
 \iffalse
 \cite{Hoemmen:2010:CKS:1970638} p.60\\
@@ -267,9 +246,9 @@ First, the data and the work is split between $P$ processors. Each processor is 
 processor fetches all the data needed from the neighboring processors, to compute its part $\alpha$ of the $s$ vectors. Thus, to compute $y_s(\alpha)$, each processor should receive the missing data of $y_0(\eta_s)$ and $A(\eta_s, :)$ from its neighboring processors and store it redundantly, where $\eta_s = R(G(A), \alpha, s)$. Finally, each processor computes the set $R(G(A), \alpha, s - i)$ of the vectors $y_i$ for $i = 1, 2, \ldots, s$ without any communication with the other processors.}
 \fi
 
-\subsection{Tall and skinny QR}
-TSQR is a QR decomposition algorithm especially suited for $m \times n$ matrices, where $m \gg n$. TSQR uses a divide-and-conquer approach and therefore, works on a reduction tree structure. The highest form of parallelism is achieved if TSQR uses a binary tree. In the purely sequential case a linear (flat) tree comes into play. Hybrid algorithms use anything in between and the best tree structure may depend on the matrix size and underlying architecture as Demmel et al. explain in~\cite{Demmel:2012:CA-QR_demmel}. The parallel TSQR with a binary tree is summarized below. For a more detailed description, as well as a description of the sequential algorithm, see Demmel et al.~\cite{Demmel:2012:CA-QR_demmel}.
-\paragraph{Parallel TSQR} First, the matrix $A$ is split up into $P$ parts with each submatrix having size $m/P \times n$. TSQR on a binary tree then passes $P - 1$ stages where any fast and accurate QR factorization can be applied for each stage. Let's assume $P = 4$, then 
+\subsection{Tall and skinny QR} \label{sec:tsqr}
+TSQR is a QR decomposition algorithm especially suited for $m \times n$ matrices, where $m \gg n$. TSQR uses a divide-and-conquer approach and, therefore, works on a reduction tree structure. The highest form of parallelism is achieved if TSQR uses a binary tree. In the purely sequential case a linear (flat) tree comes into play. Hybrid algorithms use anything in between and the best tree structure may depend on the matrix size and underlying architecture as Demmel et al. explain in~\cite{Demmel:2012:CA-QR_demmel}. The parallel TSQR with a binary tree is summarized below. For a more detailed description, as well as a description of the sequential algorithm, see Demmel et al.~\cite{Demmel:2012:CA-QR_demmel}.
+\paragraph{Parallel TSQR} First, the matrix $A$ is split up into $P$ parts with each submatrix having size $m/P \times n$. TSQR on a binary tree then passes $(\log_2P) + 1$ stages where any fast and accurate QR factorization can be applied for each stage. Let's assume $P = 4$, then 
 \begin{equation*}
 A =
 \begin{pmatrix}
@@ -280,7 +259,7 @@ At stage zero the QR factorization for each submatrix $A_i$ is computed, with
 \begin{equation*}
 A_0 = Q_{00}R_{00}, \qquad A_1 = Q_{10}R_{10}, \qquad A_2 = Q_{20}R_{20} \quad \text{and} \quad A_3 = Q_{30}R_{30}.
 \end{equation*}
-The successive stage merges the $R$-factors and computes the next QR-factorizations
+The successive stage merges the $R$-factors and computes the next QR factorizations
 \begin{equation*}
 \begin{pmatrix}
 R_{00} \\
@@ -320,11 +299,11 @@ A_0\\A_1\\A_2\\A_3
 Q_{02} \cdot R_{02}.
 \end{equation}
 
-Figure~\ref{fig:tsqr} shows, that this approach only requires $\mathcal{O}(\log P)$ messages on $P$ processors (a factor of $\Theta (s)$ fewer messages than Householder QR or MGS). \cite{Demmel:2012:CA-QR_demmel} show that, sequentially, the matrix is read only once, saving a factor of $\Theta(s)$ transferred data between levels of the memory hierarchy (compared to Householder QR or MGS). 
+Figure~\ref{fig:tsqr} shows that this approach only requires $\mathcal{O}(\log_2 P)$ messages on $P$ processors (a factor of $\Theta (s)$ fewer messages than Householder QR or MGS). \cite{Demmel:2012:CA-QR_demmel} show that, sequentially, the matrix is read only once, saving a factor of $\Theta(s)$ transferred data between levels of the memory hierarchy (compared to Householder QR or MGS). 
 Of course,~\eqref{eq:tsqr} is stored implicitly to save storage space.\\
 The orthogonality of the $Q$ factor computed by Classical or Modified Gram-Schmidt depends on the condition number of $A$. Householder QR, on the other hand, does not make any assumptions on $\mathcal{K}(A)$, it is \textit{unconditionally} stable. Therefore, Householder QR is a good choice for the local QR factorizations in TSQR, which makes TSQR inherently unconditionally stable as well.\\
 
-For reasons explained in Section~\ref{sec:scaling_first_basis_vec} one might want TSQR to produce an $R$ factor with real nonnegative diagonal entries. Demmel et al. show in $\cite{doi:10.1137/nonnegdiags_demmel} $ how to modify the usual Householder QR in a numerically stable way so that such a factor is generated. This modified Householder QR factorization can then be incorporated, in order to let TSQR as well produce an $R$ factor with real nonnegative diagonal entries.
+For reasons explained in Section~\ref{sec:scaling_first_basis_vec} one might want TSQR to produce an $R$ factor with real nonnegative diagonal entries. Demmel et al. show in $\cite{doi:10.1137/nonnegdiags_demmel} $ how to modify the usual Householder QR in a numerically stable way so that such a factor is generated. This modified Householder QR factorization can then be incorporated in order to let TSQR as well produce an $R$ factor with real nonnegative diagonal entries.
 
 
 \begin{figure}
@@ -380,20 +359,21 @@ For reasons explained in Section~\ref{sec:scaling_first_basis_vec} one might wan
 	(RR) ->[matching] (Q02R02)
 	};
 }
-\caption{Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage, the second subscript is the stage number. The blue boxes represent the processors involved at each stage.}
+\caption{Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage and the second subscript is the stage number. The blue boxes represent the processors involved at each stage.}
 \label{fig:tsqr}
 \end{figure}
 
-\subsection{Block Gram-Schmidt} \label{sec:gs}
-The Gram-Schmidt process takes a set of $s$ linearly independent basis vectors $V = [v_1, \ldots, v_s]$ and creates an orthonormal basis that spans the same subspace as $V$. Unlike unblocked Gram-Schmidt methods, blocked Gram-Schmidt algorithms work on blocks of columns at a time instead of one column at a time. If the matrix consists of $s$ columns this usually requires a factor of $\Theta (s)$ fewer messages and a factor of $\Theta(s)$ fewer data transfers between levels of the memory hierarchy.\\
-In their performance analysis with a simplified parallel model, Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} also show that blocked classical Gram-Schmidt is superior to a blocked modified Gram-Schmidt variant in terms of the messages sent between processors. However, they state that BCGS and BMGS contain similar accuracy properties as their unblocked versions. Therefore, BCGS is not as numerically stable as the blocked MGS variant. The modified Gram-Schmidt method is often used for basis orthogonalization in the Arnoldi iteration (Section~\ref{sec:ca_arnoldi}). Greenbaum et al. showed in \cite{Greenbaum97numericalbehaviour}, that it is the linear independence of the Arnoldi basis, not the orthogonality near machine precision, that is important when solving linear systems with GMRES. Therefore, the CA-GMRES algorithm (Section~\ref{sec:ca-gmres}) can make use of the classical Gram-Schmidt approach, that is presented below.
+\subsection{Block Gram-Schmidt} \label{sec:block gram-schmidt}
+The Gram-Schmidt process takes a set of $s$ linearly independent basis vectors $V = [v_1, \ldots, v_s]$ and creates an orthonormal basis that spans the same subspace as $V$. Unlike unblocked Gram-Schmidt methods, blocked Gram-Schmidt algorithms work on blocks of columns at a time instead of one column at a time. If the matrix consists of $s$ columns, this usually requires a factor of $\Theta (s)$ fewer messages and a factor of $\Theta(s)$ fewer data transfers between levels of the memory hierarchy.\\
+In their performance analysis with a simplified parallel model, Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} also show that blocked classical Gram-Schmidt is superior to a blocked modified Gram-Schmidt variant in terms of the messages sent between processors. However, they state that BCGS and BMGS contain similar accuracy properties as their unblocked versions. Therefore, BCGS is not as numerically stable as the blocked MGS variant. The modified Gram-Schmidt method is often used for basis orthogonalization in the Arnoldi iteration (Section~\ref{sec:ca_arnoldi}). Greenbaum et al. showed in \cite{Greenbaum97numericalbehaviour}, that it is the linear independence of the Arnoldi basis, not the orthogonality near machine precision, that is important when solving linear systems with GMRES. Therefore, the CA-GMRES algorithm (Section~\ref{sec:ca-gmres}) can make use of the classical Gram-Schmidt approach that is presented below.
 
 \paragraph{BCGS with TSQR} Algorithm~\ref{alg:bcgs} shows a version of BCGS that incorporates TSQR in order to improve vector orthogonalization. BCGS orthogonalizes the $s$ basis vectors in $V_k$ against all previous basis vectors in $Q$ by computing
 \begin{equation}
 	V_k' := (I - QQ^T)V_k = V_k - Q(Q^T V_k).
 \end{equation}
 
-TSQR then orthogonalizes the $s$ basis vectors with respect to each other. Combined, these two kernels do the work of updating a QR factorization with new columns. The advantage of TSQR and BCGS over unblocked MGS is, that they move asymptotically less data between levels of the memory hierarchy. Unlike MGS, BCGS consists almost entirely of dense matrix-matrix operations. TSQR improves orthogonality of the block columns. Therefore, if algorithm~\ref{alg:bcgs} is used for solving linear systems, reorthogonalization can be omitted entirely.
+TSQR then orthogonalizes the $s$ basis vectors with respect to each other. Combined, these two kernels do the work of updating a QR factorization with new columns. The advantage of TSQR and BCGS over unblocked MGS is that they move asymptotically less data between levels of the memory hierarchy. Unlike MGS, BCGS consists almost entirely of dense matrix-matrix operations. Also, TSQR improves orthogonality of the block columns. Therefore, if Algorithm~\ref{alg:bcgs} is used for solving linear systems, reorthogonalization can be omitted entirely.\\
+Since TSQR stores its $Q$ matrices implicitly, they must be extracted for the highly optimized dense matrix-matrix operations of BCGS. This step involves additional communication but should be still faster than directly performing the local QR-like computations that are required for the implicit representation.
 
 \begin{algorithm}
 \caption{BCGS with TSQR}
@@ -436,8 +416,8 @@ The Arnoldi iteration is a method for solving sparse nonsymmetric eigenvalue pro
 \begin{equation} \label{eq:AQ=QH}
 	AQ = \underline{Q} \underline{H}.
 \end{equation}
-In the GMRES method the columns of $\underline{Q}$ form a basis for the Krylov Subspace $\mathcal{K}_{s + 1}(A, r_0)$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to classical Gram-Schmidt (MGS based Arnoldi is outlined in algorithm~\ref{alg:mgs_arnoldi}). On the other hand, CGS is more suited for parallel implementations, because it provides fewer synchronization points.
-Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides better orthogonalization than MGS. Since Householder QR requires the vectors to be available all at once, Walker produced $s$ Monomial basis vectors first. Bai et al. \cite{doi:10.1093/imanum/NewtonGMRES_bai} later improved on Walkers work by replacing the (usually ill-conditioned) Monomial basis with the Newton basis. Greenbaum et al. \cite{Greenbaum97numericalbehaviour} later showed, that the loss of orthogonality caused by MGS usually does not affect the solution of the linear system at all. This gave rise to a new communication avoiding version of the Arnoldi method, that will be used by CA-GMRES, namely Arnoldi($s,t$).
+In the GMRES method the columns of $\underline{Q}$ form a basis for the Krylov Subspace $\mathcal{K}_{s + 1}(A, r_0)$. There are many ways to orthogonalize successive basis vectors. Modified Gram-Schmidt is often employed because it performs numerically better compared to classical Gram-Schmidt (MGS based Arnoldi is outlined in Algorithm~\ref{alg:mgs_arnoldi}). On the other hand, CGS is more suited for parallel implementations, because it provides fewer synchronization points.
+Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides better orthogonalization than MGS. Since Householder QR requires the vectors to be available all at once, Walker produced $s$ Monomial basis vectors first. Bai et al. \cite{doi:10.1093/imanum/NewtonGMRES_bai} later improved on Walkers work by replacing the (usually ill-conditioned) Monomial basis with the Newton basis. Greenbaum et al. \cite{Greenbaum97numericalbehaviour} later showed, that the loss of orthogonality caused by MGS usually does not affect the solution of the linear system at all. This gave rise to a new communication avoiding version of the Arnoldi method that will be used by CA-GMRES, namely Arnoldi($s,t$).
 
 \begin{algorithm}[H]
 \caption{MGS based Arnoldi iteration}
@@ -459,9 +439,9 @@ Walker \cite{doi:10.1137/Walker} used Householder QR instead because it provides
 \end{algorithm}
 
 \subsection{Arnoldi(s,t)}
-Arnoldi($s,t$) was first introduced by Hoemmen et al. in \cite{Hoemmen:2010:CKS:1970638} and is based on Walkers Householder Arnoldi method \cite{doi:10.1137/Walker} and the $s$-step Arnoldi method of Kim and Chronopoulos \cite{Chronopoulos}. Like Walkers version, Arnoldi($s,t$) produces $s$ basis vectors at once, except that, after $s$ steps, Walkers method must restart. This makes choosing a good $s$ difficult. If $s$ is too short, the method may converge too slow or may not converge at all. If $s$ is too large, the method is not numerically stable.\\ Arnoldi($s,t$) decouples the step size from the restart length by introducing an additional parameter $t$. The parameter $t$ refers to the number of iterations that produce $s$ orthonormal basis vectors before the method must restart. Therefore, the restart length $m$ is given by $m = s \cdot t$, where $s$ refers to the number of \textit{inner} iterations and $t$ denotes the number of \textit{outer} iterations.
-The $s$-step Arnoldi method of Kim and Chronopoulos also shares this property, but is not as effective in terms of avoiding communication and basis orthogonalization. Also, while Arnoldi($s,t$) can use any $s$-step basis, Kim and Chronopoulos' algorithm is restricted to the Monomial basis only.\\
-Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} use the MPK to produce  $s$ basis vectors at each outer iteration and considered the Monomial, the Newton and the Chebyshev basis. Depending on the basis type their MPK has to compute either a one-term, two-term, or three-term recurrence respectively. Since out of the three, the Chebyshev basis is the most expensive to compute and also reacts more sensitive to bad eigenvalue approximations than the Newton basis (see Section~\ref{sec:Newtonbasis}), it is not considered here. More details on the Chebyshev basis can be found, e.g. in \cite{Hoemmen:2010:CKS:1970638} and in Joubert and Carey \cite{Joubert_Carey_Chebyshev}.
+Arnoldi($s,t$) was first introduced by Hoemmen et al. in \cite{Hoemmen:2010:CKS:1970638} and is based on Walkers Householder Arnoldi method \cite{doi:10.1137/Walker} and the $s$-step Arnoldi method of Kim and Chronopoulos \cite{Chronopoulos}. Like Walkers version, Arnoldi($s,t$) produces $s$ basis vectors at once, except that, after $s$ steps, Walkers method must restart. This makes choosing a good $s$ difficult. If $s$ is too short, the method may converge too slow or may not converge at all. If $s$ is too large, the method is not numerically stable.\\ Arnoldi($s,t$) decouples the step size from the restart length by introducing an additional parameter $t$. The parameter $t$ refers to the number of iterations that produce $s$ orthonormal basis vectors before the method must restart. Therefore, the restart length $m$ is given by $m = s \cdot t$, where the basis length $s$ refers to the number of \textit{inner} iterations and $t$ denotes the number of \textit{outer} iterations.
+The $s$-step Arnoldi method of Kim and Chronopoulos also shares this independence property, but is not as effective in terms of avoiding communication and basis orthogonalization. Also, while Arnoldi($s,t$) can use any $s$-step basis, Kim and Chronopoulos' algorithm is restricted to the Monomial basis only.\\
+Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} use the MPK to produce  $s$ basis vectors at each outer iteration and considered the Monomial, the Newton and the Chebyshev basis. Depending on the basis type, their MPK has to compute either a one-term, two-term, or three-term recurrence respectively. Among the three, the Chebyshev basis is the most expensive to compute and also reacts more sensitive to bad eigenvalue approximations than the Newton basis (see Section~\ref{sec:Newtonbasis}). Therefore, it is not considered here. A more detailed description of the Chebyshev basis can be found, e.g. in \cite{Hoemmen:2010:CKS:1970638} and in Joubert and Carey \cite{Joubert_Carey_Chebyshev}.
 
 \subsubsection{The Monomial basis}
 The Monomial basis in s-step Krylov methods is given by 
@@ -518,8 +498,8 @@ Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}, among many other authors, choose
 %polinomial interpolation at shifts $\theta_1$, $\theta_2$, $\ldots$, $\theta_s$.
 
 \paragraph{The Leja ordering}
-This section only provides an overview of the Leja ordering. For more details see Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}.
- The Leja ordering takes as input a set of shifts $\theta_1, \ldots, \theta_s$ and orders them so that a particular measure of the 'distance' of the current shift $\theta_j$ is maximized to the previous shifts $\theta_1, \ldots, \theta_{j - 1}$ (see ~\eqref{eq:prod_to_max}). These shifts may come in complex conjugate pairs and with some multiplicity $\mu$ (Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} point out, that the Ritz values from a Krylov method may be unique in exact arithmetic, but need not be in machine arithmetic). If the ordered Ritz values have consecutive complex conjugate pairs, the Newton basis can be computed using real arithmetic only (see the next paragraph for details). Unfortunately the Leja ordering may separate complex conjugate pairs during the ordering process. The \textit{Modified} Leja ordering is an extension of the Leja ordering and ensures that complex conjugate pairs stay in consecutive order with the leading entry always comprising the positive imaginary part. The ordering process for both the Leja and Modified Leja orderings comprises the sets $K_j$ for $j = 1,2, \ldots, s$, where $K_j$ is given by
+This section only provides an overview of the Leja ordering. For a more detailed description see Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}.
+ The Leja ordering takes as input a set of shifts $\theta_1, \ldots, \theta_s$ and orders them so that a particular measure of the 'distance' of the current shift $\theta_j$ is maximized to the previous shifts $\theta_1, \ldots, \theta_{j - 1}$ (see ~\eqref{eq:prod_to_max}). These shifts may come in complex conjugate pairs and with some multiplicity $\mu$ (Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} point out, that the Ritz values from a Krylov method may be unique in exact arithmetic, but need not be in machine arithmetic). If the ordered Ritz values have consecutive complex conjugate pairs, the Newton basis can be computed using real arithmetic only (see the next paragraph for details). Unfortunately, the Leja ordering may separate complex conjugate pairs during the ordering process. The \textit{Modified} Leja ordering is an extension of the Leja ordering and ensures that complex conjugate pairs stay in consecutive order with the leading entry always comprising the positive imaginary part. The ordering process for both the Leja and Modified Leja orderings comprises the sets $K_j$ for $j = 1,2, \ldots, s$, where $K_j$ is given by
 \begin{equation}
 K_j := \{\theta_{j + 1}, \theta_{j + 2}, \ldots, \theta_s\}.
 \end{equation}
@@ -574,33 +554,65 @@ This also affects the change of basis matrix $\underline{B}$. If the Ritz values
 \end{equation*}
 
 \subparagraph{Performance notes}
-Avoiding complex arithmetic in that way necessitates an extra SpMV operation in the Newton basis which, in the worst case, leads to as many floating point operations as in the Chebyshev basis (which uses a three-term recurrence). However, in their performance analysis Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} observed, that the runtime of the Newton basis was still close to the runtime of the Monomial basis. \\
+Avoiding complex arithmetic in that way necessitates an extra SpMV operation in the Newton basis which, in the worst case, leads to as many floating point operations as in the Chebyshev basis (which uses a three-term recurrence). However, in their performance analysis Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} observed that the runtime of the Newton basis was still close to the runtime of the Monomial basis. \\
 \cite{Hoemmen:2010:CKS:1970638} further point out, that this approach might lose accuracy when $\theta_{j - 1}$ is real and $\theta_j$ and $\theta_{j + 1}$ form a complex conjugate pair with $\Re(\theta_j) = \theta_{j - 1} $. Then
 \begin{eqnarray*}
 v_j &=& (A - \theta_{j - 1} I )v_{j - 1} \\
 v_{j + 1} &=& (A - \Re(\theta_j) I )(A - \theta_{j - 1} I )v_{j - 1} \\
 		  &=& (A - \theta_{j - 1} I )^2v_{j - 1}
 \end{eqnarray*}
-is equivalent to computing the Monomial basis with a possibly ill-conditioned  matrix $A - \theta_{j - 1} I$. This might occur, if the Ritz values reside within an ellipse with a long vertical axis and very short horizontal axis on the complex plane.
+is equivalent to computing the Monomial basis with a possibly ill-conditioned  matrix $A - \theta_{j - 1} I$. This might occur if the Ritz values reside within an ellipse with a long vertical axis and very short horizontal axis on the complex plane.
 
 \subsubsection{The Arnoldi(s,t) algorithm}
 
+\begin{algorithm}
+\caption{Arnoldi($s,t$)}
+\label{alg:arnoldi(s,t)}
+\begin{algorithmic}[1]
+    \REQUIRE $n \times n$ matrix $A$ and starting vector $v$ of size $n$\\
+    \ENSURE An orthonormal $n \times st + 1$ matrix $\underline{\frak{Q}} = \left[\frak{Q},q_{st + 1}\right]$ and a nonsingular $st + 1 \times st$ upper Hessenberg matrix $\underline{H}$ such that $AQ = \underline{Q} \underline{H}$
+    \STATE $\beta := \norm{v}_2$, $q_1 := v/\beta$
+    \FOR{$k = 0$ to $t - 1$}
+    	\IF{$k = 0$}
+    		\STATE Compute $\underline{Q}_0$ and $\underline{H}_0$ using Algorithm~\ref{alg:mgs_arnoldi}
+    		\STATE Set $\underline{\frak{Q}}_0 := \underline{Q}_0$ and $\underline{\frak{H}}_0 := \underline{H}_0$
+			\STATE Compute Ritz values from $H_0$
+    	\ELSE
+    		\STATE Fix basis conversion matrix $\underline{B}_k$
+    		\STATE Compute $\underline{\acute{V}}_k$
+    		\STATE $\underline{\acute{\frak{R}}}_{k - 1, k} := \underline{\frak{Q}}^T_{k - 1} \underline{\acute{V}}_k$
+    	\STATE $\underline{\acute{V}}_k' := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k - 1} \underline{\acute{\frak{R}}}_{k - 1, k}$
+    	\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$ using TSQR
+    	\STATE Compute $\underline{\frak{H}}_{k - 1, k} := - \frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k$
+		\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k$
+		\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
+    	\STATE $\underline{\frak{H}}_k : = 
+    	\begin{pmatrix}
+    		\frak{H}_{k - 1} & \underline{\frak{H}}_{k - 1, k}\\
+    		h_{k - 1} e_1 e_{sk}^T & H_k\\
+    		0_{1,sk} & h_k e^T_s
+    	\end{pmatrix}$
+    	\ENDIF
+	\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
 In this thesis, the main focus lies on the Newton-based CA-GMRES method. Therefore, only the Netwon-based Arnoldi($s,t$) algorithm is outlined in Algorithm~\ref{alg:arnoldi(s,t)} and described below.\\
 
-The Arnoldi($s,t$) algorithm starts its first outer iteration with $s$ steps of the standard Arnoldi method which results in an $n \times s + 1$ basis vector matrix $\underline{Q}_0$, with
+\paragraph{First inner iteration} The Arnoldi($s,t$) algorithm starts its first outer iteration with $s$ steps of the standard Arnoldi method which results in an $n \times s + 1$ basis vector matrix $\underline{Q}_0$, with
 \begin{equation}
 \underline{Q}_0 = [Q_0, q_{s + 1}] = [q_1, q_2, \ldots, q_s, q_{s + 1}]
 \end{equation}
-and a nonsingular upper Hessenberg matrix $\underline{H}_0$ that satisfies
+and an $s + 1 \times s$ nonsingular upper Hessenberg matrix $\underline{H}_0$ that satisfies
 \begin{equation}
 AQ_0 = \underline{Q}_0 \underline{H}_0.
 \end{equation}
-Approximations of the eigenvalues of $A$ are obtained by computing the eigenvalues of the $s \times s$ upper left submatrix of $\underline{H}_0$, namely $H_0$. As mentioned in Section~\ref{sec:Newtonbasis}, the eigenvalues of $H_0$ are also known as the Ritz values $\theta_1, \ldots, \theta_s$ and will be used as shifts for the Newton basis in successive outer iterations.\\
+Approximations of the eigenvalues of $A$ are obtained by computing the eigenvalues of the $s \times s$ upper submatrix of $\underline{H}_0$, namely $H_0$. As mentioned in Section~\ref{sec:Newtonbasis}, the eigenvalues of $H_0$ are also known as the Ritz values $\theta_1, \ldots, \theta_s$ and will be used as shifts for the Newton basis in successive outer iterations.\\
 
-At iteration $k$ (with $k > 0$) the Newton basis vector matrix \begin{equation}
+\paragraph{Successive inner iterations} At iteration $k$ (with $k > 0$) the last basis vector of the previous iteration is taken as the new start vector $v_{sk + 1}$ and the Newton basis vector matrix \begin{equation}
  \underline{\acute{V}}_k = [\acute{V}_k, v_{s(k + 1) + 1}] = [v_{sk+2}, \ldots, v_{s(k + 1)}, v_{s(k + 1) + 1}]
 \end{equation}
-is computed. Then, the upper Hessenberg matrix $\frak{H}_k$ must be recreated. From relation~\eqref{eq:AV=VB} emerges
+is computed. Then, the upper Hessenberg matrix $\frak{H}_k$ must be recreated. From Relation~\eqref{eq:AV=VB} emerges
 \begin{equation}
 A [\underline{\frak{Q}}_{k - 1}, \acute{V}_k] = [\underline{\frak{Q}}_{k - 1}, \underline{\acute{V}}_k]\underline{\frak{B}}_k
 \end{equation}
@@ -650,7 +662,7 @@ where
 are the interim results of the BCGS process and $\acute{R}_k$ and $\underline{\acute{R}}_k$ are the $R$ factors in the QR factorization of $V_k$ resp. $\underline{V}_k$.
 
 
-The Arnoldi relation~\eqref{eq:AQ=QH} yields
+The Arnoldi Relation~\eqref{eq:AQ=QH} yields
 \begin{eqnarray*}
 	A [\underline{\frak{Q}}_{k - 1}, \acute{Q}_k] = [ \underline{\frak{Q}}_{k - 1}, \underline{\acute{Q}}_k ] \underline{\frak{H}}_k
 \end{eqnarray*}
@@ -693,7 +705,14 @@ the upper Hessenberg matrix $\underline{\frak{H}}_k$ can be retrieved, with
 Hoemmen et al. derive in \cite{Hoemmen:2010:CKS:1970638} how to compute Equation~\eqref{eq:AQR=QRB} efficiently. It suffices to show the results only here.
 However, in order to understand their meaning, some matrices have to be broken down or must be repartitioned first. This has nothing to do with additional computations or data movement, it is purely notational.\\
 
-First, four variations on the interim result of the BCGS process are defined by
+First, four different parts of the basis vector matrix $V$ are defined by
+\begin{eqnarray*}
+\acute{V}_k &=& [v_{sk + 2}, \ldots, v_{s(k + 1)}],\\
+\underline{\acute{V}}_k &=& [\acute{V}_k, v_{s(k + 1) + 1}],\\
+V_k &=& [v_{sk + 1}, \acute{V}_k],\\
+\underline{V}_k &=& [v_{sk + 1}, \underline{\acute{V}}_k].
+\end{eqnarray*}
+Then, four variations on the interim result of the BCGS process are defined by
 \begin{eqnarray*}
 	\frak{R}_{k - 1, k} &=& \frak{Q}_{k - 1}^TV_k,\\
 	\underline{\frak{R}}_{k - 1, k} &=& \frak{Q}_{k - 1}^T\underline{V}_k,\\
@@ -710,7 +729,7 @@ Given this notation, the $R$ factors $\underline{\frak{R}}_k$ and $\frak{R}_k$ c
 \begin{pmatrix}
 	I_{sk} & \underline{\frak{R}}_{k - 1, k} \\
 	0_{s + 1, sk} & \underline{R}_k \\
-\end{pmatrix} \\
+\end{pmatrix}, \\
 \frak{R}_k &=&
 \begin{pmatrix}
 	I_{sk + 1} & \acute{\frak{R}}_{k - 1, k} \\
@@ -722,9 +741,15 @@ Given this notation, the $R$ factors $\underline{\frak{R}}_k$ and $\frak{R}_k$ c
 \end{pmatrix}
 \end{eqnarray*}
 
-where $R_k$ and $\underline{\acute{R}}_k$ are $s \times s$ matrices, $\underline{R}_k$ is $s + 1 \times s + 1$ and $\acute{R}_k$ is an $s - 1 \times s - 1$ matrix.\\
-Notice, that $\underline{\frak{R}}_{k - 1, k} e_1 = \frak{Q}^T_{k - 1} \underline{V}_k e_1 = \frak{Q}^T_{k - 1} q_{sk + 1} = 0_{sk, 1}$, and 
-$\frak{R}_{k - 1, k} e_1 = 0_{sk, 1}$ as well.
+where $R_k$ and $\underline{\acute{R}}_k$ are $s \times s$ matrices, $\underline{R}_k$ is $s + 1 \times s + 1$ and $\acute{R}_k$ is an $s - 1 \times s - 1$ matrix. (see Appendix~\ref{app:R_2} for a sketch of $\underline{\frak{R}}_2$ with $s = 3$)\\
+
+Since the last basis vector of the previous iteration (e.g., the last column of $\underline{\frak{Q}}_{k - 1}$) is orthonormal to all previous basis vectors and since it is taken as the start vector of the current iteration, it holds that
+\begin{equation*}
+\underline{\frak{Q}}^T_{k - 1} \underline{V}_k e_1 = \underline{\frak{Q}}^T_{k - 1} q_{sk + 1} = e_{sk + 1}.
+\end{equation*}
+
+From that follows $\underline{\frak{R}}_{k - 1, k} e_1 = \frak{Q}^T_{k - 1} \underline{V}_k e_1 = \frak{Q}^T_{k - 1} q_{sk + 1} = 0_{sk, 1}$ resp. 
+$\frak{R}_{k - 1, k} e_1 = 0_{sk, 1}$ and $\underline{R}_k e_1 = 1$ resp. $R_k e_1 = 1$.
 
 $\underline{R}_k$ is broken down into
 \begin{equation*}
@@ -755,43 +780,15 @@ with
 \begin{eqnarray} \label{eq:h_blackletter_k_}
 \underline{\frak{H}}_{k - 1, k} &:=& -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k,\\
 H_k &:=& R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k,\\
-h_k &:=& \tilde{\rho}^{-1}_k \rho_k b_k
+h_k &:=& \tilde{\rho}^{-1}_k \rho_k b_k.
 \end{eqnarray}
 
-\begin{algorithm}
-\caption{Arnoldi($s,t$)}
-\label{alg:arnoldi(s,t)}
-\begin{algorithmic}[1]
-    \REQUIRE $n \times n$ matrix $A$ and starting vector $v$ of size $n$\\
-    \ENSURE An orthonormal $n \times st + 1$ matrix $\underline{\frak{Q}} = \left[\frak{Q},q_{st + 1}\right]$ and a nonsingular $st + 1 \times st$ upper Hessenberg matrix $\underline{H}$ such that $AQ = \underline{Q} \underline{H}$
-    \STATE $\beta := \norm{v}_2$, $q_1 := v/\beta$
-    \FOR{$k = 0$ to $t - 1$}
-    	\IF{$k = 0$}
-    		\STATE Compute $\underline{Q}_0$ and $\underline{H}_0$ using Algorithm~\ref{alg:mgs_arnoldi}
-    		\STATE Set $\underline{\frak{Q}}_0 := \underline{Q}_0$ and $\underline{\frak{H}}_0 := \underline{H}_0$
-			\STATE Compute Ritz values from $H_0$
-    	\ELSE
-    		\STATE Fix basis conversion matrix $\underline{B}_k$
-    		\STATE Compute $\underline{\acute{V}}_k$
-    		\STATE $\underline{\acute{\frak{R}}}_{k - 1, k} := \underline{\frak{Q}}^T_{k - 1} \underline{\acute{V}}_k$
-    	\STATE $\underline{\acute{V}}_k' := \underline{\acute{V}}_k - \underline{\frak{Q}}_{k - 1} \underline{\acute{\frak{R}}}_{k - 1, k}$
-    	\STATE Compute QR factorization of $\underline{\acute{V}}'_k \rightarrow \underline{\acute{Q}}_k \underline{\acute{R}}_k$ using TSQR
-    	\STATE Compute $\underline{\frak{H}}_{k - 1, k} := - \frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k$
-		\STATE Compute $H_k := R_k B_k R^{-1}_k + \tilde{\rho}^{-1}_k b_k z_k e^T_s - h_{k-1} e_1 e^T_{sk} \frak{R}_{k-1,k} R^{-1}_k$
-		\STATE Compute $h_k := \tilde{\rho}^{-1}_k \rho_k b_k$
-    	\STATE $\underline{\frak{H}}_k : = 
-    	\begin{pmatrix}
-    		\frak{H}_{k - 1} & \underline{\frak{H}}_{k - 1, k}\\
-    		h_{k - 1} e_1 e_{sk}^T & H_k\\
-    		0_{1,sk} & h_k e^T_s
-    	\end{pmatrix}$
-    	\ENDIF
-	\ENDFOR
-\end{algorithmic}
-\end{algorithm}
-
 \section{CA-GMRES} \label{sec:ca-gmres}
-The CA-GMRES algorithm as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} uses all of Arnoldi($s,t$) together with a Givens rotation scheme that exposes the absolute residual error $\norm{b - Ax_k}_2$ at every outer iteration $k$. The difference to GMRES($m$) is, that $s$ Givens rotations have to be applied at once. A Newton-based version of the CA-GMRES algorithm is outlined in Algorithm~\ref{alg:ca-gmres}.
+The CA-GMRES algorithm as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} uses all of Arnoldi($s,t$) together with a Givens rotation scheme that exposes the absolute residual error $\norm{b - Ax_k}_2$ at every inner iteration $j$. Therefore, the approximate solution $x_j$ need not be computed in order to estimate convergence. CA-GMRES also solves the linear least-squares problem 
+\begin{equation*}
+	y_k := argmin_y \norm{\underline{\frak{H}}_k y - \beta e_1}_2
+\end{equation*}
+at every outer iteration $k$ and computes a new approximate solution $x_k := x_0 + \frak{Q}_k y_k$. The difference to GMRES($m$) is, that $s$ Givens rotations have to be applied at once. A Newton-based version of the CA-GMRES algorithm is outlined in Algorithm~\ref{alg:ca-gmres}.
 
 \iffalse
 The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:stdgmreslsp}:
@@ -855,22 +852,12 @@ The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:s
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Preconditioning}
-For effectiveness GMRES is usually combined with a preconditioner. There exist different kinds of preconditioners, like left, right, and split preconditioners. In this thesis, only left preconditioners are considered. The preconditioner matrix $M^{-1}$ is applied to the left of $A$, where $M \approx A$. The system for CA-GMRES to solve is then given by $M^{-1}Ax = M^{-1}b$.\\
-
-\textit{Scaling} is a special type of preconditioning. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} considered two types of scaling in order to prevent rapid basis vector growth and improve numeric stability:
-\begin{enumerate}
-\item Balancing: replacing $A$ by $A' = DAD^{-1}$ with $D$ diagonal.
-\item Equilibration: replacing $A$ by $A' = D_rAD_c$ with $D_r$ and $D_c$ diagonal.
-\end{enumerate}
-In their experiments solving nonsymmetric linear systems with CA-GMRES \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration proved quite effective and almost made the basis type irrelevant. We observed something similar after applying the ILU(0) preconditioner (see Section~\ref{sec:ca-ilu}).
-
 \subsection{Scaling the first basis vector} \label{sec:scaling_first_basis_vec}
-The Monomial-based CA-GMRES could also start without the standard Arnoldi method by generating an $n \times s + 1$ Monomial basis vector matrix first and then performing a QR factorization as in Equation~\eqref{eq:unitary_scaling}. The vectors created from the QR factorization might differ from the ones created by the standard Arnoldi method by a unitary scaling. Suppose that Arnoldi($s,t$) and the standard Arnoldi method start with the same starting vector $q_1$. After $st$ steps, Arnoldi($s,t$) developed an $n \times st + 1$ basis vector matrix $\underline{\frak{Q}}$ and an $st + 1 \times st$ upper Hessenberg matrix $\underline{\frak{H}}$ and standard Arnoldi produced an $n \times st + 1$ basis vector matrix $\underline{\hat{\frak{Q}}}$ and an $st + 1 \times st$ upper Hessenberg matrix $\underline{\hat{\frak{H}}}$. $\underline{\textfrak{Q}}$ then differs from $\underline{\hat{\textfrak{Q}}}$ by a unitary scaling $\underline{\Theta} := \text{diag}(\theta_1$, $\theta_2$, $\ldots$, $\theta_{st}$, $\theta_{st+1}$) with $\theta_j = |1|$,  $\forall j$, such that $\underline{\hat{\textfrak{Q}}} = \textfrak{\underline{Q}}\underline{\Theta}$. Also, $\underline{\frak{H}}$ differs from $\underline{\hat{\frak{H}}}$ such that $\hat{\underline{\frak{H}}} = \underline{\Theta}^T \underline{\frak{H}} \Theta$, where $\Theta$ is the $st \times st$ upper left submatrix of the $st + 1 \times st + 1$ diagonal matrix $\underline{\Theta}$. Suppose that iteration $st$ of standard GMRES computes an approximate solution $\textcolor{darkcyan}{\hat{x}} = x_0 + \color{darkcyan}\hat{\frak{Q}} \hat{y}$ and CA-GMRES computes $\textcolor{magenta}x = x_0 + \color{magenta}\frak{Q} y$. Hoemmen et al. show in \cite{Hoemmen:2010:CKS:1970638} that the computed solutions relate only through the first direction $\theta_1$, with $\textcolor{darkcyan}{\hat{x}} = x_0 + \theta_1 \color{magenta}\frak{Q}y$. I.e., if $\theta \ne 1$, the CA-GMRES solution $x$ will differ from the standard GMRES solution $\hat{x}$.
+The Monomial-based CA-GMRES method could also start without the standard Arnoldi method by generating an $n \times s + 1$ Monomial basis vector matrix first and then performing a QR factorization as in Equation~\eqref{eq:unitary_scaling}. The vectors created from the QR factorization might differ from the ones created by the standard Arnoldi method by a unitary scaling. Suppose that Arnoldi($s,t$) and the standard Arnoldi method start with the same starting vector $q_1$. After $st$ steps, Arnoldi($s,t$) developed an $n \times st + 1$ basis vector matrix $\underline{\frak{Q}}$ and an $st + 1 \times st$ upper Hessenberg matrix $\underline{\frak{H}}$ and standard Arnoldi produced an $n \times st + 1$ basis vector matrix $\underline{\hat{\frak{Q}}}$ and an $st + 1 \times st$ upper Hessenberg matrix $\underline{\hat{\frak{H}}}$. $\underline{\textfrak{Q}}$ then differs from $\underline{\hat{\textfrak{Q}}}$ by a unitary scaling $\underline{\Theta} := \text{diag}(\theta_1$, $\theta_2$, $\ldots$, $\theta_{st}$, $\theta_{st+1}$) with $\theta_j = |1|$,  $\forall j$, such that $\underline{\hat{\textfrak{Q}}} = \textfrak{\underline{Q}}\underline{\Theta}$. Also, $\underline{\frak{H}}$ differs from $\underline{\hat{\frak{H}}}$ such that $\hat{\underline{\frak{H}}} = \underline{\Theta}^T \underline{\frak{H}} \Theta$, where $\Theta$ is the $st \times st$ upper left submatrix of the $st + 1 \times st + 1$ diagonal matrix $\underline{\Theta}$. Suppose that iteration $st$ of standard GMRES computes an approximate solution $\textcolor{darkcyan}{\hat{x}} = x_0 + \color{darkcyan}\hat{\frak{Q}} \hat{y}$ and CA-GMRES computes $\textcolor{magenta}x = x_0 + \color{magenta}\frak{Q} y$. Hoemmen et al. show in \cite{Hoemmen:2010:CKS:1970638} that the computed solutions relate only through the first direction $\theta_1$, with $\textcolor{darkcyan}{\hat{x}} = x_0 + \theta_1 \color{magenta}\frak{Q}y$. I.e., if $\theta \ne 1$, the CA-GMRES solution $x$ will differ from the standard GMRES solution $\hat{x}$.
 This issue can be addressed in multiple ways. Either the QR factorization used must not change direction of the first column or $\theta_1 = \left< r_0, q_1 \right>$ / $\beta$ must be computed which adds additional communication. A third approach is to compute the first set of basis vectors with the standard Arnoldi method (this happens naturally when the first outer iteration is started with standard Arnoldi in order to compute Ritz values for the Newton basis).
 
 \subsection{A different approach}
-If the Newton-based GMRES method in \cite{Erhel95aparallel} did not converge, Erhel computed 2$s$ Ritz values instead of $s$ for better eigenvalue approximations. She then picked $s$ of them and sorted them with the Modified Leja ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, these $2s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. If the $2s$ Ritz values only consist of complex conjugate pairs and $s$ is odd, a complex conjugate pair has to be split. To address this issue and still avoid complex arithmetic one could either compute $2s + 1$ Ritz values or simply omit the positive imaginary part of the last Ritz value. Another approach might be to apply all 2$s$ Ritz values to two consecutive outer iterations of Arnoldi($s,t$). Since computing $2s$ Ritz values yields better approximations of the eigenvalues, one could as well incorporate them all. This slightly changes the way Equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from Equation~\eqref{eq:B_blackletter_k_} by that additional entry with
+If the Newton-based GMRES method in \cite{Erhel95aparallel} did not converge, Erhel computed 2$s$ Ritz values instead of $s$ for better eigenvalue approximations. She then picked $s$ of them and sorted them with the Modified Leja ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, these $2s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. If the $2s$ Ritz values only consist of complex conjugate pairs and $s$ is odd, a complex conjugate pair has to be split. To address this issue and still avoid complex arithmetic, one could either compute $2s + 1$ Ritz values or simply omit the positive imaginary part of the last Ritz value. Another approach might be to apply the 2$s$ Ritz values to two consecutive outer iterations of Arnoldi($s,t$). Since computing $2s$ Ritz values yields better approximations of the eigenvalues, one could incorporate them all as well. This slightly changes the way Equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from Equation~\eqref{eq:B_blackletter_k_} by that additional entry with
 \begin{equation}
 \underline{\frak{B}}_{k} = 
 \begin{pmatrix}
@@ -884,46 +871,47 @@ Equation~\eqref{eq:h_blackletter_k_} then changes to
 \underline{\frak{H}}_{k - 1, k} := -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k - \Im (\theta_s)^2 e_{sk} e^T_1  R^{-1}_{k}.
 \end{equation}
 
-\subsection{CA-ILU(0) preconditioner} \label{sec:ca-ilu}
+\subsection{Preconditioning}
+For better effectiveness GMRES is usually combined with a preconditioner. Different kinds of preconditioners exist, like left, right, and split preconditioners. In this thesis, only left preconditioners are considered. The preconditioner matrix $M^{-1}$ is applied to the left of $A$, where $M \approx A$. The system for CA-GMRES to solve is then given by $M^{-1}Ax = M^{-1}b$.\\
+
+\textit{Scaling} is a special type of preconditioning. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} considered two types of scaling in order to prevent rapid basis vector growth and improve numeric stability:
+\begin{enumerate}
+\item Balancing: replacing $A$ by $A' = DAD^{-1}$ with $D$ diagonal.
+\item Equilibration: replacing $A$ by $A' = D_rAD_c$ with $D_r$ and $D_c$ diagonal, so that the largest absolute value in every row and every column is approximately equal to $1$.
+\end{enumerate}
+In their experiments for solving nonsymmetric linear systems with CA-GMRES Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration proved quite effective and almost made the basis type irrelevant. We observed mostly similar behavior after applying a standard version of the CA-ILU(0) preconditioner which will be explained below.
+
+\subsubsection{CA-ILU(0) preconditioner} \label{sec:ca-ilu}
 $M = LU$ \\
 Algorithm~\ref{alg:ca-gmres} in CA-GMRES apply $M^{-1}$ to the red parts, i.e. replace $r_0 = b - Ax_0$ by $r_0 = M^{-1}(b - Ax_0)$ and  $v_{i + 1} = (A - \theta_i)v_i$ by $v_{i + 1} = M^{-1}((A - \theta_i)v_i)$
 summarize \cite{Grigori} (can be very long or short, dependent on overall length)
 \subsection{Convergence metrics}
 CA-GMRES produces a cheap convergence metric, namely the absolute residual $\norm{r_{k+1}}_2$ relative to the initial residual $\norm{r_0}_2$. Might not be the best choice, depends too much on initial guess $x_0$.\\
 
-If 
+If
 \begin{itemize}
 \item $\norm{x_0}_2$ too large $\rightarrow$ $\norm{r_0}$ will be large and iteration will stop too early.
 \item $x_0 = 0$ harder to make the relative residual small if $A$ is ill-conditioned and $x_{k+1}$ lies nearly in the nullspace of $A$.
 \end{itemize}
 \subsection{Implementation details}
-The algorithm was implemented in the \texttt{C++} language and mainly uses the Intel Math Kernel Library (MKL), the design is oriented on PETSc's KSP framework which is written in \texttt{C} but emulates object oriented design.
+The CA-GMRES algorithm was implemented in the \texttt{C++} language and incorporates the LAPACK and BLAS routines provided by the Intel Math Kernel Library (MKL). The class design is inspired by PETSc's KSP framework which is written in \texttt{C} but emulates object oriented design. Simple patterns like the Strategy Pattern were implemented as well.\\
+BLAS and LAPACK functions are written in the Fortran language. Fortran itself stores matrices in column major order while C++ adopts the row major order layout. MKL provides a C-interface to most of the Fortran-style BLAS and LAPACK routines. The TSQR factorization, which MKL implemented as described in Section~\ref{sec:tsqr}, is one of the few routines that are used but not supported. Therefore, dense matrices are stored in column major order and the unsupported Fortran routines are called directly.
 
-MKL especially optimized routines that most profit from cache-management techniques such as \texttt{dgemm()}.
+MKL provides highly optimized routines that most profit from cache-management techniques such as \texttt{dgemm()}.
+The major optimization techniques used in MKL include loop unrolling, blocking, and data prefetching.
 
-The Intel$\textregistered$ Math Kernel Library has been optimized by exploiting both processor and system features and capabilities. Special care has been given to those routines that most profit from cache-management
-techniques. These especially include matrix-matrix operation routines such as dgemm().
-In addition, code optimization techniques have been applied to minimize dependencies of scheduling integer and floating-point units on the results within the processor.
-The major optimization techniques used throughout the library include:
-• Loop unrolling to minimize loop management costs
-• Blocking of data to improve data reuse opportunities
-• Copying to reduce chances of data eviction from cache
-• Data prefetching to help hide memory latency
-• Multiple simultaneous operations (for example, dot products in dgemm) to eliminate stalls due to arithmetic unit pipelines
-• Use of hardware features such as the SIMD arithmetic units, where appropriate.
-These are techniques from which the arithmetic code benefits the most.
-
-Differences:
+Differences to the implementation of Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} are outlined below:
 \begin{itemize}
-\item The MPK nor the CA-ILU(0) preconditioner were implemented due to time constraints.
-\item Monomial-based CA-GMRES starts with standard Arnoldi like Newton-based CA-GMRES.
-\item The Modified Leja ordering, like in \cite{Hoemmen:2010:CKS:1970638}, uses a capacity estimate to prevent over- and underflows in the product to maximize, but it does not perturb the input values if over- or underflows still occur.
-\item did not consider computing 2$s$ Ritz values as in Erhel \cite{Erhel95aparallel}.
-\item To avoid rapid growth in the length of the basis vectors the basis vectors are scaled by their 2-norm right after they are generated. This would break the communication avoiding scheme of the MPK, if it was used at this point. In order to avoid communication as well, Hoemmen et al. address this issue by equilibrating the matrix beforehand.
+\item The CA-GMRES always starts its first inner iteration with the standard Arnoldi iteration, regardless of the basis type. This is not needed in case the Monomial basis is used. However, starting with standard Arnoldi slows down the algorithm but might benefit the convergence if the Monomial basis is on the edge of being unstable.
+\item The CA-GMRES always starts an outer iteration with the standard Arnoldi iteration. If the Newton basis is used, the first iteration must start with standard Arnoldi in order to compute Ritz values. If the Ritz values are good approximations to the eigenvalues, it might not be necessary to compute those values again in successive outer iterations. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} do not address techniques or provide information on when to compute new Ritz values. One might monitor the estimate of the reciprocal condition number of the basis vector matrix and compute new values in case the condition worsens. Since the $R$ factor of the QR factorization of $V$ and $V$ have the same condition number the complexity for computing the reciprocal condition number is rather cheap with $\mathcal{O}(s^2)$.
+\item Although, the implemented Modified Leja Ordering algorithm uses a capacity estimate to prevent over/underflows in the product to maximize, it does not ultimately perturb the input values if over/underflows still occur like in \cite{Hoemmen:2010:CKS:1970638}. Also, the algorithm depicted in \cite{Hoemmen:2010:CKS:1970638} and Appendix~\ref{app:MLO} has complexity $\mathcal{O}(s^3)$. Computing the Ritz values from an upper $s \times s$ Hessenberg matrix requires that many operations anyway. However, Reichel et al. \cite{Reichel1990} point out that the Modfied Leja ordering can also be implemented with complexity $\mathcal{O}(s^2)$ as well.
+\item A method that computes 2$s$ Ritz values instead of $s$ (as in Erhel \cite{Erhel95aparallel}) was not implemented.
+\item Neither the MPK nor the CA-ILU(0) preconditioner were fully implemented due to time constraints. Therefore, the CA-GMRES algorithm uses the highly optimized sparse matrix-vector routine that is provided by MKL.  Communication could be avoided anyway by giving MKL the hint that $s$ successive SpMV operations are coming up for the creation of the basis vectors. This optimization technique named \texttt{mkl\_sparse\_set\_mv\_hint} would work for the Monomial basis, but might be ruined by the additional vector operation(s) needed in the Newton basis.
+\item To avoid rapid growth in the length of the basis vectors the basis vectors are scaled by their 2-norm right after they are generated. This would break the communication avoiding scheme of the MPK if it was implemented at this point. In order to avoid communication as well, Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} address this issue by equilibrating the matrix only.
 \end{itemize}
 
 \section{Numerical experiments}
-This section provides a numerical comparison between CA-GMRES and standard GMRES. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} showed in their numerical experiments, that for the correct choice of basis and parameters of the restart length $m = s \cdot t$ the CA-GMRES converges in no more iterations than standard GMRES (with same restart length) for almost all test cases. This is due to the fact, that the ability to choose the s-step basis length way shorter than the restart length improves stability and performance. They suggest $s = 5$ and $t = 12$ often gave the best performance. In order to recreate their results, mainly the same parameter settings, matrices and right hand side vectors were used.\\
+This section provides a numerical comparison between CA-GMRES and standard GMRES. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} showed in their numerical experiments, that for the correct choice of basis and parameters of the restart length $m = s \cdot t$ the CA-GMRES converges in no more iterations than standard GMRES (with the same restart length) for almost all test cases. This is due to the fact, that the ability to choose the $s$-step basis length way shorter than the restart length improves stability and performance. They suggest $s = 5$ and $t = 12$ often gave the best performance. In order to recreate their results, mainly the same parameter settings, matrices and right hand side vectors were used.\\
 
 Like in \cite{Hoemmen:2010:CKS:1970638}, the true solution $\hat{x}$ is generated with
 \begin{equation}
@@ -936,51 +924,19 @@ Hoemmen et al. state, that $\hat{x}$ was chosen in this way because a completely
 
 \subsection{Key for convergence plots}
 The $x$ axis of the convergence plots shows the number of iterations of the Krylov methods tested. The $y$ axis of the convergence plots shows the 2-norm of the residual $\norm{b - Ax_k}_2$ relative to the 2-norm of the initial residual $\norm{r_0}_2$ at iteration $k$.
-\paragraph{GMRES(m)} Standard GMRES with restart length $m$. Its convergence metric is always shown as a black line.
+\paragraph{GMRES(m)} Standard GMRES with restart length $m$ (the algorithm is outlined in Appendix~\ref{app:gmres(m)}). Its convergence metric is always shown as a black line.
 
 \paragraph{Monomial-GMRES(s,t)} Monomial-based CA-GMRES with basis length $s$ and restart length $m = s \cdot t$. Its convergence metric is plotted as a circle with different colors for each $s$ value shown in the plot.
 
 \paragraph{Newton-GMRES(s,t)} Newton-based CA-GMRES with basis length $s$ and restart length $m = s \cdot t$. Its convergence metric is plotted as a triangle with different colors for each $s$ value shown in the plot.
-\iffalse
-\begin{figure}
-	\centering
-	\resizebox{.9\textwidth}{!}{\input{dmat1.tex}}
-	\caption{•••}
-	\label{fig:dmat1}
-\end{figure}
-\begin{figure}
-	\centering
-	\resizebox{.9\textwidth}{!}{\input{dmat2.tex}}
-	\caption{•••}
-	\label{fig:dmat2}
-\end{figure}
-\fi
-\begin{figure}
+
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{dmat3.tex}}	
-	\caption{Convergence plot for a diagonal matrix with a 2-norm condition number $\mathcal{K}$ and logarithmically spaced eigenvalues between 1 and $1/\mathcal{K}$}
+	\caption{Convergence plot for a positive diagonal matrix with a 2-norm condition number $\mathcal{K}$ and logarithmically spaced eigenvalues between 1 and $1/\mathcal{K}$.}
 	\label{fig:dmat3}
 \end{figure}
-\iffalse
-\begin{figure}
-	\centering
-	\resizebox{.9\textwidth}{!}{\input{dmat1_scale.tex}}
-	\caption{•••}
-	\label{fig:dmat1_scale}
-\end{figure}
-\begin{figure}
-	\centering
-	\resizebox{.9\textwidth}{!}{\input{dmat2_scale.tex}}
-	\caption{•••}
-	\label{fig:dmat2_scale}
-\end{figure}
-\begin{figure}
-	\centering
-	\resizebox{.9\textwidth}{!}{\input{dmat3_scale.tex}}
-	\caption{•••}
-	\label{fig:dmat3_scale}
-\end{figure}
-\fi
+
 \begin{figure}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{watt1_noscale.tex}}
@@ -1005,33 +961,47 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
 	\caption{•••}
 	\label{fig:bmw7st1}
 \end{figure}
-\iffalse
-\begin{figure}
-	\centering
-	\resizebox{.9\textwidth}{!}{\input{bmw7st1_scale.tex}}
-	\caption{•••}
-	\label{fig:bmw7st1_scale}
-\end{figure}
-\fi
+
 \begin{figure}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{xenon2.tex}}
-	\caption{•••}
-	\label{fig:xenon2}
+	\caption{without scaling of basis vectors}
+	\label{fig:xenon2_noscale}
 \end{figure}
+\begin{figure}
+	\centering
+	\resizebox{.9\textwidth}{!}{\input{xenon2_scale.tex}}
+	\caption{scaled basis vectors}
+	\label{fig:xenon2_scale}
+\end{figure}
+
 
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \resizebox{.9\textwidth}{!}{\input{xenon2_scale.tex}}
-  \caption{without preconditioner}
-  \label{fig:xenon2_scale}
+  \resizebox{.9\textwidth}{!}{\input{sherman3.tex}}
+  \caption{Without preconditioner}
+  \label{fig:sherman3_unscaled}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \resizebox{.9\textwidth}{!}{\input{sherman3_ilu0.tex}}
+  \caption{With ILU(0) preconditioner}
+  \label{fig:sherman3_ilu0}
+\end{subfigure}
+\caption{A case where ILU(0) is in favor of the convergence behavior for all tested methods.}
+\label{fig:sherman3}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \resizebox{.9\textwidth}{!}{\input{xenon2.tex}}
+  \caption{Without preconditioner}
+  \label{fig:xenon2}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \resizebox{.9\textwidth}{!}{\input{xenon2_ilu0.tex}}
-  \caption{with ILU(0) preconditioner}
+  \caption{With ILU(0) preconditioner}
   \label{fig:xenon2_ilu0}
 \end{subfigure}
 \caption{A case where ILU(0) adversely affects the convergence behavior for all tested methods.}
@@ -1041,64 +1011,65 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
-  \centering
-  \resizebox{.9\textwidth}{!}{\input{sherman3.tex}}
-  \caption{without preconditioner}
-  \label{fig:sherman3_unscaled}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \resizebox{.9\textwidth}{!}{\input{sherman3_ilu0.tex}}
-  \caption{with ILU(0) preconditioner}
-  \label{fig:sherman3_ilu0}
-\end{subfigure}
-\caption{A case where ILU(0) is in favor of the convergence behavior for all tested methods.}
-\label{fig:test}
-\end{figure}
-
-
-
-\begin{figure}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{bcsstk18_noscale.tex}}
-	\caption{•••}
+	\caption{Without basis vector scaling}
 	\label{fig:bcsstk18_noscale}
-\end{figure}
-\begin{figure}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{bcsstk18_scale.tex}}
-	\caption{•••}
+	\caption{With basis vector scaling}
 	\label{fig:bcsstk18_scale}
-\end{figure}
-\begin{figure}
+\end{subfigure}
+\caption{A case where ILU(0) is in favor of the convergence behavior for all tested methods.}
+\label{fig:bcsstk18}
+\begin{subfigure}{.5\textwidth}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{pwtk_noscale.tex}}
-	\caption{•••}
+	\caption{Without basis vector scaling}
 	\label{fig:pwtk_noscale}
-\end{figure}
-\begin{figure}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{pwtk_scale.tex}}
-	\caption{•••}
+	\caption{With basis vector scaling}
 	\label{fig:pwtk_scale}
+\end{subfigure}
+\caption{In the unscaled case in figure~\ref{fig:pwtk_noscale}, the Newton-GMRES with the shorter basis length $s = 5$ is slightly unstable between 500 and 600 iterations. The scaling in figure~\ref{fig:pwtk_scale} fixes this, but drastically worsens the overall convergence for the Newton-GMRES with longer basis length $s = 10$.}
+\label{fig:pwtk}
 \end{figure}
-
-
 
 
 
 \section{Performance experiments}
+For the performance experiments considered runtime until convergence and the runtime until the maximum number of iterations was reached. Kernels do not show SpMV dominates together with the initial inner iteration for computing Ritz values.
+\begin{figure}[H]
+	\centering
+	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads.tex}}
+	\caption{This plot presents the runtimes for different numbers of threads for a large sparse unpreconditioned matrix (Xenon2). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The left bar shows the stacked relative runtimes of the kernels used in CA-GMRES, the right bar depicts the stacked relative runtimes of the kernels (SpMV and MGS) used in GMRES($m$). The tolerance $\epsilon$ for the convergence metric was set to $5\text{e}-5$. This is too high for practical applications but it is needed in order to let the method converge in under 1000 iterations (see Figures~\ref{fig:xenon2_noscale},\ref{fig:xenon2_scale}). Both methods converged at iteration 390 and both methods have a very high relative forward error of $ 8.3951\text{e}+23$. The computations were done 10 times for each thread and the average runtime was taken.}
+\end{figure}
+
+
 \begin{figure}[H]
 	\centering
 	\resizebox{1.0\textwidth}{!}{\input{runtimes_matrices.tex}}
 	\caption{left CA-GMRES, right GMRES}
 \end{figure}
+
 \begin{figure}[H]
 	\centering
-	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads.tex}}
-	\caption{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Relative convergence tolerance $\epsilon$ is $1\text{e}-14$. CA-GMRES converged at iteration 685, GMRES(m) converged at iteration 682. relative forward error CA-GMRES: $6.65\text{e}-12$, relative forward error for GMRES($m$): $7.09\text{e}-12$. Computations were done a 100 times and the average was taken.
+	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads_sherman3.tex}}
+	\caption{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Convergence tolerance $\epsilon$ is $1\text{e}-14$. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. relative forward error CA-GMRES: $6.61\text{e}-12$, relative forward error for GMRES($m$): $7.97\text{e}-12$. Computations were done 100 times and the average was taken.
  }
-	\label{fig:pwtk_scale}
+	\label{fig:runtimes_threads_sherman3}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads_xenon2.tex}}
+	\caption{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Relative convergence tolerance $\epsilon$ is $5\text{e}-5$. Both methods converged at iteration 390. Both methods have a relative forward error : $ 8.3951\text{e}+23$. Computations were done 10 times and the average was taken.}
+	\label{fig:runtimes_threads_xenon2}
 \end{figure}
 
 \section{Conclusion}
@@ -1190,7 +1161,38 @@ The main components of a single iteration of GMRES are
 \bibliographystyle{plain}
 \bibliography{BSc_Ernstbrunner_01403753}
  \listofalgorithms
+ 
+
 \begin{appendices}
+
+\section{GMRES(m)}\label{app:gmres(m)}
+\begin{algorithm}
+\caption{GMRES(m)}
+\label{alg:gmres(m)}
+\begin{algorithmic}[1]
+    \REQUIRE $n \times n$ linear system $Ax = b$ and initial guess $x_0$
+    \STATE restart := true
+    \WHILE{restart}
+    	\STATE $r_0:=b - Ax_0$, $\beta := \norm{r_0}_2$, $q_0 := r_0/\beta$, $\underline{Q}_0 := q_0$, $\underline{H}_0 := \varnothing$
+    	\FOR{$k = 1$ to $m$}
+			\STATE Compute $q_k$ and $h_k$ using Algorithm~\ref{alg:mgs_arnoldi}
+			\STATE Set $\underline{Q}_k := [Q_{k-1},q_k]$ and $\underline{H}_k := [\underline{H}_{k -1}, h_k]$
+			\STATE Reduce ${h_k}$ of $\underline{H}_k$ from upper Hessenberg to upper triangular form using $k$ \\
+		\hspace{\algorithmicindent} Givens rotations $G_1$, $G_2$, $ \ldots$, $G_{k}$. Apply the same rotations in the same order \\ 
+		\hspace{\algorithmicindent} to $\beta e_1$,  resulting in the length $k + 1$ vector $\zeta_{k}$.
+			\STATE Element $k + 1$ of $\zeta_k$ is the 2-norm (in exact arithmetic) of the current residual \\
+\hspace{\algorithmicindent} $r_{k + 1} = b - Ax_{k + 1}$ of the current solution $x_{k + 1}$.
+		\IF{converged}
+			\STATE restart = false, and exit for loop		
+		\ENDIF
+		\ENDFOR
+		\STATE Use the above reduction of $\underline{H}_k$ to upper triangular form and $\zeta_k$ to solve $y_k :=$ \\ \hspace{\algorithmicindent} $\text{argmin}_{y} \norm{\underline{H}_k y - \beta e_1}_2$
+		\STATE Set $x_0 := x_0 + Q_k y_k$
+	\ENDWHILE 
+\end{algorithmic}
+\end{algorithm}
+
+
 \section{Test matrices}
 discussion of test matrices \\
 
@@ -1201,19 +1203,30 @@ bmw & 141K & 3.7M \\
 bcsstk18 & 12K & 149K \\
 pwtk & 218K & 3.7M \\
 watt1 & 1856 & 11550 \\
-xenon2 & 157K & 3.9M
+xenon2 & 157K & 3.9M \\
+sherman3 & 5005 & 20K \\
+
 \end{tabular}
 
 \section{TODO}
 \begin{itemize}
-\item describe CA-GMRES
-\item write implementation details
+\item describe ILU(0)
+\item write implementation details (how to build)
 \item write numerical experiments
 \item write performance experiments
-\item write introduction
-\item write abstract
-Address recomputation of ritz values
+\item write related work
 \end{itemize}
+
+\section{Visualizing the R matrix}\label{app:R_2}
+\begin{center}
+	\includegraphics[scale=0.5]{visualize_R2.png}
+\end{center}
+\section{Modified Leja Ordering}\label{app:MLO}
+\begin{center}
+	\includegraphics[scale=1.3]{ModifiedLejaOrdering.png}
+\end{center}
+
 \end{appendices}
+
 \end{document}
 % End of document.

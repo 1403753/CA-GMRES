@@ -94,18 +94,18 @@ sparse_status_t generate_residual_plot(std::string fname, std::string title, siz
 
 	// generate random solution
 	
-	file.open("tx.vec");
-	for (size_t i = 0; i < n; ++i) {
-		tx[i] = (gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n)) *2;
-		file << std::scientific << std::setprecision(20) << tx[i] << std::endl;
-	}
-	file.close();
-	
-	// ifile.open("tx.vec");
+	// file.open("tx.vec");
 	// for (size_t i = 0; i < n; ++i) {
-		// ifile >> tx[i];
+		// tx[i] = (gsl_ran_flat(rng, -1, 1) + std::sin(2*M_PI*i/n)) *2;
+		// file << std::scientific << std::setprecision(20) << tx[i] << std::endl;
 	// }
-	// ifile.close();
+	// file.close();
+	
+	ifile.open("tx.vec");
+	for (size_t i = 0; i < n; ++i) {
+		ifile >> tx[i];
+	}
+	ifile.close();
 
 	mkl_sparse_d_mv(SPARSE_OPERATION_NON_TRANSPOSE, 1, A_mkl, descr, tx, 0, b);
 
@@ -266,8 +266,9 @@ sparse_status_t generate_speedup_plot(std::vector<std::string> *fnames, std::str
 
 
 sparse_status_t thread_solve(std::string fname, std::string title, size_t idx, KSM *ksm, size_t s, size_t t, size_t its, float *runtime_single) {
-	
-	mkl_set_num_threads(std::pow(2,idx - 1));
+unsigned threads[12] = {1,2,4,8,16,32,40,44,46,47,48,64};
+	// mkl_set_num_threads(std::pow(2,idx - 1));
+	mkl_set_num_threads(threads[idx - 1]);
 	
 	sparse_matrix_t               A_mkl;                          // n x n matrix A
 	sparse_index_base_t           indexing;
@@ -372,14 +373,16 @@ sparse_status_t thread_solve(std::string fname, std::string title, size_t idx, K
 	}
 	
 	file.open("../gnuplot/threads_gmres.dat", std::ios_base::app);
-	file << idx << " " << std::pow(2,idx - 1) << " " << avg_MGS / *runtime_single << " " << avg_SpMV / *runtime_single << std::endl;
+	/* file << idx << " " << std::pow(2,idx - 1) << " " << avg_MGS / *runtime_single << " " << avg_SpMV / *runtime_single \ */
+	file << idx << " " << threads[idx - 1] << " " << avg_MGS / *runtime_single << " " << avg_SpMV / *runtime_single \
+		<< " " << std::setprecision(2) << (avg_MGS + avg_SpMV) / (avg_SDO + avg_BCGS + avg_TSQR + avg_SpMV_ca + avg_INIT) << "x" << std::endl;
 	file.close();
 
 	file.open("../gnuplot/threads_gmres_ca.dat", std::ios_base::app);
 	file << idx << " " << avg_SDO / *runtime_single << " " << avg_BCGS / *runtime_single << " " << avg_TSQR / *runtime_single \
 		<< " " << avg_SpMV_ca / *runtime_single << " " << avg_INIT / *runtime_single << std::endl;
 	file.close();
-
+	
 	mkl_sparse_destroy(A_mkl);
 	gsl_rng_free(rng);
 	mkl_free(x);
@@ -393,15 +396,15 @@ sparse_status_t thread_solve(std::string fname, std::string title, size_t idx, K
 sparse_status_t generate_thread_plot(std::string fname, std::string title, size_t s, size_t t, size_t its) {
 
 	float                         runtime_single = 1;
-	double                 		   	rTol = 1e-14;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
+	double                 		   	rTol = 5e-05;                   // the relative (possibly preconditioned) residual norm || A*x_{k + 1} - b || / || A*x_0 - b ||
 																																// == || r_{k+1} || / || r_0 ||
 	double                    		aTol = 1e-50;                   // the absolute (possibly preconditioned) residual norm || A*x_{k + 1} - b || == || r_{k+1} ||
 	double                        dTol = 1e+05;                    // the divergence tolerance, amount (possibly preconditioned) residual norm can increase
 	size_t                        maxit = 1000;                   // maximum number of iterations to use
 	sparse_status_t               stat;
 	KSM                           ksm;							 						  // linear solver context	
-	PCILU0_ca                     prec;                           // PCType
-	// PCNone                        prec;                         // PCType
+	// PCILU0_ca                     prec;                           // PCType
+	PCNone                        prec;                         // PCType
 	std::ofstream                 file;
 
 	file.open("../gnuplot/threads_gmres_ca.dat");
@@ -409,13 +412,13 @@ sparse_status_t generate_thread_plot(std::string fname, std::string title, size_
 	file.close();
 	
 	file.open("../gnuplot/threads_gmres.dat");
-		file << "nr thread MGS SpMV " << title << std::endl;
+		file << "nr thread MGS SpMV speedup " << title << std::endl;
 	file.close();
 
 	stat = ksm.setOptions(rTol, aTol, dTol, maxit, true);
 	stat = ksm.setPCType(&prec);
 	
-	for (size_t i = 0; i < 4; ++i) {
+	for (size_t i = 0; i < 12; ++i) {
 		stat = thread_solve(fname, title, i + 1, &ksm, s, t, its, &runtime_single);
 	}
 

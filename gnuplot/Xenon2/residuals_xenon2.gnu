@@ -8,8 +8,8 @@
 	set yrange [1e-6:1e-0]
 
 	set style fill solid border -1
-	set key at 700, 2e-01
-	#set key top right opaque
+	#set key at 700, 2e-01
+	set key top right opaque
 	set key box vertical width -75 height 0.1
 	set key reverse Left
 	set key spacing 1.45

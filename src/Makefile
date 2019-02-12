@@ -46,11 +46,15 @@ plot: main
 	#############
 	#  threads  #
 	#############
+
+	./main 1 threads 10 5 4 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,4),\,for\,the\,unpreconditioned\,matrix\\\footnotesize\,Xenon2\,and\,restart\,length\,20\,for\,various\,numbers\,of\,threads}' \
+	xenon2 2>&1 | tee log.txt
+	gnuplot ../gnuplot/runtimes_threads.gnu
 	
-	# ./main 2 threads 100 5 6 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,6),\,for\,ILU(0)\,preconditioned\,matrix\\\footnotesize\,Sherman3\,and\,footnotesize\,restart\,length\,30\,for\,various\,numbers\,of\,threads}' \
+	# ./main 1 threads 100 5 6 '\shortstack{\footnotesize\,Runtime\,per\,kernel,\,relative\,to\,CA-GMRES(5,6),\,for\,ILU(0)\,preconditioned\,matrix\\\footnotesize\,Sherman3\,and\,restart\,length\,30\,for\,various\,numbers\,of\,threads}' \
 	# sherman3 2>&1 | tee log.txt
-	# gnuplot ../gnuplot/runtimes_threads.gnu	
-	
+	# gnuplot ../gnuplot/runtimes_threads.gnu
+
 	#############
 	#  speedup  #
 	#############
@@ -62,14 +66,25 @@ plot: main
 	# watt1 bmw7st1 xenon2 
 
 	# gnuplot ../gnuplot/runtimes_matrices.gnu
-	
+
 	###############
 	#  residuals  #
 	###############
 
-	./main 2 residuals sherman3 30 3 10 5 6 '\shortstack{Sherman3}'
-	gnuplot ../gnuplot/residuals.gnu
-	
+	##############
+	#  SHERMAN3  #
+	##############	
+
+	# ./main 2 residuals sherman3 30 3 10 5 6 '\shortstack{Sherman3}'
+	# gnuplot ../gnuplot/sherman3/residuals_sherman3.gnu
+
+	#######################
+	#  SHERMAN3 + ILU(0)  #
+	#######################
+
+	# ./main 2 residuals sherman3 30 3 10 5 6 '\shortstack{Sherman3}'
+	# gnuplot ../gnuplot/sherman3/residuals_sherman3_ilu0.gnu
+
 	#########
 	#  bmw  #
 	#########

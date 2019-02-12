@@ -1,2400 +1,600 @@
 iter: 1
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 106.954, r_knrm: 1.0185e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.02934e+30, r_knrm: 3.0101e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 2
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 3
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 4
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 5
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 6
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 7
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 8
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 9
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 10
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 11
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 12
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 13
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 14
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 15
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 16
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 17
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 18
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 19
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 20
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 21
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 22
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 23
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 24
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 25
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 26
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 27
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 28
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 29
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 30
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 31
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 32
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 33
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 34
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 35
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 36
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 37
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 38
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 39
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 40
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 41
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 42
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 43
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 44
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 45
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 46
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 47
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 48
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 49
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 50
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 51
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 52
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 53
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 54
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 55
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 56
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 57
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 58
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 59
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 60
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 61
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 62
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 63
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 64
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 65
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 66
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 67
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 68
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 69
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 70
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 71
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 72
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 73
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 74
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 75
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 76
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 77
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 78
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 79
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 80
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 81
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 82
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 83
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 84
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 85
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 86
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 87
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 88
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 89
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 90
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 91
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 92
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 93
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 94
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 95
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 96
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 97
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 98
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 99
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
-iter: 100
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.018498e-12
-ca-gmres relative forward error: 6.647940e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.063687e-12
-gmres(m) relative forward error: 7.086881e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 1
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 2
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 3
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 4
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 5
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 6
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 7
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 8
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 9
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 10
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 11
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 12
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 13
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 14
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 15
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 16
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 17
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 18
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 19
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 20
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 21
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 22
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 23
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 24
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 25
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 26
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 27
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 28
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 29
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 30
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 31
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 32
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 33
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 34
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 35
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 36
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 37
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 38
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 39
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 40
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 41
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 42
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 43
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 44
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 45
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 46
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 47
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 48
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 49
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 50
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 51
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 52
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 53
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 54
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 55
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 56
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 57
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 58
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 59
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 60
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 61
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 62
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 63
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 64
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 65
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 66
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 67
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 68
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 69
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 70
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 71
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 72
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 73
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 74
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 75
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 76
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 77
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 78
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 79
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 80
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 81
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 82
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 83
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 84
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 85
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 86
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 87
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 88
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 89
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 90
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 91
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 92
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 93
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 94
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 95
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 96
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 97
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 98
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 99
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
-iter: 100
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.023977e-12
-ca-gmres relative forward error: 6.706738e-12
-gmres(m) iter: 683, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056124e-12
-gmres(m) relative forward error: 7.006484e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 1
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 2
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 3
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 4
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 5
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 6
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 7
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 8
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 9
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 10
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 11
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 12
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 13
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 14
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 15
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 16
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 17
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 18
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 19
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 20
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 21
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 22
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 23
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 24
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 25
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 26
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 27
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 28
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 29
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 30
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 31
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 32
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 33
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 34
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 35
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 36
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 37
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 38
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 39
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 40
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 41
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 42
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 43
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 44
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 45
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 46
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 47
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 48
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 49
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 50
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 51
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 52
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 53
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 54
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 55
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 56
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 57
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 58
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 59
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 60
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 61
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 62
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 63
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 64
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 65
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 66
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 67
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 68
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 69
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 70
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 71
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 72
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 73
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 74
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 75
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 76
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 77
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 78
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 79
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 80
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 81
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 82
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 83
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 84
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 85
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 86
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 87
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 88
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 89
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 90
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 91
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 92
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 93
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 94
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 95
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 96
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 97
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 98
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 99
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 100
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.007834e-12
-ca-gmres relative forward error: 6.510332e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 1
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 2
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 3
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 4
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 5
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 6
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 7
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 8
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 9
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
 iter: 10
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 11
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 12
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 13
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 14
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 15
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 16
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 17
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 18
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 19
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 20
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 21
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 22
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 23
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 24
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 25
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 26
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 27
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 28
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 29
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 30
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 31
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 32
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 33
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 34
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 35
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 36
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 37
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 38
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 39
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 40
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 41
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 42
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 43
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 44
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 45
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 46
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 47
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 48
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 49
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 50
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 51
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 52
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 53
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 54
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 55
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 56
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 57
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 58
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 59
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 60
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 61
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 62
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 63
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 64
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 65
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 66
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 67
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 68
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 69
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 70
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 71
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 72
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 73
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 74
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 75
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 76
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 77
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 78
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 79
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 80
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 81
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 82
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 83
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 84
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 85
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 86
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 87
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 88
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 89
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 90
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 91
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 92
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 93
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 94
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 95
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 96
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 97
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 98
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 99
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
-iter: 100
-factorization finished, status: 0
-ca-gmres iter: 685, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.011138e-12
-ca-gmres relative forward error: 6.528483e-12
-gmres(m) iter: 682, maxit: 1000, r_0nrm: 1.069542e+02, r_knrm: 1.056699e-12
-gmres(m) relative forward error: 6.957279e-12
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 1
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 2
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 3
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 4
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 5
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 6
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 7
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 8
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 9
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
+iter: 10
+ca-gmres iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+ca-gmres relative forward error: 8.395114e+23
+gmres(m) iter: 390, maxit: 1000, r_0nrm: 6.029342e+30, r_knrm: 3.010102e+26
+gmres(m) relative forward error: 8.395114e+23
