@@ -6,13 +6,7 @@ Walter~Edwin Arnoldi.
   eigenvalue problem}.
 \newblock {\em {Quarterly of Applied Mathematics}}, 9(1):17 -- 29, 1951.
 
-\bibitem{Ascher:2011:FCN:2031413}
-Uri~M. Ascher and Chen Greif.
-\newblock {\em A First Course in Numerical Methods}.
-\newblock Society for Industrial and Applied Mathematics, Philadelphia, PA,
-  USA, 2011.
-
-\bibitem{doi:10.1093/imanum/NewtonGMRES_bai}
+\bibitem{NewtonGMRES_bai_reichel/doi:10.1093/imanum}
 Z.~BAI, D.~HU, and L.~REICHEL.
 \newblock A newton basis gmres implementation.
 \newblock {\em IMA Journal of Numerical Analysis}, 14(4):563--581, 1994.
@@ -69,12 +63,6 @@ S~K.~Kim and A~Chronopoulos.
 D.~Nuentsa~Wakam and G.-A. Atenekeng~Kahou.
 \newblock Parallel {GMRES} with a multiplicative schwarz preconditioner.
 \newblock {\em ARIMA}, 14:81--99, 2011.
-
-\bibitem{press92a}
-William~H. Press, Saul~A. Teukolsky, William~T. Vetterling, and Brian~P.
-  Flannery.
-\newblock {\em Numerical Recipes in C}.
-\newblock Cambridge University Press, 1992.
 
 \bibitem{Reichel1990}
 Lothar Reichel.

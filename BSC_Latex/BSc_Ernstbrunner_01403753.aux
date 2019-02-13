@@ -22,190 +22,207 @@
 \citation{Hoemmen:2010:CKS:1970638}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Related work}{2}{section.2}\protected@file@percent }
 \citation{Saad:1986:GGM:14063.14074}
+\@writefile{toc}{\contentsline {section}{\numberline {2}GMRES}{2}{section.2}\protected@file@percent }
+\newlabel{eq:stdgmreslsp}{{2.2}{2}{GMRES}{equation.2.2}{}}
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{toc}{\contentsline {section}{\numberline {3}GMRES}{3}{section.3}\protected@file@percent }
-\newlabel{eq:stdgmreslsp}{{3.2}{3}{GMRES}{equation.3.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Computational kernels}{3}{section.4}\protected@file@percent }
 \citation{nuen11c}
 \citation{Grigori}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Computational kernels}{3}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Matrix powers kernel}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Preconditioned matrix powers kernel}{3}{subsubsection.3.1.1}\protected@file@percent }
 \citation{Demmel:2012:CA-QR_demmel}
 \citation{Demmel:2012:CA-QR_demmel}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Matrix powers kernel}{4}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Preconditioned matrix powers kernel}{4}{subsubsection.4.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Tall and skinny QR}{4}{subsection.4.2}\protected@file@percent }
-\newlabel{sec:tsqr}{{4.2}{4}{Tall and skinny QR}{subsection.4.2}{}}
 \citation{Demmel:2012:CA-QR_demmel}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Tall and skinny QR}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:tsqr}{{3.2}{4}{Tall and skinny QR}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Parallel TSQR}{4}{section*.7}\protected@file@percent }
+\newlabel{eq:tsqr}{{3.1}{4}{Parallel TSQR}{equation.3.1}{}}
 \citation{doi:10.1137/nonnegdiags_demmel}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Greenbaum97numericalbehaviour}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Parallel TSQR}{5}{section*.7}\protected@file@percent }
-\newlabel{eq:tsqr}{{4.1}{5}{Parallel TSQR}{equation.4.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Block Gram-Schmidt}{5}{subsection.4.3}\protected@file@percent }
-\newlabel{sec:block gram-schmidt}{{4.3}{5}{Block Gram-Schmidt}{subsection.4.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage and the second subscript is the stage number. The blue boxes represent the processors involved at each stage.\relax }}{6}{figure.caption.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage and the second subscript is the stage number. The blue boxes represent the processors involved at each stage.\relax }}{5}{figure.caption.8}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:tsqr}{{1}{6}{Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage and the second subscript is the stage number. The blue boxes represent the processors involved at each stage.\relax }{figure.caption.8}{}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline BCGS with TSQR}{6}{section*.9}\protected@file@percent }
+\newlabel{fig:tsqr}{{1}{5}{Parallel TSQR on a binary tree of four processors. The first subscript of the $Q$ and $R$ matrices indicates the sequence number for a stage and the second subscript is the stage number. The blue boxes represent the processors involved at each stage.\relax }{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Block Gram-Schmidt}{5}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:block gram-schmidt}{{3.3}{5}{Block Gram-Schmidt}{subsection.3.3}{}}
 \citation{arnoldi:hal-01712943}
 \citation{doi:10.1137/Walker}
 \citation{doi:10.1093/imanum/NewtonGMRES_bai}
 \citation{Greenbaum97numericalbehaviour}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces BCGS with TSQR\relax }}{7}{algorithm.1}\protected@file@percent }
-\newlabel{alg:bcgs}{{1}{7}{BCGS with TSQR\relax }{algorithm.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}CA-Arnoldi}{7}{section.5}\protected@file@percent }
-\newlabel{sec:ca_arnoldi}{{5}{7}{CA-Arnoldi}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Arnoldi Iteration}{7}{subsection.5.1}\protected@file@percent }
-\newlabel{eq:AQ=QH}{{5.1}{7}{Arnoldi Iteration}{equation.5.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline BCGS with TSQR}{6}{section*.9}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces BCGS with TSQR\relax }}{6}{algorithm.1}\protected@file@percent }
+\newlabel{alg:bcgs}{{1}{6}{BCGS with TSQR\relax }{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}CA-Arnoldi}{6}{section.4}\protected@file@percent }
+\newlabel{sec:ca_arnoldi}{{4}{6}{CA-Arnoldi}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Arnoldi Iteration}{6}{subsection.4.1}\protected@file@percent }
+\newlabel{eq:AQ=QH}{{4.1}{6}{Arnoldi Iteration}{equation.4.1}{}}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{doi:10.1137/Walker}
 \citation{Chronopoulos}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Joubert_Carey_Chebyshev}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces MGS based Arnoldi iteration\relax }}{8}{algorithm.2}\protected@file@percent }
-\newlabel{alg:mgs_arnoldi}{{2}{8}{MGS based Arnoldi iteration\relax }{algorithm.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Arnoldi(s,t)}{8}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}The Monomial basis}{9}{subsubsection.5.2.1}\protected@file@percent }
-\newlabel{eq:AV=VB}{{5.2}{9}{The Monomial basis}{equation.5.2}{}}
-\newlabel{eq:unitary_scaling}{{5.3}{9}{The Monomial basis}{equation.5.3}{}}
-\newlabel{eq:H=RBR}{{5.4}{9}{The Monomial basis}{equation.5.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}The Newton basis}{9}{subsubsection.5.2.2}\protected@file@percent }
-\newlabel{sec:Newtonbasis}{{5.2.2}{9}{The Newton basis}{subsubsection.5.2.2}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces MGS based Arnoldi iteration\relax }}{7}{algorithm.2}\protected@file@percent }
+\newlabel{alg:mgs_arnoldi}{{2}{7}{MGS based Arnoldi iteration\relax }{algorithm.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Arnoldi(s,t)}{7}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}The Monomial basis}{8}{subsubsection.4.2.1}\protected@file@percent }
+\newlabel{eq:AV=VB}{{4.2}{8}{The Monomial basis}{equation.4.2}{}}
+\newlabel{eq:unitary_scaling}{{4.3}{8}{The Monomial basis}{equation.4.3}{}}
+\newlabel{eq:H=RBR}{{4.4}{8}{The Monomial basis}{equation.4.4}{}}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Reichel1990}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline The Leja ordering}{10}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}The Newton basis}{9}{subsubsection.4.2.2}\protected@file@percent }
+\newlabel{sec:Newtonbasis}{{4.2.2}{9}{The Newton basis}{subsubsection.4.2.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline The Leja ordering}{9}{section*.10}\protected@file@percent }
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{doi:10.1093/imanum/NewtonGMRES_bai}
+\newlabel{eq:prod_to_max}{{4.8}{10}{The Leja ordering}{equation.4.8}{}}
+\newlabel{sec:avoid_compl_arithm}{{4.2.2}{10}{Avoiding complex arithmetic}{section*.11}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{10}{section*.11}\protected@file@percent }
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
-\newlabel{eq:prod_to_max}{{5.8}{11}{The Leja ordering}{equation.5.8}{}}
-\newlabel{sec:avoid_compl_arithm}{{5.2.2}{11}{Avoiding complex arithmetic}{section*.11}{}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Avoiding complex arithmetic}{11}{section*.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Performance notes}{12}{section*.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.3}The Arnoldi(s,t) algorithm}{12}{subsubsection.5.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Performance notes}{11}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}The Arnoldi(s,t) algorithm}{11}{subsubsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline First inner iteration}{11}{section*.13}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Arnoldi($s,t$)\relax }}{12}{algorithm.3}\protected@file@percent }
 \newlabel{alg:arnoldi(s,t)}{{3}{12}{Arnoldi($s,t$)\relax }{algorithm.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline First inner iteration}{13}{section*.13}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{\nonumberline Successive inner iterations}{13}{section*.14}\protected@file@percent }
-\newlabel{eq:B_blackletter_k_}{{5.15}{13}{Successive inner iterations}{equation.5.15}{}}
+\newlabel{eq:B_blackletter_k_}{{4.15}{13}{Successive inner iterations}{equation.4.15}{}}
 \citation{Hoemmen:2010:CKS:1970638}
-\newlabel{eq:AQR=QRB}{{5.17}{14}{Successive inner iterations}{equation.5.17}{}}
+\newlabel{eq:AQR=QRB}{{4.17}{14}{Successive inner iterations}{equation.4.17}{}}
 \@writefile{toc}{\contentsline {paragraph}{\nonumberline Updating the upper Hessenberg matrix}{14}{section*.15}\protected@file@percent }
 \citation{Hoemmen:2010:CKS:1970638}
-\newlabel{eq:h_blackletter_k_}{{5.19}{15}{Updating the upper Hessenberg matrix}{equation.5.19}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}CA-GMRES}{15}{section.6}\protected@file@percent }
-\newlabel{sec:ca-gmres}{{6}{15}{CA-GMRES}{section.6}{}}
 \citation{Hoemmen:2010:CKS:1970638}
+\newlabel{eq:h_blackletter_k_}{{4.19}{15}{Updating the upper Hessenberg matrix}{equation.4.19}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}CA-GMRES}{15}{section.5}\protected@file@percent }
+\newlabel{sec:ca-gmres}{{5}{15}{CA-GMRES}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Scaling the first basis vector}{15}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:scaling_first_basis_vec}{{5.1}{15}{Scaling the first basis vector}{subsection.5.1}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Newton-GMRES(s,t)\relax }}{16}{algorithm.4}\protected@file@percent }
+\newlabel{alg:ca-gmres}{{4}{16}{Newton-GMRES(s,t)\relax }{algorithm.4}{}}
 \citation{Erhel95aparallel}
 \citation{Hoemmen:2010:CKS:1970638}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Scaling the first basis vector}{16}{subsection.6.1}\protected@file@percent }
-\newlabel{sec:scaling_first_basis_vec}{{6.1}{16}{Scaling the first basis vector}{subsection.6.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}A different approach}{16}{subsection.6.2}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Newton-GMRES(s,t)\relax }}{17}{algorithm.4}\protected@file@percent }
-\newlabel{alg:ca-gmres}{{4}{17}{Newton-GMRES(s,t)\relax }{algorithm.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}A different approach}{17}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Preconditioning}{17}{subsection.5.3}\protected@file@percent }
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Grigori}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Preconditioning}{18}{subsection.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}CA-ILU(0) preconditioner}{18}{subsubsection.6.3.1}\protected@file@percent }
-\newlabel{sec:ca-ilu}{{6.3.1}{18}{CA-ILU(0) preconditioner}{subsubsection.6.3.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Convergence metrics}{18}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}CA-ILU(0) preconditioner}{18}{subsubsection.5.3.1}\protected@file@percent }
+\newlabel{sec:ca-ilu}{{5.3.1}{18}{CA-ILU(0) preconditioner}{subsubsection.5.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Convergence metrics}{18}{subsection.5.4}\protected@file@percent }
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Hoemmen:2010:CKS:1970638}
-\citation{Reichel1990}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Implementation details}{19}{subsection.6.5}\protected@file@percent }
+\citation{NewtonGMRES_bai_reichel/doi:10.1093/imanum}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Implementation details}{19}{subsection.5.5}\protected@file@percent }
+\newlabel{sec:implementation_details}{{5.5}{19}{Implementation details}{subsection.5.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Differences to the implementation of Hoemmen et al. \cite  {Hoemmen:2010:CKS:1970638}}{19}{section*.16}\protected@file@percent }
 \citation{Erhel95aparallel}
 \citation{Hoemmen:2010:CKS:1970638}
+\citation{Erhel95aparallel}
 \citation{Hoemmen:2010:CKS:1970638}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline how to build}{20}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Problems and implementation difficulties}{20}{section*.18}\protected@file@percent }
+\citation{Hoemmen:2010:CKS:1970638}
+\citation{Hoemmen:2010:CKS:1970638}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Test matrices}{21}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Numerical experiments}{21}{section.6}\protected@file@percent }
+\newlabel{sec:Numerical_experiments}{{6}{21}{Numerical experiments}{section.6}{}}
+\citation{Hoemmen:2010:CKS:1970638}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Key for convergence plots}{22}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline GMRES(m)}{22}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Monomial-GMRES(s,t)}{22}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Newton-GMRES(s,t)}{22}{section*.21}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Convergence plot for a positive diagonal matrix with a 2-norm condition number $\mathcal  {K}$ and logarithmically spaced eigenvalues between 1 and $1/\mathcal  {K}$.\relax }}{23}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:dmat3}{{2}{23}{Convergence plot for a positive diagonal matrix with a 2-norm condition number $\mathcal {K}$ and logarithmically spaced eigenvalues between 1 and $1/\mathcal {K}$.\relax }{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Without basis vector scaling\relax }}{24}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:watt1_noscale}{{3}{24}{Without basis vector scaling\relax }{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces With basis vector scaling\relax }}{24}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:watt1_scale}{{4}{24}{With basis vector scaling\relax }{figure.caption.24}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Without ILU(0) preconditioner\relax }}{25}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:watt1_ilu0}{{5}{25}{Without ILU(0) preconditioner\relax }{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Without basis vector scaling\relax }}{25}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:bmw7st1}{{6}{25}{Without basis vector scaling\relax }{figure.caption.26}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Without basis vector scaling\relax }}{26}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:xenon2_noscale}{{7}{26}{Without basis vector scaling\relax }{figure.caption.27}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces With basis vector scaling\relax }}{26}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:xenon2_scale}{{8}{26}{With basis vector scaling\relax }{figure.caption.28}{}}
+\newlabel{fig:sherman3_unscaled}{{9a}{27}{Without preconditioner\relax }{figure.caption.29}{}}
+\newlabel{sub@fig:sherman3_unscaled}{{a}{27}{Without preconditioner\relax }{figure.caption.29}{}}
+\newlabel{fig:sherman3_ilu0}{{9b}{27}{With ILU(0) preconditioner\relax }{figure.caption.29}{}}
+\newlabel{sub@fig:sherman3_ilu0}{{b}{27}{With ILU(0) preconditioner\relax }{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces A case where ILU(0) is in favor of the convergence behavior for all tested methods.\relax }}{27}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:sherman3_convergence}{{9}{27}{A case where ILU(0) is in favor of the convergence behavior for all tested methods.\relax }{figure.caption.29}{}}
+\newlabel{fig:xenon2_noprec}{{10a}{27}{Without preconditioner\relax }{figure.caption.29}{}}
+\newlabel{sub@fig:xenon2_noprec}{{a}{27}{Without preconditioner\relax }{figure.caption.29}{}}
+\newlabel{fig:xenon2_ilu0}{{10b}{27}{With ILU(0) preconditioner\relax }{figure.caption.29}{}}
+\newlabel{sub@fig:xenon2_ilu0}{{b}{27}{With ILU(0) preconditioner\relax }{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces A case where ILU(0) adversely affects the convergence behavior for all tested methods.\relax }}{27}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:convergence_prec}{{10}{27}{A case where ILU(0) adversely affects the convergence behavior for all tested methods.\relax }{figure.caption.29}{}}
 \citation{Hoemmen:2010:CKS:1970638}
 \citation{Greenbaum97numericalbehaviour}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Numerical experiments}{20}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Key for convergence plots}{21}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline GMRES(m)}{21}{section*.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Monomial-GMRES(s,t)}{21}{section*.17}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Newton-GMRES(s,t)}{21}{section*.18}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Convergence plot for a positive diagonal matrix with a 2-norm condition number $\mathcal  {K}$ and logarithmically spaced eigenvalues between 1 and $1/\mathcal  {K}$.\relax }}{21}{figure.caption.19}\protected@file@percent }
-\newlabel{fig:dmat3}{{2}{21}{Convergence plot for a positive diagonal matrix with a 2-norm condition number $\mathcal {K}$ and logarithmically spaced eigenvalues between 1 and $1/\mathcal {K}$.\relax }{figure.caption.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces not scaled\relax }}{22}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:watt1_noscale}{{3}{22}{not scaled\relax }{figure.caption.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{22}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:watt1_scale}{{4}{22}{•••\relax }{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces without basis vector scaling\relax }}{23}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:watt1_ilu0}{{5}{23}{without basis vector scaling\relax }{figure.caption.22}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \IeC {\textbullet }\IeC {\textbullet }\IeC {\textbullet }\relax }}{23}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:bmw7st1}{{6}{23}{•••\relax }{figure.caption.23}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces without scaling of basis vectors\relax }}{24}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:xenon2_noscale}{{7}{24}{without scaling of basis vectors\relax }{figure.caption.24}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces scaled basis vectors\relax }}{24}{figure.caption.25}\protected@file@percent }
-\newlabel{fig:xenon2_scale}{{8}{24}{scaled basis vectors\relax }{figure.caption.25}{}}
-\newlabel{fig:sherman3_unscaled}{{9a}{25}{Without preconditioner\relax }{figure.caption.26}{}}
-\newlabel{sub@fig:sherman3_unscaled}{{a}{25}{Without preconditioner\relax }{figure.caption.26}{}}
-\newlabel{fig:sherman3_ilu0}{{9b}{25}{With ILU(0) preconditioner\relax }{figure.caption.26}{}}
-\newlabel{sub@fig:sherman3_ilu0}{{b}{25}{With ILU(0) preconditioner\relax }{figure.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces A case where ILU(0) is in favor of the convergence behavior for all tested methods.\relax }}{25}{figure.caption.26}\protected@file@percent }
-\newlabel{fig:sherman3}{{9}{25}{A case where ILU(0) is in favor of the convergence behavior for all tested methods.\relax }{figure.caption.26}{}}
-\newlabel{fig:xenon2}{{10a}{25}{Without preconditioner\relax }{figure.caption.26}{}}
-\newlabel{sub@fig:xenon2}{{a}{25}{Without preconditioner\relax }{figure.caption.26}{}}
-\newlabel{fig:xenon2_ilu0}{{10b}{25}{With ILU(0) preconditioner\relax }{figure.caption.26}{}}
-\newlabel{sub@fig:xenon2_ilu0}{{b}{25}{With ILU(0) preconditioner\relax }{figure.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces A case where ILU(0) adversely affects the convergence behavior for all tested methods.\relax }}{25}{figure.caption.26}\protected@file@percent }
-\newlabel{fig:xenon}{{10}{25}{A case where ILU(0) adversely affects the convergence behavior for all tested methods.\relax }{figure.caption.26}{}}
-\newlabel{fig:bcsstk18_noscale}{{11a}{26}{Without basis vector scaling\relax }{figure.caption.27}{}}
-\newlabel{sub@fig:bcsstk18_noscale}{{a}{26}{Without basis vector scaling\relax }{figure.caption.27}{}}
-\newlabel{fig:bcsstk18_scale}{{11b}{26}{With basis vector scaling\relax }{figure.caption.27}{}}
-\newlabel{sub@fig:bcsstk18_scale}{{b}{26}{With basis vector scaling\relax }{figure.caption.27}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces A case where ILU(0) is in favor of the convergence behavior for all tested methods.\relax }}{26}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:bcsstk18}{{11}{26}{A case where ILU(0) is in favor of the convergence behavior for all tested methods.\relax }{figure.caption.27}{}}
-\newlabel{fig:pwtk_noscale}{{12a}{26}{Without basis vector scaling\relax }{figure.caption.27}{}}
-\newlabel{sub@fig:pwtk_noscale}{{a}{26}{Without basis vector scaling\relax }{figure.caption.27}{}}
-\newlabel{fig:pwtk_scale}{{12b}{26}{With basis vector scaling\relax }{figure.caption.27}{}}
-\newlabel{sub@fig:pwtk_scale}{{b}{26}{With basis vector scaling\relax }{figure.caption.27}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces In the unscaled case in figure\nobreakspace  {}\ref  {fig:pwtk_noscale}, the Newton-GMRES with the shorter basis length $s = 5$ is slightly unstable between 500 and 600 iterations. The scaling in figure\nobreakspace  {}\ref  {fig:pwtk_scale} fixes this, but drastically worsens the overall convergence for the Newton-GMRES with longer basis length $s = 10$.\relax }}{26}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:pwtk}{{12}{26}{In the unscaled case in figure~\ref {fig:pwtk_noscale}, the Newton-GMRES with the shorter basis length $s = 5$ is slightly unstable between 500 and 600 iterations. The scaling in figure~\ref {fig:pwtk_scale} fixes this, but drastically worsens the overall convergence for the Newton-GMRES with longer basis length $s = 10$.\relax }{figure.caption.27}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Performance experiments}{27}{section.8}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces This plot presents the runtimes for different numbers of threads for a large sparse unpreconditioned matrix (Xenon2). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The left bar shows the stacked relative runtimes of the kernels used in CA-GMRES, the right bar depicts the stacked relative runtimes of the kernels (SpMV and MGS) used in GMRES($m$). The tolerance $\epsilon $ for the convergence metric was set to $5\text  {e}-5$. This is too high for practical applications but it is needed in order to let the method converge in under 1000 iterations (see Figures\nobreakspace  {}\ref  {fig:xenon2_noscale},\ref  {fig:xenon2_scale}). Both methods converged at iteration 390 and both methods have a very high relative forward error of $ 8.3951\text  {e}+23$. The computations were done 10 times for each thread and the average runtime was taken.\relax }}{27}{figure.caption.28}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces left CA-GMRES, right GMRES\relax }}{28}{figure.caption.29}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Convergence tolerance $\epsilon $ is $1\text  {e}-14$. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. relative forward error CA-GMRES: $6.61\text  {e}-12$, relative forward error for GMRES($m$): $7.97\text  {e}-12$. Computations were done 100 times and the average was taken. \relax }}{29}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:runtimes_threads_sherman3}{{15}{29}{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Convergence tolerance $\epsilon $ is $1\text {e}-14$. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. relative forward error CA-GMRES: $6.61\text {e}-12$, relative forward error for GMRES($m$): $7.97\text {e}-12$. Computations were done 100 times and the average was taken. \relax }{figure.caption.30}{}}
+\newlabel{fig:bcsstk18_noscale}{{11a}{28}{Without basis vector scaling\relax }{figure.caption.30}{}}
+\newlabel{sub@fig:bcsstk18_noscale}{{a}{28}{Without basis vector scaling\relax }{figure.caption.30}{}}
+\newlabel{fig:bcsstk18_scale}{{11b}{28}{With basis vector scaling\relax }{figure.caption.30}{}}
+\newlabel{sub@fig:bcsstk18_scale}{{b}{28}{With basis vector scaling\relax }{figure.caption.30}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Scaling the basis vectors does not help to stabilize the Newton-GMRES with the short basis length $s = 5$. It even significantly magnifies the convergence instability in the Newton-GMRES with longer basis length $s = 10$.\relax }}{28}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:bcsstk18_scaleissue}{{11}{28}{Scaling the basis vectors does not help to stabilize the Newton-GMRES with the short basis length $s = 5$. It even significantly magnifies the convergence instability in the Newton-GMRES with longer basis length $s = 10$.\relax }{figure.caption.30}{}}
+\newlabel{fig:pwtk_noscale}{{12a}{28}{Without basis vector scaling\relax }{figure.caption.30}{}}
+\newlabel{sub@fig:pwtk_noscale}{{a}{28}{Without basis vector scaling\relax }{figure.caption.30}{}}
+\newlabel{fig:pwtk_scale}{{12b}{28}{With basis vector scaling\relax }{figure.caption.30}{}}
+\newlabel{sub@fig:pwtk_scale}{{b}{28}{With basis vector scaling\relax }{figure.caption.30}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces In the unscaled case in figure\nobreakspace  {}\ref  {fig:pwtk_noscale}, the Newton-GMRES with the shorter basis length $s = 5$ is slightly unstable between 500 and 600 iterations. The scaling in figure\nobreakspace  {}\ref  {fig:pwtk_scale} fixes this, but drastically worsens the overall convergence for the Newton-GMRES with longer basis length $s = 10$.\relax }}{28}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:convergence_scaleissue}{{12}{28}{In the unscaled case in figure~\ref {fig:pwtk_noscale}, the Newton-GMRES with the shorter basis length $s = 5$ is slightly unstable between 500 and 600 iterations. The scaling in figure~\ref {fig:pwtk_scale} fixes this, but drastically worsens the overall convergence for the Newton-GMRES with longer basis length $s = 10$.\relax }{figure.caption.30}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Results for various matrices}{28}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Diagonal matrices}{28}{subsubsection.6.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Matrices from applications}{29}{subsubsection.6.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Performance experiments}{29}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Key for speedup plots}{29}{subsection.7.1}\protected@file@percent }
+\newlabel{runtime_threads_sherman3}{{\caption@xref {runtime_threads_sherman3}{ on input line 1098}}{31}{Key for speedup plots}{figure.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces This plot presents the runtimes for different numbers of threads for a small sparse preconditioned matrix (\texttt  {Sherman3}). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The tolerance $\epsilon $ for the convergence metric was set to $1\text  {e}-14$. The convergence plot of this matrix is depicted in Figure\nobreakspace  {}\ref  {fig:sherman3_ilu0}. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. The relative forward error CA-GMRES is $6.61\text  {e}-12$, the relative forward error for GMRES($m$) is $7.97\text  {e}-12$. Computations were done 10 times and the average was taken.\relax }}{31}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:runtimes_threads_sherman3}{{13}{31}{This plot presents the runtimes for different numbers of threads for a small sparse preconditioned matrix (\texttt {Sherman3}). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The tolerance $\epsilon $ for the convergence metric was set to $1\text {e}-14$. The convergence plot of this matrix is depicted in Figure~\ref {fig:sherman3_ilu0}. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. The relative forward error CA-GMRES is $6.61\text {e}-12$, the relative forward error for GMRES($m$) is $7.97\text {e}-12$. Computations were done 10 times and the average was taken.\relax }{figure.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces This plot presents the runtimes for different numbers of threads for a large sparse unpreconditioned matrix (\texttt  {Xenon2}). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The tolerance $\epsilon $ for the convergence metric was set to $5\text  {e}-5$. This is too high for practical applications but it is needed in order to let the method converge in under 1000 iterations (see Figures\nobreakspace  {}\ref  {fig:xenon2_noscale},\ref  {fig:xenon2_scale} for convergence plots). Both methods converged at iteration 390 and both methods have a very high relative forward error with $ 8.3951\text  {e}+23$. The computations were done 10 times for each thread and the average runtime was taken.\relax }}{32}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:runtimes_threads_xenon2}{{14}{32}{This plot presents the runtimes for different numbers of threads for a large sparse unpreconditioned matrix (\texttt {Xenon2}). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The tolerance $\epsilon $ for the convergence metric was set to $5\text {e}-5$. This is too high for practical applications but it is needed in order to let the method converge in under 1000 iterations (see Figures~\ref {fig:xenon2_noscale},\ref {fig:xenon2_scale} for convergence plots). Both methods converged at iteration 390 and both methods have a very high relative forward error with $ 8.3951\text {e}+23$. The computations were done 10 times for each thread and the average runtime was taken.\relax }{figure.caption.32}{}}
+\citation{Hoemmen:2010:CKS:1970638}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces This plot shows the relative runtime for different matrices with optimal basis and restart lengths (not indicated) on 8 cores. The convergence metric was disabled and 1000 iterations were performed each. The matrices are presented in ascending order from left to right according to their size.\relax }}{33}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:runtimes_matrices}{{15}{33}{This plot shows the relative runtime for different matrices with optimal basis and restart lengths (not indicated) on 8 cores. The convergence metric was disabled and 1000 iterations were performed each. The matrices are presented in ascending order from left to right according to their size.\relax }{figure.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Results for various matrices}{33}{subsection.7.2}\protected@file@percent }
+\citation{NewtonGMRES_bai_reichel/doi:10.1093/imanum}
+\citation{Erhel95aparallel}
+\citation{Hoemmen:2010:CKS:1970638}
 \bibstyle{plain}
 \bibdata{BSc_Ernstbrunner_01403753}
 \bibcite{arnoldi:hal-01712943}{1}
-\bibcite{Ascher:2011:FCN:2031413}{2}
-\bibcite{doi:10.1093/imanum/NewtonGMRES_bai}{3}
-\bibcite{doi:10.1137/nonnegdiags_demmel}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Relative convergence tolerance $\epsilon $ is $5\text  {e}-5$. Both methods converged at iteration 390. Both methods have a relative forward error : $ 8.3951\text  {e}+23$. Computations were done 10 times and the average was taken.\relax }}{30}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:runtimes_threads_xenon2}{{16}{30}{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Relative convergence tolerance $\epsilon $ is $5\text {e}-5$. Both methods converged at iteration 390. Both methods have a relative forward error : $ 8.3951\text {e}+23$. Computations were done 10 times and the average was taken.\relax }{figure.caption.31}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Conclusion}{30}{section.9}\protected@file@percent }
-\bibcite{Demmel:2012:CA-QR_demmel}{5}
-\bibcite{Erhel95aparallel}{6}
-\bibcite{Greenbaum97numericalbehaviour}{7}
-\bibcite{Grigori}{8}
-\bibcite{Hoemmen:2010:CKS:1970638}{9}
-\bibcite{Joubert_Carey_Chebyshev}{10}
-\bibcite{Chronopoulos}{11}
-\bibcite{nuen11c}{12}
-\bibcite{press92a}{13}
-\bibcite{Reichel1990}{14}
-\bibcite{Saad:1986:GGM:14063.14074}{15}
-\bibcite{doi:10.1137/Walker}{16}
-\@writefile{toc}{\contentsline {section}{Appendices}{32}{section*.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {A}GMRES(m)}{32}{Appendix.a.A}\protected@file@percent }
-\newlabel{app:gmres(m)}{{A}{32}{GMRES(m)}{Appendix.a.A}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces GMRES(m)\relax }}{32}{algorithm.5}\protected@file@percent }
-\newlabel{alg:gmres(m)}{{5}{32}{GMRES(m)\relax }{algorithm.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Test matrices}{32}{Appendix.a.B}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {C}TODO}{33}{Appendix.a.C}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {D}Visualizing the R matrix}{33}{Appendix.a.D}\protected@file@percent }
-\newlabel{app:R_2}{{D}{33}{Visualizing the R matrix}{Appendix.a.D}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {E}Modified Leja Ordering}{34}{Appendix.a.E}\protected@file@percent }
-\newlabel{app:MLO}{{E}{34}{Modified Leja Ordering}{Appendix.a.E}{}}
+\bibcite{NewtonGMRES_bai_reichel/doi:10.1093/imanum}{2}
+\bibcite{doi:10.1137/nonnegdiags_demmel}{3}
+\bibcite{Demmel:2012:CA-QR_demmel}{4}
+\bibcite{Erhel95aparallel}{5}
+\bibcite{Greenbaum97numericalbehaviour}{6}
+\bibcite{Grigori}{7}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Summary and Conclusion}{34}{section.8}\protected@file@percent }
+\bibcite{Hoemmen:2010:CKS:1970638}{8}
+\bibcite{Joubert_Carey_Chebyshev}{9}
+\bibcite{Chronopoulos}{10}
+\bibcite{nuen11c}{11}
+\bibcite{Reichel1990}{12}
+\bibcite{Saad:1986:GGM:14063.14074}{13}
+\bibcite{doi:10.1137/Walker}{14}
+\@writefile{toc}{\contentsline {section}{Appendices}{35}{section*.36}\protected@file@percent }
+\@writefile{toc}{\setcounter {tocdepth}{0}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}GMRES(m)}{35}{Appendix.a.A}\protected@file@percent }
+\newlabel{app:gmres(m)}{{A}{35}{GMRES(m)}{Appendix.a.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}TODO}{35}{Appendix.a.B}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces GMRES(m)\relax }}{36}{algorithm.5}\protected@file@percent }
+\newlabel{alg:gmres(m)}{{5}{36}{GMRES(m)\relax }{algorithm.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Visualizing the R matrix}{37}{Appendix.a.C}\protected@file@percent }
+\newlabel{app:R_2}{{C}{37}{Visualizing the R matrix}{Appendix.a.C}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Modified Leja Ordering}{38}{Appendix.a.D}\protected@file@percent }
+\newlabel{app:MLO}{{D}{38}{Modified Leja Ordering}{Appendix.a.D}{}}
 \global\csname @altsecnumformattrue\endcsname
-\global\@namedef{scr@dte@section@lastmaxnumwidth}{15.32977pt}
+\global\@namedef{scr@dte@section@lastmaxnumwidth}{13.51204pt}
 \global\@namedef{scr@dte@subsection@lastmaxnumwidth}{21.29514pt}
 \global\@namedef{scr@dte@subsubsection@lastmaxnumwidth}{29.76517pt}

@@ -1,5 +1,5 @@
-\contentsline {algorithm}{\numberline {1}{\ignorespaces BCGS with TSQR\relax }}{7}{algorithm.1}% 
-\contentsline {algorithm}{\numberline {2}{\ignorespaces MGS based Arnoldi iteration\relax }}{8}{algorithm.2}% 
+\contentsline {algorithm}{\numberline {1}{\ignorespaces BCGS with TSQR\relax }}{6}{algorithm.1}% 
+\contentsline {algorithm}{\numberline {2}{\ignorespaces MGS based Arnoldi iteration\relax }}{7}{algorithm.2}% 
 \contentsline {algorithm}{\numberline {3}{\ignorespaces Arnoldi($s,t$)\relax }}{12}{algorithm.3}% 
-\contentsline {algorithm}{\numberline {4}{\ignorespaces Newton-GMRES(s,t)\relax }}{17}{algorithm.4}% 
-\contentsline {algorithm}{\numberline {5}{\ignorespaces GMRES(m)\relax }}{32}{algorithm.5}% 
+\contentsline {algorithm}{\numberline {4}{\ignorespaces Newton-GMRES(s,t)\relax }}{16}{algorithm.4}% 
+\contentsline {algorithm}{\numberline {5}{\ignorespaces GMRES(m)\relax }}{36}{algorithm.5}% 

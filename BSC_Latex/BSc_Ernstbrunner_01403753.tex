@@ -170,14 +170,10 @@ The costs of an algorithm consist of arithmetic computations and communication.
 Compared to arithmetic, communication costs are much higher and the widening CPU-memory performance gap and increased parallelism in hardware environments further necessitate the construction of communication-avoiding algorithms.\\
 The term \textit{communication} generally denotes the movement of data either between different processors in the parallel case or between 'fast' and 'slow' memory in the sequential case, where 'fast' and 'slow' are relative to the two levels examined in the memory hierarchy (e.g., cache and DRAM, or DRAM and disk). Communication optimal algorithms do not eliminate communication completely, but they are constructed in a way that prioritizes the reduction of communication. This often results in new challenges. E.g., in the case of CA-GMRES (Section~\ref{sec:ca-gmres}), the data dependencies between the sparse matrix-vector multiplies and dot products in the Arnoldi process are broken up, which further necessitates the incorporation of additional techniques and algorithms in order to deal with numerical instabilities and ill-conditioned basis vectors.\\
 
-Krylov subspace methods are iterative algorithms that can be used for solving large, sparse linear systems either in real or complex arithmetic. Many scientific computations spend much of their time in Krylov methods. Therefore, it only makes sense to try to improve these methods by reducing their communication cost. Krylov methods can be 'one-sided' or 'two-sided', have long recurrences or short recurrences, and may work for specific matrix types only (e.g., the popular Conjugate Gradient method is one-sided, has short recurrences and works for symmetric matrices only). For a more detailed description of Krylov properties see Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. The Generalized minimal residual method (GMRES) is a one-sided Krylov subspace method that uses long recurrences and works for general matrices. The goal of the communication avoiding version, namely CA-GMRES, is to take $s$ steps for the same communication cost as 1 step, which would be optimal.\\
+Krylov subspace methods are iterative algorithms that can be used for solving large, sparse linear systems either in real or complex arithmetic. Many scientific computations spend much of their time in Krylov methods. Therefore, it only makes sense to try to improve these methods by reducing their communication cost. Krylov methods can be 'one-sided' or 'two-sided', have long recurrences or short recurrences, and may work for specific matrix types only (e.g., the popular Conjugate Gradient method is one-sided, has short recurrences and works for symmetric matrices only). For a more detailed description of Krylov properties see Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. The Generalized minimal residual method (GMRES) is a one-sided Krylov subspace method that uses long recurrences and works for general matrices. The goal of the communication-avoiding version, namely CA-GMRES, is to take $s$ steps for the same communication cost as 1 step, which would be optimal.\\
 
-The rest of this thesis is organized as follows. The second section provides related work. The third section introduces GMRES and the basic principles behind the GMRES method. The fourth section explains the most important kernels in the communication avoiding version of the GMRES method. Section five gives insight into the $s$-step based Arnoldi process of Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. Section six presents the communication avoiding GMRES method, explains how a preconditioner can be applied and addresses implementation details. Finally, sections seven and eight show results for the numerical resp. performance experiments and section nine summarizes and concludes on these results.
+The rest of this thesis is organized as follows. The second section introduces GMRES and the basic principles behind the GMRES method. The third section explains the most important kernels in the communication-avoiding version of the GMRES method. Section four gives insight into the $s$-step based Arnoldi process of Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. Section five presents the communication-avoiding GMRES method, explains how a preconditioner can be applied and addresses implementation details. Finally, sections six and seven show results for the numerical resp. performance experiments and section eight summarizes and concludes on these results.
  
-\section{Related work}
-
-\pagebreak
-
 \section{GMRES}
 The Generalized Minimal Residual Method (GMRES) was first introduced by Saad et al. \cite{Saad:1986:GGM:14063.14074} and is an iterative Krylov subspace method for solving large sparse linear systems. 
 The GMRES method starts with an initial approximate solution $x_0$ and initial residual $r_0 = b - Ax_0$ and finds a correction $z_k$ at iteration $k$ which solves the least-squares problem 
@@ -554,7 +550,7 @@ This also affects the change of basis matrix $\underline{B}$. If the Ritz values
 \end{equation*}
 
 \subparagraph{Performance notes}
-Avoiding complex arithmetic in that way necessitates an extra SpMV operation in the Newton basis which, in the worst case, leads to as many floating point operations as in the Chebyshev basis (which uses a three-term recurrence). However, in their performance analysis Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} observed that the runtime of the Newton basis was still close to the runtime of the Monomial basis. \\
+Avoiding complex arithmetic in that way necessitates an extra SpMV operation in the Newton basis which, in the worst case, leads to as many floating point operations as in the Chebyshev basis (which uses a three-term recurrence). However, in their performance analysis Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} observed that the runtime of the Newton basis was still close to the runtime of the Monomial basis.\\
 \cite{Hoemmen:2010:CKS:1970638} further point out, that this approach might lose accuracy when $\theta_{j - 1}$ is real and $\theta_j$ and $\theta_{j + 1}$ form a complex conjugate pair with $\Re(\theta_j) = \theta_{j - 1} $. Then
 \begin{eqnarray*}
 v_j &=& (A - \theta_{j - 1} I )v_{j - 1} \\
@@ -788,7 +784,7 @@ The CA-GMRES algorithm as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} uses
 \begin{equation*}
 	y_k := argmin_y \norm{\underline{\frak{H}}_k y - \beta e_1}_2
 \end{equation*}
-at every outer iteration $k$ and computes a new approximate solution $x_k := x_0 + \frak{Q}_k y_k$. The difference to GMRES($m$) is, that $s$ Givens rotations have to be applied at once. A Newton-based version of the CA-GMRES algorithm is outlined in Algorithm~\ref{alg:ca-gmres}.
+at every outer iteration $k$ and then computes a new approximate solution $x_k := x_0 + \frak{Q}_k y_k$. The difference to GMRES($m$) is, that $s$ Givens rotations have to be applied at once. A Newton-based version of the CA-GMRES algorithm is outlined in Algorithm~\ref{alg:ca-gmres}.
 
 \iffalse
 The CA-GMRES algorithm solves a different least-squares problem than~\eqref{eq:stdgmreslsp}:
@@ -857,7 +853,7 @@ The Monomial-based CA-GMRES method could also start without the standard Arnoldi
 This issue can be addressed in multiple ways. Either the QR factorization used must not change direction of the first column or $\theta_1 = \left< r_0, q_1 \right>$ / $\beta$ must be computed which adds additional communication. A third approach is to compute the first set of basis vectors with the standard Arnoldi method (this happens naturally when the first outer iteration is started with standard Arnoldi in order to compute Ritz values for the Newton basis).
 
 \subsection{A different approach}
-If the Newton-based GMRES method in \cite{Erhel95aparallel} did not converge, Erhel computed 2$s$ Ritz values instead of $s$ for better eigenvalue approximations. She then picked $s$ of them and sorted them with the Modified Leja ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ recommend the same approach. However, these $2s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. If the $2s$ Ritz values only consist of complex conjugate pairs and $s$ is odd, a complex conjugate pair has to be split. To address this issue and still avoid complex arithmetic, one could either compute $2s + 1$ Ritz values or simply omit the positive imaginary part of the last Ritz value. Another approach might be to apply the 2$s$ Ritz values to two consecutive outer iterations of Arnoldi($s,t$). Since computing $2s$ Ritz values yields better approximations of the eigenvalues, one could incorporate them all as well. This slightly changes the way Equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from Equation~\eqref{eq:B_blackletter_k_} by that additional entry with
+If the Newton-based GMRES method in \cite{Erhel95aparallel} did not converge, Erhel computed 2$s$ Ritz values instead of $s$ for better eigenvalue approximations. She then picked $s$ of them and sorted them with the Modified Leja ordering. This improved the condition of the Newton basis and lead to (better) convergence in some cases. Hoemmen et al. $\cite{Hoemmen:2010:CKS:1970638}$ simply chose a smaller step size. This might give bad eigenvalue approximations and one might want to compute 2$s$ Ritz values anyway. However, these $2s$ values could come in complex conjugate pairs and have to amount to $s$ values eventually. If the $2s$ Ritz values only consist of complex conjugate pairs and $s$ is odd, a complex conjugate pair has to be split. To address this issue and still avoid complex arithmetic, one could either compute $2s + 1$ Ritz values or simply omit the positive imaginary part of the last Ritz value. Another approach might be to apply the 2$s$ Ritz values to two consecutive outer iterations of Arnoldi($s,t$). Since computing $2s$ Ritz values yields better approximations of the eigenvalues, one could incorporate them all as well. This slightly changes the way Equation~\eqref{eq:h_blackletter_k_} is computed. Remember that, in order to avoid complex arithmetic, the consecutive order of a complex conjugate pair must be preserved. In the case where $\theta_s$ is the first entry of a complex conjugate pair, the change of basis matrix $\underline{B}_{k - 1 }$ is connected to its consecutive change of basis matrix $\underline{B}_{k}$ by an additional entry right to the last Ritz value of $\underline{B}_{k - 1}$ and above the first Ritz value of $\underline{B}_k$. $\underline{\frak{B}}_k$ then differs from Equation~\eqref{eq:B_blackletter_k_} by that additional entry with
 \begin{equation}
 \underline{\frak{B}}_{k} = 
 \begin{pmatrix}
@@ -870,47 +866,77 @@ Equation~\eqref{eq:h_blackletter_k_} then changes to
 \begin{equation}
 \underline{\frak{H}}_{k - 1, k} := -\frak{H}_{k - 1} \frak{R}_{k - 1, k} R^{-1}_k + \underline{\frak{R}}_{k - 1, k} \underline{B}_k R^{-1}_k - \Im (\theta_s)^2 e_{sk} e^T_1  R^{-1}_{k}.
 \end{equation}
+However, this option might overcomplicate things without significant benefit.
 
 \subsection{Preconditioning}
-For better effectiveness GMRES is usually combined with a preconditioner. Different kinds of preconditioners exist, like left, right, and split preconditioners. In this thesis, only left preconditioners are considered. The preconditioner matrix $M^{-1}$ is applied to the left of $A$, where $M \approx A$. The system for CA-GMRES to solve is then given by $M^{-1}Ax = M^{-1}b$.\\
+For better effectiveness GMRES is usually combined with a preconditioner. Different kinds of preconditioners exist, like left, right, and split preconditioners. In this thesis, only left preconditioners are considered. The preconditioner matrix $M^{-1}$ is applied to the left of $A$, where $M \approx A$. The system for CA-GMRES to solve is then given by $M^{-1}Ax = M^{-1}b$. Precisely, the preconditioner $M^{-1}$ must be applied to the red parts in Algorithm~\ref{alg:ca-gmres}, i.e. replace $r_0 = b - Ax_0$ by $r_0 = M^{-1}(b - Ax_0)$ and  $v_{i + 1} = (A - \theta_i)v_i$ by $v_{i + 1} = M^{-1}((A - \theta_i)v_i)$.\\
 
 \textit{Scaling} is a special type of preconditioning. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} considered two types of scaling in order to prevent rapid basis vector growth and improve numeric stability:
 \begin{enumerate}
 \item Balancing: replacing $A$ by $A' = DAD^{-1}$ with $D$ diagonal.
 \item Equilibration: replacing $A$ by $A' = D_rAD_c$ with $D_r$ and $D_c$ diagonal, so that the largest absolute value in every row and every column is approximately equal to $1$.
 \end{enumerate}
-In their experiments for solving nonsymmetric linear systems with CA-GMRES Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration proved quite effective and almost made the basis type irrelevant. We observed mostly similar behavior after applying a standard version of the CA-ILU(0) preconditioner which will be explained below.
+In their experiments for solving nonsymmetric linear systems with CA-GMRES Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} found that for practical problems, equilibration proved quite effective and almost made the basis type irrelevant. We observed mostly similar behavior after applying a standard version of the CA-ILU(0) preconditioner, which is described below.
 
 \subsubsection{CA-ILU(0) preconditioner} \label{sec:ca-ilu}
-$M = LU$ \\
-Algorithm~\ref{alg:ca-gmres} in CA-GMRES apply $M^{-1}$ to the red parts, i.e. replace $r_0 = b - Ax_0$ by $r_0 = M^{-1}(b - Ax_0)$ and  $v_{i + 1} = (A - \theta_i)v_i$ by $v_{i + 1} = M^{-1}((A - \theta_i)v_i)$
-summarize \cite{Grigori} (can be very long or short, dependent on overall length)
+The CA-ILU(0) is a communication-avoiding variant of the incomplete $LU$ factorization where the structure of $L$ resp. $U$ is the same as the lower resp. upper triangular part of $A$. The preconditioner $M = LU$ then approximates the matrix $A$ with $A = LU + R$, where $R$ is the residual matrix.\\
+In addition to the matrix-vector multiplications in the MPK the CA-ILU(0) uses a forward and a backward substitution. Therefore, additional data has to be fetched and ghosted before the computations are done. This often leads to vast amounts of data transfer in the end. Grigori et al. \cite{Grigori} address this issue by first reordering the matrix $A$ via nested dissection and then reducing fills further by applying their novel Alternating min-max layers algorithm. While nested dissection affects convergence, Grigori et al. state that their novel algorithm does not. Also, the LU factorization itself can be done without communication because the graphs of $L$ and $U$ are known prior to their computation. 
 \subsection{Convergence metrics}
-CA-GMRES produces a cheap convergence metric, namely the absolute residual $\norm{r_{k+1}}_2$ relative to the initial residual $\norm{r_0}_2$. Might not be the best choice, depends too much on initial guess $x_0$.\\
+CA-GMRES produces a cheap convergence metric, namely the absolute residual $\norm{r_{k+1}}_2$ relative to the initial residual $\norm{r_0}_2$. This metric might not be the best choice since this 'relative' residual error depends too strongly on the initial guess $x_0$ (e.g., if $\norm{x_0}_2$ is too large $\norm{r_0}$ will be large and the iteration will stop too early). Therefore, one might consider more expensive alternatives. For a fair comparison, the convergence metrics should be the same for both CA-GMRES and standard GMRES. Therefore, other metrics would only add the same amount of overhead. Since the methods are just compared here and since Hoemmen et al. use the cheap metric as well, both implemented methods do not incorporate other convergence metrics.
 
-If
+\subsection{Implementation details}\label{sec:implementation_details}
+The CA-GMRES algorithm was implemented in the \texttt{C++} language and incorporates the LAPACK and BLAS routines provided by the Intel Math Kernel Library (MKL). The code layout was inspired by PETSc's KSP framework which is written in \texttt{C} but emulates object oriented design. Simple patterns like the Strategy Pattern were implemented as well.\\
+BLAS and LAPACK functions are written in the Fortran language. Fortran itself stores matrices in column major order while C++ adopts the row major order layout. MKL provides a C-interface to most of the Fortran-style BLAS and LAPACK routines. The TSQR factorization, which is implemented in MKL as described in Section~\ref{sec:tsqr}, is one of the few routines that are used here but not supported. Therefore, dense matrices are stored in column major order and the unsupported Fortran routines are called directly.\\
+MKL provides highly optimized routines that mostly benefit from cache-management techniques (e.g., \texttt{dgemm()}).
+The major optimization techniques used in MKL include loop unrolling, blocking, and data prefetching.\\
+
+All experiments and computations were done on the harris server. harris provides 4 sockets with 12 AMD Opteron(tm) cores per socket and one thread per core, leading to a total of 48 threads.
+
+\paragraph{Differences to the implementation of Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}}
 \begin{itemize}
-\item $\norm{x_0}_2$ too large $\rightarrow$ $\norm{r_0}$ will be large and iteration will stop too early.
-\item $x_0 = 0$ harder to make the relative residual small if $A$ is ill-conditioned and $x_{k+1}$ lies nearly in the nullspace of $A$.
-\end{itemize}
-\subsection{Implementation details}
-The CA-GMRES algorithm was implemented in the \texttt{C++} language and incorporates the LAPACK and BLAS routines provided by the Intel Math Kernel Library (MKL). The class design is inspired by PETSc's KSP framework which is written in \texttt{C} but emulates object oriented design. Simple patterns like the Strategy Pattern were implemented as well.\\
-BLAS and LAPACK functions are written in the Fortran language. Fortran itself stores matrices in column major order while C++ adopts the row major order layout. MKL provides a C-interface to most of the Fortran-style BLAS and LAPACK routines. The TSQR factorization, which MKL implemented as described in Section~\ref{sec:tsqr}, is one of the few routines that are used but not supported. Therefore, dense matrices are stored in column major order and the unsupported Fortran routines are called directly.
-
-MKL provides highly optimized routines that most profit from cache-management techniques such as \texttt{dgemm()}.
-The major optimization techniques used in MKL include loop unrolling, blocking, and data prefetching.
-
-Differences to the implementation of Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} are outlined below:
-\begin{itemize}
-\item The CA-GMRES always starts its first inner iteration with the standard Arnoldi iteration, regardless of the basis type. This is not needed in case the Monomial basis is used. However, starting with standard Arnoldi slows down the algorithm but might benefit the convergence if the Monomial basis is on the edge of being unstable.
-\item The CA-GMRES always starts an outer iteration with the standard Arnoldi iteration. If the Newton basis is used, the first iteration must start with standard Arnoldi in order to compute Ritz values. If the Ritz values are good approximations to the eigenvalues, it might not be necessary to compute those values again in successive outer iterations. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} do not address techniques or provide information on when to compute new Ritz values. One might monitor the estimate of the reciprocal condition number of the basis vector matrix and compute new values in case the condition worsens. Since the $R$ factor of the QR factorization of $V$ and $V$ have the same condition number the complexity for computing the reciprocal condition number is rather cheap with $\mathcal{O}(s^2)$.
-\item Although, the implemented Modified Leja Ordering algorithm uses a capacity estimate to prevent over/underflows in the product to maximize, it does not ultimately perturb the input values if over/underflows still occur like in \cite{Hoemmen:2010:CKS:1970638}. Also, the algorithm depicted in \cite{Hoemmen:2010:CKS:1970638} and Appendix~\ref{app:MLO} has complexity $\mathcal{O}(s^3)$. Computing the Ritz values from an upper $s \times s$ Hessenberg matrix requires that many operations anyway. However, Reichel et al. \cite{Reichel1990} point out that the Modfied Leja ordering can also be implemented with complexity $\mathcal{O}(s^2)$ as well.
+\item The CA-GMRES always starts its first inner iteration with the standard Arnoldi iteration, regardless of the basis type. This is not needed in case the Monomial basis is used. Starting with standard Arnoldi slows down the algorithm but might benefit the convergence if the Monomial basis is on the edge of being unstable.
+\item The CA-GMRES always starts an outer iteration with the standard Arnoldi iteration. If the Newton basis is used, the first iteration must start with standard Arnoldi in order to compute Ritz values. If the Ritz values are good approximations to the eigenvalues, it might not be necessary to compute those values again in successive outer iterations. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} do not address techniques or provide information on when to compute new Ritz values. One might monitor the estimate of the reciprocal condition number of the basis vector matrix and compute new values in case the condition number estimate worsens significantly. Since the $R$ factor of the QR factorization of $V$ and $V$ have the same condition number the complexity for computing the reciprocal condition number is rather cheap with $\mathcal{O}(s^2)$.
+\item Although, the implemented Modified Leja ordering algorithm uses a capacity estimate to prevent over/underflows in the product to maximize, it does not ultimately perturb the input values if over/underflows still occur like in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638}. Also, the algorithm depicted in \cite{Hoemmen:2010:CKS:1970638} and Appendix~\ref{app:MLO} has complexity $\mathcal{O}(s^3)$. Computing the Ritz values from an upper $s \times s$ Hessenberg matrix requires that many operations anyway. However, Bai et al. \cite{NewtonGMRES_bai_reichel/doi:10.1093/imanum} point out that the Modfied Leja ordering can be done in $\mathcal{O}(s^2)$ as well.
 \item A method that computes 2$s$ Ritz values instead of $s$ (as in Erhel \cite{Erhel95aparallel}) was not implemented.
-\item Neither the MPK nor the CA-ILU(0) preconditioner were fully implemented due to time constraints. Therefore, the CA-GMRES algorithm uses the highly optimized sparse matrix-vector routine that is provided by MKL.  Communication could be avoided anyway by giving MKL the hint that $s$ successive SpMV operations are coming up for the creation of the basis vectors. This optimization technique named \texttt{mkl\_sparse\_set\_mv\_hint} would work for the Monomial basis, but might be ruined by the additional vector operation(s) needed in the Newton basis.
-\item To avoid rapid growth in the length of the basis vectors the basis vectors are scaled by their 2-norm right after they are generated. This would break the communication avoiding scheme of the MPK if it was implemented at this point. In order to avoid communication as well, Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} address this issue by equilibrating the matrix only.
+\item Neither the MPK nor the CA-ILU(0) preconditioner were fully implemented due to time constraints. Therefore, the CA-GMRES algorithm uses the highly optimized sparse matrix-vector routine that is provided by MKL.  Communication could be avoided anyway by giving MKL the hint that $s$ successive SpMV operations are coming up for the creation of the $s$ basis vectors. This optimization routine named \texttt{mkl\_sparse\_set\_mv\_hint()} would work for the Monomial basis, but might be ruined by the additional vector operation(s) needed in the Newton basis.
+\item To avoid rapid growth in the length of the basis vectors the basis vectors may be scaled by their 2-norm right after they are generated. This would break the communication avoiding scheme of the MPK if it was implemented at this point. In order to avoid scaling and therefore, communication, Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} address this issue by equilibrating the matrix first.
 \end{itemize}
 
-\section{Numerical experiments}
+\paragraph{how to build}
+\begin{enumerate}
+\item MKL and PAPI are required before building.
+\item Adapt the Makefile in the source folder (e.g., change the MKL root directory, etc.).
+\item type 'make -j8' to build.
+\item type 'make test' for a small example.
+\end{enumerate}
+
+
+\paragraph{Problems and implementation difficulties}
+\begin{itemize}
+\item Memory leakage was observed, that originates from MKL. Valgrind reports that bytes are possibly lost and/or still reachable. This indicates that a library might not be freed somewhere. 
+\item The ILU(0) preconditioner was implemented up to the point where all necessary values for the triangular solves and matrix-vector multiplications could be fetched. The permutation algorithm for minimizing fetching and ghosting was still missing as well as the actual triangular solving and matrix-vector multiplying routines.\\
+The implemented sparse matrix manipulation routines include matrix (and vector) row and column permutations, row and column extractions, computing $A + A^T$ for a sparse matrix $A$ (needed by Metis, a hypergraph partitioner, which only works for undirected graphs) and a neighborhood method that uses the breadth first search algorithm and some reachability order to find the set of all reachable vertices from a subset of given vertices in a graph.
+All these methods reside in the SparceUtils.cpp/.hpp files and have become mere artifacts.
+\item CA-GMRES may fail for some matrices with the given true solution described in Section~\ref{sec:Numerical_experiments}, especially \texttt{Watt1}. In fact, finding a start vector that produces the results in Figures~\ref{fig:watt1_noscale} and \ref{fig:watt1_scale} was not easy. The issues for the \texttt{Watt1} matrix are known and can be addressed with the techniques described in \cite{Erhel95aparallel} and \cite{Hoemmen:2010:CKS:1970638}. Briefly those techniques comprise the computation of 2$s$ Ritz values instead of $s$, perturbing the input of the Modified Leja ordering and equilibrating the matrix before anything else. Equilibration could help with other matrices for which the CA-GMRES methods may fail as well.
+\end{itemize}
+
+\subsection{Test matrices}
+For the numerical and performance experiments the following test matrices were used.
+\begin{center}
+\begin{tabular}{l|r|r|l}
+Name & Dim & nnz & Type\\
+\hline
+watt1 & 1856 & 11550 & unsymmetric\\
+sherman3 & 5005 & 20K & unsymmetric\\
+dmat & 10K & 10K & diagonal\\
+bcsstk18 & 12K & 149K & SPD\\
+bmwst7\_1 & 141K & 3.7M & SPD\\
+xenon2 & 157K & 3.9M & unsymmetric\\
+pwtk & 218K & 3.7M & SPD
+\end{tabular}
+\end{center}
+
+\section{Numerical experiments}\label{sec:Numerical_experiments}
 This section provides a numerical comparison between CA-GMRES and standard GMRES. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} showed in their numerical experiments, that for the correct choice of basis and parameters of the restart length $m = s \cdot t$ the CA-GMRES converges in no more iterations than standard GMRES (with the same restart length) for almost all test cases. This is due to the fact, that the ability to choose the $s$-step basis length way shorter than the restart length improves stability and performance. They suggest $s = 5$ and $t = 12$ often gave the best performance. In order to recreate their results, mainly the same parameter settings, matrices and right hand side vectors were used.\\
 
 Like in \cite{Hoemmen:2010:CKS:1970638}, the true solution $\hat{x}$ is generated with
@@ -920,15 +946,18 @@ Like in \cite{Hoemmen:2010:CKS:1970638}, the true solution $\hat{x}$ is generate
 where the scalar $u(k)$ is chosen from a random uniform [-1, 1] distribution. 
 Hoemmen et al. state, that $\hat{x}$ was chosen in this way because a completely random solution is usually nonphysical, but a highly nonrandom solution (such as a vector of all ones) might be near an eigenvector of the matrix (which would result in artificially rapid convergence of the iterative method).
 
-\texttt{It is known, but yet unexplained, that sometimes the norm of the Arnoldi residual converges to zero (for the Householder-GMRES this represents a typical behavior) even after the true residual norm stagnates. For MGS-GMRES, however, the norms of the true and Arnoldi residuals stagnate obviously at about the same level. Greenbaum~\cite{Greenbaum97numericalbehaviour}}
-
 \subsection{Key for convergence plots}
-The $x$ axis of the convergence plots shows the number of iterations of the Krylov methods tested. The $y$ axis of the convergence plots shows the 2-norm of the residual $\norm{b - Ax_k}_2$ relative to the 2-norm of the initial residual $\norm{r_0}_2$ at iteration $k$.
+The $x$ axis of the convergence plots shows the number of iterations of the Krylov methods tested. The $y$ axis of the convergence plots shows the 2-norm of the residual $\norm{b - Ax_k}_2$ relative to the 2-norm of the initial residual $\norm{r_0}_2$ at iteration $k$. Since standard GMRES exposes the residual at every iteration, it is presented as a continuous line. The $s$-step based CA-GMRES variants are depicted as points since their residuals are exposed only after every $s$ steps.\\
+
+The terms in the legend are defined as follows.
 \paragraph{GMRES(m)} Standard GMRES with restart length $m$ (the algorithm is outlined in Appendix~\ref{app:gmres(m)}). Its convergence metric is always shown as a black line.
 
-\paragraph{Monomial-GMRES(s,t)} Monomial-based CA-GMRES with basis length $s$ and restart length $m = s \cdot t$. Its convergence metric is plotted as a circle with different colors for each $s$ value shown in the plot.
+\paragraph{Monomial-GMRES(s,t)} Monomial-based CA-GMRES with basis length $s$ and restart length $m = s \cdot t$. Its convergence metric is plotted as a circle shaped dot with different colors for both $s$ values shown in the plot.
 
-\paragraph{Newton-GMRES(s,t)} Newton-based CA-GMRES with basis length $s$ and restart length $m = s \cdot t$. Its convergence metric is plotted as a triangle with different colors for each $s$ value shown in the plot.
+\paragraph{Newton-GMRES(s,t)} Newton-based CA-GMRES with basis length $s$ and restart length $m = s \cdot t$. Its convergence metric is plotted as a triangle shaped dot with different colors for both $s$ values shown in the plot.\\
+
+All plots show the standard GMRES, two versions of the Monomial-based CA-GMRES and two versions of the Newton-based CA-GMRES with different basis lengths. All methods have the same restart length, i.e., GMRES($m$) always uses $m = s \cdot t$ and $s_1 \cdot t_1$ is always equal to $s_2 \cdot t_2$ in the Newton-based resp. Monomial-based CA-GMRES versions.
+The quality of the $s$-step basis for each method is shown as well. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} compute the 2-norm condition number for the matrix $\underline{V}_k$ at iteration $k$, while an estimate for the reciprocal of the infinity-norm condition number $\mathcal{K}_{\infty}(\underline{\acute{V}}_k)$ is used here. Among all computed estimates for $\underline{\acute{V}}_k$ the minimum and maximum values are shown in the legend.
 
 \begin{figure}[H]
 	\centering
@@ -937,46 +966,45 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
 	\label{fig:dmat3}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{watt1_noscale.tex}}
-	\caption{not scaled}
+	\caption{Without basis vector scaling}
 	\label{fig:watt1_noscale}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{watt1_scale.tex}}
-	\caption{•••}
+	\caption{With basis vector scaling}
 	\label{fig:watt1_scale}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{watt1_ilu0.tex}}
-	\caption{without basis vector scaling}
+	\caption{Without ILU(0) preconditioner}
 	\label{fig:watt1_ilu0}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{bmw7st1.tex}}
-	\caption{•••}
+	\caption{Without basis vector scaling}
 	\label{fig:bmw7st1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{xenon2.tex}}
-	\caption{without scaling of basis vectors}
+	\caption{Without basis vector scaling}
 	\label{fig:xenon2_noscale}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{xenon2_scale.tex}}
-	\caption{scaled basis vectors}
+	\caption{With basis vector scaling}
 	\label{fig:xenon2_scale}
 \end{figure}
 
-
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -991,12 +1019,12 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
   \label{fig:sherman3_ilu0}
 \end{subfigure}
 \caption{A case where ILU(0) is in favor of the convergence behavior for all tested methods.}
-\label{fig:sherman3}
+\label{fig:sherman3_convergence}
 \begin{subfigure}{.5\textwidth}
   \centering
   \resizebox{.9\textwidth}{!}{\input{xenon2.tex}}
   \caption{Without preconditioner}
-  \label{fig:xenon2}
+  \label{fig:xenon2_noprec}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -1005,10 +1033,10 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
   \label{fig:xenon2_ilu0}
 \end{subfigure}
 \caption{A case where ILU(0) adversely affects the convergence behavior for all tested methods.}
-\label{fig:xenon}
+\label{fig:convergence_prec}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
 	\centering
@@ -1022,8 +1050,8 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
 	\caption{With basis vector scaling}
 	\label{fig:bcsstk18_scale}
 \end{subfigure}
-\caption{A case where ILU(0) is in favor of the convergence behavior for all tested methods.}
-\label{fig:bcsstk18}
+\caption{Scaling the basis vectors does not help to stabilize the Newton-GMRES with the short basis length $s = 5$. It even significantly magnifies the convergence instability in the Newton-GMRES with longer basis length $s = 10$.}
+\label{fig:bcsstk18_scaleissue}
 \begin{subfigure}{.5\textwidth}
 	\centering
 	\resizebox{.9\textwidth}{!}{\input{pwtk_noscale.tex}}
@@ -1037,134 +1065,80 @@ The $x$ axis of the convergence plots shows the number of iterations of the Kryl
 	\label{fig:pwtk_scale}
 \end{subfigure}
 \caption{In the unscaled case in figure~\ref{fig:pwtk_noscale}, the Newton-GMRES with the shorter basis length $s = 5$ is slightly unstable between 500 and 600 iterations. The scaling in figure~\ref{fig:pwtk_scale} fixes this, but drastically worsens the overall convergence for the Newton-GMRES with longer basis length $s = 10$.}
-\label{fig:pwtk}
+\label{fig:convergence_scaleissue}
 \end{figure}
+
+\subsection{Results for various matrices}
+\subsubsection{Diagonal matrices}
+CA-GMRES was tested with $10K \times 10K$ positive diagonal matrices (\texttt{Dmat}) with three different condition numbers $1\text{e}+05$, $1\text{e}+10$ and $1\text{e}+15$. Figure~\ref{fig:dmat3} shows how the Monomial basis fails to converge for larger $s$. Although the constructed matrices are the same as in Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} the convergence for the Monomial basis looks slightly different here because Hoemmen et al. do not start with standard Anoldi at every outer iteration. Interestingly, the Arnoldi residual converges further after the first inner iteration (it most definitely  diverges from the true residual at this point). Only the next restart cycle exposes the true and large residual in every third iteration. This phenomenon was observed by Greenbaum et al. \cite{Greenbaum97numericalbehaviour} when using a Householder-based GMRES instead of the MGS-based approach. The TSQR kernel in CA-GMRES uses Householder QR factorizations and therefore, might be the cause of this behavior.
+
+\subsubsection{Matrices from applications}
+\texttt{Watt1} is a small but very difficult matrix with two clusters of eigenvalues centered around one and zero. This impedes the computation of a good and linearly independent Newton basis. Heommen et al. used equilibration for numeric stability and could eventually converge with the same rate as standard GMRES by using a smaller step size as well. The results presented in Figures\ref{fig:watt1_noscale} and \ref{fig:watt1_scale} show similar problems for the unequilibrated case. Scaling the basis vectors by its 2-norm was helpful in this case and a larger step size could be chosen eventually. However the most effective way was to use the ILU(0) preconditioner (Figure~\ref{fig:watt1_ilu0}). Even the Monomial basis with a very large step size converged at the same rate as standard GMRES.\\
+
+\texttt{Bmw7st\_1} (Figure~\ref{fig:bmw7st1}) is the next difficult matrix that Hoemmen et al. could only fix with equilibration. The matrix is badly scaled which made the equilibration process challenging as well. The \texttt{Bmw} matrix is another good example for how the CA-GMRES approach may fail. However, applying the ILU(0) preconditioner lets the method converge in one step for standard GMRES and in $s$ steps for CA-GMRES.\\
+
+\texttt{Xenon2} is a good example for when the CA-GMRES works best. Figure~\ref{fig:xenon2_noscale} shows the convergence plot with unscaled basis vectors. Although the reciprocal condition number is extremely close to zero the convergence rate behaves rather well. This indicates that the vectors must be still linearly independent. Scaling the basis vectors as in Figure~\ref{fig:xenon2_scale} drastically improves the condition and leaves the convergence rate unchanged.\\
+
+After Hoemmen et al. used equilibration on the \texttt{Xenon2} matrix, the convergence rate started to become unstable. Something similar can be observed with the ILU(0) preconditioner in Subfigure~\ref{fig:xenon2_ilu0}.\\
+In general, Figure~\ref{fig:convergence_prec} shows two examples for when the ILU(0) improves the convergence rate and when it doesn't. Also, Figure~\ref{fig:convergence_scaleissue} discusses observed issues with basis vector scaling.
 
 
 
 \section{Performance experiments}
-For the performance experiments considered runtime until convergence and the runtime until the maximum number of iterations was reached. Kernels do not show SpMV dominates together with the initial inner iteration for computing Ritz values.
-\begin{figure}[H]
-	\centering
-	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads.tex}}
-	\caption{This plot presents the runtimes for different numbers of threads for a large sparse unpreconditioned matrix (Xenon2). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The left bar shows the stacked relative runtimes of the kernels used in CA-GMRES, the right bar depicts the stacked relative runtimes of the kernels (SpMV and MGS) used in GMRES($m$). The tolerance $\epsilon$ for the convergence metric was set to $5\text{e}-5$. This is too high for practical applications but it is needed in order to let the method converge in under 1000 iterations (see Figures~\ref{fig:xenon2_noscale},\ref{fig:xenon2_scale}). Both methods converged at iteration 390 and both methods have a very high relative forward error of $ 8.3951\text{e}+23$. The computations were done 10 times for each thread and the average runtime was taken.}
-\end{figure}
+This section describes performance experiments that compare the shared-memory implementation of CA-GMRES with the standard implementation GMRES($m$) on the harris platform.
 
+\subsection{Key for speedup plots}
+The left bars show the stacked relative runtimes for the kernels used in CA-GMRES. Those kernels comprise the first inner iteration (INIT), the sparse matrix-vector multiplications for creating the basis vectors (SpMV), the QR factorization of $V$ (TSQR), the orthogonalization against previous basis vectors (Block Gram-Schmidt) and the update of the upper Hessenberg Matrix (small dense operations). The right bars depict the stacked relative runtimes of the kernels used in GMRES($m$). These kernels include the sparse matrix-vector products (SpMV) and the modified Gram-Schmidt process (MGS). Solving the least squares problem at every outer iteration $k$ is not included since this kernel is the same for both methods. There is a difference on how the Givens rotations are applied. However, the cost for these Givens rotations is only marginal and therefore, negligible.\\
+The numbers above the CA-GMRES bars indicate the speedup over standard GMRES. In some cases, the relative forward error was computed in order to verify the result of the computed solution. Here, the relative forward error is defined by
+\begin{equation*}
+	\frac{\norm{x - \hat{x}}_2}{\norm{\hat{x}}_2}
+\end{equation*}
+where $x$ is the approximation and $\hat{x}$ is the true solution for the system.
 
-\begin{figure}[H]
+\begin{figure}[H]\label{runtime_threads_sherman3}
 	\centering
-	\resizebox{1.0\textwidth}{!}{\input{runtimes_matrices.tex}}
-	\caption{left CA-GMRES, right GMRES}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads_sherman3.tex}}
-	\caption{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Convergence tolerance $\epsilon$ is $1\text{e}-14$. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. relative forward error CA-GMRES: $6.61\text{e}-12$, relative forward error for GMRES($m$): $7.97\text{e}-12$. Computations were done 100 times and the average was taken.
- }
+	\resizebox{0.9\textwidth}{!}{\input{runtimes_threads_sherman3.tex}}
+	\caption{This plot presents the runtimes for different numbers of threads for a small sparse preconditioned matrix (\texttt{Sherman3}). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The tolerance $\epsilon$ for the convergence metric was set to $1\text{e}-14$. The convergence plot of this matrix is depicted in Figure~\ref{fig:sherman3_ilu0}. CA-GMRES converged at iteration 680, GMRES(m) converged at iteration 677. The relative forward error CA-GMRES is $6.61\text{e}-12$, the relative forward error for GMRES($m$) is $7.97\text{e}-12$. Computations were done 10 times and the average was taken.}
 	\label{fig:runtimes_threads_sherman3}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\resizebox{1.0\textwidth}{!}{\input{runtimes_threads_xenon2.tex}}
-	\caption{Left CA-GMRES, right GMRES($m$). The runtime is scaled by the runtime of single threaded CA-GMRES. Relative convergence tolerance $\epsilon$ is $5\text{e}-5$. Both methods converged at iteration 390. Both methods have a relative forward error : $ 8.3951\text{e}+23$. Computations were done 10 times and the average was taken.}
+	\caption{This plot presents the runtimes for different numbers of threads for a large sparse unpreconditioned matrix (\texttt{Xenon2}). The runtimes for different threads are scaled by the runtime of the single threaded CA-GMRES. The tolerance $\epsilon$ for the convergence metric was set to $5\text{e}-5$. This is too high for practical applications but it is needed in order to let the method converge in under 1000 iterations (see Figures~\ref{fig:xenon2_noscale},\ref{fig:xenon2_scale} for convergence plots). Both methods converged at iteration 390 and both methods have a very high relative forward error with $ 8.3951\text{e}+23$. The computations were done 10 times for each thread and the average runtime was taken.}
 	\label{fig:runtimes_threads_xenon2}
 \end{figure}
+\begin{figure}[H]
+	\centering
+	\resizebox{1.0\textwidth}{!}{\input{runtimes_matrices.tex}}
+	\caption{This plot shows the relative runtime for different matrices with optimal basis and restart lengths (not indicated) on 8 cores. The convergence metric was disabled and 1000 iterations were performed each. The matrices are presented in ascending order from left to right according to their size.}
+	\label{fig:runtimes_matrices}
+\end{figure}
 
-\section{Conclusion}
-Conclusion: the MPK is an important kernel and should have been implemented, also restarting with $s$ steps of std. GMRES is not optimal and leaves room for optimization.
-\iffalse
-compute Ritz values of real upper Hessenberg matrix with LAPACK "DHSEQR()"
-\url{http://www.netlib.org/lapack/explore-html/da/dba/group__double_o_t_h_e_rcomputational_gacb35e85b362ce8ccf9d653cc3f8fb89c.html#gacb35e85b362ce8ccf9d653cc3f8fb89c}
-\\
+\subsection{Results for various matrices}
+Figure~\ref{fig:runtimes_threads_sherman3} shows an almost constant speedup factor of around $1.8$ between methods for different threads, but indicates speedups $< 1$ between same methods with increasing thread size. The dimension of the matrix used (\texttt{Sherman3}) is 5K and therefore, rather small. Using more than one thread is obviously not appropriate in this case.\\
+Larger matrices like \texttt{Xenon2} with dimension 157K however do benefit from multiple threads. Figure~\ref{fig:runtimes_threads_xenon2} suggests around 32 to 40 threads would be optimal for a matrix of this size. Notice that, on the far right of the plot, more threads than available cores were used which further adds more overhead to the standard implementation rather than CA-GMRES.\\
+Figure~\ref{fig:runtimes_matrices} shows the relative runtimes for three small matrices (\texttt{Watt1}, \texttt{Sherman3} and \texttt{Bcsstk18}) and two large ones (\texttt{Xenon2} and \texttt{Pwtk}). The different kernels in CA-GMRES are best visible in the smallest matrix, namely \texttt{Watt1}. However, even here the Block Gram-Schmidt process is too small to notice. This could be due to the fact that MKL is highly optimized for dense matrix-matrix operations. \texttt{Bcsstk18} has far more nonzeros compared to the other small matrices which might correlate with the significant speedup for CA-GMRES over the standard implementation.\\
+The dominant kernel in CA-GMRES for large matrices is obviously SpMV. This is the only kernel that was not optimized (i.e., replaced with the matrix powers kernel from Heommen et al. \cite{Hoemmen:2010:CKS:1970638}). Also, as is discussed in Section~\ref{sec:implementation_details}, the INIT kernel may be reduced by shifting the work to the TSQR and 'small dense operations' kernels.
 
-Modified Leja ordering \cite{Hoemmen:2010:CKS:1970638} p.291/292\\
-
-Octave code:\\
-\url{https://github.com/magnusgrandin/ca-lanczos/blob/master/modified_leja.m}
-\fi
-
-\iffalse
-\section*{Krylov subspace methods (summarize this section briefly in introduction)}
-
-\cite{Ascher:2011:FCN:2031413} p.191\\
+\section{Summary and Conclusion}
+The numerical results show that CA-GMRES converges like standard GMRES under these conditions.
 \begin{itemize}
-\item short description:\\
-Krylov subspace definition: $\mathcal{K}_k(A, r_0) = span \left\{ r_0, Ar_0, A^2r_0,\ldots,A^{k-1}r_0 \right\}$\\
-
-All iterative methods build and enhance a KSP with every iteration.
-\begin{equation*}
-\textbf{r}_k = \textbf{r}_0 + \sum_{j=1}^{k} c_jA^j\textbf{r}_0 \quad \to \quad \textbf{x}_k = \textbf{x}_0 + \sum_{j=0}^{k-1} c_{j+1}A^j\textbf{r}_0
-\end{equation*}
-what is good for the power method, is bad here, bc. vectors are in theory linearly independent but too close to parallel $\to$ in machine arithmetic they become linearly dependent. Need new basis \ldots 
-\item Arnoldi \cite{Ascher:2011:FCN:2031413} p.192
-\begin{equation*}
-AQ_k = Q_{k+1}H_{k+1,k}
-\end{equation*}
-\item Summary: (\cite{Ascher:2011:FCN:2031413} p. 192)
-	\begin{itemize}
-	\item 1. construct an orthogonal basis for the Krylov subspace;
-	\item 2. define an optimality property;
-	\item 3. use an effective preconditioner.
-	\end{itemize}
+\item The right basis length $s$ is chosen.
+\item The right $s$-step basis is used.
+\item Preconditioners (e.g. equilibration, etc.) are used.
 \end{itemize}
+Basis vector scaling was done in Bai et al. \cite{NewtonGMRES_bai_reichel/doi:10.1093/imanum} and Erhel \cite{Erhel95aparallel}.
+The convergence plots show that scaling the basis vectors by its 2-norm may exacerbate convergence instabilities and, therefore, is not recommended. Hoemmen et al. \cite{Hoemmen:2010:CKS:1970638} use matrix equilibration instead.\\
+The speedup plots clearly show the absence of the matrix powers kernel, especially for large matrices. Also, restarting with standard GMRES in every outer iteration of CA-GMRES may not be optimal and leaves room for optimization.
 
-\cite{Ascher:2011:FCN:2031413} p.184\\
-\begin{itemize}
-\item short description: most stable and prominent iterative method, for sym pos def matrices only.
-\item Algorithm description (just the basics)
-	\begin{itemize}
-	\item $\norm{x - x_k}_A = \text{argmin}_{y \in \mathcal{K}_k(A, r_0)}\norm{x - y}_A$\\
-	 After $k$-steps, $x_k$ minimizes in the KSP the $A$-norm x - $y$ (only if A is SPD, or else it's not a norm)
-	\item follows basic concept: $\textbf{x}_{new} = x_{old} + constant \cdot search direction$ (better version \textit{steepest descent})
-	\item $\textbf{r}_k$ is multiple of $q_{k+1}$ ($q$ from Arnoldi; $q$ is not directly used in CG)\\
-	$\to$ (1) orthogonal residuals $\textbf{r}_i^T\textbf{r}_k = 0, \quad i < k$\\
-	$\to$ (2) $(x_i - x_{i-1})^T A (x_k - x_{k-1}) = 0 \quad \to \quad\Delta \textbf{x}_i^T A \Delta \textbf{x}_k = 0, \quad  i < k$\\
-	in other words: the corrections in \textbf{x} are orthogonal in the $A$-inner product, hence the term 'conjugate' in CG. The term 'gradients' comes from minimizing the energy equation/quadratic form:
-	\begin{equation*}
-	E(x) = \frac{1}{2} \textbf{x}^TA\textbf{x} - b^T\textbf{x} \to min
-	\end{equation*}	 
-	Set the derivative (gradient) to zero, i.e. $E'(x) = 0$:
-	\begin{equation*}
-	A\textbf{x} - b = 0
-	\end{equation*}
-	and we're back to the original problem. So minimizing energies and solving the linear equation $A\textbf{x} = b$ are basically the same.
-	\item $H$ is symmetric, and therefore tridiagonal. Arnoldi simplifies to Lanczos $\to$ short 'three-term' recurrences (only have to look at a few previous orthogonal vectors, not all of them).
-	\end{itemize}
-\item p.191 what about general matrices? Any nonsingular matrix $A$ can be transformed into SPD matrix via $A^TA$ $\to$ bad condition number $\kappa (A)$.\\
-
-\{The condition number of the matrix $A^TA$ is the square of the condition number of $A$ [\ldots] A large condition number both increases the number of iterations required and limits the accuracy to which a solution can be obtained. \cite{press92a} p. 89 (2.7.40)\}
-consider Krylov subspace methods that are directly based on general matrix $A$ $\to$ GMRES
-\end{itemize}
-
-\subsection*{GMRES (summarize this section briefly in introduction)}
-\begin{itemize}
-\item short description: general form of MINRES (=like CG it is only for symmetric matrices, but must not be PD) MINRES minimizes $\norm{\textbf{r}_k}_2$ and CG minimizes energy norm of the residual $\norm{\textbf{r}_k}_{A^{-1}}$ or the energy norm of the error $\norm{\textbf{x}^* - \textbf{x}_k}_A$ respectively. \cite{Ascher:2011:FCN:2031413} (p. 198)
-\item algorithm description:
-\item $\norm{b - A\textbf{x}_k}_2 = argmin_{y \in \mathcal{K}_k(A, r_0)}\norm{b - Ay}_2$\\
-	 After $k$-steps, $\textbf{x}_k$ minimizes in the KSP the $\ell^2$-norm $b - Ay$
-\item GMRES vs. CG:
-\begin{itemize}
-\item CG forces the residual $\textbf{r}_k$ to be orthogonal to the Krylov subspace $\mathcal{K}_k(A, r_0)$;
-\item GMRES seeks the residual with minimum $\ell_2$-norm within the Krylov subspace.
-\end{itemize}
-\item Summary:\\
-The main components of a single iteration of GMRES are
-\begin{enumerate}
-	\item perform a step of the Arnoldi process;
-	\item update the QR factorization of the updated upper Hessenberg matrix;
-	\item solve the resulting least squares problem.
-	\end{enumerate}
-\end{itemize}
-\fi
 \bibliographystyle{plain}
 \bibliography{BSc_Ernstbrunner_01403753}
  \listofalgorithms
  
 
 \begin{appendices}
-
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 \section{GMRES(m)}\label{app:gmres(m)}
 \begin{algorithm}
 \caption{GMRES(m)}
@@ -1193,28 +1167,14 @@ The main components of a single iteration of GMRES are
 \end{algorithm}
 
 
-\section{Test matrices}
-discussion of test matrices \\
-
-\begin{tabular}{l|r|r}
-Name & Dim & nnz \\
-\hline
-bmw & 141K & 3.7M \\
-bcsstk18 & 12K & 149K \\
-pwtk & 218K & 3.7M \\
-watt1 & 1856 & 11550 \\
-xenon2 & 157K & 3.9M \\
-sherman3 & 5005 & 20K \\
-
-\end{tabular}
 
 \section{TODO}
 \begin{itemize}
 \item describe ILU(0)
-\item write implementation details (how to build)
-\item write numerical experiments
-\item write performance experiments
+
 \item write related work
+
+
 \end{itemize}
 
 \section{Visualizing the R matrix}\label{app:R_2}
